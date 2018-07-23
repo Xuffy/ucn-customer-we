@@ -18,6 +18,9 @@ export default {
     entryDt:{
         _hide:true
     },
+    skuFormation:{
+        _hide:true
+    },
     skuPic:{
         _slot:'skuPictures',
         type:'pic',

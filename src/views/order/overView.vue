@@ -32,15 +32,33 @@
                 :loading='loading'
                 :pageTotal='pageTotal'
                 @change-checked='checked'
+                @change-sort="val=>{getData(val)}"
                 :height="500"
                 style='marginTop:10px'>
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
-                        <!--<el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedList.length}})</el-button>-->
-                        <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
-                        <el-button :disabled='disableFinish' :loading="disableClickFinish" @click='finish'>{{$i.order.shipped}}</el-button>
-                        <!--                <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
+                        <el-button
+                                @click='createOrder'
+                                v-authorize="'ORDER:OVERVIEW:CREATE'">
+                            {{($i.order.createOrder)}}</el-button>
+                        <el-button
+                                :disabled='disableFinish'
+                                :loading="disableClickFinish"
+                                @click='finish'
+                                v-authorize="'ORDER:OVERVIEW:SHIPPED'">
+                            {{$i.order.shipped}}({{selectedList.length}})</el-button>
+                        <el-button
+                                v-authorize="'ORDER:OVERVIEW:DOWNLOAD'"
+                                @click="downloadOrder">
+                            {{$i.order.download}}({{selectedList.length===0?$i.order.all:selectedList.length}})</el-button>
+                        <el-button
+                                type='danger'
+                                :loading="disableClickDelete"
+                                :disabled='disableDelete'
+                                @click='deleteOrder'
+                                v-authorize="'ORDER:OVERVIEW:ARCHIVE'">
+                            {{($i.common.archive)}}</el-button>
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
@@ -100,28 +118,32 @@
                 selectSearch: 1,
                 pageTotal: 1,
                 rowspan: 1,
-                options: [{
-                    id: 1,
-                    label: 'Order No'
-                }, {
-                    id: 2,
-                    label: 'Sku Code'
-                }],
+                options: [
+                    {
+                        id: 1,
+                        label: 'Order No'
+                    },
+                    {
+                        id: 2,
+                        label: 'Sku Code'
+                    }
+                ],
                 id: '',
                 params: {
                     orderNo: '',
                     skuCode: '',
                     status: '',
-                    // view: '1', //view by的按钮组
                     ps: 50,
                     pn: 1,
-                    operatorFilters: [],
-                    sorts: [],
+                    draftCustomer:false,
+                    recycleCustomer:false,
                 },
                 selectedList: [],
                 selectedNumber: [],
                 tableCode:'uorder_list',
                 disableClickFinish:false,
+                disableClickDelete:false,
+                disableDelete:true,
 
                 /**
                  * 字典
@@ -132,9 +154,7 @@
             }
         },
         methods: {
-            ...mapActions([
-                'setDraft','setLog'
-            ]),
+            ...mapActions(['setMenuLink']),
             onAction(item) {
                 this.$windowOpen({
                     url: '/order/detail',
@@ -148,11 +168,20 @@
                     url: '/order/create'
                 });
             },
+            downloadOrder(){
+                let params=this.$depthClone(this.params);
+                params.ids=_.pluck(_.pluck(this.selectedList,'id'),'value');
+                console.log(params,'params')
+                this.$fetch.export_task('EXPORT_ORDER',params);
+            },
             selectChange(val) {
                 this.id = val;
             },
             checked(item) {
                 this.selectedList = item;
+            },
+            changeSort(e){
+                console.log(e,'eeee')
             },
             changeStatus() {
                 this.getData();
@@ -220,29 +249,45 @@
                     });
             },
             deleteOrder() {
-                this.$ajax.post(this.$apis.delete_order, {
-                    ids: this.selectedNumber
-                })
-                    .then((res) => {
-                        if (this.params.view == 1) {
-                            this.getdata(this.$db.order.overviewByOrder)
-                        } else {
-                            this.getdata(this.$db.order.overviewBysku)
-                        }
-                    })
-                    .catch((res) => {
-                        console.log(res)
+                this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    let ids=[];
+                    _.map(this.selectedList,v=>{
+                        ids.push(v.id.value);
                     });
+                    this.disableClickDelete=true;
+                    this.$ajax.post(this.$apis.delete_order,{
+                        ids:ids,
+                        recycleCustomer:true
+                    }).then(res=>{
+                        this.selectedList=[];
+                        this.getData();
+                    }).finally(()=>{
+                        this.disableClickDelete=false;
+                    });
+
+                    this.$message({
+                        type: 'success',
+                        message: this.$i.order.deleteSuccess
+                    });
+                }).catch(() => {
+
+                });
             },
             //get_orderlist数据
-            getData() {
+            getData(e) {
                 this.loading = true;
                 let url='',query='';
                 url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
                 query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
+                if(e && e.sorts){
+                    Object.assign(this.params,e);
+                }
                 this.$ajax.post(url, this.params)
                     .then((res) => {
-                        this.loading = false;
                         this.tabData = this.$getDB(query, res.datas,e=>{
                             if(e.entryDt){
                                 e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
@@ -288,15 +333,13 @@
                         this.pageData = res;
                         this.disableFinish=true;
                     })
-                    .catch((res) => {
+                    .finally(() => {
+                        this.selectedList=[];
                         this.loading = false
                     });
             },
             //获取字典
             getUnit() {
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
                 this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS','ITM','PMT'], {cache: true}).then(res => {
                     res.forEach(v => {
                         if (v.code === 'ORDER_STATUS') {
@@ -307,7 +350,7 @@
                             this.paymentOption=v.codes;
                         }
                     });
-                    this.getData(this.$db.order.overviewByOrder);
+                    this.getData();
                 })
             },
 
@@ -325,21 +368,48 @@
         },
         created() {
             this.getUnit();
-            // this.setRecycleBin({
-            //     name: 'orderRecycleBin',
-            //     show: true
-            // });
-            this.setDraft({
-                name: 'orderDraft',
-                show: true
+            this.setMenuLink({
+                path: '/order/draft',
+                type: 10,
+                auth:'ORDER:DRAFT_OVERVIEW',
+                label: this.$i.common.draft
+            });
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'ORDER'},
+                type: 20,
+                auth:'ORDER:LOG',
+                label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/order/archiveOrder',
+                type: 30,
+                auth:'ORDER:OVERVIEW:ARCHIVE_LINK',
+                label: this.$i.order.archiveOrder
+            });
+            this.setMenuLink({
+                path: '/order/archiveDraft',
+                type: 40,
+                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK',
+                label: this.$i.order.archiveDraft
             });
         },
         mounted() {
             this.loading = false;
-            this.setLog({query:{code:'ORDER'}});
         },
         watch: {
             selectedList(n){
+                let disableArchive=false;
+                if(n.length===0){
+                    disableArchive=true;
+                }else{
+                    _.map(n,v=>{
+                        if(v.status.value!=='CANCLED'){
+                            disableArchive=true;
+                        }
+                    });
+                }
+                this.disableDelete=disableArchive;
                 if(this.view==='1'){
                     if(n.length>0){
                         let allow=true;

@@ -142,7 +142,7 @@
         <div class="second-title">
             {{$i.warehouse.payment}}
         </div>
-        <div class="payment-table">
+        <div class="payment-table" v-authorize="'QC:ORDER_DETAIL:PAYMENT'">
             <el-button @click="addPayment" :loading="disableClickAdd" class="payment-btn" :disabled="disableAdd" type="primary">{{$i.warehouse.add}}</el-button>
             <el-table
                     v-loading='loadingPaymentTable'
@@ -155,6 +155,7 @@
                 <el-table-column
                     label="#"
                     align="center"
+                    fixed="left"
                     width="60">
                     <template slot-scope="scope">
                         {{scope.$index+1}}
@@ -240,7 +241,11 @@
                         width="150">
                     <template slot-scope="scope">
                         <div v-if="scope.row.status===-1">
-                            <el-button @click="restore(scope.row)" type="text" size="small">{{$i.warehouse.restore}}</el-button>
+                            <el-button
+                                    v-authorize="'QC:ORDER_DETAIL:PAYMENT_ACTION'"
+                                    @click="restore(scope.row)"
+                                    type="text"
+                                    size="small">{{$i.warehouse.restore}}</el-button>
                         </div>
                         <div v-else>
                             <div v-if="scope.row.isNew">
@@ -252,15 +257,22 @@
                                 <el-button @click="cancelModify(scope.row)" type="text" size="small">{{$i.warehouse.cancel}}</el-button>
                             </div>
                             <div v-else>
-                                <el-button @click="modify(scope.row)" type="text" size="small">{{$i.warehouse.modify}}</el-button>
-                                <el-button @click="invalid(scope.row)" type="text" size="small">{{$i.warehouse.invalid}}</el-button>
+                                <el-button
+                                        v-authorize="'QC:ORDER_DETAIL:PAYMENT_ACTION'"
+                                        @click="modify(scope.row)"
+                                        type="text"
+                                        size="small">{{$i.warehouse.modify}}</el-button>
+                                <el-button
+                                        v-authorize="'QC:ORDER_DETAIL:PAYMENT_ACTION'"
+                                        @click="invalid(scope.row)"
+                                        type="text"
+                                        size="small">{{$i.warehouse.invalid}}</el-button>
                             </div>
                         </div>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-
         <div class="second-title">
             {{$i.warehouse.productInfo}}
         </div>
@@ -271,19 +283,35 @@
                     :data="productInfoData"
                     :buttons="[{'label': 'Detail', type: 1}]"
                     @action="btnClick"
+                    @change-sort="val=>{getProductInfo(val)}"
                     @change-checked="changeChecked"
                     :totalRow="totalRow">
                 <template slot="header">
                     <div class="btn-group">
-                        <el-button :disabled="selectList.length===0" type="primary" @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
-                        <el-button @click="restartQc" :disabled="disableClickRestart" type="primary">{{$i.warehouse.restartQc}}</el-button>
-                        <el-button :disabled="selectList.length===0" type="primary" @click="rework">{{$i.warehouse.rework}}</el-button>
-                        <el-button :disabled="selectList.length===0" type="danger" @click="returnProduct">{{$i.warehouse.return}}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_CONFIRM_SKU'"
+                                :disabled="selectList.length===0"
+                                type="primary"
+                                @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_RESTART_QC'"
+                                @click="restartQc"
+                                :disabled="disableClickRestart"
+                                type="primary">{{$i.warehouse.restartQc}}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_RESTART_QC'"
+                                :disabled="selectList.length===0"
+                                type="primary"
+                                @click="rework">{{$i.warehouse.rework}}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_RETURN'"
+                                :disabled="selectList.length===0"
+                                type="danger"
+                                @click="returnProduct">{{$i.warehouse.return}}</el-button>
                     </div>
                 </template>
             </v-table>
         </div>
-
         <div class="summary">
             <div class="second-title">
                 {{$i.warehouse.summary}}
@@ -403,11 +431,14 @@
                 </el-row>
             </el-form>
         </div>
-
         <div class="footBtn">
+            <el-button
+                    v-authorize="'QC:ORDER_DETAIL:DOWNLOAD'"
+                    :disabled="loadingData"
+                    type="primary"
+                    @click="download">{{$i.warehouse.download}}</el-button>
             <el-button @click="cancel" type="danger">{{$i.warehouse.exit}}</el-button>
         </div>
-
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
 </template>
@@ -457,7 +488,7 @@
                     pn: 1,
                     ps: 200,
                     qcOrderId: this.$route.query.id,
-
+                    qcOrderNo:this.$route.query.code
                     // sorts: [
                     //     {
                     //         orderBy: "",
@@ -468,7 +499,6 @@
                 productInfoData:[],
                 selectList:[],
                 loadingData:false,
-                totalRow:[],
 
                 /**
                  * summary Data
@@ -490,8 +520,31 @@
 
             }
         },
+        computed:{
+            totalRow(){
+                let obj={};
+                if(this.productInfoData.length<=0){
+                    return;
+                }
+                _.map(this.productInfoData,v=>{
+                    _.mapObject(v,(item,key)=>{
+                        if(item._calculate){
+                            obj[key]={
+                                value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                            };
+                        }else{
+                            obj[key] = {
+                                value: ''
+                            };
+                        }
+                    })
+                });
+                return [obj];
+
+            }
+        },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(["setMenuLink"]),
             getQcOrderDetail(){
                 if(this.$route.query.id){
                     this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
@@ -518,24 +571,26 @@
                 }
 
             },
-            getProductInfo(){
+            getProductInfo(e){
                 this.loadingProductInfoTable=true;
+                if(e){
+                    Object.assign(this.productInfoConfig,e);
+                }
                 this.$ajax.post(this.$apis.get_qcProductInfo,this.productInfoConfig).then(res=>{
                     this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas,e=>{
                         if(e.skuQcResultDictCode.value==='WAIT_FOR_QC'){
                             e._disabled=true;
                         }
                         e.deliveryDate._value=this.$dateFormat(e.deliveryDate.value,'yyyy-mm-dd');
-                        e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
-                        e.volumeUnitDictCode._value=e.volumeUnitDictCode.value?_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}).name:'';
-                        e.weightUnitDictCode._value=e.weightUnitDictCode.value?_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}).name:'';
-                        e.lengthUnitDictCode._value=e.lengthUnitDictCode.value?_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}).name:'';
-
-                        e.skuBarCodeResultDictCode._value=e.skuBarCodeResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.skuBarCodeResultDictCode.value}).name:'';
-                        e.innerPackingBarCodeResultDictCode._value=e.innerPackingBarCodeResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.innerPackingBarCodeResultDictCode.value}).name:'';
-                        e.skuLabelResultDictCode._value=e.skuLabelResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.skuLabelResultDictCode.value}).name:'';
-                        e.outerCartonBarCodeResultDictCode._value=e.outerCartonBarCodeResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.outerCartonBarCodeResultDictCode.value}).name:'';
-                        e.shippingMarkResultDictCode._value=e.shippingMarkResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.shippingMarkResultDictCode.value}).name:'';
+                        e.skuUnitDictCode._value=(_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name;
+                        e.volumeUnitDictCode._value=(_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name;
+                        e.weightUnitDictCode._value=(_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name;
+                        e.lengthUnitDictCode._value=(_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name;
+                        e.skuBarCodeResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.skuBarCodeResultDictCode.value}) || {}).name;
+                        e.innerPackingBarCodeResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.innerPackingBarCodeResultDictCode.value}) || {}).name;
+                        e.skuLabelResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.skuLabelResultDictCode.value}) || {}).name;
+                        e.outerCartonBarCodeResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.outerCartonBarCodeResultDictCode.value}) || {}).name;
+                        e.shippingMarkResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.shippingMarkResultDictCode.value}) || {}).name;
                         return e;
                     });
                     let diffData=[];
@@ -562,9 +617,6 @@
 
                             })
                         })
-                        this.totalRow = this.$getDB(this.$db.warehouse.qcDetailProductInfo, [obj],item=>{
-
-                        });
                     }
                     this.loadingProductInfoTable=false;
                     this.selectList=[];
@@ -582,12 +634,13 @@
                     this.paymentTableData=res.datas;
                     _.map(this.paymentTableData,v=>{
                         v.actualPayDt='';
-                    })
+                    });
                     if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
                         this.disableAdd=true;
                     }else{
                         this.disableAdd=false;
                     }
+                    console.log(this.disableAdd,'this.disableAdd')
                 }).catch(err=>{
                     this.loadingPaymentTable=false;
 
@@ -761,6 +814,7 @@
                             this.$set(v,'actualPayAmount',obj.actualPayAmount);
                         }
                     });
+                    this.$set(e,'status',res.status)
                     this.$set(e,'isModify',false);
                     this.$set(e,'version',res.version);
                     this.loadingPaymentTable=false;
@@ -962,6 +1016,9 @@
 
                 });
             },
+            download(){
+                this.$fetch.export_task('WAREHOUES',{qcOrderNos:[this.qcDetail.qcOrderNo]});
+            },
             cancel(){
                 window.close();
             },
@@ -976,9 +1033,6 @@
         created(){
             this.getCurrency();
             this.loadingData=true;
-            this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                console.log(res)
-            })
             this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','PB_CODE'],{cache:true})
                 .then(res=>{
                     res.forEach(v=>{
@@ -1006,7 +1060,13 @@
                 });
         },
         mounted(){
-            this.setLog({query:{code:'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                auth:'QC:LOG',
+                label: this.$i.common.log
+            });
         },
         watch:{
             selectList(n){

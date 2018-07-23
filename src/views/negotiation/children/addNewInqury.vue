@@ -1,7 +1,7 @@
 <template>
     <div class="inquiry">
         <el-dialog
-            :title="$i.common.prompt"
+            :title="title || $i.common.prompt"
             :visible.sync="showDialog"
             width="80%">
                 <div class="status">
@@ -95,6 +95,9 @@ export default {
     event: 'changeShow'
   },
   props: {
+    title:{
+      type: String
+    },
     show: {
       type: Boolean,
       default: false

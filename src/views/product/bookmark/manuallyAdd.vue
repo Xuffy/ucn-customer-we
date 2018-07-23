@@ -11,7 +11,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
-                    <el-form-item :prop="v.key" :label="v.label+':'">
+                    <el-form-item :required="v._rules?v._rules.required:false" :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='input'">
                             <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
@@ -785,14 +785,12 @@
 </template>
 
 <script>
-    import imgHandler from './imgHandler'
     import {dropDownSingle,VUpload} from '@/components/index'
     import {mapActions} from 'vuex'
 
     export default {
         name: "manually-add",
         components:{
-            imgHandler,
             dropDown:dropDownSingle,
             VUpload
         },
@@ -941,23 +939,12 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
-            //获取类别数据
-            getCategoryId(){
-                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
-                    this.categoryList[1].children=res;
-                }).catch(err=>{
-
-                });
-                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
-                    this.categoryList[0].children=res;
-                }).catch(err=>{
-
-                });
-            },
-
+            ...mapActions(['setMenuLink']),
             //完成新增
             finish(){
+                if(this.$validateForm(this.productForm, this.$db.product.detailTab)){
+                    return;
+                }
                 let params=Object.assign({},this.productForm);
                 params.pictures=this.$refs.upload.getFiles();
                 params.attachments=this.$refs.uploadAttachmemt.getFiles();
@@ -1001,23 +988,16 @@
              * 获取字典data
              * */
             getUnitCode(){
-                //币种单位
-                this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
-                    this.currencyOption=res;
-                }).catch(err=>{
- b
-                });
-
-                //国家
-                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
-                    this.countryOption=res;
-                }).catch(err=>{
-
-                });
-
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{cache:true}).then(res=>{
-                    console.log(res)
-                    res.forEach(v=>{
+                const currencyAjax=this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true});
+                const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
+                const partUnit=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{cache:true});
+                const sysCategory=this.$ajax.get(this.$apis.get_buyer_sys_category,{});
+                const myCategory=this.$ajax.get(this.$apis.get_buyer_my_category,{});
+                this.loadingPage=true;
+                this.$ajax.all([currencyAjax,countryAjax,partUnit,sysCategory,myCategory]).then(res=>{
+                    this.currencyOption=res[0];
+                    this.countryOption=res[1];
+                    res[2].forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
                         }else if(v.code==='WT_UNIT'){
@@ -1040,9 +1020,11 @@
                             this.packageAdjustOption=v.codes;
                         }
                     });
-                }).catch(err=>{
-
-                })
+                    this.categoryList[1].children=res[3];
+                    this.categoryList[0].children=res[4];
+                }).finally(()=>{
+                    this.loadingPage=false;
+                });
             },
         },
         created(){
@@ -1088,18 +1070,23 @@
                     this.boxSize.width=Number(res.lengthWidthHeight.split('*')[1]);
                     this.boxSize.height=Number(res.lengthWidthHeight.split('*')[2]);
                     this.productForm=res;
-                    this.getCategoryId();
                     this.getUnitCode();
                 }).catch(err=>{
                     this.loadingPage=false;
                 })
-            }else{
-                this.getCategoryId();
+            }
+            else{
                 this.getUnitCode();
             }
         },
         mounted(){
-
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'PRODUCT'},
+                type: 10,
+                auth:'PRODUCT:LOG',
+                label: this.$i.common.log
+            });
         },
     }
 </script>

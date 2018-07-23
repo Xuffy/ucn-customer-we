@@ -15,27 +15,56 @@
         </div>
         <div class="btns" v-show="hasLoading">
             <span v-if="$route.params.type==='new'">
-                <el-button @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
-                <el-button @click="createOrder">{{$i.product.createOrder}}({{selectList.length}})</el-button>
-                <el-button @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
-                <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                <el-button
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:CREATE_INQUIRY'"
+                        @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                <el-button
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:CREATE_ORDER'"
+                        @click="createOrder">{{$i.product.createOrder}}({{selectList.length}})</el-button>
+                <el-button
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:ADD_NEW'"
+                        @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
+                <el-button
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:DELETE'"
+                        @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
-                <el-button @click="createOrder" v-if="!isModify">{{$i.product.createOrder}}({{selectList.length}})</el-button>
-
-                <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
-
-                <el-button v-if="isModify" @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
-                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                <el-button
+                        v-if="!isModify"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:CREATE_INQUIRY'"
+                        @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                <el-button
+                        v-if="!isModify"
+                        @click="createOrder"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:CREATE_ORDER'">{{$i.product.createOrder}}({{selectList.length}})</el-button>
+                <el-button
+                        v-if="!isModify"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:DOWNLOAD'"
+                        @click="download">{{$i.product.download}}</el-button>
+                <el-button
+                        v-if="!isModify"
+                        @click="modifyCompare">{{$i.product.modify}}</el-button>
+                <el-button
+                        v-if="isModify"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:ADD_NEW'"
+                        @click="addNewProduct"
+                        :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
+                <el-button
+                        v-if="isModify"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:DELETE'"
+                        @click="deleteProduct"
+                        :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
-            <el-checkbox @change="changeHideTheSame" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
-            <el-checkbox @change="changeHighlight" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
+            <el-checkbox @change="changeStatus" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
+            <el-checkbox @change="changeStatus" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
         </div>
         <v-table
+                ref="table"
+                native-sort="id"
+                @change-sort="$refs.table.setSort(tableDataList)"
                 code="udata_purchase_sku_compare_list_detail"
                 :height="500"
-                v-loading="loadingTable"
+                v-loading="loadingTable"g
                 :data="tableDataList"
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="btnClick"
@@ -45,9 +74,14 @@
                 <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.params.type==='modify'">
-                <!--<el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger">{{$i.product.deleteTheCompare}}</el-button>-->
-                <el-button @click="saveModify" :loading="disableClickSaveModify" :disabled="allowBottomClick" type="primary" v-if="isModify">Save</el-button>
-                <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify" v-if="isModify">Cancel</el-button>
+                <el-button
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:SAVE'"
+                        @click="saveModify"
+                        :loading="disableClickSaveModify"
+                        :disabled="allowBottomClick"
+                        type="primary"
+                        v-if="isModify">{{$i.product.save}}</el-button>
+                <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify" v-if="isModify">{{$i.product.cancel}}</el-button>
             </div>
         </div>
 
@@ -116,6 +150,8 @@
     import product from '../addProduct'
     import { mapActions } from 'vuex'
 
+    let copySameData,copyLightData;
+
 
     export default {
         name: "compare",
@@ -148,16 +184,11 @@
                 allowBottomClick:true,          //是否禁止点击底部操作按钮
                 disableClickCancel:false,
                 disableClickSaveModify:false,
-
                 isChangeData:false,             //是否在最原始的基础上modify过数据
-
                 isHideTheSame:false,
                 isHighlight:true,
-
-                copySameData:[],
-                copyLightData:[],
+                initialData:[],
                 categoryList:[],
-
 
                 /**
                  * 字典配置
@@ -171,7 +202,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getList() {
                 if(this.$route.params.type==='new'){
                     //表示是新建detail还未保存
@@ -181,23 +212,22 @@
                     });
                     let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
-                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
-                            e.status._value=e.status.value?_.findWhere(this.statusOption,{code:String(e.status.value)}).name:'';
-                            e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
-                            e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
-                            e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
-                            e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
-                            e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                            e.status._value=(_.findWhere(this.statusOption,{code:String(e.status.value)}) || {}).name;
+                            e.unit._value=(_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}) || {}).name;
+                            e.expireUnit._value = (_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}) || {}).name;
+                            e.unitLength._value = (_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}) || {}).name;
+                            e.unitVolume._value = (_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}) || {}).name;
+                            e.unitWeight._value = (_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}) || {}).name;
                             e.yearListed.value=e.yearListed.value?this.$dateFormat(e.yearListed.value,'yyyy-mm'):'';
                             return e;
                         });
-                        this.changeHighlight(true);
+                        this.initialData=this.$depthClone(this.tableDataList);
+                        this.changeStatus();
                         this.hasLoading=true;
-                        this.loadingTable=false;
                         this.disabledLine=this.tableDataList;
-                    }).catch(err=>{
+                    }).finally(()=>{
                         this.loadingTable=false;
                     });
                 }
@@ -208,29 +238,29 @@
                         this.isModify=true;
                     }
                     let params={
-                        id: Number(this.$route.query.compareId),
-                        pn: 1,
-                        ps: 100,
-                        recycle: false,
+                        id: this.$route.query.compareId,
+                        pn:1,
+                        ps:100
                     };
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
-                            e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
-                            e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
-                            e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
-                            e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
-                            e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
-                            e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                            e.status._value=(_.findWhere(this.statusOption,{code:String(e.status.value)}) || {}).name;
+                            e.unit._value=(_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}) || {}).name;
+                            e.expireUnit._value = (_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}) || {}).name;
+                            e.unitLength._value = (_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}) || {}).name;
+                            e.unitVolume._value = (_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}) || {}).name;
+                            e.unitWeight._value = (_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}) || {}).name;
                             e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                             return e;
                         });
-                        this.changeHighlight(true);
+                        this.initialData=this.$depthClone(this.tableDataList);
+                        this.changeStatus();
                         this.hasLoading=true;
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
-                    }).catch(err=>{
-
+                    }).finally(err=>{
+                        this.loadingTable=false;
                     });
                 }
             },
@@ -260,81 +290,56 @@
                     })
                 }
             },
-            changeHideTheSame(e){
-                if(e){
-                    this.copySameData=this.$depthClone(this.tableDataList);
-                    this.$table.setHideSame(this.tableDataList);
-                }else{
-                    this.tableDataList=this.$depthClone(this.copySameData);
+            changeStatus(){
+                let data=this.$depthClone(this.initialData);
+                if(this.isHideTheSame){
+                    data = this.$table.setHideSame(data);
                 }
-            },
-            changeHighlight(e){
-                if(e){
-                    this.copyLightData=this.$depthClone(this.tableDataList);
-                    this.$table.setHighlight(this.tableDataList);
-                }else{
-                    this.tableDataList=this.$depthClone(this.copyLightData);
+                if(this.isHighlight){
+                    data = this.$table.setHighlight(data);
                 }
+                this.tableDataList=data;
             },
             changeChecked(e){
                 this.selectList=e;
             },
-
-            //编辑单子
             modifyCompare(){
                 this.isModify=true;
             },
-
-            //取消编辑
             cancelModify(){
-                this.disableClickCancel=true;
-                this.loadingTable=true;
-                this.compareName=this.$route.query.compareName;
-                let params={
-                    id: Number(this.$route.query.compareId),
-                    // operatorFilters: [
-                    //     {
-                    //         "columnName": "string",
-                    //         "operator": "string",
-                    //         "property": "string",
-                    //         "resultMapId": "string",
-                    //         "value": {}
-                    //     }
-                    // ],
-                    pn: 1,
-                    ps: 100,
-                    recycle: false,
-                    // sorts: [
-                    //     {
-                    //         orderBy: "string",
-                    //         orderType: "string",
-                    //     }
-                    // ]
-                };
-                this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
-                        if(e.status.value===1){
-                            e.status.value='上架';
-                        }else if(e.status.value===0){
-                            e.status.value='下架';
-                        }
-                        return e;
-                    });
-                    this.hasLoading=true;
-                    this.disabledLine=this.tableDataList;
-                    this.allowDeleteCompare=false;
-                    this.allowBottomClick=false;
-
-                    //额外操作
-                    this.isModify=false;
-                    this.disableClickCancel=false;
-                    this.loadingTable=false;
-                }).catch(err=>{
-                    this.disableClickCancel=false;
-                    this.loadingTable=false;
-                });
+                // this.disableClickCancel=true;
+                // this.loadingTable=true;
+                // this.compareName=this.$route.query.compareName;
+                // let params={
+                //     id: Number(this.$route.query.compareId),
+                //     pn: 1,
+                //     ps: 100,
+                //     recycle: false,
+                // };
+                this.getList();
+                // this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
+                //     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                //         if(e.status.value===1){
+                //             e.status.value='上架';
+                //         }else if(e.status.value===0){
+                //             e.status.value='下架';
+                //         }
+                //         return e;
+                //     });
+                //     this.hasLoading=true;
+                //     this.disabledLine=this.tableDataList;
+                //     this.allowDeleteCompare=false;
+                //     this.allowBottomClick=false;
+                //
+                //     //额外操作
+                //     this.isModify=false;
+                //     this.disableClickCancel=false;
+                //     this.loadingTable=false;
+                // }).catch(err=>{
+                //     this.disableClickCancel=false;
+                //     this.loadingTable=false;
+                // });
             },
-
             createInquiry(){
                 if(this.selectList.length===0){
                     this.$windowOpen({
@@ -369,8 +374,6 @@
                     })
                 }
             },
-
-            //勾选的商品创建order
             createOrder(){
                 this.disabledOrderList=[];
                 _.map(this.selectList,v=>{
@@ -396,7 +399,6 @@
                                 type: 'warning'
                             });
                         }
-
                         let ids='';
                         this.selectList.forEach(v=>{
                             ids+=(v.skuId.value+',');
@@ -411,91 +413,42 @@
                         })
                     }
                 }
-
-
-
-                // let supplierList=[];
-                // let allow=true;
-                // _.map(this.selectList,v=>{
-                //     if(v.customerCreate.value){
-                //         allow=false;
-                //     }
-                //     supplierList.push(v.supplierCode.value);
-                // });
-                // if(!allow){
-                //     return this.$message({
-                //         message: this.$i.product.customerProductCanNotAddToOrder,
-                //         type: 'warning'
-                //     });
-                // }
-                // if(_.uniq(supplierList).length>1){
-                //     return this.$message({
-                //         message: this.$i.product.notAddDifferentSupplierProduct,
-                //         type: 'warning'
-                //     });
-                // }
-                //
-                // this.disabledOrderList=[];
-                // this.selectList.forEach(v=>{
-                //     //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
-                //     if(v.customerCreate.value){
-                //         this.disabledOrderList.push(v);
-                //     }
-                // });
-                // if(this.disabledOrderList.length>0){
-                //     this.dialogFormVisible=true;
-                // }else{
-                //     if(this.selectList.length===0){
-                //         this.$windowOpen({
-                //             url:'/order/create',
-                //         })
-                //     }else{
-                //         let ids='';
-                //         this.selectList.forEach(v=>{
-                //             if(this.$route.params.type==='modify'){
-                //                 ids+=(v.skuId.value+',');
-                //             }else if(this.$route.params.type==='new'){
-                //                 ids+=(v.id.value+',');
-                //             }
-                //         });
-                //         this.$windowOpen({
-                //             url:'/order/create',
-                //             params:{
-                //                 type:'product',
-                //                 ids:ids,
-                //                 supplierCode:this.selectList[0].supplierCode.value
-                //             },
-                //         })
-                //     }
-                // }
             },
-
-            //新增product
+            download(){
+                this.$fetch.export_task('SKU_PURCHASE_EXPORT_COMPARE_IDS',{ids:[this.$route.query.compareId]});
+            },
             addNewProduct(){
                 this.addProductDialogVisible=true;
                 this.forceUpdateNumber=Math.random();
             },
-
-            //删除product
             deleteProduct(){
                 this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
                     confirmButtonText: this.$i.product.sure,
                     cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
-                    this.selectList.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
-                        this.tableDataList.forEach(m=>{
-                            let newId=_.findWhere(m,{key:'id'}).value;
-                            if(id===newId){
-                                this.$set(m,'_disabled',true);
-                                this.$set(m,'_checked',false);
+                    let ids=_.uniq(_.pluck(_.pluck(this.selectList, 'id'), 'value'));
+                    let arr=[],initalData=[];
+                    _.map(this.tableDataList,v=>{
+                        _.map(ids,m=>{
+                            if(v.id.value===m){
+                                arr.push(v);
                             }
-                        })
+                        });
                     });
+                    _.map(this.initialData,v=>{
+                        _.map(ids,m=>{
+                            if(v.id.value===m){
+                                initalData.push(v);
+                            }
+                        });
+                    })
+                    this.tableDataList=_.difference(this.tableDataList, arr);
+                    this.initialData=_.difference(this.initialData, initalData);
+
                     this.$message({
                         type: 'success',
-                        message: '删除成功!'
+                        message: this.$i.product.deleteSuccess
                     });
                     this.$nextTick(()=>{
                         this.disableDelete=true;
@@ -524,7 +477,8 @@
                         message: this.$i.product.compareRecordMustLessThan100,
                         type: 'warning'
                     });
-                }else{
+                }
+                else{
                     //现在跑出来的东西只是一个productId数组
                     if(this.$route.params.type==='new'){
                         //在新建状态的情况下，直接拿id重新请求获取表格数据
@@ -539,15 +493,16 @@
                         this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                             this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                                 e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
+                                e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
+                                e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
+                                e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
+                                e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
+                                e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                                e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                                 return e;
                             });
-                            if(this.isHideTheSame){
-                                this.changeHideTheSame(true);
-                            }
-                            if(this.isHighlight){
-                                this.changeHighlight(true);
-                            }
-
+                            this.initialData=this.$depthClone(this.tableDataList);
+                            this.changeStatus();
                             this.hasLoading=true;
                             this.disabledLine=this.tableDataList;
                             this.loadingTable=false;
@@ -558,7 +513,6 @@
                     else if(this.$route.params.type==='modify'){
                         //modify状态下，要把拿出来的数据先进行对比，对比之后没有的再请求接口塞进去
                         //如果丢出来的数据的id有table里面产品的id，则把这个id对于的商品从置灰还原
-                        console.log(this.tableDataList,'table')
                         let ids=[];
                         this.tableDataList.forEach(v=>{
                             if(!v._disabled){
@@ -576,9 +530,17 @@
                         this.$ajax.post(this.$apis.get_skuListByIds,ids).then(res=>{
                             this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                                 e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
+                                e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
+                                e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
+                                e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
+                                e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
+                                e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                                e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                                 e.skuId.value=e.id.value;       //把id的值给skuId
                                 return e;
                             });
+                            this.initialData=this.$depthClone(this.tableDataList);
+                            this.changeStatus();
                             this.hasLoading=true;
                             this.isChangeData=true;
                             this.disabledLine=this.tableDataList;
@@ -586,8 +548,6 @@
                         }).catch(err=>{
                             this.loadingTable=false;
                         });
-
-                        console.log(ids,'ids')
                     }
                 }
                 this.addProductDialogVisible=false;
@@ -595,8 +555,6 @@
             handleCancel(){
                 this.addProductDialogVisible=false;
             },
-
-            //保存该compare list
             saveCompare(){
                 if(!this.compareName){
                     this.$message({
@@ -644,12 +602,10 @@
                     this.disabledSaveCompare=false;
                 });
             },
-
-            //删除该compare
             deleteCompare(){
-                this.$confirm('确认删除该compare?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
+                    confirmButtonText: this.$i.product.sure,
+                    cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.disabledSaveCompare=true;
@@ -658,7 +614,7 @@
                     this.$ajax.post(this.$apis.delete_buyerProductCompare,id).then(res=>{
                         this.$message({
                             type: 'success',
-                            message: '删除成功!'
+                            message: this.$i.product.deleteSuccess
                         });
                         this.disabledSaveCompare=false;
                         this.$router.push('/product/compare');
@@ -669,8 +625,6 @@
 
                 });
             },
-
-            //保存修改
             saveModify(){
                 if(!this.compareName){
                     this.$message({
@@ -682,7 +636,7 @@
                 this.disableClickSaveModify=true;
                 let params={
                     compares: [],
-                    id: Number(this.$route.query.compareId),
+                    id: this.$route.query.compareId,
                     name: this.compareName
                 };
                 this.tableDataList.forEach(v=>{
@@ -716,7 +670,6 @@
                     this.disableClickSaveModify=false;
                 });
             },
-
             handleClick(e){
                 e.isActive=!e.isActive;
                 this.keylist.forEach(v=>{
@@ -725,7 +678,6 @@
                     }
                 });
             },
-
             handleCategory(data){
                 _.map(data,item=>{
                     if(item.children.length===0){
@@ -735,9 +687,9 @@
                     }
                 });
             },
-
         },
         created(){
+            this.loadingTable=true;
             const codeAjax=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true});
             const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
             const sysCategoryAjax=this.$ajax.get(this.$apis.get_buyer_sys_category,{});
@@ -764,16 +716,26 @@
                 //         this.categoryList.push(data);
                 //     })
                 // });
-                console.log(this.$depthClone(res[3]),'res[3]')
                 this.handleCategory(res[3]);
-                console.log(this.$depthClone(this.categoryList),'this.categoryList')
                 this.getList();
             }).catch(()=>{
 
             })
         },
         mounted(){
-            this.setLog({query:{code:'PRODUCT'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'PURCHASE_SKU'},
+                type: 10,
+                auth:'PRODUCT:LOG',
+                label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/product/compareArchive',
+                type: 20,
+                auth:'PRODUCT:COMPARE_ARCHIVE',
+                label: this.$i.common.archive
+            });
         },
         watch:{
             selectList(n){

@@ -42,11 +42,22 @@
                     </el-col>
                 </el-row>
                 <div class="btns" v-show="notLoadingDone">
-                    <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                    <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
-                    <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
-                    <el-button @click="addToBookmark" :loading="disableClickAddBookmark">{{$i.product.addToBookmark}}</el-button>
-                    <!--<el-button>{{$i.product.download}}</el-button>-->
+                    <el-button
+                            v-authorize="'PRODUCT:DETAIL:CREATE_INQUIRY'"
+                            @click="createInquiry">{{$i.product.createInquiry}}</el-button>
+                    <el-button
+                            v-authorize="'PRODUCT:DETAIL:CREATE_ORDER'"
+                            @click="createOrder">{{$i.product.createOrder}}</el-button>
+                    <el-button
+                            v-authorize="'PRODUCT:DETAIL:ADD_COMPARE'"
+                            @click="addCompare">{{$i.product.addToCompare}}</el-button>
+                    <el-button
+                            v-authorize="'PRODUCT:DETAIL:ADD_BOOKMARK'"
+                            @click="addToBookmark"
+                            :loading="disableClickAddBookmark">{{$i.product.addToBookmark}}</el-button>
+                    <el-button
+                            v-authorize="'PRODUCT:DETAIL:DOWNLOAD'"
+                            @click="download">{{$i.product.download}}</el-button>
                 </div>
             </div>
         </div>
@@ -223,14 +234,12 @@
 
 <script>
     import {VTable,VUpload,VPagination,VImage} from '@/components/index'
-    import addTable from '../addlineTable'
     import compareList from '../compareList'
     import {mapActions} from 'vuex'
 
     export default {
         name: "detail",
         components:{
-            addTable,
             compareList,
             VTable,
             VUpload,
@@ -454,7 +463,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             handleClick(){
                 //切换tab页
             },
@@ -696,6 +705,9 @@
                     this.disableClickAddBookmark=false;
                 });
             },
+            download(){
+                this.$fetch.export_task('SKU_PURCHASE_EXPORT_IDS',{ids:[this.productForm.id]});
+            },
 
             /**
              * compare-list操作
@@ -807,7 +819,13 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query:{code:'PRODUCT'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'PRODUCT'},
+                type: 10,
+                auth:'PRODUCT:LOG',
+                label: this.$i.common.log
+            });
         },
     }
 </script>

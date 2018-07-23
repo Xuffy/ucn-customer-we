@@ -102,7 +102,7 @@
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
               </span>
-              <v-upload v-else-if="item.type === 'attachment'" :limit="20" :list="fromArg.attachment" ref="UPLOAD"></v-upload>
+              <v-upload v-else-if="item.type === 'attachment'" :limit="20" :list="fromArg.attachments" ref="UPLOAD"></v-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -112,8 +112,8 @@
     <div class="status">
       <div class="btn-wrap">
         <el-button @click="addProduct">{{ $i.common.addProduct }}</el-button>
-        <el-button type="danger" :disabled="checkedAll.length <= 0" @click="removeList">{{
-          `${$i.common.remove}(${checkedAll.length})` }}
+        <el-button type="danger" :disabled="checkedSkuIds.length <= 0" @click="removeList">{{
+          `${$i.common.remove}(${checkedSkuIds.length})` }}
         </el-button>
       </div>
       <!-- <select-search :options="[]" @inputEnter="inputEnter" /> -->
@@ -154,7 +154,7 @@
         :type="radio"
         :isInquiry="true"></v-product>
     </el-dialog>
-    <v-history-modify @save="save" :beforeSave="beforeSave" ref="HM"/>
+    <v-history-modify code="inquiry" @save="save" :beforeSave="beforeSave" ref="HM"/>
   </div>
 </template>
 <script>
@@ -169,7 +169,7 @@ export default {
     return {
       showInquiryNo: false,
       disabledLine: [],
-      checkedAll: [],
+      checkedSkuIds: [],
       trig: 0,
       tableLoad: false,
       optionData: {
@@ -194,7 +194,8 @@ export default {
 
       tabColumn: '', // tab top
       tabData: [], // tab Data
-      textarea: ''
+      textarea: '',
+      initDetailIds: []
     }
   },
   components: {
@@ -315,6 +316,7 @@ export default {
             item.entryDt = null;
             item.updateDt = null;
             item.updateName = null;
+            this.initDetailIds.push(item.id);
           }
         }
         this.fromArg = res;
@@ -338,15 +340,8 @@ export default {
       this.dialogTableVisible = true;
     },
     removeList() {
-      let arr = [];
-      _.map(this.tabData, (item, index) => {
-        if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
-      });
-      this.tabData = _.difference(this.tabData, arr);
-      this.checkedAll = [];
-    },
-    inputEnter(val) {
-
+      this.tabData = this.tabData.filter(i => !this.checkedSkuIds.includes(i.skuId.value));
+      this.checkedSkuIds = [];
     },
     beforeSave(data) {
       if (Array.isArray(data)) {
@@ -425,6 +420,9 @@ export default {
         }
       }
 
+      let ids = postData.details.filter(i => i.id).map(i => i.id);
+      postData.deleteDetailIds = this.initDetailIds.filter(i => !ids.includes(i));
+
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, postData).then(() => {
         if (!this.fromArg.draft) {
           this.$router.push('/negotiation/inquiry')
@@ -481,7 +479,7 @@ export default {
       return arr;
     },
     changeChecked(item) {
-      this.checkedAll = item;
+      this.checkedSkuIds = [...new Set(item.filter(i => !i._remark).map(i => i.skuId.value))];
     },
     getList(ids) {
       if (!Array.isArray(ids) || !ids.length) {

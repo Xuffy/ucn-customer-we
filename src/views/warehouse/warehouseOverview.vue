@@ -2,6 +2,13 @@
     <div class="inbound-overview">
         <div class="title">
             <span>{{$i.warehouse.warehouseOverview}}</span>
+            <select-search
+                    :width="200"
+                    style="float: right"
+                    class="search"
+                    @inputEnter="searchInbound"
+                    v-model="searchId"
+                    :options="searchOptions"></select-search>
         </div>
         <div class="body">
             <div class="head">
@@ -10,27 +17,24 @@
                     <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
                     <el-radio-button v-for="v in warehouseStatusOption" :key="v.id" :label="v.code">{{v.name}}</el-radio-button>
                 </el-radio-group>
-                <select-search
-                        class="search"
-                        @inputEnter="searchInbound"
-                        v-model="searchId"
-                        :options="searchOptions"></select-search>
+
             </div>
-            <br>
-            <br>
             <div class="section">
                 <v-table
                         code="uwarehouse_overview"
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
-                        :buttons="[{label: 'Detail', type: 1}]"
+                        :buttons="[{label: $i.warehouse.detail, type: 1}]"
+                        @change-sort="val=>{getWarehouseData(val)}"
                         @change-checked="changeChecked"
                         @action="btnClick">
                     <template slot="header">
-                        <!--<div class="btns">-->
-                            <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                        <!--</div>-->
+                        <div class="btns">
+                            <el-button
+                                    v-authorize="'WAREHOUSE:DOWNLOAD'"
+                                    @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
+                        </div>
                     </template>
                 </v-table>
                 <page
@@ -79,61 +83,49 @@
                     ps: 50,
                     skuCode: "",
                     skuInventoryStatusDictCode: "",
-
-                    // sorts: [
-                    //     {
-                    //         "orderBy": "string",
-                    //         "orderType": "string",
-                    //     }
-                    // ],
-                    // operatorFilters: [
-                    //     {
-                    //         "columnName": "string",
-                    //         "operator": "string",
-                    //         "property": "string",
-                    //         "value": {}
-                    //     }
-                    // ],
+                    sorts:[{orderBy:"entryDt",orderType:"desc"}]
                 },
                 searchId:1,
                 searchOptions:[
                     {
-                        label:'orderNo',
+                        label:this.$i.warehouse.orderNo,
                         id:1
                     },
                     {
-                        label:'skuCode',
+                        label:this.$i.warehouse.skuCode,
                         id:2
                     },
                     {
-                        label:'inboundNo',
+                        label:this.$i.warehouse.inboundNo,
                         id:3
                     },
                 ]
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             changeStatus(){
                 this.warehouseConfig.pn=1;
                 this.getWarehouseData();
             },
 
             //获取表格数据
-            getWarehouseData(){
+            getWarehouseData(e){
                 this.loadingTable=true;
+                if(e){
+                    Object.assign(this.warehouseConfig,e);
+                }
+                this.selectList=[];
                 this.$ajax.post(this.$apis.get_buyerWarehouseOverview,this.warehouseConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.warehouseOverview, res.datas,e=>{
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
                         e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
                     });
                     this.pageData=res;
-                    this.loadingTable=false;
-                }).catch(err=>{
+                }).finally(err=>{
                     this.loadingTable=false;
                 });
             },
-
             searchInbound(e){
                 if(!e.id){
                     return this.$message({
@@ -157,7 +149,6 @@
                     this.getWarehouseData();
                 }
             },
-
             btnClick(e){
                 this.$windowOpen({
                     url:'/product/sourcingDetail',
@@ -166,11 +157,15 @@
                     }
                 })
             },
-
             changeChecked(e){
                 this.selectList=e;
             },
-
+            download(){
+                let ids=_.pluck(_.pluck(this.selectList,'id'),'value');
+                let params=this.$depthClone(this.warehouseConfig);
+                params.inboundSkuIds=ids;
+                this.$fetch.export_task('WAREHOUES',params);
+            },
 
             /**
              * 字典获取
@@ -208,7 +203,13 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query:{code:'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                auth:'WAREHOUSE:LOG',
+                label: this.$i.common.log
+            });
         },
         watch:{
 
@@ -217,6 +218,9 @@
 </script>
 
 <style scoped>
+    .body{
+        margin-top: 5px;
+    }
     .title{
         font-weight: bold;
         font-size: 18px;

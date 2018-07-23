@@ -6,7 +6,7 @@
         <div class="status">
             <div class="state">
                 <span>{{ $i.common.qcStatus }}</span>
-                <el-radio-group class="radios" @change="getQcOrderList(true)" v-model="params.qcStatusDictCode"
+                <el-radio-group class="radios" @change="changeQcStatus" v-model="params.qcStatusDictCode"
                                 size="mini">
                     <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
                     <el-radio-button v-for="v in qcStatusOption" :key="v.id" :label="v.code">{{v.name}}
@@ -18,8 +18,8 @@
                         :options="options"
                         v-model="searchValue"
                         @inputEnter="inputEnter"
-                        :searchLoad="searchLoad"
-                />
+                        :searchLoad="searchLoad">
+                </select-search>
             </div>
         </div>
         <v-table
@@ -27,14 +27,21 @@
                 :height="500"
                 :data="tabData"
                 :loading='loading'
-                :buttons="[{label: 'Detail', type: 1}]"
+                :buttons="[{label: $i.warehouse.detail, type: 1}]"
                 @action="onAction"
+                @change-sort="val=>{getQcOrderList(val)}"
                 @change-checked='checked'>
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
-                        <!--<el-button @click='download'>{{($i.warehouse.download)}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                        <el-button @click="createQcOrder">{{ $i.warehouse.create }}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_OVERVIEW:CREATE'"
+                                @click="createQcOrder">{{ $i.warehouse.create }}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_OVERVIEW:DOWNLOAD'"
+                                @click='download'>
+                            {{($i.warehouse.download)}}({{selectList.length?selectList.length:$i.warehouse.all}})
+                        </el-button>
                     </div>
                 </div>
             </template>
@@ -67,7 +74,10 @@
                 options: [
                     {
                         id: 1,
-                        label: 'QC Order No'
+                        label: this.$i.warehouse.QCOrderNo
+                    }, {
+                        id: 2,
+                        label: this.$i.warehouse.orderNo
                     }
                 ],
                 pageData: {},
@@ -77,15 +87,10 @@
                 params: {
                     pn: 1,
                     ps: 50,
+                    orderNo: "",
                     qcOrderNo: "",
                     qcStatusDictCode: "",
-
-                    // sorts: [
-                    //     {
-                    //         orderBy: "",
-                    //         orderType: "",
-                    //     }
-                    // ],
+                    sorts:[{orderBy:"entryDt",orderType:"desc"}]
                 },
                 tabData: [],
                 selectList: [],
@@ -94,7 +99,7 @@
             }
         },
         methods: {
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getSort(val, key) {
                 console.log(val, key)
             },
@@ -115,9 +120,13 @@
                     type: 'warning'
                 });
                 if (val.id === 1) {
-                    this.params.qcOrderNo = val.value
+                    this.params.qcOrderNo = val.value ? val.value : "";
+                    this.params.orderNo = "";
+                } else {
+                    this.params.orderNo = val.value ? val.value : "";
+                    this.params.qcOrderNo = "";
                 }
-                this.getQcOrderList()
+                this.getQcOrderList();
             },
             onAction(item, type) {
                 this.$windowOpen({
@@ -128,21 +137,22 @@
                 })
             },
             download() {
-                console.log('下载')
-                // this.$ajax.post(this.$apis.download_order, {ids:this.selectedNumber})
-                //   .then((res) => {
-                //     console.log(res)
-                //   })
-                //   .catch((res) => {
-                //     console.log(res)
-                //   });
+                let orderNos=_.pluck(_.pluck(this.selectList, "qcOrderNo"),'value');
+                let params=this.$depthClone(this.params);
+                params.qcOrderNos=orderNos;
+                this.$fetch.export_task('QC_ORDER',params);
+            },
+            changeQcStatus(){
+                this.params.pn = 1;
+                this.getQcOrderList();
             },
             //获取表格data
             getQcOrderList(e) {
-                if (e) {
-                    this.params.pn = 1;
-                }
                 this.loading = true;
+                if(e){
+                    Object.assign(this.params,e);
+                }
+                this.selectList=[];
                 this.$ajax.post(this.$apis.post_qc_page, this.params)
                     .then(res => {
                         this.loading = false;
@@ -179,13 +189,18 @@
 
                 });
             },
-
         },
         created() {
             this.getUnit();
         },
         mounted() {
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                auth:'QC:LOG',
+                label: this.$i.common.log
+            });
         },
     }
 </script>

@@ -33,9 +33,6 @@ export const routerMap = [
         path: 'index',
         name: 'workbench',
         meta: {
-          draft: false,
-          recycleBin: false,
-          log: false,
         },
         component: () => import('../views/workbench/index.vue')
       }
@@ -44,16 +41,17 @@ export const routerMap = [
   {
     path: '/product',
     component: Layout,
-    meta: {name: $i.router.product},
+    meta: {
+        name: $i.router.product,
+        auth:'PRODUCT'
+    },
     redirect: '/product/sourcing',
     children: [
       {
         path: 'sourcing',
         name: 'productSourcingOverview',
         meta: {
-          // draft: false,
-          // recycleBin: false,
-          // log: true,
+            auth:'PRODUCT:OVERVIEW',
           name: $i.router.productSourcingOverview
         },
         component: () => import('../views/product/sourcing/sourcing'),
@@ -63,9 +61,7 @@ export const routerMap = [
         name: 'productSourcingDetail',
         hidden: true,
         meta: {
-          // draft: false,
-          // recycleBin: false,
-          // log: true,
+            auth:'PRODUCT:DETAIL',
           name: $i.router.productSourcingDetail
         },
         component: () => import('../views/product/sourcing/detail'),
@@ -74,9 +70,7 @@ export const routerMap = [
         path: 'bookmark',
         name: 'productBookmarkOverview',
         meta: {
-          // draft: false,
-          // recycleBin: true,
-          // log: true,
+            auth:'PRODUCT:BOOKMARK_OVERVIEW',
           name: $i.router.productBookmarkOverview
         },
         component: () => import('../views/product/bookmark/bookmark'),
@@ -86,9 +80,7 @@ export const routerMap = [
         name: 'productBookmarkDetail',
         hidden: true,
         meta: {
-          // draft: false,
-          // recycleBin: true,
-          // log: false,
+            auth:'PRODUCT:BOOKMARK_DETAIL',
           name: $i.router.productBookmarkDetail
         },
         component: () => import('../views/product/bookmark/detail'),
@@ -98,33 +90,27 @@ export const routerMap = [
         name: 'productBookmarkManuallyAdd',
         hidden: true,
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'PRODUCT:BOOKMARK_OVERVIEW:MANUALLY_ADD',
           name: $i.router.productBookmarkManuallyAdd
         },
         component: () => import('../views/product/bookmark/manuallyAdd'),
       },
       {
-        path: 'recycleBin',
-        name: 'productBookmarkRecycleBin',
+        path: 'bookmarkArchive',
+        name: 'productBookmarkArchive',
         hidden: true,
         meta: {
-          // draft: false,
-          // recycleBin: true,
-          // log: true,
-          name: $i.router.productBookmarkRecycleBin
+          auth:'PRODUCT:ARCHIVE',
+          name: $i.router.bookmarkArchive
         },
-        component: () => import('../views/product/bookmark/recycleBin'),
+        component: () => import('../views/product/bookmark/archive'),
       },
 
       {
         path: 'compare',
         name: 'productCompareOverview',
         meta: {
-          // draft: false,
-          // recycleBin: true,
-          // log: true,
+            auth:'PRODUCT:COMPARE_OVERVIEW',
           name: $i.router.productCompareOverview
         },
         component: () => import('../views/product/compare/overview'),
@@ -134,31 +120,30 @@ export const routerMap = [
         name: 'productCompareDetail',
         hidden: true,
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+            auth:'PRODUCT:COMPARE_DETAIL',
           name: $i.router.productCompareDetail
         },
         component: () => import('../views/product/compare/compare'),
       },
       {
-        path: 'compareRecycleBin',
+        path: 'compareArchive',
         name: 'productCompareRecycleBin',
         hidden: true,
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+            auth:'PRODUCT:COMPARE_ARCHIVE',
           name: $i.router.productCompareRecycleBin
         },
-        component: () => import('../views/product/compare/recycleBin'),
+        component: () => import('../views/product/compare/archive'),
       },
     ]
   },
   {
     path: '/supplier',
     component: Layout,
-    meta: {name: $i.router.supplier},
+    meta: {
+      name: $i.router.supplier,
+      auth: ['SUPPLIER']
+    },
     redirect: '/supplier/sourcing',
     children: [
       {
@@ -168,9 +153,10 @@ export const routerMap = [
           draft: false,
           recycleBin: false,
           log: true,
-          name: $i.router.supplierOverview
+          name: $i.router.supplierOverview,
+          auth: ['SUPPLIER:OVERVIEW']
         },
-        component: () => import ('../views/supplier/sourcing/sourcing.vue'),
+        component: () => import ('../views/supplier/sourcing/sourcing.vue')
       },
       {
         path: 'bookmark',
@@ -179,8 +165,10 @@ export const routerMap = [
           draft: false,
           recycleBin: true,
           log: true,
-          name: $i.router.supplierBookmark
+          name: $i.router.supplierBookmark,
+          auth: ['SUPPLIER:BOOKMARK_OVERVIEW']
         },
+
         component: () => import ('../views/supplier/bookmark/bookmark.vue')
       },
       {
@@ -191,7 +179,8 @@ export const routerMap = [
           draft: false,
           recycleBin: true,
           log: true,
-          name: $i.router.supplierBookmarkDetail
+          name: $i.router.supplierBookmarkDetail,
+          auth: ['SUPPLIER:BOOKMARK_DETAIL']
         },
         component: () => import ('../views/supplier/bookmark/bookmarkDetail.vue')
       },
@@ -215,7 +204,8 @@ export const routerMap = [
           draft: false,
           recycleBin: false,
           log: true,
-          name: $i.router.supplierSourcingDetail
+          name: $i.router.supplierSourcingDetail,
+          auth: ['SUPPLIER:DETAIL']
         },
         component: () => import ('../views/supplier/sourcing/sourcingDetail.vue')
       },
@@ -227,7 +217,8 @@ export const routerMap = [
           draft: false,
           recycleBin: true,
           log: true,
-          name: $i.router.supplierCompareDetail
+          name: $i.router.supplierCompareDetail,
+          auth: ['SUPPLIER:COMPARE_DETAIL']
         },
         component: () => import ('../views/supplier/compare/compare.vue')
       },
@@ -238,21 +229,22 @@ export const routerMap = [
           draft: false,
           recycleBin: true,
           log: true,
-          name: $i.router.supplierCompareOverview
+          name: $i.router.supplierCompareOverview,
+          auth: ['SUPPLIER:COMPARE_OVERVIEW']
         },
         component: () => import ('../views/supplier/compare/overview.vue')
       },
       {
-        path: 'compareRecycleBin',
-        name: 'supplierCompareRecycleBin',
+        path: 'compareArchive',
+        name: 'supplierCompareArchive',
         hidden: true,
         meta: {
           draft: false,
           recycleBin: true,
           log: true,
-          name: 'Compare RecycleBin'
+          name: 'Compare Archive'
         },
-        component: () => import ('../views/supplier/compare/recycleBin.vue')
+        component: () => import ('../views/supplier/compare/archiveSupplier.vue')
       }
     ]
   },
@@ -334,7 +326,10 @@ export const routerMap = [
   },
   {
     path: '/payment',
-    meta: {name: $i.router.payment},
+    meta: {
+      name: $i.router.payment,
+      auth: ['PAYMENT']
+    },
     component: Layout,
     redirect: '/payment/index',
     noDropdown: true,
@@ -355,16 +350,17 @@ export const routerMap = [
     path: '/order',
     component: Layout,
     redirect: '/order/overview',
-    meta: {name: $i.router.order},
+    meta: {
+        name: $i.router.order,
+        auth:'ORDER',
+    },
     noDropdown: true,
     children: [
       {
         path: 'overview',
         name: 'order',
         meta: {
-          // draft: '/order/draft',
-          // recycleBin: true,
-          // log: true,
+          auth:'ORDER:OVERVIEW',
           name: $i.router.orderOverview
         },
         component: () => import('../views/order/overView.vue')
@@ -373,9 +369,7 @@ export const routerMap = [
         path: 'create',
         name: 'orderCreate',
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'ORDER:OVERVIEW:CREATE',
           name: $i.router.orderCreate
         },
         component: () => import('../views/order/createOrder/createOrder.vue')
@@ -384,35 +378,38 @@ export const routerMap = [
         path: 'detail',
         name: 'Order Detail',
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'ORDER:DETAIL',
           name: $i.router.orderDetail
         },
-        component: () => import('../views/order/poDetail/poDetail.vue')
+        component: () => import('../views/order/orderDetail.vue')
       },
 
       {
         path: 'draft',
         name: 'orderDraft',
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'ORDER:DRAFT_OVERVIEW',
           name: $i.router.orderDraft
         },
         component: () => import('../views/order/draftOverview.vue')
       }, {
-        path: 'recycleBin',
-        name: 'orderRecycleBin',
+        path: 'archiveOrder',
+        name: 'orderArchiveOrder',
         meta: {
-          draft: true,
-          recycleBin: true,
-          log: true,
+            auth:'ORDER:DRAFT_ARCHIVE',
           name: $i.router.orderRecycleBin
         },
-        component: () => import('../views/order/recycleBin.vue')
-      }
+        component: () => import('../views/order/archiveOrder.vue')
+      },
+        {
+            path: 'archiveDraft',
+            name: 'orderArchiveDraft',
+            meta: {
+                auth:'ORDER:DRAFT_ARCHIVE',
+                name: $i.router.orderRecycleBin
+            },
+            component: () => import('../views/order/archiveDraft.vue')
+        }
     ]
   },
   {
@@ -420,16 +417,17 @@ export const routerMap = [
     component: Layout,
     redirect: '/warehouse/overview',
     name: 'Warehouse',
-    meta: {name: $i.router.warehouse},
+    meta: {
+        auth:'WAREHOUSE',
+        name: $i.router.warehouse
+    },
     noDropdown: false,
     children: [
       {
         path: 'overview',
         name: 'Warehouse Overview',
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+            auth:'WAREHOUSE:OVERVIEW',
           name: $i.router.warehouseOverview
         },
         component: () => import('../views/warehouse/warehouseOverview.vue'),
@@ -438,9 +436,7 @@ export const routerMap = [
         path: 'qcOverview',
         name: 'warehouseQc',
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+            auth:'QC:ORDER_OVERVIEW',
           name: $i.router.warehouseQcOverview
         },
         component: () => import('../views/warehouse/qcOverview.vue'),
@@ -450,9 +446,7 @@ export const routerMap = [
         name: 'warehouseQcOrderDetail',
         hidden: true,
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'QC:ORDER_DETAIL',
           name: $i.router.warehouseQcOrderDetail
         },
         component: () => import('../views/warehouse/qcDetail.vue'),
@@ -462,9 +456,7 @@ export const routerMap = [
         name: 'warehouseCreateQcOrder',
         hidden: true,
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'QC:ORDER_OVERVIEW:CREATE',
           name: $i.router.warehouseCreateQcOrder
         },
         component: () => import('../views/warehouse/createQc.vue'),
@@ -474,7 +466,10 @@ export const routerMap = [
   {
     path: '/logistic',
     name: 'logistic',
-    meta: {name: $i.router.logistic},
+    meta: {
+      name: $i.router.logistic,
+      auth: ['LOGISTICS']
+    },
     component: Layout,
     redirect: '/logistic/plan',
     children: [
@@ -485,8 +480,9 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
-          importTask: false,
-          name: $i.router.logisticPlanOverview
+          importTask: true,
+          name: $i.router.logisticPlanOverview,
+          auth: ['LOGISTICS:PLAN_OVERVIEW']
         },
         component: () => import('../views/logistic/logisticPlanOverview')
       },
@@ -497,8 +493,9 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
-          importTask: false,
-          name: $i.router.logisticLoadingListOverview
+          importTask: true,
+          name: $i.router.logisticLoadingListOverview,
+          auth: ['LOADING_LIST:OVERVIEW']
         },
         component: () => import('../views/logistic/logisticPlanOverview')
       },
@@ -511,22 +508,52 @@ export const routerMap = [
           recycleBin: false,
           log: true,
           importTask: false,
-          name: $i.router.logisticLoadingDraft
+          name: $i.router.logisticLoadingDraft,
+          auth: ['LOGISTICS:PLAN_DRAFT_OVERVIEW']
         },
         component: () => import('../views/logistic/logisticPlanOverview')
       },
       {
-        path: 'archive',
-        name: 'overviewArchive',
+        path: 'archivePlan',
+        name: 'archivePlan',
         hidden: true,
         meta: {
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
           importTask: false,
-          name: $i.router.logisticLoadingArchive
+          name: $i.router.archive,
+          auth: ['LOGISTICS:ARCHIVE']
         },
-        component: () => import('../views/logistic/logisticPlanOverview')
+        component: () => import('../views/logistic/archivePlan')
+      },
+      {
+        path: 'archiveDraft',
+        name: 'archiveDraft',
+        hidden: true,
+        meta: {
+          draft: '/logistic/draft',
+          recycleBin: false,
+          log: true,
+          importTask: false,
+          name: $i.router.archive,
+          auth: ['LOGISTICS:DRAFT_ARCHIVE']
+        },
+        component: () => import('../views/logistic/archiveDraft')
+      },
+      {
+        path: 'archiveLoadingList',
+        name: 'archiveLoadingList',
+        hidden: true,
+        meta: {
+          draft: '/logistic/draft',
+          recycleBin: false,
+          log: true,
+          importTask: false,
+          name: $i.router.archive,
+          auth: ['LOADING_LIST:ARCHIVE']
+        },
+        component: () => import('../views/logistic/archiveLoadingList')
       },
       {
         path: 'placeLogisticPlan',
@@ -549,8 +576,9 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: false,
-          importTask: false,
-          name: $i.router.logisticPlaceDetail
+          importTask: true,
+          name: $i.router.logisticPlaceDetail,
+          auth: ['LOGISTICS:PLAN_DETAIL']
         },
         component: () => import('../views/logistic/logisticPlanDetail')
       },
@@ -562,8 +590,9 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: false,
-          importTask: false,
-          name: $i.router.logisticLoadingList
+          importTask: true,
+          name: $i.router.logisticLoadingList,
+          auth: ['LOADING_LIST:DETAIL']
         },
         component: () => import('../views/logistic/logisticPlanDetail')
       },
@@ -586,15 +615,15 @@ export const routerMap = [
     path: '/settings',
     component: Layout,
     redirect: '/settings/department',
-    meta: {name: $i.router.settings},
+    meta: {
+      name: $i.router.settings,
+      auth: ['SETTING']
+    },
     children: [
       {
         path: 'department',
         name: 'settingsDepartment',
         meta: {
-          // draft: true,
-          // recycleBin: false,
-          // log: true,
           auth: [0],
           name: $i.router.settingsDepartment
         },
@@ -619,7 +648,8 @@ export const routerMap = [
           draft: true,
           recycleBin: true,
           log: true,
-          name: $i.router.settingsPersonal
+          name: $i.router.settingsPersonal,
+          auth: ['SETTING:PERSONAL']
         },
         component: () => import('../views/settings/personalSetting')
       },
@@ -675,10 +705,10 @@ export const routerMap = [
         component: () => import('../views/logs/logs.vue')
       },
       {
-        path: 'import',
-        name: 'logsImport',
+        path: 'task',
+        name: 'logsTask',
         meta: {},
-        component: () => import('../views/logs/import.vue')
+        component: () => import('../views/logs/task.vue')
       }
     ]
   },
@@ -686,7 +716,10 @@ export const routerMap = [
     path: '/message',
     component: Layout,
     redirect: '/message/index',
-    meta: {name: $i.router.message},
+    meta: {
+      name: $i.router.message,
+      auth: ['MESSAGE']
+    },
     hidden: true,
     children: [
       {
@@ -751,58 +784,23 @@ export const routerMap = [
 ]
 
 let router = new Router({
+  mode: 'history',
   routes: routerMap
 });
 
 router.beforeResolve((to, from, next) => {
-  let ts = localStore.get('token')
-    , cacheParam = sessionStore.get('cache_router_param') || []
-    , cp = _.findWhere(cacheParam, {path: to.path}) // 从缓存中获取对应路由参数
-    , version;
+  let ts = localStore.get('token');
 
   if (to.meta && to.meta.auth && !Util.$auth(to.meta.auth)) {
-    return next({path: '/'});
+    return;
+    // return next({path: '/'});
   }
 
   if (to.path !== '/login' || from.path === '/login') {
-    /*version = localStore.get('version');
-
-    if (version !== Config.VERSION) { // 版本控制
-      return next({path: '/login'});
-    }*/
     if (_.isEmpty(ts)) { // 登录验证
       return next({path: '/login'});
     }
   }
-
-  // 判断路由是否必须带入参数 todo 跳转之前页面地址没有带上参数
-  /*if (to.meta.needParam) {
-    if (_.isEmpty(to.params) && _.isEmpty(to.query)) {
-      if (!_.isEmpty(cp)) {
-        _.map(cp.query, (val, key) => {
-          to.query[key] = val;
-        });
-
-        _.map(cp.params, (val, key) => {
-          to.params[key] = val;
-        });
-      } else {
-        return to.matched.length ?
-          next({path: to.matched[1] ? to.matched[1].redirect : to.matched[0].redirect}) : next({path: '/'});
-      }
-    }
-    if (!_.isEmpty(cp)) {
-      cacheParam = _.filter(cacheParam, val => {
-        return val.path !== to.path;
-      });
-    }
-
-    cacheParam.push(_.pick(to, 'path', 'params', 'query'));
-    sessionStore.set('cache_router_param', cacheParam);
-
-  }*/
-
-  // Notification.closeAll();
 
   next();
 });

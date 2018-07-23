@@ -24,8 +24,8 @@ export default {
       _important:true,
     },
     waitPayment: {
-      _important:true,
-      key: '' //待付
+      // _important:true,
+      key: 'toPayAmount' //待付
     },
     planDateOfPayment: {   //应付时间
       key: 'planPayDt',
@@ -44,8 +44,8 @@ export default {
       _important:true,
     },
     waitReceipt: {
-        _important:true,
-        key: ''  //待收
+        // _important:true,
+        key: 'toReceiveAmount'  //待收
     },
     planDateOfReceipt: {  //应收时间
        key:'planReceiveDt',
@@ -74,4 +74,12 @@ export default {
       key: 'type',
       _hide:true
     },
+    timestamp: {
+     _important:true,
+     _hide:true
+   },
+    paymentNumber:{
+      _important:true,
+      _hide:true
+    }
   }

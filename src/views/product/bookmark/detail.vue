@@ -7,7 +7,8 @@
             <div class="detail head-detail">
                 <el-row>
                     <el-col :span="6">
-                        <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="300px">
+                        <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always"
+                                     trigger="click" height="300px">
                             <el-carousel-item v-for="item in productForm.pictures" :key="item">
                                 <v-image :src="item"></v-image>
                             </el-carousel-item>
@@ -16,7 +17,9 @@
                     <el-col :span="18">
                         <el-form :modal="productForm" ref="sourcingDetail" label-width="190px">
                             <el-row>
-                                <el-col  v-for="v in $db.product.buyerDetailTop" :key="v.key" class="list" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                                <el-col v-for="v in $db.product.buyerDetailTop" :key="v.key" class="list" :xs="24"
+                                        :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                                        :xl="v.fullLine?24:12">
                                     <el-form-item :prop="v.key" :label="v.label +' :'">
                                         <span v-if="v.key==='incoterm'">
                                             FOB
@@ -42,18 +45,52 @@
                     </el-col>
                 </el-row>
                 <div class="btns" v-show="hideBtns" v-if="notEdit">
-                    <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                    <el-button :disabled="productForm.customerCreate" @click="createOrder">{{$i.product.createOrder}}</el-button>
-                    <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
-                    <el-button @click="editProduct">{{$i.product.editEn}}</el-button>
-                    <!--<el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark">{{$i.product.delete}}</el-button>-->
-                    <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
-                    <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
-                    <!--<el-button>{{$i.product.downloadTheProduct}}</el-button>-->
-                    <!--<el-button>{{$i.product.uploadProduct}}</el-button>-->
+                    <el-button
+                            @click="createInquiry"
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:CREATE_INQUIRY'">
+                        {{$i.product.createInquiry}}
+                    </el-button>
+                    <el-button
+                            :disabled="productForm.customerCreate"
+                            @click="createOrder"
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:CREATE_ORDER'">{{$i.product.createOrder}}
+                    </el-button>
+                    <el-button
+                            @click="addCompare"
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:ADD_COMPARE'">
+                        {{$i.product.addToCompare}}
+                    </el-button>
+                    <el-button
+                            @click="editProduct"
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:MODIFY'">
+                        {{$i.product.editEn}}
+                    </el-button>
+                    <el-button
+                            @click="addProduct"
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:ADD_PRODUCT'">
+                        {{$i.product.addNewProductEn}}
+                    </el-button>
+                    <el-button
+                            @click="manuallyAddProduct"
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:MANUALLY_ADD'">
+                        {{$i.product.manuallyAdd}}
+                    </el-button>
+                    <el-button
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:DOWNLOAD'">{{$i.product.downloadTheProduct}}
+                    </el-button>
+                    <el-button
+                            @click="upload"
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:UPLOAD'">{{$i.product.uploadProduct}}</el-button>
+                    <el-button
+                            type="danger"
+                            :loading="disableClickDelete"
+                            @click="deleteBookmark"
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:DELETE'">{{$i.product.remove}}
+                    </el-button>
                 </div>
                 <div class="btns" v-else>
-                    <el-button @click="saveEdit" :loading="disabledClickSaveEdit" type="primary">{{$i.product.ok}}</el-button>
+                    <el-button @click="saveEdit" :loading="disabledClickSaveEdit" type="primary">{{$i.product.ok}}
+                    </el-button>
                     <el-button @click="cancelEdit">{{$i.product.cancel}}</el-button>
                 </div>
             </div>
@@ -64,10 +101,12 @@
                     <el-form class="speForm" label-width="310px" :label-position="labelPosition">
                         <el-row>
                             <el-row>
-                                <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                                <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key"
+                                        class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                                        :xl="v.fullLine?24:12">
                                     <el-form-item :prop="v.key" :label="v.label+' :'">
                                         <div v-if="v.key==='status'">
-                                           {{productForm[v.key]}}
+                                            {{productForm[v.key]}}
                                         </div>
                                         <div v-else>
                                             <div v-if="productForm.customerCreate">
@@ -84,7 +123,8 @@
                                                     </el-input>
                                                 </div>
                                                 <div v-else-if="v.key==='customerSkuCode' || v.key==='nameCustomer'">
-                                                    <el-input :disabled="notEdit" v-model="productForm[v.key]" placeholder="please input"></el-input>
+                                                    <el-input :disabled="notEdit" v-model="productForm[v.key]"
+                                                              placeholder="please input"></el-input>
                                                 </div>
                                                 <div v-else>
                                                     {{productForm[v.key]}}
@@ -100,7 +140,9 @@
                 <el-tab-pane :label="$i.product.customerInfo" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key"
+                                    class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                                    :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -117,7 +159,9 @@
                 <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key"
+                                    class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                                    :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -128,7 +172,9 @@
                 <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
                     <el-form class="speForm" label-width="280px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key"
+                                    class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                                    :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -139,7 +185,9 @@
                 <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
                     <el-form class="speForm" label-width="310px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key"
+                                    class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                                    :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -182,7 +230,7 @@
                                 :label="$i.product.time"
                                 align="center">
                             <template slot-scope="scope">
-                                {{$dateFormat(scope.row.operatorDate,'yyyy-mm-dd hh:mm:ss')}}
+                                {{$dateFormat(scope.row.operatorDate,"yyyy-mm-dd hh:mm:ss")}}
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -190,8 +238,12 @@
                                 :label="$i.product.action"
                                 align="center">
                             <template slot-scope="scope">
-                                <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.modify}}</el-button>
-                                <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.delete}}</el-button>
+                                <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">
+                                    {{$i.product.modify}}
+                                </el-button>
+                                <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">
+                                    {{$i.product.delete}}
+                                </el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -213,7 +265,9 @@
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
-                            <el-button :loading="disableCreateRemark" type="primary" @click="createRemarkSubmit">{{$i.product.submit}}</el-button>
+                            <el-button :loading="disableCreateRemark" type="primary" @click="createRemarkSubmit">
+                                {{$i.product.submit}}
+                            </el-button>
                             <el-button @click="addRemarkFormVisible = false">{{$i.product.cancel}}</el-button>
                         </div>
                     </el-dialog>
@@ -239,7 +293,9 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button :loading="disableModifyRemark" type="primary" @click="editRemarkSubmit">{{$i.product.submit}}</el-button>
+                <el-button :loading="disableModifyRemark" type="primary" @click="editRemarkSubmit">
+                    {{$i.product.submit}}
+                </el-button>
                 <el-button @click="editRemarkFormVisible = false">{{$i.product.cancel}}</el-button>
             </div>
         </el-dialog>
@@ -259,52 +315,50 @@
 </template>
 
 <script>
-    import addTable from '../addlineTable'
-    import compareList from '../compareList'
-    import product from '../addProduct'
-    import {VTable,VUpload,VPagination,VImage} from '@/components/index'
-    import {mapActions} from 'vuex'
+    import compareList from "../compareList";
+    import product from "../addProduct";
+    import { VTable, VUpload, VPagination, VImage } from "@/components/index";
+    import { mapActions } from "vuex";
 
     export default {
         name: "detail",
-        components:{
-            addTable,
+        components: {
             compareList,
             VTable,
             product,
             VUpload,
-            page:VPagination,
+            page: VPagination,
             VImage
         },
-        data(){
-            return{
+        data() {
+            return {
                 /**
                  * 页面配置
                  * */
-                pageData:{},
-                notEdit:true,          //是否不在编辑状态,默认为true
-                hideBtns:false,
+                pageData: {},
+                notEdit: true,          //是否不在编辑状态,默认为true
+                hideBtns: false,
                 value1: 0,
-                tabName:'Basic Info',
-                labelPosition:'left',               //文字靠边参数，left或者right
-                notLoadingDone:true,
-                addProductDialogVisible:false,      //新增产品弹出框显示隐藏
-                addProductTitle:'',
-                addProductType:'product',
-                disabledOkBtn:false,
-                disabledClickSaveEdit:false,
-                disableClickDelete:false,
-                forceNumber:0,
-                editRemarkFormVisible:false,
-                disableModifyRemark:false,
+                tabName: "Basic Info",
+                labelPosition: "left",               //文字靠边参数，left或者right
+                notLoadingDone: true,
+                addProductDialogVisible: false,      //新增产品弹出框显示隐藏
+                addProductTitle: "",
+                addProductType: "product",
+                disabledOkBtn: false,
+                disabledClickSaveEdit: false,
+                disableClickDelete: false,
+                forceNumber: 0,
+                editRemarkFormVisible: false,
+                disableModifyRemark: false,
 
-                editRemarkData:{
+                editRemarkData: {
                     id: null,
                     remark: "",
-                    skuId: 0,
+                    skuId: 0
                 },
 
-                productForm:{
+                productForm: {
                     id: null,                         //新增传空
                     pic: "thisIsAPicture",
                     status: null,                      //0下架 1上架
@@ -347,7 +401,7 @@
                     adjustPackage: 2,
                     lengthWidthHeight: "",
                     recycle: 2,
-                    categoryId: '',                      //类型id
+                    categoryId: "",                      //类型id
                     rateValueAddedTax: 1,               //增值税率
                     taxRefundRate: 1,
                     customsCode: "",
@@ -421,7 +475,7 @@
                             exwCurrency: 1,
                             otherIncoterm: 1,
                             otherIncotermPrice: 1,
-                            otherIncotermArea: '',
+                            otherIncotermArea: "",
                             otherIncotermCurrency: 1,
                             status: 1                       //1成本价，2基础报价
                         },
@@ -433,147 +487,145 @@
                             exwCurrency: 1,
                             otherIncoterm: 1,
                             otherIncotermPrice: 1,
-                            otherIncotermArea: '',
+                            otherIncotermArea: "",
                             otherIncotermCurrency: 1,
                             status: 2
-                        },
+                        }
                     ]
                 },
                 //三个copy字段
-                copyDescCustomer:'',
-                copyNameCustomer:'',
-                copyCustomerSkuCode:'',
+                copyDescCustomer: "",
+                copyNameCustomer: "",
+                copyCustomerSkuCode: "",
 
                 //特别取出来显示的几个变量
-                fobPort:'',
-                fobPrice:'',
+                fobPort: "",
+                fobPrice: "",
                 //用于展示的table数据
-                priceTable:[],
+                priceTable: [],
 
                 /**
                  * compareList配置
                  * */
-                showCompareList:false,      //是否显示比较列表
-                compareData:[],
+                showCompareList: false,      //是否显示比较列表
+                compareData: [],
 
                 /**
                  * remark data
                  * */
-                loadingRemark:false,
-                remarkConfig:{
+                loadingRemark: false,
+                remarkConfig: {
                     pn: 1,
                     ps: 10,
                     sorts: [],
-                    id:Number(this.$route.query.id),
+                    id: Number(this.$route.query.id)
                 },
-                formLabelWidth:'80px',
-                remarkTableData:[],
-                addRemarkData:{
+                formLabelWidth: "80px",
+                remarkTableData: [],
+                addRemarkData: {
                     id: null,
                     remark: "",
-                    skuId: 0,
+                    skuId: 0
                 },
-                currentPage1:1,
-                addRemarkFormVisible:false,
-                disableCreateRemark:false,      //是否禁用提交按钮
+                currentPage1: 1,
+                addRemarkFormVisible: false,
+                disableCreateRemark: false,      //是否禁用提交按钮
 
-                tradeHistory:{
-                    pn:1,
-                    ps:100,
-                    skuCode:'',
-                    sorts:[
-
-                    ],
+                tradeHistory: {
+                    pn: 1,
+                    ps: 100,
+                    skuCode: "",
+                    sorts: []
                 },
-                historyData:[],
-                loadingTable:false,
+                historyData: [],
+                loadingTable: false,
 
                 /**
                  * 字典配置
                  * */
-                incotermOption:[],
-                skuSaleStatusOption:[],
-                skuUnitOption:[],       //计量单位
-                expirationOption:[],    //保质期单位
-                quarantineTypeOption:[],//检疫类别
-                weightOption:[],
-                volumeOption:[],
-                lengthOption:[],
-                oemOption:[],
-                udbOption:[],
-                skuPkgOption:[],
-                countryOption:[],
-            }
+                incotermOption: [],
+                skuSaleStatusOption: [],
+                skuUnitOption: [],       //计量单位
+                expirationOption: [],    //保质期单位
+                quarantineTypeOption: [],//检疫类别
+                weightOption: [],
+                volumeOption: [],
+                lengthOption: [],
+                oemOption: [],
+                udbOption: [],
+                skuPkgOption: [],
+                countryOption: []
+            };
         },
-        methods:{
-            ...mapActions(['setLog']),
+        methods: {
+            ...mapActions(["setMenuLink"]),
             /**
              * 中间按钮组事件
              * */
-            editProduct(){
-                if(this.productForm.customerCreate){
+            editProduct() {
+                if (this.productForm.customerCreate) {
                     this.$windowOpen({
-                        url:'/product/bookmarkManuallyAdd',
-                        params:{
-                            id:this.productForm.id
+                        url: "/product/bookmarkManuallyAdd",
+                        params: {
+                            id: this.productForm.id
                         }
-                    })
-                }else{
-                    this.tabName='Basic Info';
-                    this.notEdit=false;
-                    this.copyCustomerSkuCode=this.productForm.customerSkuCode;
-                    this.copyDescCustomer=this.productForm.descCustomer;
-                    this.copyNameCustomer=this.productForm.nameCustomer;
+                    });
+                } else {
+                    this.tabName = "Basic Info";
+                    this.notEdit = false;
+                    this.copyCustomerSkuCode = this.productForm.customerSkuCode;
+                    this.copyDescCustomer = this.productForm.descCustomer;
+                    this.copyNameCustomer = this.productForm.nameCustomer;
                 }
             },
-            saveEdit(){
-                let params={
+            saveEdit() {
+                let params = {
                     customerCode: "",
                     descCustomer: "",
                     id: null,
-                    nameCustomer: "",
+                    nameCustomer: ""
                 };
-                params.nameCustomer=this.productForm.nameCustomer;
-                params.id=this.$route.query.bookmarkId;
-                params.descCustomer=this.productForm.descCustomer;
-                params.customerCode=this.productForm.customerSkuCode;
-                this.disabledClickSaveEdit=true;
-                this.$ajax.post(this.$apis.edit_buyerProductBookmark,params).then(res=>{
-                    this.notEdit=true;
-                    this.disabledClickSaveEdit=false;
+                params.nameCustomer = this.productForm.nameCustomer;
+                params.id = this.$route.query.bookmarkId;
+                params.descCustomer = this.productForm.descCustomer;
+                params.customerCode = this.productForm.customerSkuCode;
+                this.disabledClickSaveEdit = true;
+                this.$ajax.post(this.$apis.edit_buyerProductBookmark, params).then(res => {
+                    this.notEdit = true;
+                    this.disabledClickSaveEdit = false;
                     this.$message({
-                        message: 'Edit Successfully!',
-                        type: 'success'
+                        message: "Edit Successfully!",
+                        type: "success"
                     });
-                }).catch(err=>{
-                    this.disabledClickSaveEdit=false;
+                }).catch(err => {
+                    this.disabledClickSaveEdit = false;
                 });
             },
-            cancelEdit(){
-                this.notEdit=true;
-                this.productForm.customerSkuCode=this.copyCustomerSkuCode;
-                this.productForm.descCustomer=this.copyDescCustomer;
-                this.productForm.nameCustomer=this.copyNameCustomer;
+            cancelEdit() {
+                this.notEdit = true;
+                this.productForm.customerSkuCode = this.copyCustomerSkuCode;
+                this.productForm.descCustomer = this.copyDescCustomer;
+                this.productForm.nameCustomer = this.copyNameCustomer;
             },
 
             //删除bookmark
-            deleteBookmark(){
+            deleteBookmark() {
                 this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
                     confirmButtonText: this.$i.product.sure,
                     cancelButtonText: this.$i.product.cancel,
-                    type: 'warning'
+                    type: "warning"
                 }).then(() => {
-                    this.disableClickDelete=true;
-                    this.$ajax.post(this.$apis.delete_buyerProductBookmark,[this.$route.query.bookmarkId]).then(res=>{
+                    this.disableClickDelete = true;
+                    this.$ajax.post(this.$apis.delete_buyerProductBookmark, [this.$route.query.bookmarkId]).then(res => {
                         this.$message({
-                            type: 'success',
-                            message: '删除成功!'
+                            type: "success",
+                            message: "删除成功!"
                         });
-                        this.disableClickDelete=false;
-                        this.$router.push('/product/bookmark');
-                    }).catch(err=>{
-                        this.disableClickDelete=false;
-                        this.$message.error('delete failed!');
+                        this.disableClickDelete = false;
+                        this.$router.push("/product/bookmark");
+                    }).catch(err => {
+                        this.disableClickDelete = false;
+                        this.$message.error("delete failed!");
                     });
 
                 }).catch(() => {
@@ -581,161 +633,164 @@
                 });
 
             },
-            //新增product
-            addProduct(){
-                this.forceNumber=Math.random();
-                this.addProductDialogVisible=true;
+            upload(){
+
             },
-            manuallyAddProduct(){
+            //新增product
+            addProduct() {
+                this.forceNumber = Math.random();
+                this.addProductDialogVisible = true;
+            },
+            manuallyAddProduct() {
                 this.$windowOpen({
-                    url:'/product/bookmarkManuallyAdd'
+                    url: "/product/bookmarkManuallyAdd"
                 });
             },
-            handleCancel(){
-                this.addProductDialogVisible=false;
+            handleCancel() {
+                this.addProductDialogVisible = false;
             },
-            handleOkClick(e){
-                if(e.length===0){
+            handleOkClick(e) {
+                if (e.length === 0) {
                     //表示一个都没选
                     this.$message({
                         message: this.$i.product.pleaseChoose,
-                        type: 'warning'
+                        type: "warning"
                     });
-                }else{
-                    this.disabledOkBtn=true;
-                    this.$ajax.post(this.$apis.add_buyerBookmark,e).then(res=>{
+                } else {
+                    this.disabledOkBtn = true;
+                    this.$ajax.post(this.$apis.add_buyerBookmark, e).then(res => {
                         this.$message({
                             message: this.$i.product.successfullyAdd,
-                            type: 'success'
+                            type: "success"
                         });
-                        this.disabledOkBtn=false;
-                        this.addProductDialogVisible=false;
-                    }).catch(err=>{
-                        console.log(err)
-                        this.disabledOkBtn=false;
-                        this.addProductDialogVisible=false;
+                        this.disabledOkBtn = false;
+                        this.addProductDialogVisible = false;
+                    }).catch(err => {
+                        console.log(err);
+                        this.disabledOkBtn = false;
+                        this.addProductDialogVisible = false;
                     });
                 }
             },
-            handleClick(){
+            handleClick() {
                 //切换tab页
             },
-            getTableData(){
-                this.$ajax.get(this.$apis.get_buyerProductDetail,{
-                    id:Number(this.$route.query.id)
-                }).then(res=>{
-                    this.productForm=res;
+            getTableData() {
+                this.$ajax.get(this.$apis.get_buyerProductDetail, {
+                    id: Number(this.$route.query.id)
+                }).then(res => {
+                    this.productForm = res;
 
                     //处理国家显示
-                    if(this.productForm.noneSellCountry){
-                        let noneSellCountry=this.productForm.noneSellCountry.split(',');
-                        this.productForm.noneSellCountry='';
-                        _.map(noneSellCountry,v=>{
-                            this.productForm.noneSellCountry+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                    if (this.productForm.noneSellCountry) {
+                        let noneSellCountry = this.productForm.noneSellCountry.split(",");
+                        this.productForm.noneSellCountry = "";
+                        _.map(noneSellCountry, v => {
+                            this.productForm.noneSellCountry += (_.findWhere(this.countryOption, { code: v }).name + ",");
                         });
-                        this.productForm.noneSellCountry=this.productForm.noneSellCountry.slice(0,this.productForm.noneSellCountry.length-1);
+                        this.productForm.noneSellCountry = this.productForm.noneSellCountry.slice(0, this.productForm.noneSellCountry.length - 1);
                     }
-                    if(this.productForm.mainSaleCountry){
-                        let mainSaleCountry=this.productForm.mainSaleCountry.split(',');
-                        this.productForm.mainSaleCountry='';
-                        _.map(mainSaleCountry,v=>{
-                            this.productForm.mainSaleCountry+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                    if (this.productForm.mainSaleCountry) {
+                        let mainSaleCountry = this.productForm.mainSaleCountry.split(",");
+                        this.productForm.mainSaleCountry = "";
+                        _.map(mainSaleCountry, v => {
+                            this.productForm.mainSaleCountry += (_.findWhere(this.countryOption, { code: v }).name + ",");
                         });
-                        this.productForm.mainSaleCountry=this.productForm.mainSaleCountry.slice(0,this.productForm.mainSaleCountry.length-1);
+                        this.productForm.mainSaleCountry = this.productForm.mainSaleCountry.slice(0, this.productForm.mainSaleCountry.length - 1);
                     }
 
                     /**
                      * 字典转换
                      * */
-                    this.productForm.status=_.findWhere(this.skuSaleStatusOption,{code:String(this.productForm.status)}).name;
-                    this.productForm.unit=this.productForm.unit?_.findWhere(this.skuUnitOption,{code:String(this.productForm.unit)}).name:'';
-                    this.productForm.expireUnit=this.productForm.expireUnit?_.findWhere(this.expirationOption,{code:String(this.productForm.expireUnit)}).name:'';
-                    this.productForm.inspectQuarantineCategory=this.productForm.inspectQuarantineCategory?_.findWhere(this.quarantineTypeOption,{code:this.productForm.inspectQuarantineCategory}).name:'';
-                    this.productForm.unitLength=this.productForm.unitLength?_.findWhere(this.lengthOption,{code:String(this.productForm.unitLength)}).name:'';
-                    this.productForm.unitVolume=this.productForm.unitVolume?_.findWhere(this.volumeOption,{code:String(this.productForm.unitVolume)}).name:'';
-                    this.productForm.unitWeight=this.productForm.unitWeight?_.findWhere(this.weightOption,{code:String(this.productForm.unitWeight)}).name:'';
-                    this.productForm.oem=_.findWhere(this.oemOption,{code:String(Number(this.productForm.oem))}).name;
-                    this.productForm.yearListed=this.$dateFormat(this.productForm.yearListed,'yyyy-mm');
-                    this.productForm.useDisplayBox=_.findWhere(this.udbOption,{code:String(Number(this.productForm.useDisplayBox))}).name;
-                    this.productForm.adjustPackage=_.findWhere(this.skuPkgOption,{code:String(Number(this.productForm.adjustPackage))}).name;
+                    this.productForm.status = _.findWhere(this.skuSaleStatusOption, { code: String(this.productForm.status) }).name;
+                    this.productForm.unit = this.productForm.unit ? _.findWhere(this.skuUnitOption, { code: String(this.productForm.unit) }).name : "";
+                    this.productForm.expireUnit = this.productForm.expireUnit ? _.findWhere(this.expirationOption, { code: String(this.productForm.expireUnit) }).name : "";
+                    this.productForm.inspectQuarantineCategory = this.productForm.inspectQuarantineCategory ? _.findWhere(this.quarantineTypeOption, { code: this.productForm.inspectQuarantineCategory }).name : "";
+                    this.productForm.unitLength = this.productForm.unitLength ? _.findWhere(this.lengthOption, { code: String(this.productForm.unitLength) }).name : "";
+                    this.productForm.unitVolume = this.productForm.unitVolume ? _.findWhere(this.volumeOption, { code: String(this.productForm.unitVolume) }).name : "";
+                    this.productForm.unitWeight = this.productForm.unitWeight ? _.findWhere(this.weightOption, { code: String(this.productForm.unitWeight) }).name : "";
+                    this.productForm.oem = _.findWhere(this.oemOption, { code: String(Number(this.productForm.oem)) }).name;
+                    this.productForm.yearListed = this.$dateFormat(this.productForm.yearListed, "yyyy-mm");
+                    this.productForm.useDisplayBox = _.findWhere(this.udbOption, { code: String(Number(this.productForm.useDisplayBox)) }).name;
+                    this.productForm.adjustPackage = _.findWhere(this.skuPkgOption, { code: String(Number(this.productForm.adjustPackage)) }).name;
 
 
-                    this.notLoadingDone=false;
-                    this.hideBtns=true;
-                    let priceData=[{
-                        fobCurrency:this.productForm.fobCurrency,
-                        fobPrice:this.productForm.fobPrice,
-                        refFobPrice:this.productForm.refFobPrice,
-                        fobPort:this.productForm.fobPort,
-                        exwPrice:this.productForm.exwPrice,
-                        exwCurrency:this.productForm.exwCurrency,
-                        cifPrice:this.productForm.cifPrice,
-                        refCifPrice:this.productForm.refCifPrice,
-                        cifCurrency:this.productForm.cifCurrency,
-                        cifArea:this.productForm.cifArea,
-                        dduPrice:this.productForm.dduPrice,
-                        refDduPrice:this.productForm.refDduPrice,
-                        dduCurrency:this.productForm.dduCurrency,
-                        dduArea:this.productForm.dduArea,
+                    this.notLoadingDone = false;
+                    this.hideBtns = true;
+                    let priceData = [{
+                        fobCurrency: this.productForm.fobCurrency,
+                        fobPrice: this.productForm.fobPrice,
+                        refFobPrice: this.productForm.refFobPrice,
+                        fobPort: this.productForm.fobPort,
+                        exwPrice: this.productForm.exwPrice,
+                        exwCurrency: this.productForm.exwCurrency,
+                        cifPrice: this.productForm.cifPrice,
+                        refCifPrice: this.productForm.refCifPrice,
+                        cifCurrency: this.productForm.cifCurrency,
+                        cifArea: this.productForm.cifArea,
+                        dduPrice: this.productForm.dduPrice,
+                        refDduPrice: this.productForm.refDduPrice,
+                        dduCurrency: this.productForm.dduCurrency,
+                        dduArea: this.productForm.dduArea
                     }];
                     this.priceTable = this.$getDB(this.$db.product.detailTab, priceData);
-                    this.tradeHistory.skuCode=this.productForm.code;
-                    this.loadingTable=true;
-                    this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory)
-                        .then(res=>{
-                            this.historyData=this.$getDB(this.$db.product.tradeHistory,res.datas,e=>{
-                                e.incoterm._value=_.findWhere(this.incotermOption,{code:e.incoterm.value}).name;
-                                e.actDeliveryDt._value=this.$dateFormat(e.actDeliveryDt.value,'yyyy-mm-dd');
-                                e.confirmQcDt._value=this.$dateFormat(e.confirmQcDt.value,'yyyy-mm-dd');
-                                e.actDepartureDt._value=this.$dateFormat(e.actDepartureDt.value,'yyyy-mm-dd');
+                    this.tradeHistory.skuCode = this.productForm.code;
+                    this.loadingTable = true;
+                    this.$ajax.post(this.$apis.get_buyerProductTradeList, this.tradeHistory)
+                        .then(res => {
+                            this.historyData = this.$getDB(this.$db.product.tradeHistory, res.datas, e => {
+                                e.incoterm._value = _.findWhere(this.incotermOption, { code: e.incoterm.value }).name;
+                                e.actDeliveryDt._value = this.$dateFormat(e.actDeliveryDt.value, "yyyy-mm-dd");
+                                e.confirmQcDt._value = this.$dateFormat(e.confirmQcDt.value, "yyyy-mm-dd");
+                                e.actDepartureDt._value = this.$dateFormat(e.actDepartureDt.value, "yyyy-mm-dd");
                             });
-                        }).finally(()=>{
-                            this.notLoadingDone=false;
-                            this.loadingTable=false;
+                        }).finally(() => {
+                            this.notLoadingDone = false;
+                            this.loadingTable = false;
                         }
-                    )
+                    );
 
-                }).catch(err=>{
-                    this.notLoadingDone=false;
-                })
+                }).catch(err => {
+                    this.notLoadingDone = false;
+                });
             },
 
             /**
              *  remark操作
              * */
-            getRemarkData(){
-                this.loadingRemark=true;
-                this.$ajax.post(this.$apis.get_buyerRemarkList,this.remarkConfig).then(res=>{
-                    this.loadingRemark=false;
-                    this.remarkTableData=res.datas;
-                    this.pageData=res;
-                }).catch(err=>{
-                    this.loadingRemark=false;
+            getRemarkData() {
+                this.loadingRemark = true;
+                this.$ajax.post(this.$apis.get_buyerRemarkList, this.remarkConfig).then(res => {
+                    this.loadingRemark = false;
+                    this.remarkTableData = res.datas;
+                    this.pageData = res;
+                }).catch(err => {
+                    this.loadingRemark = false;
                 });
             },
-            editRemark(index,row){
-                this.editRemarkData.id=row.id;
-                this.editRemarkData.skuId=this.productForm.id;
-                this.editRemarkData.remark=row.remark;
-                this.editRemarkFormVisible=true;
+            editRemark(index, row) {
+                this.editRemarkData.id = row.id;
+                this.editRemarkData.skuId = this.productForm.id;
+                this.editRemarkData.remark = row.remark;
+                this.editRemarkFormVisible = true;
             },
 
             //确定编辑remark
-            editRemarkSubmit(){
-                this.disableModifyRemark=true;
-                this.$ajax.post(this.$apis.update_buyerProductRemark,this.editRemarkData)
-                    .then(res=>{
+            editRemarkSubmit() {
+                this.disableModifyRemark = true;
+                this.$ajax.post(this.$apis.update_buyerProductRemark, this.editRemarkData)
+                    .then(res => {
                         this.getRemarkData();
                         this.$message({
-                            message: '修改成功',
-                            type: 'success'
+                            message: "修改成功",
+                            type: "success"
                         });
 
-                        this.disableModifyRemark=false;
-                        this.editRemarkFormVisible=false;
-                    }).catch(err=>{
-                        this.disableModifyRemark=false;
-                        this.editRemarkFormVisible=false;
+                        this.disableModifyRemark = false;
+                        this.editRemarkFormVisible = false;
+                    }).catch(err => {
+                        this.disableModifyRemark = false;
+                        this.editRemarkFormVisible = false;
                     }
                 );
             },
@@ -743,114 +798,114 @@
             /**
              * 分页操作
              * */
-            changePage(e){
-                this.remarkConfig.pn=e;
+            changePage(e) {
+                this.remarkConfig.pn = e;
                 this.getRemarkData();
             },
-            changeSize(e){
-                this.remarkConfig.ps=e;
+            changeSize(e) {
+                this.remarkConfig.ps = e;
                 this.getRemarkData();
             },
-            createRemark(){
-                this.addRemarkFormVisible=true;
-                this.addRemarkData.id=null;     //新增的时候要置为null
-                this.addRemarkData.skuId=this.productForm.id;
-                this.addRemarkData.remark='';
+            createRemark() {
+                this.addRemarkFormVisible = true;
+                this.addRemarkData.id = null;     //新增的时候要置为null
+                this.addRemarkData.skuId = this.productForm.id;
+                this.addRemarkData.remark = "";
 
             },
-            createRemarkSubmit(){
-                this.disableCreateRemark=true;
-                this.$ajax.post(this.$apis.add_buyerProductRemark,this.addRemarkData).then(res=>{
-                    this.disableCreateRemark=false;
-                    this.addRemarkFormVisible=false;
+            createRemarkSubmit() {
+                this.disableCreateRemark = true;
+                this.$ajax.post(this.$apis.add_buyerProductRemark, this.addRemarkData).then(res => {
+                    this.disableCreateRemark = false;
+                    this.addRemarkFormVisible = false;
                     this.$message({
-                        message: '新增成功',
-                        type: 'success'
+                        message: "新增成功",
+                        type: "success"
                     });
                     this.getRemarkData();
-                }).catch(err=>{
-                    this.disableCreateRemark=false;
-                    this.addRemarkFormVisible=false;
+                }).catch(err => {
+                    this.disableCreateRemark = false;
+                    this.addRemarkFormVisible = false;
                 });
             },
-            deleteRemark(index, row){
+            deleteRemark(index, row) {
                 this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
                     confirmButtonText: this.$i.product.sure,
                     cancelButtonText: this.$i.product.cancel,
-                    type: 'warning'
+                    type: "warning"
                 }).then(() => {
-                    this.$ajax.post(this.$apis.delete_buyerProductRemark,{
-                        id:row.id
-                    }).then(res=>{
-                        if(this.remarkTableData.length===1 && this.remarkConfig.pn>1){
+                    this.$ajax.post(this.$apis.delete_buyerProductRemark, {
+                        id: row.id
+                    }).then(res => {
+                        if (this.remarkTableData.length === 1 && this.remarkConfig.pn > 1) {
                             //代表删的是最后一个了
-                            this.remarkConfig.pn-=1;
+                            this.remarkConfig.pn -= 1;
                         }
                         this.$message({
                             message: this.$i.product.deleteSuccess,
-                            type: 'success'
+                            type: "success"
                         });
                         this.getRemarkData();
-                    }).catch(err=>{
+                    }).catch(err => {
 
                     });
                 }).catch(() => {
 
                 });
             },
-            createInquiry(){
+            createInquiry() {
                 this.$windowOpen({
-                    url:'/negotiation/createInquiry',
-                    params:{
-                        skus:this.$route.query.id,
-                        supplierCodes:this.productForm.supplierCode
-                    },
-                })
+                    url: "/negotiation/createInquiry",
+                    params: {
+                        skus: this.$route.query.id,
+                        supplierCodes: this.productForm.supplierCode
+                    }
+                });
             },
-            createOrder(){
+            createOrder() {
                 this.$windowOpen({
-                    url:'/order/create',
-                    params:{
-                        type:'product',
-                        ids:this.productForm.id+',',
-                        supplierCode:this.productForm.supplierCode
-                    },
-                })
+                    url: "/order/create",
+                    params: {
+                        type: "product",
+                        ids: this.productForm.id + ",",
+                        supplierCode: this.productForm.supplierCode
+                    }
+                });
             },
 
             //添加比较
-            addCompare(){
-                this.showCompareList=true;
-                let compareList=this.$localStore.get('compareProductList');
-                let hasAdd=false;
-                if(!compareList){
-                    compareList=[];
+            addCompare() {
+                this.showCompareList = true;
+                let compareList = this.$localStore.get("compareProductList");
+                let hasAdd = false;
+                if (!compareList) {
+                    compareList = [];
                 }
-                compareList.forEach(v=>{
-                    if(v.id===this.productForm.id){
+                compareList.forEach(v => {
+                    if (v.id === this.productForm.id) {
                         //代表该商品已经添加了
-                        hasAdd=true;
+                        hasAdd = true;
                     }
                 });
-                if(hasAdd){
+                if (hasAdd) {
                     this.$message({
-                        message: '该商品已经添加到列表了',
-                        type: 'warning'
+                        message: "该商品已经添加到列表了",
+                        type: "warning"
                     });
-                }else{
+                } else {
                     compareList.push({
-                        name:this.productForm.nameEn,
-                        id:this.productForm.id
+                        name: this.productForm.nameEn,
+                        id: this.productForm.id
                     });
-                    this.compareData=compareList;
-                    this.$localStore.set('compareProductList',compareList)
+                    this.compareData = compareList;
+                    this.$localStore.set("compareProductList", compareList);
                 }
             },
-            addToBookmark(){
-                this.$ajax.post(this.$apis.add_buyerBookmark,[this.productForm.id]).then(res=>{
-                    console.log(res)
-                }).catch(err=>{
-                    console.log(err)
+            addToBookmark() {
+                this.$ajax.post(this.$apis.add_buyerBookmark, [this.productForm.id]).then(res => {
+                    console.log(res);
+                }).catch(err => {
+                    console.log(err);
                 });
                 // this.$router.push({
                 //     path:'/product/bookmark/detail',
@@ -863,173 +918,198 @@
             /**
              * compare-list操作
              * */
-            getCompareList(){
-                let data=this.$localStore.get('compareProductList');
-                if(!data){
-                    this.compareData=[];
-                }else{
-                    this.compareData=data;
+            getCompareList() {
+                let data = this.$localStore.get("compareProductList");
+                if (!data) {
+                    this.compareData = [];
+                } else {
+                    this.compareData = data;
                 }
             },
-            handleClose(e){
+            handleClose(e) {
                 let key;
-                this.compareData.forEach((v,k)=>{
-                    if(v.id===e.id){
-                        key=k;
+                this.compareData.forEach((v, k) => {
+                    if (v.id === e.id) {
+                        key = k;
                     }
                 });
-                this.compareData.splice(key,1);
-                this.$localStore.set('compareProductList',this.compareData);
+                this.compareData.splice(key, 1);
+                this.$localStore.set("compareProductList", this.compareData);
             },
 
             //去比较
-            goCompare(){
-                let data=this.$localStore.get('compareProductList');
-                let id='';
-                data.forEach((v,k)=>{
-                    if(k===data.length-1){
-                        id+=v.id;
-                    }else{
-                        id+=(v.id+',');
+            goCompare() {
+                let data = this.$localStore.get("compareProductList");
+                let id = "";
+                data.forEach((v, k) => {
+                    if (k === data.length - 1) {
+                        id += v.id;
+                    } else {
+                        id += (v.id + ",");
                     }
                 });
                 this.$windowOpen({
-                    url:'product/compareDetail/new',
-                    params:{
-                        id:id,
+                    url: "product/compareDetail/new",
+                    params: {
+                        id: id
                     }
                 });
             },
 
             //清空数据
-            clearData(){
-                this.$localStore.remove('compareProductList');
-                this.compareData=[];
+            clearData() {
+                this.$localStore.remove("compareProductList");
+                this.compareData = [];
             },
 
             //获取字典
-            getUnit(){
-                this.notLoadingDone=true;
-                this.$ajax.post(this.$apis.get_partUnit,['ITM','SKU_SALE_STATUS', 'SKU_UNIT','ED_UNIT','QUARANTINE_TYPE','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{cache:true}).then(res=>{
-                    res.forEach(v=>{
-                        if(v.code==='ITM'){
-                            this.incotermOption=v.codes;
-                        }else if(v.code==='SKU_SALE_STATUS'){
-                            this.skuSaleStatusOption=v.codes;
-                        }else if (v.code === 'SKU_UNIT') {
+            getUnit() {
+                this.notLoadingDone = true;
+                this.$ajax.post(this.$apis.get_partUnit, ["ITM", "SKU_SALE_STATUS", "SKU_UNIT", "ED_UNIT", "QUARANTINE_TYPE", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS"], { cache: true }).then(res => {
+                    res.forEach(v => {
+                        if (v.code === "ITM") {
+                            this.incotermOption = v.codes;
+                        } else if (v.code === "SKU_SALE_STATUS") {
+                            this.skuSaleStatusOption = v.codes;
+                        } else if (v.code === "SKU_UNIT") {
                             this.skuUnitOption = v.codes;
-                        }else if (v.code === 'ED_UNIT') {
+                        } else if (v.code === "ED_UNIT") {
                             this.expirationOption = v.codes;
-                        }else if(v.code==='QUARANTINE_TYPE'){
-                            this.quarantineTypeOption=v.codes;
-                        }else if(v.code==='WT_UNIT'){
-                            this.weightOption=v.codes;
-                        }else if(v.code==='VE_UNIT'){
-                            this.volumeOption=v.codes;
-                        }else if(v.code==='LH_UNIT'){
-                            this.lengthOption=v.codes;
-                        }else if(v.code==='OEM_IS'){
-                            this.oemOption=v.codes;
-                        }else if(v.code==='UDB_IS'){
-                            this.udbOption=v.codes;
-                        }else if(v.code==='SKU_PG_IS'){
-                            this.skuPkgOption=v.codes;
+                        } else if (v.code === "QUARANTINE_TYPE") {
+                            this.quarantineTypeOption = v.codes;
+                        } else if (v.code === "WT_UNIT") {
+                            this.weightOption = v.codes;
+                        } else if (v.code === "VE_UNIT") {
+                            this.volumeOption = v.codes;
+                        } else if (v.code === "LH_UNIT") {
+                            this.lengthOption = v.codes;
+                        } else if (v.code === "OEM_IS") {
+                            this.oemOption = v.codes;
+                        } else if (v.code === "UDB_IS") {
+                            this.udbOption = v.codes;
+                        } else if (v.code === "SKU_PG_IS") {
+                            this.skuPkgOption = v.codes;
                         }
                     });
 
-                    this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
-                        this.countryOption=res;
+                    this.$ajax.get(this.$apis.get_country, {}, { cache: true }).then(res => {
+                        this.countryOption = res;
                         this.getTableData();
                         this.getRemarkData();
                         this.getCompareList();
-                    }).catch(()=>{
-                        this.notLoadingDone=false;
+                    }).catch(() => {
+                        this.notLoadingDone = false;
                     });
-                }).finally(()=>{
-                    this.notLoadingDone=false;
+                }).finally(() => {
+                    this.notLoadingDone = false;
                 });
-            },
+            }
         },
-        created(){
+        created() {
             this.getUnit();
         },
-        mounted(){
-            this.setLog({query:{code:'PRODUCT'}});
-        },
-    }
+        mounted() {
+            this.setMenuLink({
+                path: "/logs/index",
+                query: { code: "PRODUCT" },
+                type: 10,
+                auth:'PRODUCT:LOG',
+                label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: "/product/bookmarkArchive",
+                type: 20,
+                auth:'PRODUCT:ARCHIVE',
+                label: this.$i.common.archive
+            });
+        }
+    };
 </script>
 
 <style scoped>
-    .Details{
+    .Details {
         background-color: #f4f4f4;
     }
-    .Details .head{
+
+    .Details .head {
         background-color: #FFFFFF;
-        padding:0 20px;
+        padding: 0 20px;
 
     }
-    .Details .head .title{
+
+    .Details .head .title {
         position: relative;
         height: 40px;
         line-height: 40px;
         font-weight: bold;
         font-size: 18px;
-        color:#666666;
+        color: #666666;
     }
 
-    .Details .head .title .btn{
+    .Details .head .title .btn {
         position: absolute;
         right: 10px;
-        top:4px;
+        top: 4px;
     }
-    .Details .head .detail{
+
+    .Details .head .detail {
         margin-top: 8px;
     }
-    .Details .head .detail .carousel-img{
+
+    .Details .head .detail .carousel-img {
         height: 170px;
     }
-    .Details .head .detail .carousel-img img{
+
+    .Details .head .detail .carousel-img img {
         width: 100%;
         height: 100%;
     }
-    .Details .head .detail .right{
+
+    .Details .head .detail .right {
         /*padding-top: 10px;*/
     }
-    .Details .head .detail .list{
+
+    .Details .head .detail .list {
         /*padding-left: 30px;*/
         /*font-size: 14px;*/
         /*line-height: 2.5;*/
         /*border-bottom: 1px dotted #e0e0e0;*/
     }
-    .Details .head .detail .list >>> .el-form-item.el-form-item--small{
+
+    .Details .head .detail .list >>> .el-form-item.el-form-item--small {
         margin-bottom: 6px;
     }
-    .Details .head .detail .btns{
+
+    .Details .head .detail .btns {
         text-align: center;
         padding: 15px 0;
     }
-    .Details .head .detail .btns>Button{
+
+    .Details .head .detail .btns > Button {
         margin-right: 10px;
     }
 
-    .Details .body{
+    .Details .body {
         margin-top: 10px;
         margin-bottom: 35px;
         background-color: #FFFFFF;
     }
-    .Details .body .list{
+
+    .Details .body .list {
         line-height: 35px;
         font-size: 13px;
         min-height: 35px;
     }
-    .Details .body .list >>> label{
+
+    .Details .body .list >>> label {
         /*text-align: right;*/
     }
 
-    .speForm .el-form-item--small.el-form-item{
+    .speForm .el-form-item--small.el-form-item {
         margin-bottom: 0;
     }
-    .speForm .el-row .list .el-input{
+
+    .speForm .el-row .list .el-input {
         width: 80%;
     }
 </style>

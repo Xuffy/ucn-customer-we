@@ -5,24 +5,31 @@
     <el-row :gutter="10">
       <el-form label-width="300px" label-position="right" class="form" >
         <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
-
+          
           <el-form-item v-if="!edit&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')" :label="a.label+'：'">
             <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
           </el-form-item>
           <div v-else>
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'input'">
-              <el-input placeholder="请输入内容" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
+              <el-input :placeholder="$i.logistic.placeholder" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
 
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')">
-              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" placeholder="请输入内容" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="a.key=='exchangeCurrency' ? item.code : item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
+              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+                <el-option :label="a.key=='exchangeCurrency' ? item.code : item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="item.id"
                   v-if="selectArr[a.key]" />
               </el-select>
             </el-form-item>
 
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'filterable'">
+              <el-select filterable v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr.country" :key="item.id"
+                  v-if="selectArr.country" />
+              </el-select>
+            </el-form-item>
+
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'date'">
-              <el-date-picker format="yyyy-MM-dd" v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
+              <el-date-picker format="yyyy-MM-dd" v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.placeholder" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
           </div>
         </el-col>
@@ -113,6 +120,10 @@
         if (a.type === 'selector' && this.selectArr[a.key]) {
           let obj = this.selectArr[a.key].find(item => item.code == a.value)
           return obj ? a.key=='exchangeCurrency' ? obj.code : obj.name : null
+        }
+        if(a.type === 'filterable' && this.selectArr.country){
+          let obj = this.selectArr.country.find(item => item.code == a.value)
+          return obj ? obj.name : null
         }
       }
     },

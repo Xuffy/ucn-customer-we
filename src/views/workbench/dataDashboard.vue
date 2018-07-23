@@ -32,6 +32,12 @@
 </template>
 
 <script>
+  const AUTH_LIST = {
+    'CUST_PO_PLACED': 'WORKBENCH:DATA_DASHBOARD:ORDERS_PLACED',
+    'CUST_PO_IN_PROCESSING': 'WORKBENCH:DATA_DASHBOARD:ORDERS_PROCESS',
+    'CUST_PO_CANCELED': 'WORKBENCH:DATA_DASHBOARD:ORDERS_CANCELED',
+    'CUST_LO_IN_PROCESSING': 'WORKBENCH:DATA_DASHBOARD:LOGISTICS_ORDERS_PROCESS',
+  };
 
   export default {
     name: 'VDataDashboard',
@@ -49,10 +55,14 @@
     },
     methods: {
       getData() {
+        let params = [];
         this.loading = true;
-        this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST, {
-          statPoints: ['CUST_PO_PLACED', 'CUST_PO_IN_PROCESSING', 'CUST_PO_CANCELED', 'CUST_LO_IN_PROCESSING']
-        })
+
+        _.mapObject(AUTH_LIST, (val, key) => {
+          this.$auth(val) && params.push(key)
+        });
+
+        !_.isEmpty(params) && this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST, {statPoints: params})
           .then(res => {
             this.dataList = [];
             this.getCode().then(data => {

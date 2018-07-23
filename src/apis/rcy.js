@@ -35,7 +35,7 @@ export default {
     post_supplier_addCompare: ['/purchase/supplier/compare','BASE_CS',  'BASE_URL'],
     post_supplier_listCompare: ['/purchase/supplier/listCompare','BASE_CS', 'BASE_URL'],
     post_supplier_listCompareDetails: ['/purchase/supplier/listCompareDetails','BASE_CS', 'BASE_URL'],
-    post_supplier_deleteCompareDetails: ['/purchase/supplier/deleteCompareDetails','BASE_CS', 'BASE_URL'],
+    post_supplier_deleteCompareDetails: ['/purchase/supplier/deleteCompareDetail','BASE_CS', 'BASE_URL'],
     post_supplier_deleteCompare: ['/purchase/supplier/deleteCompare','BASE_CS', 'BASE_URL'],
     post_supplier_recoverCompare: ['/purchase/supplier/recoverCompare','BASE_CS', 'BASE_URL'],
     post_deleteBookmarks: ['/purchase/supplier/batchDeleteBookmark','BASE_CS', 'BASE_URL'],
@@ -46,6 +46,8 @@ export default {
     post_purchase_supplier_remark: ['/purchase/supplier/remark','BASE_CS', 'BASE_URL'],
     post_purchase_supplier_remark_id: ['/purchase/supplier/remark','BASE_CS', 'BASE_URL'],
     post_purchase_supplier_deleteRemark_id: ['/purchase/supplier/deleteRemark/{id}','BASE_CS', 'BASE_URL'],
+    post_batchDeleteBookmark:['/purchase/supplier/batchDeleteBookmark','BASE_CS', 'BASE_URL'],
+    post_batchRecoverBookmark:['/purchase/supplier/batchRecoverBookmark','BASE_CS', 'BASE_URL'],
 
     //customer
     post_getCustomerList: ['/supply/overview', 'BASE_URL'],
@@ -103,5 +105,7 @@ export default {
     ORDER_SAVE_DRAFT:['/order/saveDraft','BASE_URL'],
     ORDER_SEND:['/order/send','BASE_URL'],
     ORDER_HISTORY:['/order/skuHistory','BASE_URL'],
-
+    ORDER_RECYCLE_ORDER_PAGE:['/order/recycle/orderPage','BASE_URL'],
+    ORDER_RECYCLE_SKU_PAGE:['/order/recycle/skuPage','BASE_URL'],
+    ORDER_RECOVER:['/order/recover','BASE_URL']
 }

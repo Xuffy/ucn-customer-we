@@ -246,7 +246,7 @@ export default{
         key: 'unqualifiedSkuGrossWeight',
         type: 'Number',
         _calculate:true
-    },
+    }, 
     unqualifiedType:{
         key: 'unqualifiedType',
         type: 'String',

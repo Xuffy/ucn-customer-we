@@ -103,12 +103,13 @@
         </div>
         <div class="footer">
             <v-table
-                    code="udata_purchase_sku_overview"
+                    :code="code"
                     :height="500"
                     :loading="loadingTable"
                     :data="tableDataList"
                     :buttons="type==='recycle'?null:[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
+                    @change-sort="val=>{getData({sorts:val})}"
                     @filter-value="tableFilterValue"
                     @action="btnClick">
                 <template slot="header">
@@ -120,7 +121,9 @@
                         <el-button @click="addToBookmark" :loading="disableClickAddBookmark"
                                    :disabled="disabledAddBookmark">{{`${$i.product.addToBookmark}(${selectList.length})`}}
                         </el-button>
-                        <!--<el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
+                        <el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'"
+                                   @click="download"
+                                   :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
                         <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
                     </div>
                     <div class="btns" v-if="type==='recycle'">
@@ -164,7 +167,7 @@
                 type: String,
                 default: ''
             },
-            type: { //product || bookmark
+            type: {
                 type: String,
                 default: 'product'
             },
@@ -208,8 +211,11 @@
             },
             dataResource:{
                 type:Function,
-
-            }
+            },
+            code:{
+                type:String,
+                default:'udata_purchase_sku_overview'
+            },
         },
         data() {
             return {
@@ -391,6 +397,7 @@
                 if (this.type === 'product') {
                     arr.forEach(v => {
                         if (v._checked && !v._disabled) {
+                            // newArr.push(v);
                             newArr.push(v.id.value);        //只把id带出去
                         }
                     });
@@ -445,28 +452,36 @@
             },
 
             initData(data){
-                this.tableDataList = this.$getDB(this.$db.product.indexTable, data.datas, (e) => {
-                    let noneSellCountry = '';
-                    e.noneSellCountry.value.split(',').forEach(v => {
-                        this.countryOption.forEach(m => {
-                            if (m.code === v) {
-                                noneSellCountry += (m.name + ',');
-                            }
-                        })
-                    });
-                    noneSellCountry = noneSellCountry.slice(0, noneSellCountry.length - 1);
-                    e.noneSellCountry.value = noneSellCountry;
+                let database;
+                if(this.code==='udata_purchase_sku_overview'){
+                    database=this.$db.product.indexTable;
+                }else{
+                    database=this.$db.logistic.dbBasicInfoObj;
+                }
+                this.tableDataList = this.$getDB(database, data.datas, (e) => {
+                    if(this.code==='udata_purchase_sku_overview'){
+                        let noneSellCountry = '';
+                        e.noneSellCountry.value.split(',').forEach(v => {
+                            this.countryOption.forEach(m => {
+                                if (m.code === v) {
+                                    noneSellCountry += (m.name + ',');
+                                }
+                            })
+                        });
+                        noneSellCountry = noneSellCountry.slice(0, noneSellCountry.length - 1);
+                        e.noneSellCountry.value = noneSellCountry;
 
-                    e.status.value = this.$change(this.statusOption, 'status', e, true).name;
-                    e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
-                    e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
-                    e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
-                    e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
-                    e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
-                    e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
+                        e.status.value = this.$change(this.statusOption, 'status', e, true).name;
+                        e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
+                        e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
+                        e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
+                        e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
+                        e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
+                        e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
 
-                    if(this.disableBookmarkChoose && e.bookmarkId.value){
-                        this.$set(e,'_disabled',true);
+                        if(this.disableBookmarkChoose && e.bookmarkId.value){
+                            this.$set(e,'_disabled',true);
+                        }
                     }
                     return e;
                 });
@@ -499,10 +514,12 @@
                 this.selectList.forEach(v => {
                     v._disabled = true;
                 });
+                this.loadingTable = false;
             },
 
             //获取table数据
-            getData(e) {
+            getData(params) {
+                this.productForm=_.extend(this.productForm,params);
                 if(this.dataResource){
                     this.dataResource().then(data=>{
                         this.initData(data);
@@ -581,6 +598,10 @@
                 }).catch(err => {
                     this.disableClickAddBookmark = false;
                 });
+            },
+            download(){
+
+                this.$fetch.export_taske('SKU_PURCHASE_EXPORT_IDS',_.pluck(_.pluck(this.selectList,"id"),'value'));
             },
 
             //表格按钮点击
@@ -752,11 +773,11 @@
              * */
             changePage(e) {
                 this.productForm.pn = e;
-                this.getData();
+                this.getData({pn:e});
             },
             changeSize(e) {
                 this.productForm.ps = e;
-                this.getData();
+                this.getData({ps:e});
             },
         },
         created() {
@@ -794,7 +815,7 @@
 
         },
         mounted() {
-            this.setLog({query: {code: 'PRODUCT'}});
+
         },
 
         watch: {
