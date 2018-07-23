@@ -122,6 +122,7 @@ export default {
   methods: {
     //高亮 
     ContainerInfoLight(key,v,index,scope){
+      console.log(this.returnData)
       this.returnData[index].fieldDisplay[key] = v;
       this.returnData[index][key] = v;
       if(this.matchData[index][key]==v){
