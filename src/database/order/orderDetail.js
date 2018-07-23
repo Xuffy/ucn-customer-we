@@ -155,6 +155,7 @@ export default {
         fullLine:true
     },
     attachment:{
+        key:'attachments',
         type:'attachment',
         belong:'basicInfo',
         fullLine:true
