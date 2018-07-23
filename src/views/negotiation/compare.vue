@@ -10,7 +10,6 @@
         </div>
         <div class="fn">
             <div class="box-l">
-                <el-button type="primary" @click="showModify" v-show="compareType  === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
                 <el-button @click="addNewCopare" v-if="compareType  !== 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:ADD_NEW'">{{ $i.common.addNew }}</el-button>
                 <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompareItem" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ `${$i.common.archive}(${checkedArg.length})` }}</el-button>
                 <div style="margin-left: 20px;">
@@ -42,8 +41,9 @@
             :pageData="params"
             @page-change="handleSizeChange"
             @page-size-change="pageSizeChange"
-            :page-sizes="[100]"/>
+            :page-sizes="[100,200,]"/>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.saveTheCompare }}</el-button>
+                        <el-button type="primary" @click="showModify" v-show="compareType  === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.archive }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i.common.cancel }}</el-button>
@@ -52,6 +52,7 @@
             @addInquiry="addCopare"
             :arg-disabled="argDisabled"
             :compareId="compareInfo.id || null"
+            :title="addNewTitle"
             :disableds="disableds"/>
     </div>
 </template>
@@ -62,6 +63,7 @@ export default {
   name: 'compareOverview',
   data() {
     return {
+      addNewTitle:null,
       dirCodes: ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'],
       addInquiryIds: null,
       pageTotal: 0,
@@ -239,6 +241,7 @@ export default {
       this.checkedArg = item.map(i => i[this.compareBy ? 'inquiryId' : 'id']);
     },
     addNewCopare() {
+      this.addNewTitle = this.$i.inquiry.addNewTitle;
       this.showAddListDialog = true;
     },
     deleteCompareItem() {

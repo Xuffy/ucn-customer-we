@@ -84,7 +84,8 @@
 </template>
 <script>
 
-    import {VTable,VPagination,selectSearch} from '@/components/index'
+    import {VTable,VPagination,selectSearch} from '@/components/index';
+    import { mapActions } from 'vuex';
     export default {
         name:'payment',
         components:{
@@ -164,6 +165,7 @@
             },
         },
         methods:{
+            ...mapActions(['setMenuLink']),
             onFilterValue(val) {
                 console.log(val);
             },
@@ -336,6 +338,15 @@
               this.$fetch.export_task('EXPORT_LEDGER',params);
           },
 
+        },
+        mounted(){
+          this.setMenuLink({
+              path: '/logs',
+              query: {code: 'PAYMENT'},
+              type: 100,
+              label: this.$i.common.log,
+              auth: 'PAYMENT:LOG'
+            });
         },
         created(){
            this.viewByStatus = '1';

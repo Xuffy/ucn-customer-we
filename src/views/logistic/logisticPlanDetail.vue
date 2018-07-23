@@ -1,6 +1,5 @@
 <template>
   <div class="place-logistic-plan">
-    {{pageName}}
     <div class="hd-top" v-if="$route.name=='logisticPlanDetail'">{{ $i.logistic.logisticPlan + ' ' + logisticsNo}}</div>
     <div class="hd-top" v-if="$route.name=='placeLogisticPlan'">{{ $i.logistic.placeNewLogisticPlan }}</div>
     <div class="hd-top" v-if="$route.name=='loadingListDetail'">{{ $i.logistic.loadingList + ' ' + logisticsNo}}</div>
@@ -362,7 +361,8 @@
       })
       if(this.pageTypeCurr == 'logisticDraftDetail'){
         this.edit = true;
-      }
+      };
+      this.countryAll();
     },
     methods: {
       ...mapActions(['setMenuLink']),
@@ -429,7 +429,7 @@
           this.addProductFromOrder();
         })
       },
-      
+
       ProductFromOrderDetail(e){
         this.$windowOpen({url:'/product/sourcingDetail',params:{id:e.skuId.value}})
       },
@@ -537,7 +537,6 @@
             }
           }
         })
-        this.countryAll();
       },
       createdPaymentData(res = this.oldPaymentObject) {
         this.oldPaymentObject = JSON.parse(JSON.stringify(res))
@@ -611,7 +610,7 @@
         return basicInfoInput.includes(key) ? 'input' : basicInfoDate.includes(key) ? 'date' : 'selector'
       },
       arrayAppend() {
-        this.containerInfo.push({
+        const obj = {
           exchangeCurrency: this.basicInfoArr.find(a => a.key === 'exchangeCurrency').value,
           containerNo: "",
           containerType: null,
@@ -623,7 +622,9 @@
           totalContainerSkuPrice: 0,
           totalContainerVolume: 0,
           vgm: 0
-        })
+        };
+        this.containerInfo.push(obj);
+        this.containerinfoMatch.push(obj);
       },
       arraySplite(array, index) {
         array.splice(index, 1);

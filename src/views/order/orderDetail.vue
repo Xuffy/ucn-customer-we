@@ -199,6 +199,7 @@
                         </div>
                         <div v-else-if="v.type==='attachment'">
                             <v-upload
+                                    @change="changeAttachment"
                                     ref="upload"
                                     :readonly="!isModify"
                                     :list="orderForm.attachments"
@@ -1179,6 +1180,7 @@
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
         </v-history-modify>
+
         <v-message-board
                 @send="afterSend"
                 :readonly="orderForm.status==='5'" module="order"
@@ -1543,29 +1545,6 @@
                 }).finally(err => {
 
                 });
-
-                // this.skuStatusTotalOption=[
-                //     {
-                //         code:'1',
-                //         name:'TBCBYSUPPLIER'
-                //     },
-                //     {
-                //         code:'2',
-                //         name:'TBCBYCUSTOMER'
-                //     },
-                //     {
-                //         code:'3',
-                //         name:'PROCESS'
-                //     },
-                //     {
-                //         code:'4',
-                //         name:'FINISHED'
-                //     },
-                //     {
-                //         code:'5',
-                //         name:'CANCLED'
-                //     },
-                // ];
                 this.skuStatusOption = [
                     {
                         code: "PROCESS",
@@ -1576,8 +1555,6 @@
                         name: "CANCLED"
                     }
                 ];
-
-
                 this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "ORDER_STATUS", "SKU_SALE_STATUS", "SKU_STATUS"], { cache: true }).then(res => {
                     this.allowQuery++;
                     res.forEach(v => {
@@ -1674,6 +1651,9 @@
                         v._isModified = false;
                     });
                     _.map(this.orderForm.fieldUpdate, (v, k) => {
+                        if(k==='attachments'){
+                            k='attachment';
+                        }
                         this.$db.order.orderDetail[k]._isModified = true;
                     });
                     this.orderForm.fieldUpdate = {};
@@ -1797,6 +1777,7 @@
                     }
                 });
                 let orderSkuUpdateList = [];
+
                 _.map(this.productTableData, item => {
                     let isModify = false, isModifyStatus = false;
                     _.map(item, (val, index) => {
@@ -1806,7 +1787,6 @@
                         if (val._isModifyStatus) {
                             isModifyStatus = true;
                         }
-
                     });
                     if (isModify || isModifyStatus) {
                         let isIn = false;
@@ -1835,9 +1815,21 @@
                             }
                         });
                     }
+                    else{
+                        console.log(item,'item')
+                        if(!item.fieldRemarkUpdate){
+                            item.fieldRemarkUpdate={value:{}}
+                        }
+                        _.map(item, (v, k) => {
+                            if (v._isModified) {
+                                item.fieldRemarkUpdate.value[k] = "";
+                            }
+                        });
+                    }
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 console.log();
+                return console.log(this.$depthClone(this.productTableData), "params.skuList");
                 params.skuList = this.dataFilter(this.productTableData);
                 let rightCode = true;
                 _.map(params.skuList, v => {
@@ -1863,7 +1855,6 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
-                // return console.log(this.$depthClone(params), "params.skuList");
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -1957,6 +1948,12 @@
                     this.orderForm.fieldUpdate = {};
                 }
                 this.orderForm.fieldUpdate[key] = "";
+            },
+            changeAttachment(){
+                if (!this.orderForm.fieldUpdate) {
+                    this.orderForm.fieldUpdate = {};
+                }
+                this.orderForm.fieldUpdate['attachments'] = "";
             },
 
             /**
@@ -3080,11 +3077,19 @@
         margin-top: 10px;
     }
 
-    .isModify >>> input {
+    .isModify >>> input{
         background-color: yellow !important;
     }
-
-    .high-light >>> input {
+    .high-light >>> input{
+        background-color: yellow !important;
+    }
+    .isModify >>> textarea{
+        background-color: yellow !important;
+    }
+    .isModify >>> li{
+        background-color: yellow !important;
+    }
+    .high-light >>> textarea{
         background-color: yellow !important;
     }
 

@@ -41,6 +41,7 @@
                       @click="addNewProduct">{{$i.product.addNew}}</el-button>
                     <el-button
                       v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
+                      :disabled="!selectList.length>0"
                       @click="deleteCompare"  type="danger">{{$i.common.remove}}</el-button>
                 </span>
               <span v-if="$route.params.type==='modify'">
@@ -63,6 +64,7 @@
                     @click="addNewProduct">{{$i.product.addNew}}</el-button>
                   <el-button
                     v-if="isModify"
+                    :disabled="!selectList.length>0"
                     v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
                     @click="deleteCompare"  type="danger">{{$i.common.remove}}</el-button>
                   <el-button
@@ -86,11 +88,13 @@
             </div>
             <div v-if="$route.params.type==='modify'">
                 <el-button
+                  v-if="isModify"
                   :disabled="allowBottomClick"
                   type="primary"
                   @click='saveCompare'
                   v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
                   <el-button
+                    v-if="isModify"
                     :disabled="allowBottomClick"
                     @click="cancelModify" >Cancel</el-button>
             </div>
@@ -200,9 +204,9 @@
                     });
                     let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
-                    console.log(id)
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
+                          this.loading = false;
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res, e => {
                           let country;
                           country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
@@ -215,7 +219,6 @@
                         this.initialData=this.$depthClone(this.tableDataList);
                         this.changeStatus();
                         this.disabledLine=this.tableDataList;
-                        this.loading = false;
                     }).catch(err=>{
                         this.loading = false;
                     })
@@ -228,6 +231,7 @@
                     }
                     this.loading = true;
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
+                        this.loading = false;
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
@@ -238,10 +242,12 @@
                         this.initialData=this.$depthClone(this.tableDataList);
                         this.changeStatus();
                         this.disabledLine=this.tableDataList;
-                        this.loading = false;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
+                    }).catch(err=>{
+                      this.loading = false;
                     })
+
                 }
             },
 
@@ -257,13 +263,7 @@
 
             changeChecked(item){
               this.selectList=item;
-              // this.selectList=item;
-              // this.selectedData = item
-              // let number = []
-              // this.selectedData.forEach(item => {
-              //   number.push(item.id.value);
-              // });
-              // this.selectNumber = number
+
             },
 
             //编辑单子
@@ -352,7 +352,7 @@
                     });
                 }else{
                     e.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
+                        let id=_.findWhere(v,{key:'supplierId'}).value;
                         let isIn=false;
                         this.tableDataList.forEach(m=>{
                             let newId=_.findWhere(m,{key:'id'}).value;
@@ -363,7 +363,6 @@
                         });
                         if(!isIn){
                             this.tableDataList.push(v);
-                            console.log(this.tableDataList)
                             this.initialData=this.$depthClone(this.tableDataList);
                             this.changeStatus();
 
@@ -409,7 +408,7 @@
                     });
                 });
                 if (this.$route.params.type==='modify'){
-                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.id}`,params).then(res=>{
+                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.compareId}`,params).then(res=>{
                       let compareId=res;
                       this.$router.push({
                         name:'supplierCompareDetail',
@@ -417,7 +416,7 @@
                           type:'modify'
                         },
                         query:{
-                          id:compareId,
+                          compareId:compareId,
                           compareName:this.compareName
                         }
                       });
@@ -429,13 +428,14 @@
                   params.id = ''
                   this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
                     let compareId=res;
+
                     this.$router.push({
                       name:'supplierCompareDetail',
                       params:{
                         type:'modify'
                       },
                       query:{
-                        id:compareId,
+                        compareId:compareId,
                         compareName:this.compareName
                       }
                     });
@@ -546,7 +546,7 @@
               if(n.length>0 && (len-n.length)>=2){
                   this.disableDelete=false;
               }else{
-                  this.disableDelete=true;
+                 this.disableDelete=true;
               }
           },
 

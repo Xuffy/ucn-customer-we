@@ -33,5 +33,9 @@ export default {
     companyId:{
          _hide:true,
         key:'companyId'
+    },
+    supplierId:{
+      _hide:true,
+      key:'supplierId'
     }
 }

@@ -55,12 +55,30 @@
                <template slot="header">
                  <div class="btnline">
 
-                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"  @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
-                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder'  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
-                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
-                   <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
-                   <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
-                   <el-button @click="download"  v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DOWNLOAD'">
+                   <el-button
+                     v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"
+                     @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
+                   <el-button
+                     v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"
+                     @click='createOrder'
+                     :class="(selectedData.length>1)?'disabledBtn':'' ">
+                     {{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
+                   <el-button
+                     v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'"
+                     @click='compare'
+                     :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>
+                     {{$i.common.compare}}({{selectedNumber.length}})</el-button>
+                   <el-button
+                     @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
+                   <el-button
+                     :disabled='!selectedData.length>0'
+                     v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'"
+                     @click='remove'
+                     type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
+                   <el-button
+                     @click="download"
+                      v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DOWNLOAD'"
+                     :disabled='!(tabData.length)>0'>
                      {{$i.common.download}}
                      ({{selectedNumber.length===0?$i.product.all:selectedNumber.length}})
                    </el-button>

@@ -63,14 +63,14 @@ export default {
   add_buyerProductCompare: ['/purchase/sku/compare','BASE_URL'],
   delete_buyerProductCompareDetail: ['/purchase/supplier/listCompareDetails', 'BASE_URL'],
   get_buyerProductCompareDetail: ['/purchase/sku/listCompareDetails', 'BACE_CS','BASE_URL'],
-  delete_buyerProductCompare: ['/purchase/sku/deleteCompare', 'BASE_CS'],
+  delete_buyerProductCompare: ['/purchase/sku/deleteCompare', 'BASE_URL'],
   get_buyerProductDetail: ['/purchase/sku/{id}', 'BASE_URL'],
   edit_buyerProductBookmark: ['/purchase/sku/bookmark/{id}', 'BASE_URL'],
   update_buyerProductCompare: ['/purchase/sku/compare/{id}','BASE_URL'],
   delete_buyerProductRemark: ['/purchase/sku/deleteSkuRemark/{id}', 'BASE_URL'],
   recover_buyerProductBookmark: ['/purchase/sku/recoverBookmark', 'BASE_URL'],
   get_buyerProductTradeList: ['/purchase/sku/history', 'BASE_URL'],
-  RECOVER_COMPARE: ['/purchase/sku/recoverCompare','BASE_CS'],
+  RECOVER_COMPARE: ['/purchase/sku/recoverCompare','BASE_URL'],
 
 
   /**

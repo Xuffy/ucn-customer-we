@@ -67,9 +67,11 @@
                <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'"
                           @click='addToBookmark' :disabled='!(selectedData.length)>0'>
                       {{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
-               <el-button @click="download"  v-authorize="'SUPPLIER:OVERVIEW:DOWNLOAD'">
+               <el-button @click="download"
+                          v-authorize="'SUPPLIER:OVERVIEW:DOWNLOAD'"
+                          :disabled="!(tabData.length)>0">
                       {{$i.common.download}}
-                      ({{selectNumber.length===0?$i.product.all:selectNumber.length}})</el-button>
+                      ({{selectNumber.length===0?$i.common.all:selectNumber.length}})</el-button>
              </div>
            </div>
          </template>
@@ -331,15 +333,13 @@
                       if (this.disabledLine.length > 0) {
                         this.disabledLine.forEach(v => {
                           let id = _.findWhere(v, {
-                            key: 'id'
+                            key: 'supplierId'
                           }).value;
                           this.tabData.forEach(m => {
                             let newId = _.findWhere(m, {
                               key: 'id'
                             }).value;
                             if (id === newId) {
-                              console.log(m)
-                              console.log(1)
                               m._disabled = true;
                               m._checked = true;
                             }
