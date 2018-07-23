@@ -118,13 +118,16 @@
                 selectSearch: 1,
                 pageTotal: 1,
                 rowspan: 1,
-                options: [{
-                    id: 1,
-                    label: 'Order No'
-                }, {
-                    id: 2,
-                    label: 'Sku Code'
-                }],
+                options: [
+                    {
+                        id: 1,
+                        label: 'Order No'
+                    },
+                    {
+                        id: 2,
+                        label: 'Sku Code'
+                    }
+                ],
                 id: '',
                 params: {
                     orderNo: '',
