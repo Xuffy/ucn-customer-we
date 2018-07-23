@@ -959,7 +959,7 @@
 
         this.oldPlanObject.containerDetail =  this.oldPlanObject.containerDetail&&this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
           if(!el.isModify&&'fieldDisplay' in el){
-            el.fieldDisplay = {};
+            el.fieldDisplay = null;
           }
           return el;
         });

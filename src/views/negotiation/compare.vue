@@ -26,7 +26,7 @@
             </div>
         </div>
         <v-table
-            :code="compareBy === 0 ? 'inquiry_list' : 'inquiry_sku_list'"
+            :code="compareBy === 0 ? 'inquiry_list' : 'inquiry'"
             :height="455"
             :data="tabData"
             :loading="tabLoad"
@@ -268,6 +268,7 @@ export default {
         this.$message(this.$i.common.pleaseChooseGoods);
         return;
       }
+      this.pageTotal += arg.length;
       let url, column;
       if (this.compareBy === 0) {
         url = this.$apis.POST_INQIIRY_LIST;
