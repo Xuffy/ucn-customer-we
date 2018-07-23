@@ -225,8 +225,8 @@
     mounted(){
       this.setMenuLink([
         {
-          path: '',
-          query: {code: 'PRUCHASE_SUPPLIER'},
+          path: '/logs',
+          query: {code: 'PRUCHASE_SUPPLIER',bizCode: 'BIZ_PURCHASE_SUPPLIER_COMPARE'},
           type: 10,
           label: this.$i.common.log,
           auth: 'SUPPLIER:LOG'

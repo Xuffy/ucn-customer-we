@@ -161,6 +161,7 @@
             },
             getbizlogs(){
                 this.params.moduleCode = this.$route.query.code  // BIZ_PURCHASE_SUPPLIER/PRUCHASE_SUPPLIER
+                this.params.bizCode = this.$route.query.bizCode
                 this.tabLoad = true;
                 this.$ajax.post(this.$apis.post_bizloQuery,this.params)
                 .then(res => {
