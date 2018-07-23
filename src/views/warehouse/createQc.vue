@@ -335,7 +335,6 @@
                 serviceDialogVisible: false,
                 radio: "",
                 currencyOptions: [],
-                
                 qcStatusCode: "WAITING_QC",
                 qcStatusOption: [],
                 selectProductTableData: [],      //页面上选中的table data

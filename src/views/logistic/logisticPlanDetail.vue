@@ -611,7 +611,7 @@
         return basicInfoInput.includes(key) ? 'input' : basicInfoDate.includes(key) ? 'date' : 'selector'
       },
       arrayAppend() {
-        this.containerInfo.push({
+        const obj = {
           exchangeCurrency: this.basicInfoArr.find(a => a.key === 'exchangeCurrency').value,
           containerNo: "",
           containerType: null,
@@ -623,7 +623,9 @@
           totalContainerSkuPrice: 0,
           totalContainerVolume: 0,
           vgm: 0
-        })
+        };
+        this.containerInfo.push(obj);
+        this.containerinfoMatch.push(obj);
       },
       arraySplite(array, index) {
         array.splice(index, 1);
