@@ -489,12 +489,6 @@ export default {
       }
     },
     computePrice(col, item) {
-      this.custom = {
-        exchangeRateUSD: 3,
-        insuranceExpensesUSD40HC: 5,
-        oceanFreightUSD40HC: 7,
-        portWarehousePrice40HC: 9
-      };
       let field = col.key;
       if (item._remark || !this.custom || !['skuExwPrice', 'skuFobPrice', 'skuCifPrice', 'skuOuterCartonQty', 'skuOuterCartonVolume'].includes(field)) {
         return;
