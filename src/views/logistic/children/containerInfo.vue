@@ -5,10 +5,10 @@
       <el-button type="danger" size="mini" @click.stop="$emit('deleteContainer')">{{ $i.logistic.delete }}</el-button>
     </div>
     <div class="tab-wrap">
-      <el-table :cell-class-name="lightHight" :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
-        show-summary 
+      <el-table :cell-class-name="lightHight" :data="tableData" ref="table" border style="width: 100%; margin-top: 20px"
+        show-summary
         :summary-method="summaryMethod"
-        @selection-change="handleSelectionChange" 
+        @selection-change="handleSelectionChange"
         :row-class-name="tableRowClassName">
         <el-table-column type="selection" width="100" align="center" :selectable='checkboxInit' class-name="checkbox-no-margin" v-if="edit"/>
         <el-table-column type="index" width="100" align="center"/>
@@ -35,7 +35,7 @@
                 <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
               </el-select>
             </div>
-            <span v-else>{{ scope.row.containerType }}</span>       
+            <span v-else>{{ scope.row.containerType }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.vgm" prop='{"key":"vgm","total":true}' width="120" align="center">
@@ -120,7 +120,7 @@ export default {
     }
   },
   methods: {
-    //高亮 
+    //高亮
     ContainerInfoLight(key,v,index,scope){
       this.returnData[index].fieldDisplay[key] = v;
       this.returnData[index][key] = v;
@@ -147,7 +147,7 @@ export default {
     },
     //返回当前行是否可选中 复选框
     checkboxInit(row,index){
-      if (row.beBinding) 
+      if (row.beBinding)
         return 0;//不可勾选
       else
         return 1;//可勾选
@@ -166,13 +166,18 @@ export default {
             sums[index] = this.$i.logistic.sum;
             return;
           }
+<<<<<<< HEAD
           const values = data.map(item => Number(item[column.property&&JSON.parse(column.property).key]));
           //提取data 拼接成汇率的key 
+=======
+          const values = data.map(item => Number(item[column.property]) );
+          //提取data 拼接成汇率的key
+>>>>>>> 3346d4f0f559dc9cbbd996b6b1302e93d54e4ece
           const currencyCode = data.map(item => {
             if(item.exchangeCurrency!=this.currencyCode){
               return item.exchangeCurrency+this.currencyCode;
             }else{
-              return this.currencyCode; 
+              return this.currencyCode;
             }
           });
           let currencyCodeArr = [];
@@ -192,12 +197,12 @@ export default {
               const value = Number(curr);
               if(column.property&&JSON.parse(column.property).key=="totalContainerSkuPrice"){
                 if (!isNaN(value)) {
-                  return this.$numAdd(prev , this.$mul(curr,currencyCodeArr[i]));
+                  return this.$calc.add(prev , this.$calc.multiply(curr,currencyCodeArr[i]));
                 } else {
                   return prev;
                 }
               }else{
-                return this.$numAdd(prev , curr || 0);
+                return this.$calc.add(prev , curr || 0);
               }
             }, 0);
             sums[index] += 0;
