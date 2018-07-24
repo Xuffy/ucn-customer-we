@@ -155,7 +155,9 @@ export default {
     _disabled: true,
     transForm: 'EL_IS'
   },
-  skuQty: {
+  quantity: {
+    key: 'skuQty',
+    _disabled: true,
     _inquiryHide: true
   },
   inquiryRemark: { // 询价备注
