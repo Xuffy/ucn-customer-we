@@ -1946,6 +1946,25 @@
                     this.orderForm.fieldUpdate = {};
                 }
                 this.orderForm.fieldUpdate[key] = "";
+                if(key==='incoterm'){
+                    _.map(this.productTableData,item=>{
+                        if(!item._remark){
+                            if(this.orderForm[key] === '1'){
+                                //fob
+                                item.skuPrice.value=item.skuFobPrice.value*(item.skuQty.value?item.skuQty.value:0);
+                            }else if(this.orderForm[key] === '2'){
+                                //exw
+                                item.skuPrice.value=item.skuExwPrice.value*(item.skuQty.value?item.skuQty.value:0);
+                            }else if(this.orderForm[key] === '3'){
+                                //cif
+                                item.skuPrice.value=item.skuCifPrice.value*(item.skuQty.value?item.skuQty.value:0);
+                            }else if(this.orderForm[key] === '4'){
+                                //ddu
+                                item.skuPrice.value=item.skuDduPrice.value*(item.skuQty.value?item.skuQty.value:0);
+                            }
+                        }
+                    })
+                }
             },
             changeAttachment(){
                 if (!this.orderForm.fieldUpdate) {
@@ -1991,9 +2010,9 @@
                     let arr = [];
                     _.map(this.productTableData, v => {
                         if (Number(v.skuSysCode.value) === Number(e.skuSysCode.value)) {
-                            if (!v._remark) {
-                                this.handlePriceBlur({}, v);
-                            }
+                            // if (!v._remark) {
+                            //     this.handlePriceBlur({}, v);
+                            // }
                             arr.push(v);
                         }
                     });

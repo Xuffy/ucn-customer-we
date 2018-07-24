@@ -949,7 +949,7 @@
                     }
                 });
                 this.$windowOpen({
-                    url: "product/compareDetail/new",
+                    url: "/product/compareDetail/new",
                     params: {
                         id: id
                     }
