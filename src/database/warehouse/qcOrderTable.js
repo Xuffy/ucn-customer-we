@@ -27,34 +27,46 @@ export default {
         key: 'remark'
     },
     qualifiedSkuCartonTotalQty: {
-        key: 'qualifiedSkuCartonTotalQty'
+        key: 'qualifiedSkuCartonTotalQty',
+        _sort:false
     },
     qualifiedSkuQty: {
-        key: 'qualifiedSkuQty'
+        key: 'qualifiedSkuQty',
+        _sort:false
     },
     qualifiedSkuVolume: {
-        key: 'qualifiedSkuVolume'
+        key: 'qualifiedSkuVolume',
+        _sort:false
     },
     qualifiedSkuNetWeight: {
-        key: 'qualifiedSkuNetWeight'
+        key: 'qualifiedSkuNetWeight',
+        _sort:false
     },
     qualifiedSkuGrossWeight: {
-        key: 'qualifiedSkuGrossWeight'
+        key: 'qualifiedSkuGrossWeight',
+        _sort:false
     },
     unqualifiedSkuQty: {
-        key: 'unqualifiedSkuQty'
+        key: 'unqualifiedSkuQty',
+        _sort:false
     },
     unqualifiedSkuCartonTotalQty: {
-        key: 'unqualifiedSkuCartonTotalQty'
+        key: 'unqualifiedSkuCartonTotalQty',
+        _sort:false
     },
     unqualifiedSkuNetWeight: {
-        key: 'unqualifiedSkuNetWeight'
+        key: 'unqualifiedSkuNetWeight',
+        _sort:false
     },
     unqualifiedSkuVolume: {
-        key: 'unqualifiedSkuVolume'
+        key: 'unqualifiedSkuVolume',
+        _sort:false
     },
     unqualifiedSkuGrossWeight: {
-        key: 'unqualifiedSkuGrossWeight'
+        key: 'unqualifiedSkuGrossWeight',
+        _sort:false
     },
-    skuRowNum: {},
+    skuRowNum: {
+        _sort:false
+    },
 }

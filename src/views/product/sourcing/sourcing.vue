@@ -241,7 +241,6 @@
                         message: this.$i.product.successfullyAdd,
                         type: "success"
                     });
-                    this.getData();
                 }).finally(() => {
                     this.loadingAddBookmark = false;
                 });
