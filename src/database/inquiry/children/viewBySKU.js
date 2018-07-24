@@ -11,6 +11,9 @@ export default {
   quotationNo: { // 系统带入：当前询价单的子单号
 
   },
+  entryDt: { // 创建时间
+    transForm: 'time'
+  },
   status: { // 系统带入，共四个状态及其触发： 询价状态
     transForm: 'INQUIRY_STATUS'
   },
@@ -28,6 +31,26 @@ export default {
   },
   currency: { // 币种 系统带入：当前inquiry选的币种
     transForm: 'CY_UNIT'
+  },
+  skuFobCurrency: { // FOB币种
+    transForm: 'CY_UNIT'
+  },
+  skuFobPrice: { // FOB价格
+  },
+  skuExwCurrency: { // EXW币种
+    transForm: 'CY_UNIT'
+  },
+  skuExwPrice: { // EXW价格
+  },
+  skuCifCurrency: { // CIF币种
+    transForm: 'CY_UNIT'
+  },
+  skuCifPrice: { // CIF价格
+  },
+  skuDduCurrency: { // DDU币种
+    transForm: 'CY_UNIT'
+  },
+  skuDduPrice: { // DDU价格
   },
   incoterm: { // 付款条款 系统带入，当前inquiry所选的付款条款
     transForm: 'ITM'

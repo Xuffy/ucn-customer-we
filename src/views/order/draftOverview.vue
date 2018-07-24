@@ -22,11 +22,22 @@
                 :loading='loading'
                 :pageTotal='pageTotal'
                 @change-checked='checked'
+                @change-sort="val=>{getData(val)}"
                 :height="500"
                 style='marginTop:10px'>
             <template slot="header">
-                <div style="padding: 10px 0">
-                    <!--<el-button :loading="disableClickSend" :disabled="selectedList.length===0" @click="send">{{$i.order.send}}</el-button>-->
+                <div>
+                    <el-button
+                            v-authorize="'ORDER:DRAFT_OVERVIEW:SEND'"
+                            :loading="disableClickSend"
+                            :disabled="selectedList.length===0"
+                            @click="send">{{$i.order.send}}</el-button>
+                    <el-button
+                            :loading="disableClickDelete"
+                            type='danger'
+                            :disabled='selectedList.length===0'
+                            @click='deleteOrder'
+                            v-authorize="'ORDER:DRAFT_OVERVIEW:ARCHIVE'">{{($i.order.archive)}}</el-button>
                     <div class="speHead">
                         <div class="viewBy">
                             <span>{{$i.order.viewBy}}</span>
@@ -99,14 +110,15 @@
                     orderNo: '',
                     skuCode: '',
                     status: '',
-                    // view: '1', //view by的按钮组
                     ps: 50,
                     pn: 1,
+                    draftCustomer:true
                 },
                 selectedList: [],
                 selectedNumber: [],
                 disableClickSend:false,
                 tableCode:'uorder_list',
+                disableClickDelete:false,
 
                 /**
                  * 字典
@@ -118,7 +130,7 @@
         },
         methods: {
             ...mapActions([
-                'setRecycleBin', 'setDraft','setLog'
+                'setMenuLink'
             ]),
             send(){
                 let ids=[];
@@ -139,31 +151,63 @@
                     this.disableClickSend=false;
                 })
             },
-            onAction(item) {
-                this.$windowOpen({
-                    url: '/order/create',
-                    params: {
-                        orderId: item.id.value
-                    }
+            deleteOrder(){
+                this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    let ids=[];
+                    _.map(this.selectedList,v=>{
+                        ids.push(v.id.value);
+                    });
+                    this.disableClickDelete=true;
+                    this.$ajax.post(this.$apis.delete_order,{
+                        ids:ids,
+                        recycleCustomer:true,
+                        draftCustomer:true
+                    }).then(res=>{
+                        this.selectedList=[];
+                        this.getData();
+                    }).finally(()=>{
+                        this.disableClickDelete=false;
+                    });
+
+                    this.$message({
+                        type: 'success',
+                        message: this.$i.order.deleteSuccess
+                    });
+                }).catch(() => {
+
                 });
             },
-            createOrder() {
-                this.$windowOpen({
-                    url: '/order/create'
-                });
+            onAction(item) {
+                this.$ajax.post(this.$apis.ORDER_DETAIL,{
+                    orderId:item.id.value
+                }).then(res=>{
+                    if(res.draftCustomer){
+                        this.$windowOpen({
+                            url: '/order/create',
+                            params: {
+                                orderId: item.id.value
+                            }
+                        });
+                    }else{
+                        this.$alert(this.$i.order.orderHasBeenSent, this.$i.order.prompt, {
+                            confirmButtonText: this.$i.order.sure,
+                            callback: action => {
+                                this.getData();
+                            }
+                        });
+                    }
+                })
+
             },
             selectChange(val) {
                 this.keyType = val;
             },
             checked(item) {
                 this.selectedList = item;
-            },
-            changeStatus() {
-                if (this.params.view === '1') {
-                    this.getData();
-                } else {
-                    this.getData();
-                }
             },
             changeView() {
                 this.disableFinish=true;
@@ -189,62 +233,18 @@
                     this.getData()
                 }
             },
-            finish() {
-                let ids=[];
-                _.map(this.selectedList,v=>{
-                    ids.push(v.id.value);
-                });
-                this.$ajax.post(this.$apis.ORDER_FINISH, {
-                    draftCustomer: false,
-                    draftSupplier: false,
-                    ids:ids,
-                    recycleCustomer: false,
-                    recycleSupplier: false,
-                })
-                    .then((res) => {
-                        console.log(res)
-                    })
-                    .catch((res) => {
-                        console.log(res)
-                    });
-            },
-            download() {
-                this.$ajax.post(this.$apis.download_order, {
-                    ids: this.selectedNumber
-                })
-                    .then((res) => {
-                        console.log(res)
-                    })
-                    .catch((res) => {
-                        console.log(res)
-                    });
-            },
-            deleteOrder() {
-                this.$ajax.post(this.$apis.delete_order, {
-                    ids: this.selectedNumber
-                })
-                    .then((res) => {
-                        if (this.params.view == 1) {
-                            this.getdata()
-                        } else {
-                            this.getdata()
-                        }
-                    })
-                    .catch((res) => {
-                        console.log(res)
-                    });
-            },
-            //get_orderlist数据
-            getData() {
+            getData(e) {
                 this.loading = true;
                 let url='',query='';
                 url=(this.view==='1'?this.$apis.ORDER_DRAFT_ORDERPAGE:this.$apis.ORDER_DRAFT_SKUPAGE);
                 query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
+                if(e && e.sorts){
+                    Object.assign(this.params,e);
+                }
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
                         this.tabData = this.$getDB(query, res.datas,e=>{
-                            console.log(e,'????')
                             if(e.entryDt){
                                 e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
                             }
@@ -322,15 +322,28 @@
         },
         created() {
             this.getUnit();
-            // this.setRecycleBin({
-            //     name: 'orderRecycleBin',
-            //     show: true
-            // });
-
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'ORDER'},
+                type: 10,
+                auth:'ORDER:LOG',
+                label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/order/archiveOrder',
+                type: 20,
+                auth:'ORDER:OVERVIEW:ARCHIVE_LINK',
+                label: this.$i.order.archiveOrder
+            });
+            this.setMenuLink({
+                path: '/order/archiveDraft',
+                type: 30,
+                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK',
+                label: this.$i.order.archiveDraft
+            });
         },
         mounted() {
             this.loading = false;
-            this.setLog({query:{code:'ORDER'}});
         },
         watch: {
             selectedList(n){
@@ -372,7 +385,10 @@
     }
     .viewBy{
         float: right;
-        margin-right: 70px;
+        margin-right: 40px;
+    }
+    .speHead{
+        float: right;
     }
     .speHead:after{
         content: '';

@@ -82,7 +82,6 @@ export default {
         belongPage:'sellerProductOverview'
 
     },
-
     fobPrice:{
         key: 'fobPrice',
         type: 'String',

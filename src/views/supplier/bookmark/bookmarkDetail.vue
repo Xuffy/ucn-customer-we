@@ -7,7 +7,7 @@
             <div class="detail">
                  <el-form  label-width="190px">
                      <el-row>
-                       <el-col :span="4">
+                       <el-col :span="4"  class="img-box">
                          <v-image :src="basicDate.logo" style="height: 184px;"/>
                        </el-col>
                        <el-col :span="20">
@@ -16,9 +16,9 @@
                              <el-col
                                v-for='(item,index) in $db.supplier.detail'
                                :key='index'
-                               :xs="24" :sm="item.fullLine?24:8" :md="item.fullLine?24:8" :lg="item.fullLine?24:8" :xl="item.fullLine?24:8"
+                               :xs="24" :sm="item.fullLine?24:24" :md="item.fullLine?24:12" :lg="item.fullLine?24:12" :xl="item.fullLine?24:8"
                              >
-                               <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
+                               <el-form-item label-width="190px" :prop="item.key" :label="item.label+' :'">
                                  {{basicDate[item.key]}}
                                </el-form-item>
                              </el-col>
@@ -34,6 +34,9 @@
                   <router-link :to="{ name:'productSourcingOverview', params: {supplierName: basicDate.name}}">
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:PRODUCT'" >{{$i.common.supplierProducts}}</el-button>
                   </router-link>
+                  <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:DOWNLOAD'" @click="download">
+                    {{$i.common.download}}
+                  </el-button>
 
                 <!--<el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}</el-button>-->
 
@@ -117,7 +120,6 @@
 
 <script>
     import VCompareList from '../../product/compareList'
-    import VRemark from '../../product/addlineTable'
     import VAttachment from '../attachment'
     import {
         VTable,VUpload,VImage
@@ -128,7 +130,6 @@
         components: {
             VTable,
             VCompareList,
-            VRemark,
             VUpload,
             VAttachment,
             VImage
@@ -239,7 +240,7 @@
                 });
                 if (hasAdd) {
                     this.$message({
-                        message: '该商品已经添加到列表了',
+                        message: this.$i.common.supplierAddList,
                         type: 'warning'
                     });
                 } else {
@@ -250,7 +251,7 @@
                         });
                         if (compareList.length>=100){
                           this.$message({
-                            message: '对比项不能超过100',
+                            message: this.$i.common.compareLength,
                             type: 'warning'
                           });
                           return false;
@@ -259,7 +260,7 @@
                         this.$localStore.set('compareSupplierList', compareList)
                     } else {
                         this.$message({
-                            message: '添加失败',
+                            message: this.$i.common.addError,
                             type: 'warning'
                         });
                     }
@@ -439,7 +440,7 @@
               this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
                 this.get_data();
                 this.$message({
-                  message: '上传成功',
+                  message: this.$i.common.uploadSuccess,
                   type: 'success'
                 });
               })
@@ -448,7 +449,7 @@
               this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
                 this.get_data();
                 this.$message({
-                  message: '上传成功',
+                  message: this.$i.common.uploadSuccess,
                   type: 'success'
                 });
               })
@@ -504,7 +505,7 @@
               this.$ajax.post(`${this.$apis.post_purchase_supplier_remark_id}/${this.addRemarkData.id}`,this.addRemarkData)
                 .then(res => {
                   this.$message({
-                    message: '修改成功',
+                    message: this.$i.common.modifySuccess,
                     type: 'success'
                   });
                   this.getListRemark();
@@ -519,7 +520,7 @@
               this.$ajax.post(this.$apis.post_purchase_supplier_remark,this.addRemarkData)
                 .then(res => {
                   this.$message({
-                    message: '添加成功',
+                    message:  this.$i.common.addSuccess,
                     type: 'success'
                   });
                   this.getListRemark();
@@ -533,20 +534,24 @@
             }
           },
           deleteRemark(e){
-            this.$confirm('确定删除该备注?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
+            this.$confirm(this.$i.common.sureToDeleteRemark, this.$i.common.prompt, {
+              confirmButtonText: this.$i.common.confirm,
+              cancelButtonText: this.$i.common.cancel,
               type: 'warning'
             }).then(() => {
               this.$ajax.post(this.$apis.post_purchase_supplier_deleteRemark_id,{id:e.id.value}).then(res=>{
                 this.$message({
                   type: 'success',
-                  message: '删除成功!'
+                  message: this.$i.common.deleteTheSuccess
                 });
                 this.getListRemark();
               }).catch(err=>{
               });
             })
+          },
+          download(){
+            let ids=_.pluck(_.pluck(this.basicDate,"id"),'value');
+            this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_IDS',{ids:ids});
           },
         },
         created() {
@@ -668,5 +673,8 @@
       height: 200px;
       line-height: 200px;
     }
+  .img-box{
+    height: 184px;background-color: #f9f9f9;
+  }
 
 </style>

@@ -73,6 +73,9 @@ export default {
         type: 'String',
         showType:'input',
         belongTab:'basicInfo',
+        _rules:{
+            required:true
+        }
     },
     // supplierName:{
     //     key:'supplierName',

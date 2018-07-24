@@ -9,7 +9,7 @@
                  <el-form  label-width="190px">
                     <el-row>
                       <el-row>
-                        <el-col :span="4">
+                        <el-col :span="4" class="img-box">
                           <v-image :src="basicDate.logo" style="height: 184px;"/>
                         </el-col>
                         <el-col :span="20">
@@ -18,9 +18,9 @@
                               <el-col
                                 v-for='(item,index) in $db.supplier.detail'
                                 :key='index'
-                                :xs="24" :sm="item.fullLine?24:8" :md="item.fullLine?24:8" :lg="item.fullLine?24:8" :xl="item.fullLine?24:8"
+                                :xs="24" :sm="item.fullLine?24:24" :md="item.fullLine?24:12" :lg="item.fullLine?24:12" :xl="item.fullLine?24:8"
                               >
-                                <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
+                                <el-form-item label-width="190px" :prop="item.key" :label="item.label+' :'">
                                   {{basicDate[item.key]}}
                                 </el-form-item>
                               </el-col>
@@ -28,17 +28,6 @@
                           </el-form>
                         </el-col>
                       </el-row>
-                        <!--<el-row class="right">-->
-                            <!--<el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8"-->
-                                   <!--v-for='(item,index) in $db.supplier.detail'-->
-                                   <!--:key='index'-->
-                                   <!--&gt;-->
-                                    <!--<el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">-->
-                                       <!--{{basicDate[item.key]}}-->
-                                    <!--</el-form-item>-->
-                            <!--</el-col>-->
-                        <!--</el-row>-->
-
                 </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
@@ -49,6 +38,9 @@
                     <el-button v-authorize="'SUPPLIER:DETAIL:PRODUCT'" >{{$i.common.supplierProducts}}</el-button>
                   </router-link>
                     <el-button v-authorize="'SUPPLIER:DETAIL:ADD_BOOKMARK'" @click='addToBookmark'>{{$i.common.addToBookmark}}</el-button>
+                  <el-button v-authorize="'SUPPLIER:DETAIL:DOWNLOAD'" @click="download">
+                    {{$i.common.download}}
+                  </el-button>
                 </div>
 
                 <div class="btns" v-else>
@@ -131,7 +123,6 @@
 
 <script>
     import VCompareList from '../../product/compareList'
-    import VRemark from '../../product/addlineTable'
     import VAttachment from '../attachment'
     import {
         VTable,VUpload,VImage
@@ -142,7 +133,6 @@
         components: {
             VTable,
             VCompareList,
-            VRemark,
             VAttachment,
             VUpload,
             VImage
@@ -242,7 +232,7 @@
                 });
                 if (hasAdd) {
                     this.$message({
-                        message: '该商品已经添加到列表了',
+                        message: this.$i.common.supplierAddList,
                         type: 'warning'
                     });
                 } else {
@@ -253,7 +243,7 @@
                         });
                         if (compareList.length>=100){
                           this.$message({
-                            message: '对比项不能超过100',
+                            message: this.$i.common.compareLength,
                             type: 'warning'
                           });
                           return false;
@@ -262,7 +252,7 @@
                         this.$localStore.set('compareSupplierList', compareList)
                     } else {
                         this.$message({
-                            message: '添加失败',
+                            message: this.$i.common.addError,
                             type: 'warning'
                         });
                     }
@@ -320,7 +310,7 @@
                 this.$ajax.post(this.$apis.post_supplier_addbookmark, [this.id])
                     .then(res => {
                         this.$message({
-                            message: '添加成功',
+                            message: this.$i.common.addSuccess,
                             type: 'success',
                         });
                       this.$router.push({
@@ -481,7 +471,7 @@
               this.$ajax.post(`${this.$apis.post_purchase_supplier_remark_id}/${this.addRemarkData.id}`,this.addRemarkData)
                 .then(res => {
                   this.$message({
-                    message: '修改成功',
+                    message: this.$i.common.modifySuccess,
                     type: 'success'
                   });
                   this.getListRemark();
@@ -496,7 +486,7 @@
               this.$ajax.post(this.$apis.post_purchase_supplier_remark,this.addRemarkData)
                 .then(res => {
                   this.$message({
-                    message: '添加成功',
+                    message: this.$i.common.addSuccess,
                     type: 'success'
                   });
                   this.getListRemark();
@@ -510,15 +500,15 @@
             }
           },
           deleteRemark(e){
-            this.$confirm('确定删除该备注?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
+            this.$confirm(this.$i.common.sureToDeleteRemark, this.$i.common.prompt, {
+              confirmButtonText: this.$i.common.confirm,
+              cancelButtonText: this.$i.common.cancel,
               type: 'warning'
             }).then(() => {
               this.$ajax.post(this.$apis.post_purchase_supplier_deleteRemark_id,{id:e.id.value}).then(res=>{
                 this.$message({
                   type: 'success',
-                  message: '删除成功!'
+                  message: this.$i.common.deleteTheSuccess
                 });
                 this.getListRemark();
               }).catch(err=>{
@@ -545,7 +535,7 @@
               this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
                 this.getData();
                 this.$message({
-                  message: '上传成功',
+                  message: this.$i.common.uploadedSuccess,
                   type: 'success'
                 });
               })
@@ -554,7 +544,7 @@
               this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
                 this.getData();
                 this.$message({
-                  message: '上传成功',
+                  message: this.$i.common.uploadedSuccess,
                   type: 'success'
                 });
               })
@@ -567,6 +557,11 @@
             }).catch(err=>{
               console.log(err)
             });
+          },
+          //download
+          download(){
+            let ids=_.pluck(_.pluck(this.basicDate,"id"),'value');
+            this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_IDS',{ids:ids});
           },
         },
         created() {
@@ -691,40 +686,8 @@
       height: 200px;
       line-height: 200px;
     }
-    /*
-    .attchment {
-        display: flex;
-        justify-content: flex-start;
-        height: 400px;
+    .img-box{
+      height: 184px;background-color: #f9f9f9;
     }
-
-    .attchment_item {
-        width: 180px;
-        height: 60px;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        border: 1px solid #BEBEBE;
-        border-radius: 3px;
-        margin-left: 20px;
-    }
-
-    .attchment_item_content {
-        width: 180px;
-        display: flex;
-        justify-content: center;
-        align-items: baseline;
-    }
-
-    .attchment_item p {
-        font-size: 14px;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .attchment_item i {
-        font-size: 40px;
-    }
-*/
 
 </style>

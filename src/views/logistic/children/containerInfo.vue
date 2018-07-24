@@ -1,23 +1,23 @@
 <template>
   <div>
     <div class="btn-wraps" v-if="edit">
-      <el-button type="primary" size="mini" @click.stop="$emit('arrayAppend', 'containerInfo')">{{ $i.logistic.add }}</el-button>
+      <el-button type="primary" size="mini" @click.stop="$emit('arrayAppend')">{{ $i.logistic.add }}</el-button>
       <el-button type="danger" size="mini" @click.stop="$emit('deleteContainer')">{{ $i.logistic.delete }}</el-button>
     </div>
     <div class="tab-wrap">
-      <el-table :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
+      <el-table :cell-class-name="lightHight" :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
         show-summary 
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
         :row-class-name="tableRowClassName">
         <el-table-column type="selection" width="100" align="center" :selectable='checkboxInit' class-name="checkbox-no-margin" v-if="edit"/>
-        <el-table-column type="index" width="50" align="center"/>
-        <el-table-column :label="$i.logistic.containerNo" width="140" align="center">
+        <el-table-column type="index" width="100" align="center"/>
+        <el-table-column :label="$i.logistic.containerNo" width="140" align="center" prop="containerNo">
           <template slot-scope="scope">
             <span>{{ scope.row.containerNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.sealNo" width="120" align="center">
+        <el-table-column :label="$i.logistic.sealNo" width="120" align="center" prop="sealNo">
           <template slot-scope="scope">
             <span>{{ scope.row.sealNo }}</span>
           </template>
@@ -27,15 +27,15 @@
             <span>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.containerType" width="180" align="center">
+        <el-table-column :label="$i.logistic.containerType" width="180" align="center" prop="containerType">
           <template slot-scope="scope">
             <div v-if="edit" style="display:flex;">
               <label class="reqiuredStar"></label>
-              <el-select v-model="scope.row.containerType" placeholder="请选择">
+              <el-select v-model="scope.row.containerType" :placeholder="$i.logistic.placeholder" @change="ContainerInfoLight('containerType',scope.row.containerType,scope.$index)">
                 <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
               </el-select>
             </div>
-            <span v-else>{{ scope.row.containerType }}</span>
+            <span v-else>{{ scope.row.containerType }}</span>       
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.vgm" prop="vgm" width="120" align="center">
@@ -83,7 +83,8 @@ export default {
   data () {
     return {
       containerNo: '',
-      containerSelect: ''
+      containerSelect: '',
+      ContainerInfoLightArr:[]
     }
   },
   props: {
@@ -99,6 +100,12 @@ export default {
         return []
       }
     },
+    matchData: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
     containerType: {
       type: Array,
       default: () => {
@@ -106,7 +113,39 @@ export default {
       }
     }
   },
+  computed:{
+    returnData(){
+      let arr = this.$depthClone(this.matchData).map(el=> {el.fieldDisplay={}; return el } );
+      return arr;
+    }
+  },
   methods: {
+    //高亮 
+    ContainerInfoLight(key,v,index,scope){
+      console.log(this.returnData)
+      this.returnData[index].fieldDisplay[key] = v;
+      this.returnData[index][key] = v;
+      if(this.matchData[index][key]==v){
+        delete this.returnData[index].fieldDisplay[key];
+      }
+      let cloneReturnData = this.$depthClone(this.returnData[index]);
+      let cloneMatchData = this.$depthClone(this.matchData[index]);
+      delete cloneReturnData.isModify
+      delete cloneMatchData.isModify
+      if(_.isEqual(cloneReturnData, cloneMatchData)){
+        this.returnData[index].isModify = false;
+      }else{
+        this.returnData[index].isModify = true;
+      }
+      this.$emit('ContainerInfoLight',this.returnData);
+    },
+    lightHight({row, column, rowIndex, columnIndex}){
+      if(column.property&&row.fieldDisplay){
+        if(column.property in row.fieldDisplay){
+          return 'lightHight'
+        }
+      }
+    },
     //返回当前行是否可选中 复选框
     checkboxInit(row,index){
       if (row.beBinding) 
@@ -169,32 +208,7 @@ export default {
         });
 
         return sums;
-    },
-    // tailBtn(str) {
-    //   if(str === 'ok') {
-    //     if(!this.containerSelect) return this.$message({
-    //       message: '请选择货柜类型',
-    //       type: 'warning'
-    //     });
-    //     if(!this.containerNo) return this.$message({
-    //       message: '请填写货柜数量',
-    //       type: 'warning'
-    //     });
-    //     this.$emit('tailBtnOk', {
-    //       Product: this.containerSelect,
-    //       containerAmount: this.containerNo
-    //     });
-    //     this.containerSelect = '';
-    //     this.containerNo = '';
-    //   } else {
-    //     this.$emit('tailBtnCancel');
-    //   }
-    //   return this.isActive = false
-    // },
-    // tabSplite(index) {
-    //   if(this.tableData.length <= 1) this.tabAppend();
-    //   this.$emit('tabSplite', index)
-    // }
+    }
   },
 }
 </script>
@@ -207,4 +221,10 @@ export default {
   color: #f56c6c;
   margin-right: 4px;
 }
+.tab-wrap{
+  /deep/.lightHight{
+    background: yellow;
+  }
+}
+
 </style>

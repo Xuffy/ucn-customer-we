@@ -6,23 +6,13 @@
         <div class="name">
             <span>Compare Name</span>
             <el-input
-                    :disabled="$route.params.type==='modify' && !isModify"
-                    size="mini"
-                    class="compare-name"
-                    placeholder="please input"
-                    v-model="compareName"
-                    clearable>
+              :disabled="$route.params.type==='modify' && !isModify"
+              size="mini"
+              class="compare-name"
+              placeholder="please input"
+              v-model="compareName"
+              clearable>
             </el-input>
-        </div>
-        <div class="btns">
-            <span>
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
-            </span>
-            <el-checkbox  v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
-            <el-checkbox  v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
         </div>
 
         <v-table
@@ -32,21 +22,82 @@
           :buttons="[{label: 'Detail', type: 1}]"
           @action="btnClick"
           @change-checked="changeChecked"
-          @filter-value="tableFilterValue"></v-table>
+          @change-sort="sort"
+          @filter-value="tableFilterValue"
+          :height="500">
+          <template slot="header">
+            <div class="btns">
+                <span v-if="$route.params.type==='new'">
+                    <el-button
+                       v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'"
+                       @click='createInquiry'>{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                    <el-button
+                      v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"
+                      @click="createOrder"
+                      :class="(selectedData.length>1)?'disabledBtn':'' ">
+                      {{$i.product.createOrder}}({{selectList.length}})</el-button>
+                    <el-button
+                      v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'"
+                      @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                    <el-button
+                      v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
+                      :disabled="!selectList.length>0"
+                      @click="deleteCompare"  type="danger">{{$i.common.remove}}</el-button>
+                </span>
+              <span v-if="$route.params.type==='modify'">
+                 <el-button
+                   v-if="!isModify"
+                   v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'"
+                   @click='createInquiry'>{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                  <el-button
+                    v-if="!isModify"
+                    v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"
+                    @click="createOrder"
+                    :class="(selectedData.length>1)?'disabledBtn':'' ">
+                    {{$i.product.createOrder}}({{selectList.length}})</el-button>
+                <el-button
+                  v-if="!isModify"
+                  @click="modifyCompare">{{$i.button.modify}}</el-button>
+                  <el-button
+                    v-if="isModify"
+                    v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'"
+                    @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                  <el-button
+                    v-if="isModify"
+                    :disabled="!selectList.length>0"
+                    v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
+                    @click="deleteCompare"  type="danger">{{$i.common.remove}}</el-button>
+                  <el-button
+                    v-if="!isModify"
+                    v-authorize="'SUPPLIER:COMPARE_DETAIL:DOWNLOAD'"
+                    @click="download"> {{$i.common.download}} </el-button>
+              </span>
+              <el-checkbox @change="changeStatus" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
+              <el-checkbox @change="changeStatus" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
+            </div>
+          </template>
+        </v-table>
 
         <div class="footBtn">
-            <div v-if="$route.query.type==='new'">
-                <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary" v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">{{$i.product.saveTheCompare}}</el-button>
+            <div v-if="$route.params.type==='new'">
+                <el-button
+                  @click="saveCompare"
+                  :loading="disabledSaveCompare"
+                  type="primary"
+                  v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">{{$i.product.saveTheCompare}}</el-button>
             </div>
-            <div v-if="$route.query.type==='modify'">
-                <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.deleteTheCompare}}</el-button>
-                <el-button :disabled="allowBottomClick" type="primary"  @click='saveCompare' v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
-                <el-button :disabled="allowBottomClick" @click="cancelModify" >Cancel</el-button>
+            <div v-if="$route.params.type==='modify'">
+                <el-button
+                  v-if="isModify"
+                  :disabled="allowBottomClick"
+                  type="primary"
+                  @click='saveCompare'
+                  v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
+                  <el-button
+                    v-if="isModify"
+                    :disabled="allowBottomClick"
+                    @click="cancelModify" >Cancel</el-button>
             </div>
-          <div v-if="$route.query.type==='read'">
-            <el-button :disabled="allowBottomClick" type="primary"  @click='saveCompare' v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">OK</el-button>
-            <el-button :disabled="allowBottomClick" @click="cancelModify">Cancel</el-button>
-          </div>
         </div>
 
         <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
@@ -71,7 +122,7 @@
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
+    import {VTable} from '@/components/index'
     import product from '../../product/addProduct'
     import VSupplier from '../sourcing/sourcing'
 
@@ -79,9 +130,9 @@
     export default {
         name: "compare",
         components:{
-            VTable,
-            product,
-            VSupplier
+          VTable,
+          product,
+          VSupplier
         },
         data(){
             return{
@@ -92,7 +143,7 @@
                 compareName:'',         //对比的名称
                 screenTableStatus:[],   //表格筛选状态
                 tableDataList:[],       //表格数据展示
-                addProductTitle:'哇哈哈',
+                addProductTitle:'',
                 totalDataList:[],       //因为要分页，所以先取一个全部数据
                 disabledLine:[],        //在弹出框中默认置灰不能操作的条目
                 selectList:[],          //保存选择的数剧
@@ -112,8 +163,9 @@
                 loading:false,
                 selectedData:[],
                 selectNumber: [],
+                initialData:[],
                 params:{
-                  id: Number(this.$route.query.id),
+                  id: this.$route.query.compareId,
                   name:'',
                   pn: 1,
                   ps: 50,
@@ -143,7 +195,7 @@
               });
             },
             getList() {
-                if(this.$route.query.type==='new'){
+                if(this.$route.params.type==='new'){
                     //表示是新建detail还未保存
                     this.loading = true;
                     let id=[];
@@ -152,63 +204,50 @@
                     });
                     let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
-                    this.loading = true;
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
+                          this.loading = false;
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res, e => {
                           let country;
                           country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
                           e.country._value = country.name || '';
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
-
                           return e;
                         });
-                        this.changeHighlight(true);
+                        // this.changeHighlight(true);
+                        this.initialData=this.$depthClone(this.tableDataList);
+                        this.changeStatus();
                         this.disabledLine=this.tableDataList;
-                        this.loading = false;
                     }).catch(err=>{
                         this.loading = false;
                     })
 
-                }else if(this.$route.query.type==='modify'){
+                }else if(this.$route.params.type==='modify'){
                     //表示这里已经生成对应的compare单，直接获取该单数据即可
                     this.compareName=this.$route.query.compareName;
                     if(this.$route.query.isModify){
-                        this.isModify=true;
+                      this.isModify=true;
                     }
                     this.loading = true;
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
+                        this.loading = false;
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
 
                           return e;
                         });
-                        this.changeHighlight(true);
+                        // this.changeHighlight(true);
+                        this.initialData=this.$depthClone(this.tableDataList);
+                        this.changeStatus();
                         this.disabledLine=this.tableDataList;
-                        this.loading = false;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
+                    }).catch(err=>{
+                      this.loading = false;
                     })
-                }else{
-                  this.loading = true;
-                  this.compareName=this.$route.query.compareName;
-                  if(this.$route.query.isModify){
-                    this.isModify=true;
-                  }
-                  this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
-                      e.type.value=this.$change(this.options.type,'type',e,true).name;
-                      e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
-                      return e;
-                    });
-                    this.changeHighlight(true);
-                    this.disabledLine=this.tableDataList;
-                    this.loading = false;
-                    this.allowDeleteCompare=false;
-                    this.allowBottomClick=false;
-                  })
+
                 }
             },
 
@@ -224,12 +263,7 @@
 
             changeChecked(item){
               this.selectList=item;
-              this.selectedData = item
-              let number = []
-              this.selectedData.forEach(item => {
-                number.push(item.id.value);
-              });
-              this.selectNumber = number
+
             },
 
             //编辑单子
@@ -240,7 +274,6 @@
             //取消编辑
             cancelModify(){
               this.isModify=false;
-              this.selectNumber = [];
               this.getList();
             },
             createInquiry() {
@@ -271,15 +304,15 @@
             },
             //勾选的商品创建order
             createOrder(){
-              console.log(this.selectedData)
-              if(_.uniq(this.selectNumber).length>1){
+              console.log(this.selectList)
+              if(this.selectList.length>1){
                 this.$message({
-                  message: '供应商只能单选!',
+                  message: this.$i.common.supplierSearch,
                   type: 'warning',
                 });
                 return false;
               }else{
-                if(this.selectNumber.length===0){
+                if(this.selectList.length===0){
                   this.$windowOpen({
                     url:'/order/create',
                   })
@@ -288,55 +321,20 @@
                     url:'/order/create',
                     params:{
                       type:'supplier',
-                      supplierCode:this.selectedData[0].code.value
+                      supplierCode:this.selectList[0].code.value
                     },
                   })
                 }
               }
             },
 
-            //新增product
+            //新增
             addNewProduct(){
                 this.addProductDialogVisible=true;
                 this.forceUpdateNumber=Math.random();
                 let v = [];
                 // this.getList.forEach(v => x[v.id] = v);
 
-            },
-
-            //删除product
-            deleteProduct(){
-                this.$confirm('确定删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.selectList.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
-                        this.tableDataList.forEach(m=>{
-                            let newId=_.findWhere(m,{key:'id'}).value;
-                            if(id===newId){
-                                this.$set(m,'_disabled',true);
-                                this.$set(m,'_checked',false);
-                            }
-                        })
-                    });
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
-                    this.$nextTick(()=>{
-                        this.disableDelete=true;
-                        this.disabledLine=[];
-                        this.tableDataList.forEach(v=>{
-                            if(!v._disabled){
-                                this.disabledLine.push(v);
-                            }
-                        });
-                    });
-                }).catch(() => {
-
-                });
             },
 
             handleOkClick(e){
@@ -349,12 +347,12 @@
                 });
                 if(totalLen+e.length>100){
                     this.$message({
-                        message: '不能超过100条',
+                        message: this.$i.common.noLength,
                         type: 'warning'
                     });
                 }else{
                     e.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
+                        let id=_.findWhere(v,{key:'supplierId'}).value;
                         let isIn=false;
                         this.tableDataList.forEach(m=>{
                             let newId=_.findWhere(m,{key:'id'}).value;
@@ -365,7 +363,8 @@
                         });
                         if(!isIn){
                             this.tableDataList.push(v);
-                            copy_Data = this.$depthClone(this.tableDataList);
+                            this.initialData=this.$depthClone(this.tableDataList);
+                            this.changeStatus();
 
                         }
                     });
@@ -408,8 +407,8 @@
                         name:name
                     });
                 });
-                if (this.$route.query.type==='modify'){
-                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.id}`,params).then(res=>{
+                if (this.$route.params.type==='modify'){
+                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.compareId}`,params).then(res=>{
                       let compareId=res;
                       this.$router.push({
                         name:'supplierCompareDetail',
@@ -417,7 +416,7 @@
                           type:'modify'
                         },
                         query:{
-                          id:compareId,
+                          compareId:compareId,
                           compareName:this.compareName
                         }
                       });
@@ -426,15 +425,17 @@
                       this.disabledSaveCompare=false;
                     });
                 }else{
+                  params.id = ''
                   this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
                     let compareId=res;
+
                     this.$router.push({
                       name:'supplierCompareDetail',
                       params:{
                         type:'modify'
                       },
                       query:{
-                        id:compareId,
+                        compareId:compareId,
                         compareName:this.compareName
                       }
                     });
@@ -447,23 +448,28 @@
             },
             //删除该compare
             deleteCompare(){
-                this.$confirm('确认删除该compare?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
+              this.$confirm(this.$i.common.sureDeleteToCompare, this.$i.common.prompt, {
+                  confirmButtonText: this.$i.common.confirm,
+                  cancelButtonText: this.$i.common.cancel,
+                  type: 'warning'
                 }).then(() => {
                     this.disabledSaveCompare=true;
                     let id=[];
-                    id.push(Number(this.$route.query.compareId));
-                    this.$ajax.post(this.$apis.post_supplier_deleteCompare,id).then(res=>{
+                    _.map(this.selectList,v=>{
+                      id.push(
+                        v.id.value
+                      )
+                    });
+                    this.$ajax.post(this.$apis.post_supplier_deleteCompareDetails,id).then(res=>{
                         this.$message({
                             type: 'success',
-                            message: '删除成功!'
+                            message: this.$i.common.deleteTheSuccess
                         });
                         this.disabledSaveCompare=false;
-                        this.$router.push({
-                            path:'/supplier/compare'
-                        });
+                        this.getList();
+                        // this.$router.push({
+                        //     path:'/supplier/compare'
+                        // });
                     }).catch(err=>{
                         this.disabledSaveCompare=false;
                     });
@@ -487,23 +493,42 @@
             this.getList();
           },
           //相同项隐藏
-          changeHideTheSame(e){
-            if(e){
-              this.copyHideSameData = this.$depthClone(this.tableDataList);
-              this.$table.setHideSame(this.tableDataList);
-            }else{
-              this.tableDataList = this.$depthClone(this.copyHideSameData)
-            }
-          },
+          // changeHideTheSame(e){
+          //   if(e){
+          //     this.copyHideSameData = this.$depthClone(this.tableDataList);
+          //     this.$table.setHideSame(this.tableDataList);
+          //   }else{
+          //     this.tableDataList = this.$depthClone(this.copyHideSameData)
+          //   }
+          // },
           //不同项高亮
-          changeHighlight(e){
-            if(e){
-              this.copyHighlightData = this.$depthClone(this.tableDataList);
-              this.$table.setHighlight(this.tableDataList)
-            }else{
-              this.tableDataList = this.$depthClone(this.copyHighlightData)
+          // changeHighlight(e){
+          //   if(e){
+          //     this.copyHighlightData = this.$depthClone(this.tableDataList);
+          //     this.$table.setHighlight(this.tableDataList)
+          //   }else{
+          //     this.tableDataList = this.$depthClone(this.copyHighlightData)
+          //   }
+          // },
+          changeStatus(){
+            let data=this.$depthClone(this.initialData);
+            if(this.isHideTheSame){
+              data = this.$table.setHideSame(data);
             }
+            if(this.isHighlight){
+              data = this.$table.setHighlight(data);
+            }
+            this.tableDataList=data;
           },
+          //...............sort
+          sort(item){
+            this.params.sorts =  item.sorts;
+            this.getList();
+          },
+          download(){
+            let ids = this.$route.query.id;
+            this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_COMPARE_IDS',{ids:ids});
+          }
         },
         created(){
             this.getCodePart();
@@ -521,26 +546,9 @@
               if(n.length>0 && (len-n.length)>=2){
                   this.disableDelete=false;
               }else{
-                  this.disableDelete=true;
+                 this.disableDelete=true;
               }
           },
-          //isHideTheSame isHighlight
-          isHideTheSame(e){
-            if(e){
-              this.copyHideSameData = this.$depthClone(this.tableDataList);
-              this.$table.setHideSame(this.tableDataList);
-            }else{
-              this.tableDataList = this.$depthClone(this.copyHideSameData)
-            }
-          },
-          isHighlight(e){
-            if(e){
-              this.copyHighlightData = this.$depthClone(this.tableDataList);
-              this.$table.setHighlight(this.tableDataList)
-            }else{
-              this.tableDataList = this.$depthClone(this.copyHighlightData)
-            }
-          }
 
         },
     }

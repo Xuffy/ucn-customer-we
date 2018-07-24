@@ -14,13 +14,13 @@
                       <div v-if="v.type==='input'">
                         <el-input
                           size="mini"
-                          placeholder="请输入内容"
+                          :placeholder="$i.common.inputkeyWordToSearch"
                           v-model="params[v.key]">
                         </el-input>
                       </div>
                       <div v-if="v.type==='select'">
                         {{params[v.country]}}
-                        <el-select class="speWidth" v-model="params[v.key]" placeholder="请选择">
+                        <el-select class="speWidth" v-model="params[v.key]" :placeholder="$i.common.inputSearch">
                           <el-option
                             size="mini"
                             v-for="item in options[v.key]"
@@ -40,48 +40,67 @@
             <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
             <el-button @click="clear('params')">{{$i.common.clear}}</el-button>
         </div>
-<!--      搜索结果  -->
-            <div>
-             <div class="btnline">
-
-                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"  @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder'  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
-               <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
-<!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
-<!--                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}({{selectedNumber.length}})</el-button>-->
-
-              </div>
-              <div>
-
-              </div>
-        </div>
 <!--        表格-->
              <v-table
                 code="udata_pruchase_supplier_bookmark_overview"
-                :height=360
+                :height=500
                 :data="tabData"
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="detail"
                 @change-checked='checked'
                 :loading='loading'
                 @filter-value="tableFilterValue"
-                style='marginTop:10px'/>
+                @change-sort="sort"
+                style='marginTop:10px'>
+               <template slot="header">
+                 <div class="btnline">
+
+                   <el-button
+                     v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"
+                     @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
+                   <el-button
+                     v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"
+                     @click='createOrder'
+                     :class="(selectedData.length>1)?'disabledBtn':'' ">
+                     {{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
+                   <el-button
+                     v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'"
+                     @click='compare'
+                     :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>
+                     {{$i.common.compare}}({{selectedNumber.length}})</el-button>
+                   <el-button
+                     @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
+                   <el-button
+                     :disabled='!selectedData.length>0'
+                     v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'"
+                     @click='remove'
+                     type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
+                   <el-button
+                     @click="download"
+                      v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DOWNLOAD'"
+                     :disabled='!(tabData.length)>0'>
+                     {{$i.common.download}}
+                     ({{selectedNumber.length===0?$i.product.all:selectedNumber.length}})
+                   </el-button>
+
+                 </div>
+               </template>
+             </v-table>
             <page
               :page-data="pageData"
               @change="handleSizeChange"
               :page-sizes="[50,100,200,500]"
               @size-change="pageSizeChange"></page>
 
-      <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
-        <VSupplier
-          @handleOkClick='handleOkClick'
-          :isButton=false
-          :disabledLine="disabledLine"
-          @handleCancel="handleCancel"
-        >
-        </VSupplier>
-      </el-dialog>
+            <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
+              <VSupplier
+                @handleOkClick='handleOkClick'
+                :isButton=false
+                :disabledLine="disabledLine"
+                @handleCancel="handleCancel"
+              >
+              </VSupplier>
+            </el-dialog>
 
     </div>
 
@@ -145,8 +164,7 @@
         },
         methods: {
               ...mapActions([
-                // 'setRecycleBin',
-                'setLog'
+                'setMenuLink'
             ]),
             //获取字典
             getCodePart(){
@@ -159,11 +177,11 @@
             },
             handleSizeChange(val) {
               this.params.pn = val;
-              this.get_data();
+              this.getData();
             },
             pageSizeChange(val) {
               this.params.ps = val;
-              this.get_data();
+              this.getData();
             },
             //切换body的收缩展开状态
             switchDisplay() {
@@ -179,7 +197,7 @@
             search() {
               this.selectedNumber = [];
               this.selectedData = [];
-              this.get_data()
+              this.getData()
             },
             //....跳入createInquiry
             createInquiry() {
@@ -222,7 +240,7 @@
                 });
               }else{
                 this.$message({
-                  message: '供应商只能单选!',
+                  message: this.$i.common.supplierSearch,
                   type: 'warning',
                 });
                 return false;
@@ -272,18 +290,24 @@
             getCountryAll(){
               this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
                 this.countryOption = res
-                this.get_data();
+                this.getData();
               }).catch(err=>{
                 console.log(err)
               });
             },
-            get_data() {
+            //...............sort
+            sort(item){
+              this.params.sorts =  item.sorts;
+              this.getData();
+            },
+            getData() {
                 this.loading = true;
                 this.$ajax.post(this.$apis.post_supplier_listbookmark, this.params)
                     .then(res => {
                         this.pageData=res;
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas, e => {
+
                           let country;
                           country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
                           e.country._value = country.name || '';
@@ -300,13 +324,31 @@
             },
             //..........remove
             remove() {
-                this.$ajax.post(this.$apis.post_deleteBookmarks, this.selectedNumber)
-                    .then(res => {
-                        this.get_data()
-                    })
-                    .catch((res) => {
-
-                    });
+              this.$confirm(this.$i.common.sureDelete, this.$i.common.prompt, {
+                confirmButtonText: this.$i.common.sure,
+                cancelButtonText: this.$i.common.cancel,
+                type: 'warning'
+              }).then(() => {
+                let params=[];
+                _.map(this.selectedData,v=>{
+                  params.push({
+                    id:v.id.value,
+                    name:v.name.value
+                  })
+                });
+                this.disableClickDeleteBtn = true;
+                this.$ajax.post(this.$apis.post_batchDeleteBookmark, params).then(res => {
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.common.deleteTheSuccess
+                  });
+                  this.selectedNumber = [];
+                  this.disableClickDeleteBtn = false;
+                  this.getData();
+                }).finally(() => {
+                  this.disableClickDeleteBtn = false;
+                });
+              })
             },
             getCategoryId() {
                 this.$ajax.get(this.$apis.getCategory, {}).then(res => {
@@ -330,10 +372,10 @@
             if (params.length != []){
               this.$ajax.post(this.$apis.post_supplier_addbookmark,params).then(res=>{
                 this.$message({
-                  message: '添加成功',
+                  message: this.$i.common.addSuccess,
                   type: 'success',
                 })
-                this.get_data();
+                this.getData();
               }).catch(err=>{
 
               });
@@ -348,8 +390,17 @@
             let {operatorFilters,sorts}=val;
             this.params.operatorFilters=operatorFilters||[];
             this.params.sorts=sorts||[];
-            this.get_data();
-          }
+            this.getData();
+          },
+          download(){
+            let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
+            if(ids.length>0){
+              this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_IDS',{ids:ids});
+            }else{
+              let params=this.$depthClone(this.params);
+              this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_PARAMS',params);
+            }
+          },
 
         },
         created() {
@@ -361,7 +412,13 @@
             // });
         },
         mounted(){
-          this.setLog({query:{code:'PRUCHASE_SUPPLIER'}});
+          this.setMenuLink({
+            path: '',
+            query: {code: 'PRUCHASE_SUPPLIER'},
+            type: 100,
+            label: this.$i.common.log,
+            auth:'SUPPLIER:LOG'
+          });
         },
         watch: {
             hideBody(n) {
@@ -437,13 +494,8 @@
     .btnline {
         margin-top: 20px;
         width: 100%;
-        border-top: 1px solid black;
     }
 
-    .btnline .el-button {
-        margin-right: 8px;
-        margin-top: 20px;
-    }
 
     .el-select {
         max-width: 200px

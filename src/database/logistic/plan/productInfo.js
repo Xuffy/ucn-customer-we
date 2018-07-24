@@ -17,12 +17,6 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "containerId": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _hide: true
-  },
   "skuSupplierId": {
     type: 'String',
     _disabled: true,
@@ -30,7 +24,7 @@ export default {
     _hide: true
   },
   "entryDt": {
-    type: 'String',
+    type: 'Date',
     _disabled: true,
     typeSlef: 'text',
     _hide: true
@@ -44,6 +38,14 @@ export default {
   "orderNo": {
     type: 'String',
     _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuPictures":{
+    type: 'String',
+    _image:true,
+    _upload:{
+      readonly:true
+    },
     typeSlef: 'text'
   },
   "orderId": {
@@ -161,10 +163,26 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
+  "skuQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCartonQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
   "containerNo": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
+  },
+  "containerId": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
   },
   "containerType": {
     type: 'String',

@@ -111,14 +111,14 @@ export default {
     _disabled: true,
     _inquiryHide: true
   },
-  discountRate: { // 折扣率 限制输入百分比 ok
-    rules: [],
-    width: '150px',
-    type: 'Number',
-    state: 'rate',
-    min: 0,
-    max: 100
-  },
+  // discountRate: { // 折扣率 限制输入百分比 ok
+  //   rules: [],
+  //   width: '150px',
+  //   type: 'Number',
+  //   state: 'rate',
+  //   min: 0,
+  //   max: 100
+  // },
   departurePort: { // 发运港口  ok
     rules: [],
     width: '150px',
@@ -156,8 +156,7 @@ export default {
     transForm: 'EL_IS'
   },
   skuQty: {
-    _inquiryHide: true,
-    _hide: true
+    _inquiryHide: true
   },
   inquiryRemark: { // 询价备注
     key: 'remark',

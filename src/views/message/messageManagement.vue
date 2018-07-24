@@ -27,7 +27,7 @@
             <el-input
                 type="input"
                 :rows="2"
-                placeholder="请输入标题"
+                :placeholder="$i.common.title"
                 style="margin-bottom:10px"
                 v-model="params.title"
                >
@@ -35,12 +35,12 @@
             <el-input
                     type="textarea"
                     :rows="2"
-                    placeholder="请输入内容"
+                    :placeholder="$i.common.content"
                     v-model="params.content">
             </el-input>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="postAddMessage()">发 布</el-button>
-                <el-button @click="cencl()">取消</el-button>
+                <el-button type="primary" @click="postAddMessage()">{{$i.common.release}}</el-button>
+                <el-button @click="cencl()">{{$i.common.cancel}}</el-button>
             </span>
         </el-dialog>
     </div>
@@ -147,7 +147,7 @@
             this.$ajax.post(url, this.params)
             .then(res => {
               this.$message({
-                message: '添加成功',
+                message: this.$i.common.addSuccess,
                 type: 'success',
               });
               this.params = {}

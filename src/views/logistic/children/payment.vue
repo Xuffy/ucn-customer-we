@@ -1,8 +1,8 @@
 <template>
   <div class="payment">
-    <el-button type="primary" :disabled="addPaymentBtn" size="mini" @click.stop="$emit('addPayment');addPaymentBtn=true;">{{ $i.logistic.applyForPayment }}</el-button>
+    <el-button v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_APPLY||'')" type="primary" :disabled="addPaymentBtn" size="mini" @click.stop="$emit('addPayment');addPaymentBtn=true;">{{ $i.logistic.applyForPayment }}</el-button>
     <el-table ref="table" :row-class-name="tableRowClassName" :data="tableData" border style="width: 100%; margin-top: 20px" show-summary :summary-method="summaryMethod">
-      <el-table-column type="index" width="50" align="center"/>
+      <el-table-column type="index" width="100" align="center"/>
       <el-table-column :label="$i.logistic.paymentNo" align="center" width="140">
         <template slot-scope="scope">
           <span>{{ scope.row.no }}</span>
@@ -10,14 +10,14 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.paymentItem" align="center" width="140">
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
+          <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
         <template slot-scope="scope">
           <el-col v-if="scope.row.edit">
-            <el-select v-model="scope.row.payToCompanyId" filterable placeholder="请选择">
+            <el-select v-model="scope.row.payToCompanyId" filterable :placeholder="$i.logistic.placeholder">
               <el-option
                 v-for="item in selectArr.supplier"
                 :key="item.value"
@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.estAmount" prop="planPayAmount" align="center" width="180">
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
+          <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.planPayAmount }}</span>
         </template>
       </el-table-column>
@@ -52,7 +52,7 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.actAmount" prop="actualPayAmount" align="center" width="180">
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.actualPayAmount" v-if="scope.row.edit"></el-input>
+          <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.actualPayAmount" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.actualPayAmount }}</span>
         </template>
       </el-table-column>
@@ -75,16 +75,16 @@
             <el-button size="mini" type="primary" @click.stop="$emit('deletePaymentList', scope.$index)">取消</el-button>
           </div> -->
           <div v-if="scope.row.status === -1">
-            <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.recover_plan_payment,$i.logistic.recover)">{{ $i.logistic.recover}}</el-button>
+            <el-button size="mini" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_ACTION||'')" type="primary" @click.stop="switchStatus(scope.$index, $apis.recover_plan_payment,$i.logistic.recover)">{{ $i.logistic.recover}}</el-button>
           </div>
           <div v-if="scope.row.status === 20 || scope.row.status === 40">
             <div v-if="scope.row.edit">
-              <el-button size="mini" type="primary" @click.stop="$emit('savePayment', scope.$index)">{{ $i.logistic.save }}</el-button>
-              <el-button size="mini" type="primary" @click.stop="cancelPaymentModify(scope.$index)">{{ $i.logistic.cancel }}</el-button>
+              <el-button size="mini" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_ACTION||'')" type="primary" @click.stop="$emit('savePayment', scope.$index)">{{ $i.logistic.save }}</el-button>
+              <el-button size="mini" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_ACTION||'')" type="primary" @click.stop="cancelPaymentModify(scope.$index)">{{ $i.logistic.cancel }}</el-button>
             </div>
             <div v-else>
-              <el-button size="mini" type="primary" @click.stop="switchModify(scope.$index)">{{ $i.logistic.modify }}</el-button>
-              <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.abandon_plan_payment,$i.logistic.invalid)">{{ $i.logistic.invalid }}</el-button>
+              <el-button size="mini" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_ACTION||'')" type="primary" @click.stop="switchModify(scope.$index)">{{ $i.logistic.modify }}</el-button>
+              <el-button size="mini" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_ACTION||'')" type="primary" @click.stop="switchStatus(scope.$index, $apis.abandon_plan_payment,$i.logistic.invalid)">{{ $i.logistic.invalid }}</el-button>
             </div>
           </div>
         </template>
@@ -170,11 +170,24 @@ export default {
           }
         }]
       },
+      auth:{
+        logisticPlanDetail: {
+          PAYMENT_APPLY:'LOGISTICS:PLAN_DETAIL:PAYMENT_APPLY',
+          PAYMENT_ACTION:'LOGISTICS:PLAN_DETAIL:PAYMENT_ACTION'
+        },
+        loadingListDetail: {
+          PAYMENT_APPLY:'LOADING_LIST:DETAIL:PAYMENT_APPLY',
+          PAYMENT_ACTION:'LOADING_LIST:DETAIL:PAYMENT_ACTION'
+        }
+      },
     }
   },
   computed:{
     restaurants(){
       return this.selectArr.supplier;
+    },
+    pageTypeCurr() {
+      return this.$route.name;
     }
   },
   methods: {
@@ -256,9 +269,9 @@ export default {
       this.$emit('updatePaymentWithView', { i, edit: false })
     },
     switchStatus (i, url,title) {
-      this.$confirm('此操作将'+title+'该数据, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+        confirmButtonText: this.$i.logistic.confirm,
+        cancelButtonText: this.$i.logistic.cancel,
         type: 'warning'
       }).then(() => {
         this.addPaymentBtn = false;
@@ -274,10 +287,5 @@ export default {
 <style scoped lang="less">
   .payment/deep/.el-table .warning-row {
     background: yellow;
-    &:hover{
-      td,th{
-        color:#1d1007;
-      }
-    }
   }
 </style>

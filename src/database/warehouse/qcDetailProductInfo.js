@@ -14,43 +14,43 @@ export default{
     inboundSkuId:{
         _hide:true
     },
-    SKUQCResult: {
+    skuQcResultDictCode: {
         key: 'skuQcResultDictCode',
         type: 'String'
     },
-    SKUInventoryStatus:{
+    skuInventoryStatusDictCode:{
         key: 'skuInventoryStatusDictCode',
         type: 'String'
     },
-    SKUCode: {
+    skuCode: {
         key: 'skuCode',
         type: 'String'
     },
-    custermerSKUCode: {    
+    customerSkuCode: {
         key: 'customerSkuCode',
         type: 'String'
     },
-    factorySKUCode: {
+    factorySkuCode: {
         key: 'factorySkuCode',
         type: 'String'
     },
-    SKUNameCN: {
+    skuNameCn: {
         key: 'skuNameCn',
         type: 'String'
     },
-    brand: {
+    skuBrand: {
         key: 'skuBrand',
         type: 'String'
     },
-    productDesign: {
+    skuDesign: {
         key: 'skuDesign',
         type: 'String'
     },
-    packingMethodCN: {
+    packingMethodCn: {
         key: 'packingMethodCn',
         type: 'String'
     },
-    packingMethodOfInnerCartonCN: {
+    innerCartonPackingMethodCn: {
         key: 'innerCartonPackingMethodCn',
         type: 'String'
     },
@@ -62,15 +62,15 @@ export default{
         key: 'skuUnitDictCode',
         type: 'String'
     },
-    unitLength: {
+    lengthUnitDictCode: {
         key: 'lengthUnitDictCode',
         type: 'String'
     },
-    unitVolume: {
+    volumeUnitDictCode: {
         key: 'volumeUnitDictCode',
         type: 'String'
     },
-    unitWeight: {
+    weightUnitDictCode: {
         key: 'weightUnitDictCode',
         type: 'String'
     },
@@ -80,11 +80,13 @@ export default{
     },
     orderSkuQuantity: {
         key: 'orderSkuQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
-    expectQCQTY: {
+    expectQcQty: {
         key: 'expectQcQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     samplingRate: {
         key: 'samplingRate',
@@ -94,35 +96,35 @@ export default{
         key: 'unqualifiedProcessingMode',
         type: 'String'
     },
-    totalOuterCartonQuantity: {
+    outerCartonTotalQty: {
         key: 'outerCartonTotalQty',
         type: 'Number'
     },
-    SKULength: {
+    skuLength: {
         key: 'skuLength',
         type: 'Number'
     },
-    SKUWidth: {
+    skuWidth: {
         key: 'skuWidth',
         type: 'Number'
     },
-    SKUHeigh: {
+    skuHeight: {
         key: 'skuHeight',
         type: 'Number'
     },
-    SKUNetWeight:{
+    skuNetWeight:{
         key: 'skuNetWeight',
         type: 'Number'
     },
-    SKUQuantityOfOuterCarton:{
+    outerCartonSkuQty:{
         key: 'outerCartonSkuQty',
         type: 'Number'
     },
-    actQuantityOuterCarton:{
+    actOuterCartonSkuQty:{
         key: 'actOuterCartonSkuQty',
         type: 'Number'
     },
-    quantityOfInnerBoxOuterCarton:{
+    outerCartonInnerBoxQty:{
         key: 'outerCartonInnerBoxQty',
         type: 'Number'
     },
@@ -130,7 +132,7 @@ export default{
         key: 'actOuterCartonInnerBoxQty',
         type: 'Number'
     },
-    SKUQuantityOfInnerCarton:{
+    innerCartonSkuQty:{
         key: 'innerCartonSkuQty',
         type: 'Number'
     },
@@ -188,35 +190,43 @@ export default{
     },
     actualProductTotalCTNS:{
         key: 'actSkuCartonTotalQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     qualifiedProductsTotalCTNS:{
         key: 'qualifiedSkuCartonTotalQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     unqualifiedProductTotalCTNS:{
         key: 'unqualifiedSkuCartonTotalQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     actProductQuantity:{
         key: 'actSkuQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     qualifiedProductsTotalQTYS:{
         key: 'qualifiedSkuQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     unqualifiedProductsQTY:{
         key: 'unqualifiedSkuQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     qualifiedProductTotalNW:{
         key: 'qualifiedSkuNetWeight',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     unqualifiedProductTotalNW:{
         key: 'unqualifiedSkuNetWeight',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     qualifiedProductsTotalCBM:{
         key: 'qualifiedSkuVolume',
@@ -224,21 +234,24 @@ export default{
     },
     unqualifiedProductsTotalCBM:{
         key: 'unqualifiedSkuVolume',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     qualifiedProductTotalGW:{
         key: 'qualifiedSkuGrossWeight',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     unqualifiedProductTotalGW:{
         key: 'unqualifiedSkuGrossWeight',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     }, 
     unqualifiedType:{
         key: 'unqualifiedType',
-        type: 'String'
+        type: 'String',
     },
-    SKUBarCode:{
+    skuBarCode:{
         key: 'skuBarCode',
         type: 'String'
     },
@@ -246,7 +259,7 @@ export default{
         key: 'skuBarCodeResultDictCode',
         type: 'String'
     },
-    SKULabel:{
+    skuLabel:{
         key: 'skuLabel',
         type: 'String'
     },
@@ -270,7 +283,7 @@ export default{
         key: 'outerCartonBarCodeResultDictCode',
         type: 'String'
     },
-    shippingMarks:{
+    shippingMark:{
         key: 'shippingMark',
         type: 'String'
     },
@@ -278,14 +291,15 @@ export default{
         key: 'shippingMarkResultDictCode',
         type: 'String'
     },
-    QCPic:{
+    qcPics:{
         key: 'qcPics',
         type: 'String',
         _image:true
     },
     checkOuterCartons:{
         key: 'checkOuterCartonQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     remark:{
         key: 'remark',

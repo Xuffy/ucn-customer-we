@@ -4,6 +4,7 @@ export default {
     local: {
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
       LOGIN_URL: 'http://dev.auth.ucnscm.cn',
+      // LOGIN_URL: 'http://192.168.51.220:8070',
       // LOGIN_URL: 'http://192.168.51.138:8070',
       LJ: '//192.168.51.208:11001',
       // BASE_CS:'//192.168.51.33:11001',
@@ -45,25 +46,6 @@ export default {
 
       OSS_BUCKET_PUBLIC: 'dev-public-ucn-oss',
       OSS_BUCKET_PRIVATE: 'dev-private-ucn-oss'
-    },
-    test_company: {// 公司内部测试环境
-      LOGIN_URL: 'http://test.auth.ucnscm.cn',
-      BASE_URL: '//192.168.51.108:11001', // 采购端
-      USSO_URL: '//192.168.51.108:11006', // sso 服务
-      UUSER_URL: '//192.168.51.108:11004', // 用户中心
-      UMETA_URL: '//192.168.51.108:11005', // 元数据
-      UMESSAGE_URL: '//192.168.51.108:11007', // 消息服务
-      ULOG_URL: '//192.168.51.108:11008', // 日志服务
-      UPURCHASE_URL: '//192.168.51.108:11001', // 采购端
-      USUPPLY_URL: '//192.168.51.108:11002', // 供应商端
-      USERVICE_URL: '//192.168.51.108:11003', // 服务商端
-      UOSS_URL: '//192.168.51.108:', // 对象存储服务
-      UBIZLOG_URL: '//192.168.51.108:13301', // 业务日志
-      UWORKBENCH_URL: '//192.168.51.108:11010',
-      UIE_URL: '//192.168.51.108:13003',
-
-      OSS_BUCKET_PUBLIC: 'test-public-ucn-oss',
-      OSS_BUCKET_PRIVATE: 'test-private-ucn-oss'
     },
     test: {
       LOGIN_URL: 'http://test.auth.ucnscm.cn', // 登录授权
