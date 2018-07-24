@@ -90,8 +90,9 @@
                 <el-button
                   v-if="isModify"
                   :disabled="allowBottomClick"
+                  :loading="disableClickSaveModify"
                   type="primary"
-                  @click='saveCompare'
+                  @click='saveModifyCompare'
                   v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
                   <el-button
                     v-if="isModify"
@@ -161,6 +162,7 @@
                 isHideTheSame:false,
                 isHighlight:true,
                 loading:false,
+                disableClickSaveModify:false,
                 selectedData:[],
                 selectNumber: [],
                 initialData:[],
@@ -392,11 +394,10 @@
                     });
                     return;
                 }
-                this.disabledSaveCompare=true;
                 let params={
                     compares: [],
                     name: this.compareName,
-                    id: this.$route.query.id
+                    id: ''
                 };
                 this.tableDataList.forEach(v=>{
                     let id,name;
@@ -407,44 +408,64 @@
                         name:name
                     });
                 });
-                if (this.$route.params.type==='modify'){
-                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.compareId}`,params).then(res=>{
-                      let compareId=res;
-                      this.$router.push({
-                        name:'supplierCompareDetail',
-                        params:{
-                          type:'modify'
-                        },
-                        query:{
-                          compareId:compareId,
-                          compareName:this.compareName
-                        }
-                      });
-                      this.disabledSaveCompare=false;
-                    }).catch(err=>{
-                      this.disabledSaveCompare=false;
-                    });
-                }else{
-                  params.id = ''
-                  this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
-                    let compareId=res;
+                this.disabledSaveCompare=true;
+                this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
+                  let compareId=res;
 
-                    this.$router.push({
-                      name:'supplierCompareDetail',
-                      params:{
-                        type:'modify'
-                      },
-                      query:{
-                        compareId:compareId,
-                        compareName:this.compareName
-                      }
-                    });
-                    this.disabledSaveCompare=false;
-                  }).catch(err=>{
-                    this.disabledSaveCompare=false;
+                  this.$router.push({
+                    name:'supplierCompareDetail',
+                    params:{
+                      type:'modify'
+                    },
+                    query:{
+                      compareId:compareId,
+                      compareName:this.compareName
+                    }
                   });
-                }
-
+                  this.disabledSaveCompare=false;
+                }).catch(err=>{
+                  this.disabledSaveCompare=false;
+                });
+            },
+              //保存修改的compare
+            saveModifyCompare(){
+              if(!this.compareName){
+                this.$message({
+                  message: 'Please Input Compare Name',
+                  type: 'warning'
+                });
+                return;
+              }
+              this.disableClickSaveModify=true;
+              let params={
+                compares: [],
+                id: this.$route.query.compareId,
+                name: this.compareName
+              };
+              this.tableDataList.forEach(v=>{
+                let id,name;
+                id=_.findWhere(v,{key:'id'}).value;
+                name=_.findWhere(v,{key:'name'}).value;
+                params.compares.push({
+                  id:id,
+                  name:name
+                });
+              });
+              this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.compareId}`,params).then(res=>{
+                this.$router.push({
+                  name:'supplierCompareDetail',
+                  params:{
+                    type:'modify'
+                  },
+                  query:{
+                    compareId:compareId,
+                    compareName:this.compareName
+                  }
+                });
+                this.disableClickSaveModify=false;
+              }).catch(err=>{
+                this.disableClickSaveModify=false;
+              });
             },
             //删除该compare
             deleteCompare(){
