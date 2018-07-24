@@ -58,7 +58,7 @@
                                 :disabled='disableDelete'
                                 @click='deleteOrder'
                                 v-authorize="'ORDER:OVERVIEW:ARCHIVE'">
-                            {{($i.common.archive)}}</el-button>
+                            {{($i.common.archive)}}({{archiveLength}})</el-button>
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
@@ -144,6 +144,7 @@
                 disableClickFinish:false,
                 disableClickDelete:false,
                 disableDelete:true,
+                archiveLength:0,
 
                 /**
                  * 字典
@@ -277,7 +278,6 @@
 
                 });
             },
-            //get_orderlist数据
             getData(e) {
                 this.loading = true;
                 let url='',query='';
@@ -338,7 +338,6 @@
                         this.loading = false
                     });
             },
-            //获取字典
             getUnit() {
                 this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS','ITM','PMT'], {cache: true}).then(res => {
                     res.forEach(v => {
@@ -399,6 +398,7 @@
         },
         watch: {
             selectedList(n){
+                let archiveLength=0;
                 let disableArchive=false;
                 if(n.length===0){
                     disableArchive=true;
@@ -406,6 +406,8 @@
                     _.map(n,v=>{
                         if(v.status.value!=='CANCLED'){
                             disableArchive=true;
+                        }else{
+                            archiveLength++;
                         }
                     });
                 }
@@ -422,9 +424,11 @@
                     }else{
                         this.disableFinish=true;
                     }
-                }else{
+                }
+                else{
                     this.disableFinish=true;
                 }
+                this.archiveLength=archiveLength;
             },
         }
     }
