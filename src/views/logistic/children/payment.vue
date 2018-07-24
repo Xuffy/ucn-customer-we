@@ -210,13 +210,13 @@ export default {
             sums[index] = this.$i.logistic.sum;
             return;
           }
-          const values = data.map(item => Number(item[column.property]));  //要给 组件el-table-column 上加上 prop="xxxx" 
-          //提取data 拼接成汇率的key 
+          const values = data.map(item => Number(item[column.property]));  //要给 组件el-table-column 上加上 prop="xxxx"
+          //提取data 拼接成汇率的key
           const currencyCode = data.map(item => {
             if(item.currencyCode!=this.currencyCode){
               return item.currencyCode+this.currencyCode;
             }else{
-              return this.currencyCode; 
+              return this.currencyCode;
             }
           });
           let currencyCodeArr = [];
@@ -235,7 +235,7 @@ export default {
             sums[index] = values.reduce((prev, curr,i) => {
               const value = Number(curr);
               if (!isNaN(value)) {
-                return this.$numAdd(prev , this.$mul(curr,currencyCodeArr[i]));
+                return this.$calc.add(prev , this.$calc.multiply(curr,currencyCodeArr[i]));
               } else {
                 return prev;
               }
