@@ -504,11 +504,9 @@ export default {
       let exchangeRate = this.custom.exchangeRateUSD; // 汇率
       if (field === 'skuExwPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
         let exwPrice = item.skuExwPrice.value;
-        console.log(exwPrice, outerCartonVolume, outerCartonQty, exchangeRate);
         if (codeUtils.isNumber(exwPrice, outerCartonVolume, outerCartonQty, exchangeRate)) {
           let fob = exwPrice + 6500 / 68 * outerCartonVolume / outerCartonQty / exchangeRate * 1.05;
           item.skuRefFobPrice.value = Number(fob.toFixed(8));
-          console.log('skuRefFobPrice=' + item.skuRefFobPrice.value);
         }
       }
       if (field === 'skuFobPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
