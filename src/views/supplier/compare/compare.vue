@@ -444,7 +444,7 @@
               };
               this.tableDataList.forEach(v=>{
                 let id,name;
-                id=_.findWhere(v,{key:'id'}).value;
+                id=_.findWhere(v,{key:'supplierId'}).value;
                 name=_.findWhere(v,{key:'name'}).value;
                 params.compares.push({
                   id:id,
@@ -458,8 +458,9 @@
                     type:'modify'
                   },
                   query:{
-                    compareId:compareId,
-                    compareName:this.compareName
+                    compareId:res,
+                    compareName:this.compareName,
+                    forceChange:Math.random().toFixed(3)
                   }
                 });
                 this.disableClickSaveModify=false;
