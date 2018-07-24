@@ -20,7 +20,8 @@ export default{
     },
     skuInventoryStatusDictCode:{
         key: 'skuInventoryStatusDictCode',
-        type: 'String'
+        type: 'String',
+        _sort:false
     },
     skuCode: {
         key: 'skuCode',
@@ -294,7 +295,8 @@ export default{
     qcPics:{
         key: 'qcPics',
         type: 'String',
-        _image:true
+        _image:true,
+        _sort:false
     },
     checkOuterCartons:{
         key: 'checkOuterCartonQty',
