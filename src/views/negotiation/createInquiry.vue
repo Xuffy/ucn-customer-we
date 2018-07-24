@@ -28,6 +28,7 @@
               <el-select
                 v-model="fromArg[item.key]"
                 value-key="id"
+                filterable
                 :size="item.size || 'mini'"
                 :placeholder="item.placeholder"
                 v-else-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
@@ -42,6 +43,7 @@
               <el-select
                 v-model="fromArg[item.key]"
                 value-key="id"
+                filterable
                 :size="item.size || 'mini'"
                 :placeholder="item.placeholder"
                 v-else-if="item.key === 'currency'"
@@ -56,6 +58,7 @@
               <el-select
                 v-model="fromArg[item.key]"
                 value-key="id"
+                filterable
                 :size="item.size || 'mini'"
                 :placeholder="item.placeholder"
                 v-else-if="item.type === 'Select'"
