@@ -58,10 +58,10 @@
           <el-form-item :label="$i.setting.gender+':'"  v-if="isVisible" required>
             <el-select v-model="form.gender" :placeholder="$i.common.inputSearch" style="width: 200px" :disabled="isModify">
               <el-option
-                v-for="item in genderOptions"
-                :key="item.key"
-                :label="item.label"
-                :value="item.key"
+                v-for="item in sex"
+                :key="item.id"
+                :label="item.name"
+                :value="item.code"
                 style="width: 200px">
               </el-option>
             </el-select>
@@ -166,6 +166,7 @@
         dialogVisibleO:false,
         formLabelWidth: '160px',
         language:[],
+        sex:[],
         isVisible:false,
         isModify:true,
         isModifyPass:false,
@@ -184,9 +185,10 @@
           })
       },
       postLanguage(){
-        this.$ajax.post(this.$apis.POST_CODE_PART,['LANGUAGE'])
+        this.$ajax.post(this.$apis.POST_CODE_PART,['LANGUAGE','SEX'])
           .then(res => {
-            this.language = res[0].codes
+            this.language = _.findWhere(res, {'code': 'LANGUAGE'}).codes;
+            this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
           });
       },
       getUserProfile(){

@@ -652,7 +652,7 @@
               this.productModifyList = this.$getDB(this.$db.logistic.productModify,res.history.map(el => {
                 let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
                 el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm');
+                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm:ss');
                 return el;
               }));
               this.$refs.HM.init(this.productModifyList,[],false);
