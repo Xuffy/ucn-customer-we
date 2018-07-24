@@ -166,13 +166,8 @@ export default {
             sums[index] = this.$i.logistic.sum;
             return;
           }
-<<<<<<< HEAD
-          const values = data.map(item => Number(item[column.property&&JSON.parse(column.property).key]));
-          //提取data 拼接成汇率的key 
-=======
           const values = data.map(item => Number(item[column.property]) );
           //提取data 拼接成汇率的key
->>>>>>> 3346d4f0f559dc9cbbd996b6b1302e93d54e4ece
           const currencyCode = data.map(item => {
             if(item.exchangeCurrency!=this.currencyCode){
               return item.exchangeCurrency+this.currencyCode;
