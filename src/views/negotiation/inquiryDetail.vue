@@ -84,7 +84,7 @@
           :isInquiry="true">
       </v-product>
     </el-dialog>
-    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
+    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" @change="computePrice" :beforeSave="beforeSave" ref="HM"></v-history-modify>
     <v-message-board v-if="chatParams" module="inquiry" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>
@@ -488,16 +488,17 @@ export default {
         this.onSwitch = true;
       }
     },
-    computePrice(item, field) {
+    computePrice(col, item) {
+      let field = col.key;
       if (item._remark || !this.custom || !['skuExwPrice', 'skuFobPrice', 'skuCifPrice', 'skuOuterCartonQty', 'skuOuterCartonVolume'].includes(field)) {
         return;
       }
       let outerCartonQty = item.skuOuterCartonQty.value; // 外箱产品数量
       let outerCartonVolume = item.skuOuterCartonVolume.value; // 外箱体积
-      let exchangeRate = this.custom.exchangeRate; // 汇率
+      let exchangeRate = this.custom.exchangeRateUSD; // 汇率
       if (field === 'skuExwPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
         let exwPrice = item.skuExwPrice.value;
-        if (!codeUtils.isUndefinedOrNull(exwPrice, outerCartonVolume, outerCartonQty, exchangeRate)) {
+        if (codeUtils.isNumber(exwPrice, outerCartonVolume, outerCartonQty, exchangeRate)) {
           let fob = exwPrice + 6500 / 68 * outerCartonVolume / outerCartonQty / exchangeRate * 1.05;
           item.skuRefFobPrice.value = Number(fob.toFixed(8));
         }
@@ -506,7 +507,7 @@ export default {
         let fobPrice = item.skuFobPrice.value;
         let oceanFreight = this.custom.oceanFreightUSD40HC; // 海运费
         let insuranceExpenses = this.custom.insuranceExpensesUSD40HC; // 保险费
-        if (!codeUtils.isUndefinedOrNull(fobPrice, outerCartonQty, outerCartonVolume, oceanFreight, insuranceExpenses)) {
+        if (codeUtils.isNumber(fobPrice, outerCartonQty, outerCartonVolume, oceanFreight, insuranceExpenses)) {
           let cif = fobPrice + (oceanFreight + insuranceExpenses) / 68 * outerCartonVolume / outerCartonQty;
           item.skuRefCifPrice.value = Number(cif.toFixed(8));
         }
@@ -514,7 +515,7 @@ export default {
       if (field === 'skuCifPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
         let cifPrice = item.skuCifPrice.value;
         let portWarehouse = this.custom.portWarehousePrice40HC; // 港口到仓库运费
-        if (!codeUtils.isUndefinedOrNull(cifPrice, outerCartonQty, outerCartonVolume, portWarehouse)) {
+        if (codeUtils.isNumber(cifPrice, outerCartonQty, outerCartonVolume, portWarehouse)) {
           let ddu = cifPrice + portWarehouse / 68 * outerCartonVolume / outerCartonQty / this.exchangeRate;
           item.skuRefDduPrice.value = Number(ddu.toFixed(8));
         }
