@@ -59,11 +59,12 @@
 <script>
 import { VTable, dropDownSingle, addNewInqury, VPagination } from '@/components/index';
 import { mapActions } from 'vuex';
+import codeUtils from '@/lib/code-utils';
 export default {
   name: 'compareOverview',
   data() {
     return {
-      addNewTitle:null,
+      addNewTitle: null,
       dirCodes: ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'],
       addInquiryIds: null,
       pageTotal: 0,
@@ -176,7 +177,7 @@ export default {
       }
     },
     getDirData() {
-      return this.$ajax.post(this.$apis.POST_CODE_PART, this.dirCodes, 'cache').then(res => this.setDic(res));
+      return this.$ajax.post(this.$apis.POST_CODE_PART, this.dirCodes, 'cache').then(res => this.setDic(codeUtils.convertDicValueType(res)));
     },
     renderTabdata() {
       let data = JSON.parse(JSON.stringify(this.bakData));
@@ -268,7 +269,6 @@ export default {
         this.$message(this.$i.common.pleaseChooseGoods);
         return;
       }
-      this.pageTotal += arg.length;
       let url, column;
       if (this.compareBy === 0) {
         url = this.$apis.POST_INQIIRY_LIST;
