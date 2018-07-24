@@ -242,12 +242,12 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="skuCode" :label="$i.warehouse.inboundNo">
+                        <el-form-item prop="inboundNo" :label="$i.warehouse.inboundNo">
                             <el-input
                                     class="dialogInput"
                                     size="mini"
                                     placeholder="please input"
-                                    v-model="productDialogConfig.skuCode">
+                                    v-model="productDialogConfig.inboundNo">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -384,7 +384,8 @@
                     pn: 1,
                     ps: 200,
                     skuBarCode: "",
-                    skuCode: "",
+                    // skuCode: "",
+                    inboundNo: "",
                     skuNameEn: ""
                 },
                 qcOrderBasic: {},
@@ -576,7 +577,8 @@
             clear() {
                 this.productDialogConfig.orderNo = "";
                 this.productDialogConfig.skuBarCode = "";
-                this.productDialogConfig.skuCode = "";
+                // this.productDialogConfig.skuCode = "";
+                this.productDialogConfig.inboundNo = "";
                 this.productDialogConfig.skuNameEn = "";
             },
             changeProductDialogChecked(e) {
