@@ -74,7 +74,7 @@
                      :disabled='!selectedData.length>0'
                      v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'"
                      @click='remove'
-                     type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
+                     type='danger'>{{$i.common.archive}}({{selectedNumber.length}})</el-button>
                    <el-button
                      @click="download"
                       v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DOWNLOAD'"

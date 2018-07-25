@@ -23,7 +23,7 @@
             :disabled="disableDelete"
             :loading="disableClickDeleteBtn"
             v-authorize="'SUPPLIER:COMPARE_OVERVIEW:DELETE'"
-            type="danger">{{$i.common.remove}}</el-button>
+            type="danger">{{$i.common.archive}}</el-button>
           <select-search
             v-model="searchValue"
             :options="searchOptions"
