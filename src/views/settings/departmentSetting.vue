@@ -3,6 +3,7 @@
     <div class="title">
       {{$i.setting.departmentSetting}}
     </div>
+
     <div class="body">
       <el-row :gutter="15">
         <el-col :span="8">
@@ -158,6 +159,7 @@
         </el-col>
       </el-row>
     </div>
+
     <div class="footer">
       <div class="title">{{$i.setting.belongingUsers}}</div>
       <div class="btns">

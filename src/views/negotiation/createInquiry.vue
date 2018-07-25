@@ -130,8 +130,7 @@
       @action="producInfoAction"
       @change-checked="changeChecked"
       :parId="'skuId'"
-      :rowspan="2"
-      :hideFilterColumn="true"/>
+      :rowspan="2"/>
     <div class="bom-btn-wrap">
       <el-button @click="submitForm()">{{ $i.common.submit }}</el-button>
       <el-button @click="submitForm('draft')">{{ $i.common.saveAsDraft }}</el-button>

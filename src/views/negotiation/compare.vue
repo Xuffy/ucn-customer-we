@@ -11,7 +11,7 @@
         <div class="fn">
             <div class="box-l">
                 <el-button @click="addNewCopare" v-if="compareType  !== 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:ADD_NEW'">{{ $i.common.addNew }}</el-button>
-                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompareItem" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ `${$i.common.archive}(${checkedArg.length})` }}</el-button>
+                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompareItem" :disabled="delBtnDisabled" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ `${$i.common.archive}(${checkedInquiryIds.length})` }}</el-button>
                 <div style="margin-left: 20px;">
                   <el-checkbox v-model="hideSame" @change="renderTabdata" size="mini">{{ $i.common.hideTheSame }}</el-checkbox>
                   <el-checkbox v-model="highLight" @change="renderTabdata" size="mini">{{ $i.common.highlightTheDifferent }}</el-checkbox>
@@ -42,10 +42,10 @@
             @page-change="handleSizeChange"
             @page-size-change="pageSizeChange"
             :page-sizes="[100,200,]"/>
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.saveTheCompare }}</el-button>
-                        <el-button type="primary" @click="showModify" v-show="compareType  === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'new'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.saveTheCompare }}</el-button>
+        <el-button type="primary" @click="showModify" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.archive }}</el-button>
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.save }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i.common.cancel }}</el-button>
         <add-new-inqury
             v-model="showAddListDialog"
@@ -73,11 +73,10 @@ export default {
       tabLoad: false,
       tabData: [],
       bakData: [],
-      Filed: '',
       compareBy: 0,
       hideSame: false,
       highLight: true,
-      checkedArg: [],
+      checkedInquiryIds: [],
       compareType: '',
       params: {
         ps: 100,
@@ -93,6 +92,15 @@ export default {
     'add-new-inqury': addNewInqury,
     'v-pagination': VPagination,
     dropDownSingle
+  },
+  computed: {
+    delBtnDisabled() {
+      let ids = new Set(this.bakData.map(i => (i.inquiryId || i.id).originValue)).size;
+      return this.checkedInquiryIds.length < 1 || ids - this.checkedInquiryIds.length < 2;
+    },
+    idKey() {
+      return [this.compareBy ? 'inquiryId' : 'id'];
+    }
   },
   created() {
     if (this.$route.query.ids) {
@@ -124,17 +132,22 @@ export default {
       this.compareInfo._compareName = this.compareInfo.compareName;
     },
     cancel() {
+      this.compareInfo.compareName = this.compareInfo._compareName;
+      delete this.compareInfo._compareName;
+
+      this.bakData = this.bakData.filter(i => !i._new);
+      this.bakData.forEach(i => {
+        if (i._delete) delete i._delete;
+      });
+      this.renderTabdata();
+
       if (Array.isArray(this.argDisabled)) {
-        let idKey = this.compareBy === 0 ? 'id' : 'inquiryId';
-        this.bakData = this.bakData.filter(i => !this.argDisabled.includes(i[idKey].value));
         this.argDisabled = [];
-        this.compareInfo.compareName = this.compareInfo._compareName;
-        delete this.compareInfo._compareName;
-        this.renderTabdata();
       }
+      this.disableds = [];
       this.compareType = 'only';
     },
-    onSubmit(type) { // 保存Compare
+    onSubmit() { // 保存Compare
       this.$confirm(this.$i.common.thisOperationKeepsAllOperationsContinuing, this.$i.common.prompt, {
         confirmButtonText: this.$i.common.confirm,
         cancelButtonText: this.$i.common.cancel,
@@ -171,7 +184,7 @@ export default {
         case 'detail':
           this.$router.push({
             path: '/negotiation/inquiryDetail',
-            query: {id: this.compareBy === 0 ? item.id.value : item.inquiryId.value}
+            query: {id: item[this.idKey].value}
           });
           break;
       }
@@ -180,7 +193,7 @@ export default {
       return this.$ajax.post(this.$apis.POST_CODE_PART, this.dirCodes, 'cache').then(res => this.setDic(codeUtils.convertDicValueType(res)));
     },
     renderTabdata() {
-      let data = JSON.parse(JSON.stringify(this.bakData));
+      let data = JSON.parse(JSON.stringify(this.bakData.filter(i => !i._delete)));
       if (this.hideSame) {
         data = this.$table.setHideSame(data);
       }
@@ -236,22 +249,28 @@ export default {
     },
     compareByChange() {
       this.params.sorts = null;
+      this.disableds = [];
+      this.argDisabled = [];
+      this.checkedInquiryIds = [];
       this.getData();
     },
     changeChecked(item) {
-      this.checkedArg = item.map(i => i[this.compareBy ? 'inquiryId' : 'id']);
+      this.checkedInquiryIds = [...new Set(item.map(i => i[this.idKey]).map(i => i.originValue))];
     },
     addNewCopare() {
       this.addNewTitle = this.$i.inquiry.addNewTitle;
       this.showAddListDialog = true;
     },
     deleteCompareItem() {
-      let delIds = this.checkedArg.map(i => i.originValue);
-      this.disableds = this.disableds.concat(delIds);
+      this.disableds = this.disableds.concat(this.checkedInquiryIds);
       this.argDisabled = this.argDisabled.filter(i => this.disableds.indexOf(i) < 0);
-      this.bakData = this.bakData.filter(i => !delIds.includes(i.id.originValue));
-      this.checkedArg = [];
+      this.bakData.forEach(i => {
+        if (this.checkedInquiryIds.includes(i[this.idKey].originValue)) {
+          i._delete = true;
+        }
+      });
       this.renderTabdata();
+      this.checkedInquiryIds = [];
     },
     deleteCompare() { // 删除
       this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
@@ -281,7 +300,10 @@ export default {
         this.argDisabled = this.argDisabled.concat(arg);
         this.disableds = this.disableds.filter(i => this.argDisabled.indexOf(i) < 0);
 
-        let datas = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        let datas = this.$getDB(column, res.datas, item => {
+          this.$filterDic(item);
+          item._new = true;
+        });
         this.bakData = datas.concat(this.bakData);
         this.renderTabdata();
         this.showAddListDialog = false;

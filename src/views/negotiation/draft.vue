@@ -109,7 +109,8 @@ export default {
       if (this.postParams.viewType === 0) {
         column = this.$db.inquiry.viewByInqury;
       } else {
-        column = this.$db.inquiry.viewBySKU;
+        column = this.$db.inquiry.overviewBySKU;
+        column.price.key = 'skuPrice';
       }
       column.supplierName._sort = false;
       this.$ajax.post(url, this.postParams).then(res => {
