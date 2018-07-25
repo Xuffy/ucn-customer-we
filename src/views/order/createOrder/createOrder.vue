@@ -54,6 +54,7 @@
                                 <el-select
                                         class="speInput"
                                         v-model="orderForm[v.key]"
+                                        @change="handleChangeIncoterm"
                                         filterable
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
@@ -1290,6 +1291,25 @@
             },
             handleChangeSupplier(data){
                 this.supplierNo=_.findWhere(this.supplierOption,{id:data}).code;
+            },
+            handleChangeIncoterm(){
+                _.map(this.productTableData,item=>{
+                    if(!item._remark){
+                        if(this.orderForm[key] === '1'){
+                            //fob
+                            item.skuPrice.value=item.skuFobPrice.value*(item.skuQty.value?item.skuQty.value:0);
+                        }else if(this.orderForm[key] === '2'){
+                            //exw
+                            item.skuPrice.value=item.skuExwPrice.value*(item.skuQty.value?item.skuQty.value:0);
+                        }else if(this.orderForm[key] === '3'){
+                            //cif
+                            item.skuPrice.value=item.skuCifPrice.value*(item.skuQty.value?item.skuQty.value:0);
+                        }else if(this.orderForm[key] === '4'){
+                            //ddu
+                            item.skuPrice.value=item.skuDduPrice.value*(item.skuQty.value?item.skuQty.value:0);
+                        }
+                    }
+                })
             },
             getInitialData(){
                 if(this.$route.query.orderId){
