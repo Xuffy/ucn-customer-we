@@ -153,7 +153,13 @@
                         @click="removeProduct">{{$i.warehouse.remove}}
                 </el-button>
             </div>
-
+            <div class="gear">
+                <v-filter-column
+                    ref="filterColumn"
+                    code="uwarehouse_qc_order_detail"
+                    @change="changeColumn">
+                </v-filter-column>
+            </div>
             <el-table
                     v-loading="loadingProductTable"
                     class="product-table"
@@ -171,21 +177,22 @@
                         width="55">
                 </el-table-column>
                 <el-table-column
-                        v-for="v in $db.warehouse.createQcProductTable"
+                        v-for="v in columnConfig"
                         :key="v.key"
                         :prop="v.key"
+                        v-if="!v._hidden && !v._hide"
                         :label="$i.warehouse[v.key]"
                         align="center"
                         :class-name="v.key === 'expectQcQty' ? 'ucn-table-required' : ''"
                         width="240">
-                    <template slot-scope="scope">
+                    <template slot-scope="scope" v-if="scope.row[v.key]">
                         <div v-if="v.showType==='qc'">
                             {{v.value}}
                         </div>
                         <div v-else-if="v.fromService"></div>
                         <div v-else-if="v.showType==='number'">
                             <el-input-number
-                                    v-model="scope.row[v.key]"
+                                    v-model="scope.row[v.key].value"
                                     :min="0"
                                     :controls="false"
                                     label="please input"></el-input-number>
@@ -193,15 +200,15 @@
                         <div v-else-if="v.showType==='input'">
                             <el-input
                                     placeholder="please input"
-                                    v-model="scope.row[v.key]"
+                                    v-model="scope.row[v.key].value"
                                     clearable>
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='date'">
-                            {{scope.row[v.key]?$dateFormat(scope.row[v.key],"yyyy-mm-dd"):""}}
+                            {{scope.row[v.key]?$dateFormat(scope.row[v.key].value,"yyyy-mm-dd"):""}}
                         </div>
                         <div v-else>
-                            {{scope.row[v.key]}}
+                            {{scope.row[v.key].value}}
                         </div>
                     </template>
                 </el-table-column>
@@ -300,7 +307,7 @@
 </template>
 <script>
 
-    import { VTimeZone, VPagination, VUpload, VTable } from "@/components/index";
+    import { VTimeZone, VPagination, VUpload, VTable, VFilterColumn } from "@/components/index";
 
     export default {
         name: "createQc",
@@ -308,7 +315,8 @@
             VTable,
             VTimeZone,
             page: VPagination,
-            VUpload
+            VUpload,
+            VFilterColumn
         },
         data() {
             return {
@@ -408,11 +416,15 @@
                 skuUnitOption: [],       //计量单位
                 lengthOption: [],
                 volumeOption: [],
-                weightOption: []
+                weightOption: [],
+                columnConfig: ''
             };
         },
         methods: {
-
+            changeColumn(val) {
+                this.productTableData = this.$refs.filterColumn.getFilterData(this.productTableData, val);
+                this.columnConfig = this.productTableData[0];
+            },
             getQcNo(){
                 this.loadingData=true;
                 this.$ajax.post(this.$apis.GET_WAREHOUSE_NO,{
@@ -555,7 +567,7 @@
                     this.pageData = res;
                     this.productTableData.forEach(v => {
                         this.productDialogTableData.forEach(m => {
-                            if (v.id === m.id.value) {
+                            if (v.id.value === m.id.value) {
                                 this.$set(m, "_checked", true);
                                 this.$set(m, "_disabled", true);
                             }
@@ -605,6 +617,7 @@
                     this.loadingProductTable = true;
                     this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
                         this.loadingProductTable = false;
+                        console.log(res)
                         _.map(res, v => {
                             if (v.id !== 0) {
                                 let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
@@ -617,6 +630,12 @@
                                 v.lengthUnitDictCode = lo.name || "";
                                 this.productTableData.push(v);
                             }
+                        });
+                        let arr = this.$copyArr(this.productTableData)
+                        arr = this.$getDB(this.$db.warehouse.createQcProductTable, arr);
+                        this.$refs.filterColumn.update(false, arr).then(data => {
+                            this.productTableData = this.$refs.filterColumn.getFilterData(arr, data);
+                            this.columnConfig = this.productTableData[0];
                         });
                     }).catch(err => this.loadingProductTable = false);
                 }
@@ -744,6 +763,7 @@
         },
         mounted() {
             this.loadingData = true;
+            this.columnConfig = this.$db.warehouse.createQcProductTable;
         },
         watch: {
             selectProductTableData(n) {
@@ -857,5 +877,10 @@
 
     .summaryInput /deep/ input {
         text-align: center;
+    }
+    .gear{
+        float: right;
+        margin-right: 5px;
+        margin-bottom: 5px;
     }
 </style>
