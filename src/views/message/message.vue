@@ -204,9 +204,9 @@
                   return val
                 })
                 if(e.read.value){
-                  e.read.value = this.$i.common.read;
+                  e.read.value = this.$i.message.read;
                 }else{
-                  e.read.value = this.$i.common.unread;
+                  e.read.value = this.$i.message.unread;
                 }
                 return e
               });

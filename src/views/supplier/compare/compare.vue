@@ -42,7 +42,7 @@
                     <el-button
                       v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
                       :disabled="!selectList.length>0"
-                      @click="deleteCompare"  type="danger">{{$i.common.remove}}</el-button>
+                      @click="deleteCompare"  type="danger">{{$i.common.archive}}</el-button>
                 </span>
               <span v-if="$route.params.type==='modify'">
                  <el-button
@@ -66,7 +66,7 @@
                     v-if="isModify"
                     :disabled="!selectList.length>0"
                     v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
-                    @click="deleteCompare"  type="danger">{{$i.common.remove}}</el-button>
+                    @click="deleteCompare"  type="danger">{{$i.common.archive}}</el-button>
                   <el-button
                     v-if="!isModify"
                     v-authorize="'SUPPLIER:COMPARE_DETAIL:DOWNLOAD'"
@@ -163,6 +163,7 @@
                 isHighlight:true,
                 loading:false,
                 disableClickSaveModify:false,
+                isChangeData:false,
                 selectedData:[],
                 selectNumber: [],
                 initialData:[],
@@ -235,6 +236,9 @@
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
                         this.loading = false;
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
+                          let country;
+                          country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
+                          e.country._value = country.name || '';
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
 
@@ -243,6 +247,7 @@
                         // this.changeHighlight(true);
                         this.initialData=this.$depthClone(this.tableDataList);
                         this.changeStatus();
+                        this.isChangeData=true;
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
@@ -354,17 +359,19 @@
                     });
                 }else{
                     e.forEach(v=>{
-                        let id=_.findWhere(v,{key:'supplierId'}).value;
+                        let id=_.findWhere(v,{key:'id'}).value;
                         let isIn=false;
                         this.tableDataList.forEach(m=>{
-                            let newId=_.findWhere(m,{key:'id'}).value;
-                            if(id===newId){
-                                this.$set(m,'_disabled',false);
-                                isIn=true;
-                            }
+                          let newId=_.findWhere(m,{key:'id'}).value;
+                          if(id===newId){
+                              this.$set(m,'_disabled',false);
+                              isIn=true;
+                          }
                         });
                         if(!isIn){
-                            this.tableDataList.push(v);
+                            if (!v._disabled) {
+                              this.tableDataList.push(v);
+                            }
                             this.initialData=this.$depthClone(this.tableDataList);
                             this.changeStatus();
 
@@ -444,7 +451,11 @@
               };
               this.tableDataList.forEach(v=>{
                 let id,name;
-                id=_.findWhere(v,{key:'supplierId'}).value;
+                if (!v._checked){
+                  id=_.findWhere(v,{key:'supplierId'}).value;
+                }else{
+                  id=_.findWhere(v,{key:'id'}).value;
+                }
                 name=_.findWhere(v,{key:'name'}).value;
                 params.compares.push({
                   id:id,
