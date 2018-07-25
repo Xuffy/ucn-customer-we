@@ -438,7 +438,7 @@
             saveModifyCompare(){
               if(!this.compareName){
                 this.$message({
-                  message: 'Please Input Compare Name',
+                  message:this.$i.supplier.inputCompareName,
                   type: 'warning'
                 });
                 return;

@@ -15,7 +15,7 @@
                       </el-radio-group>
                     </div>
                 </div>
-              <div style="overflow: hidden;">
+              <div>
                 <div class="View">
                   <span class="text">{{$i.payment.view}} : </span>
                   <el-radio-group size="mini"  v-model="params.conditions.orderType"  @change="getList">
@@ -275,18 +275,18 @@
                     }
                   });
               }else if(item.orderType.value == 20){
-                  this.$router.push({
-                    path: '/warehouse/qcDetail',
-                    query: {
-                      code:item.orderNo.value
-                    }
-                  })
-                  // this.$windowOpen({
-                  //   url: '/warehouse/qcDetail',
-                  //   params: {
+                  // this.$router.push({
+                  //   path: '/warehouse/qcDetail',
+                  //   query: {
                   //     code:item.orderNo.value
                   //   }
-                  // });
+                  // })
+                  this.$windowOpen({
+                    url: '/warehouse/qcDetail',
+                    params: {
+                      code:item.orderNo.value
+                    }
+                  });
               }else{
                   this.$windowOpen({
                     url: '/logisticPlanDetail',
