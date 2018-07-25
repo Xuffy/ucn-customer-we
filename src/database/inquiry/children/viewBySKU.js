@@ -52,6 +52,12 @@ export default {
   },
   skuDduPrice: { // DDU价格
   },
+  skuRefFobPrice: { // Fob参考价格
+  },
+  skuRefCifPrice: { // Cif参考价格
+  },
+  skuRefDduPrice: { // DDU参考价格
+  },
   incoterm: { // 付款条款 系统带入，当前inquiry所选的付款条款
     transForm: 'ITM'
   },
