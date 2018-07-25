@@ -157,6 +157,7 @@ export default {
   },
   quantity: {
     key: 'skuQty',
+    _disabled: true,
     _inquiryHide: true
   },
   inquiryRemark: { // 询价备注

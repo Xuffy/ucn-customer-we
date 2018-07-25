@@ -175,7 +175,7 @@
       },
       inputEnter(val) {
         if (!val.id) return this.$message({
-          message: 'please choose a type',
+          message: this.$i.common.keyType,
           type: 'warning'
         });
         if (val.id === '1'){
@@ -204,9 +204,9 @@
                   return val
                 })
                 if(e.read.value){
-                  e.read.value = this.$i.common.read;
+                  e.read.value = this.$i.message.read;
                 }else{
-                  e.read.value = this.$i.common.unread;
+                  e.read.value = this.$i.message.unread;
                 }
                 return e
               });

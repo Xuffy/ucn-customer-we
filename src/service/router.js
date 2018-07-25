@@ -32,8 +32,7 @@ export const routerMap = [
       {
         path: 'index',
         name: 'workbench',
-        meta: {
-        },
+        meta: {},
         component: () => import('../views/workbench/index.vue')
       }
     ]
@@ -42,8 +41,8 @@ export const routerMap = [
     path: '/product',
     component: Layout,
     meta: {
-        name: $i.router.product,
-        auth:'PRODUCT'
+      name: $i.router.product,
+      auth: 'PRODUCT'
     },
     redirect: '/product/sourcing',
     children: [
@@ -51,7 +50,7 @@ export const routerMap = [
         path: 'sourcing',
         name: 'productSourcingOverview',
         meta: {
-            auth:'PRODUCT:OVERVIEW',
+          auth: 'PRODUCT:OVERVIEW',
           name: $i.router.productSourcingOverview
         },
         component: () => import('../views/product/sourcing/sourcing'),
@@ -61,7 +60,7 @@ export const routerMap = [
         name: 'productSourcingDetail',
         hidden: true,
         meta: {
-            auth:'PRODUCT:DETAIL',
+          auth: 'PRODUCT:DETAIL',
           name: $i.router.productSourcingDetail
         },
         component: () => import('../views/product/sourcing/detail'),
@@ -70,7 +69,7 @@ export const routerMap = [
         path: 'bookmark',
         name: 'productBookmarkOverview',
         meta: {
-            auth:'PRODUCT:BOOKMARK_OVERVIEW',
+          auth: 'PRODUCT:BOOKMARK_OVERVIEW',
           name: $i.router.productBookmarkOverview
         },
         component: () => import('../views/product/bookmark/bookmark'),
@@ -80,7 +79,7 @@ export const routerMap = [
         name: 'productBookmarkDetail',
         hidden: true,
         meta: {
-            auth:'PRODUCT:BOOKMARK_DETAIL',
+          auth: 'PRODUCT:BOOKMARK_DETAIL',
           name: $i.router.productBookmarkDetail
         },
         component: () => import('../views/product/bookmark/detail'),
@@ -90,7 +89,7 @@ export const routerMap = [
         name: 'productBookmarkManuallyAdd',
         hidden: true,
         meta: {
-          auth:'PRODUCT:BOOKMARK_OVERVIEW:MANUALLY_ADD',
+          auth: 'PRODUCT:BOOKMARK_OVERVIEW:MANUALLY_ADD',
           name: $i.router.productBookmarkManuallyAdd
         },
         component: () => import('../views/product/bookmark/manuallyAdd'),
@@ -100,7 +99,7 @@ export const routerMap = [
         name: 'productBookmarkArchive',
         hidden: true,
         meta: {
-          auth:'PRODUCT:ARCHIVE',
+          auth: 'PRODUCT:ARCHIVE',
           name: $i.router.bookmarkArchive
         },
         component: () => import('../views/product/bookmark/archive'),
@@ -110,7 +109,7 @@ export const routerMap = [
         path: 'compare',
         name: 'productCompareOverview',
         meta: {
-            auth:'PRODUCT:COMPARE_OVERVIEW',
+          auth: 'PRODUCT:COMPARE_OVERVIEW',
           name: $i.router.productCompareOverview
         },
         component: () => import('../views/product/compare/overview'),
@@ -120,7 +119,7 @@ export const routerMap = [
         name: 'productCompareDetail',
         hidden: true,
         meta: {
-            auth:'PRODUCT:COMPARE_DETAIL',
+          auth: 'PRODUCT:COMPARE_DETAIL',
           name: $i.router.productCompareDetail
         },
         component: () => import('../views/product/compare/compare'),
@@ -130,7 +129,7 @@ export const routerMap = [
         name: 'productCompareRecycleBin',
         hidden: true,
         meta: {
-            auth:'PRODUCT:COMPARE_ARCHIVE',
+          auth: 'PRODUCT:COMPARE_ARCHIVE',
           name: $i.router.productCompareRecycleBin
         },
         component: () => import('../views/product/compare/archive'),
@@ -351,8 +350,8 @@ export const routerMap = [
     component: Layout,
     redirect: '/order/overview',
     meta: {
-        name: $i.router.order,
-        auth:'ORDER',
+      name: $i.router.order,
+      auth: 'ORDER',
     },
     noDropdown: true,
     children: [
@@ -360,7 +359,7 @@ export const routerMap = [
         path: 'overview',
         name: 'order',
         meta: {
-          auth:'ORDER:OVERVIEW',
+          auth: 'ORDER:OVERVIEW',
           name: $i.router.orderOverview
         },
         component: () => import('../views/order/overView.vue')
@@ -369,7 +368,7 @@ export const routerMap = [
         path: 'create',
         name: 'orderCreate',
         meta: {
-          auth:'ORDER:OVERVIEW:CREATE',
+          auth: 'ORDER:OVERVIEW:CREATE',
           name: $i.router.orderCreate
         },
         component: () => import('../views/order/createOrder/createOrder.vue')
@@ -378,7 +377,7 @@ export const routerMap = [
         path: 'detail',
         name: 'Order Detail',
         meta: {
-          auth:'ORDER:DETAIL',
+          auth: 'ORDER:DETAIL',
           name: $i.router.orderDetail
         },
         component: () => import('../views/order/orderDetail.vue')
@@ -388,7 +387,7 @@ export const routerMap = [
         path: 'draft',
         name: 'orderDraft',
         meta: {
-          auth:'ORDER:DRAFT_OVERVIEW',
+          auth: 'ORDER:DRAFT_OVERVIEW',
           name: $i.router.orderDraft
         },
         component: () => import('../views/order/draftOverview.vue')
@@ -396,20 +395,20 @@ export const routerMap = [
         path: 'archiveOrder',
         name: 'orderArchiveOrder',
         meta: {
-            auth:'ORDER:DRAFT_ARCHIVE',
+          auth: 'ORDER:DRAFT_ARCHIVE',
           name: $i.router.orderRecycleBin
         },
         component: () => import('../views/order/archiveOrder.vue')
       },
-        {
-            path: 'archiveDraft',
-            name: 'orderArchiveDraft',
-            meta: {
-                auth:'ORDER:DRAFT_ARCHIVE',
-                name: $i.router.orderRecycleBin
-            },
-            component: () => import('../views/order/archiveDraft.vue')
-        }
+      {
+        path: 'archiveDraft',
+        name: 'orderArchiveDraft',
+        meta: {
+          auth: 'ORDER:DRAFT_ARCHIVE',
+          name: $i.router.orderRecycleBin
+        },
+        component: () => import('../views/order/archiveDraft.vue')
+      }
     ]
   },
   {
@@ -418,8 +417,8 @@ export const routerMap = [
     redirect: '/warehouse/overview',
     name: 'Warehouse',
     meta: {
-        auth:'WAREHOUSE',
-        name: $i.router.warehouse
+      auth: 'WAREHOUSE',
+      name: $i.router.warehouse
     },
     noDropdown: false,
     children: [
@@ -427,7 +426,7 @@ export const routerMap = [
         path: 'overview',
         name: 'Warehouse Overview',
         meta: {
-            auth:'WAREHOUSE:OVERVIEW',
+          auth: 'WAREHOUSE:OVERVIEW',
           name: $i.router.warehouseOverview
         },
         component: () => import('../views/warehouse/warehouseOverview.vue'),
@@ -436,7 +435,7 @@ export const routerMap = [
         path: 'qcOverview',
         name: 'warehouseQc',
         meta: {
-            auth:'QC:ORDER_OVERVIEW',
+          auth: 'QC:ORDER_OVERVIEW',
           name: $i.router.warehouseQcOverview
         },
         component: () => import('../views/warehouse/qcOverview.vue'),
@@ -446,7 +445,7 @@ export const routerMap = [
         name: 'warehouseQcOrderDetail',
         hidden: true,
         meta: {
-          auth:'QC:ORDER_DETAIL',
+          auth: 'QC:ORDER_DETAIL',
           name: $i.router.warehouseQcOrderDetail
         },
         component: () => import('../views/warehouse/qcDetail.vue'),
@@ -456,7 +455,7 @@ export const routerMap = [
         name: 'warehouseCreateQcOrder',
         hidden: true,
         meta: {
-          auth:'QC:ORDER_OVERVIEW:CREATE',
+          auth: 'QC:ORDER_OVERVIEW:CREATE',
           name: $i.router.warehouseCreateQcOrder
         },
         component: () => import('../views/warehouse/createQc.vue'),
@@ -792,7 +791,11 @@ router.beforeResolve((to, from, next) => {
   let ts = localStore.get('token');
 
   if (to.meta && to.meta.auth && !Util.$auth(to.meta.auth)) {
-    return;
+
+    return Notification.error({
+      title: $i.hintMessage.systemHints,
+      message: $i.hintMessage.noAuthority
+    });
     // return next({path: '/'});
   }
 

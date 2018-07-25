@@ -112,5 +112,6 @@
   "customerSource": "customer source",
   "recentTransactionDate": "Recent transaction date",
   "receiverAddress1": "receiver Address1",
-  "supplierId": "supplierId"
+  "supplierId": "supplierId",
+  "inputCompareName": "Please Input Compare Name"
 }

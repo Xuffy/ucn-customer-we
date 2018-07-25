@@ -208,7 +208,7 @@
                     //表示是新建detail还未保存
                     let id=[];
                     this.$route.query.id.split(',').forEach(v=>{
-                        id.push(Number(v));
+                        id.push(v);
                     });
                     let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
