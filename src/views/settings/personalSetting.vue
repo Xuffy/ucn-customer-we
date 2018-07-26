@@ -27,7 +27,13 @@
         <el-col :span="12">
           <el-form-item :label="$i.setting.birthday+':'"  v-if="isVisible" >
             <div style="display:flex;max-width:200px;">
-              <el-date-picker type="date" :placeholder="$i.common.inputSearch" value-format="timestamp" v-model="form.birthday"  style="max-width:300px;" :disabled="isModify"></el-date-picker>
+              <el-date-picker
+                type="date"
+                :placeholder="$i.common.inputSearch"
+                v-model="form.birthday"
+                style="max-width:300px;"
+                @change="val => {form.birthday = $dateFormat(form.birthday,'yyyy-mm-dd')}"
+                :disabled="isModify"></el-date-picker>
             </div>
           </el-form-item>
         </el-col>
@@ -61,7 +67,7 @@
                 v-for="item in sex"
                 :key="item.id"
                 :label="item.name"
-                :value="item.code"
+                :value="Number(item.code)"
                 style="width: 200px">
               </el-option>
             </el-select>
@@ -150,19 +156,6 @@
         modifyEmail:{
           newEmail:''
         },
-        genderOptions:[{
-          value: '男',
-          label: 'Male',
-          key: 1
-        }, {
-          value: '女',
-          label: 'Female',
-          key: 0
-        }, {
-          value: '未知',
-          label: 'Unknown',
-          key: 2
-        }],
         dialogVisibleO:false,
         formLabelWidth: '160px',
         language:[],
@@ -254,6 +247,7 @@
               type: 'success',
               message: this.$i.common.modifySuccess
             });
+            this.getUserProfile();
             this.isModifyPass = false;
             this.isModify = true;
             this.summaryDisabled=true;

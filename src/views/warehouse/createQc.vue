@@ -187,7 +187,7 @@
                         width="240">
                     <template slot-scope="scope" v-if="scope.row[v.key]">
                         <div v-if="v.showType==='qc'">
-                            {{v.value}}
+                            {{scope.row[v.key].value}}
                         </div>
                         <div v-else-if="v.fromService"></div>
                         <div v-else-if="v.showType==='number'">
@@ -617,7 +617,6 @@
                     this.loadingProductTable = true;
                     this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
                         this.loadingProductTable = false;
-                        console.log(res)
                         _.map(res, v => {
                             if (v.id !== 0) {
                                 let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
@@ -628,10 +627,17 @@
                                 v.volumeUnitDictCode = vo.name || "";
                                 v.weightUnitDictCode = wo.name || "";
                                 v.lengthUnitDictCode = lo.name || "";
+                                v.skuQcResult = '';
+                                v.remark = ''
                                 this.productTableData.push(v);
                             }
                         });
                         let arr = this.$copyArr(this.productTableData)
+                        // for (let k in this.$db.warehouse.createQcProductTable) {
+                        //     if (arr[0][k] === undefined) {
+                        //         arr[0][k] = null
+                        //     }
+                        // }
                         arr = this.$getDB(this.$db.warehouse.createQcProductTable, arr);
                         this.$refs.filterColumn.update(false, arr).then(data => {
                             this.productTableData = this.$refs.filterColumn.getFilterData(arr, data);
@@ -764,6 +770,7 @@
         mounted() {
             this.loadingData = true;
             this.columnConfig = this.$db.warehouse.createQcProductTable;
+            console.log(this.columnConfig)
         },
         watch: {
             selectProductTableData(n) {
