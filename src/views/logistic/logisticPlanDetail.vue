@@ -57,7 +57,7 @@
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table ref="productInfo" :code="configUrl[pageName]&&configUrl[pageName].setTheField" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct"
-        native-sort="onlyID"
+        native-sort="vId"
         @change-sort="$refs.productInfo.setSort(productList)"
         >
         <div slot="header" class="product-header" v-if="edit">
@@ -86,7 +86,7 @@
         </div>
       </overviewPage>
     </el-dialog>
-    <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
+    <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'&&pageTypeCurr!='logisticDraftDetail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
       :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
     <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext"
@@ -516,8 +516,7 @@
         this.feeList = feeListb ? [res.fee] : null;
         this.sendfee = feeListb ? res.fee : null;
         res.product = res.product.map((item, i) => {
-          item.vId = i;
-          item.onlyID = new Date().getTime();
+          item.vId = this.$getUUID();
           return item;
         });
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
@@ -626,7 +625,7 @@
           vgm: 0
         };
         this.containerInfo.push(obj);
-        this.oldPlanObject.containerDetail = this.containerInfo;
+        this.oldPlanObject.containerDetail.push(obj);
         this.containerinfoMatch.push(obj);
       },
       arraySplite(array, index) {
@@ -710,18 +709,17 @@
           })
         })
       },
-      updatePaymentWithView({
-        i,
-        edit,
-        status,
-        res
-      }) {
+      updatePaymentWithView({i,edit,status,res,btnstatus}) {
         const obj = {
           ...this.paymentList[i],
           edit,
           status: status || this.paymentList[i].status
         }
-        this.$set(this.paymentList, i, obj);
+        if(btnstatus=='cancel'){
+          this.$set(this.paymentList, i, this.oldPaymentObject.datas[i]);
+        }else{
+          this.$set(this.paymentList, i, obj);
+        }
         if (res) {
           this.getPaymentList(res.orderNo);
         }
@@ -739,12 +737,11 @@
         this.showAddProductDialog = false
         const selectArrData = this.$depthClone(arr);
         if (!arr.length || !selectArrData.length) return
-        selectArrData.forEach(a => {
+        selectArrData.forEach((a,i) => {
           let sliceStr = this.selectArr.skuIncoterm.find(item => item.code == a.skuIncoterm).name;
           sliceStr = sliceStr.slice(0, 1) + sliceStr.slice(1 - sliceStr.length).toLowerCase();
           a.id = null
-          a.vId = +new Date();
-          a.onlyID = new Date().getTime();
+          a.vId = this.$getUUID();
           a.blSkuName = null
           a.hsCode = null
           a.currency = null
@@ -815,7 +812,7 @@
           this.$set(this.productList[item].fieldDisplay,'value',fieldDisplayObj);
         })
         const id = currrentProduct.id.value
-        const vId = +new Date();
+        const vId = this.$getUUID();
         const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
         index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] =
           this.restoreObj(currrentProduct))
@@ -1019,14 +1016,13 @@
         if (this.$validateForm(obj || this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
           return;
         }
-        console.log(this.oldPlanObject.containerDetail&&this.oldPlanObject.containerDetail.map(el => {
-          return this.$validateForm(el, this.$db.logistic.dbcontainerInfo);
-        }))
+
         if(this.oldPlanObject.containerDetail&&this.oldPlanObject.containerDetail.map(el => {
           return this.$validateForm(el, this.$db.logistic.dbcontainerInfo);
         }).some(el=> el)){
           return
         }
+        
         this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
           this.$message({
             message: this.$i.logistic.jumping,

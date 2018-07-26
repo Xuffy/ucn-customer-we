@@ -16,7 +16,8 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
         <template slot-scope="scope">
-          <el-col v-if="scope.row.edit">
+          <div v-if="scope.row.edit" style="display:flex;">
+            <label class="reqiuredStar"></label>
             <el-select v-model="scope.row.payToCompanyId" filterable :placeholder="$i.logistic.placeholder">
               <el-option
                 v-for="item in selectArr.supplier"
@@ -25,7 +26,7 @@
                 :value="item.companyId">
               </el-option>
             </el-select>
-          </el-col>
+          </div>
           <!-- <span v-else>{{ computedCurrency('supplier', 'skuSupplierId', 'skuSupplierName', scope.row.payToId) }}</span> 接手 注释 -->
           <span v-else>{{ scope.row.payToCompanyName }}</span>
         </template>
@@ -33,13 +34,19 @@
       <el-table-column :label="$i.logistic.estPayDate" align="center" width="260">
         <template slot-scope="scope">
           <!-- <el-input placeholder="请输入内容" v-model="scope.row.planPayDt" v-if="edit"></el-input> -->
-          <el-date-picker v-if="scope.row.edit" v-model="scope.row.planPayDt" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
+          <div v-if="scope.row.edit" style="display:flex;">
+            <label class="reqiuredStar"></label>
+            <el-date-picker v-if="scope.row.edit" v-model="scope.row.planPayDt" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
+          </div>
           <span v-else>{{ scope.row.planPayDt ? $dateFormat(scope.row.planPayDt, 'yyyy-mm-dd') : null }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.estAmount" prop="planPayAmount" align="center" width="180">
         <template slot-scope="scope">
-          <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
+          <div v-if="scope.row.edit" style="display:flex;">
+            <label class="reqiuredStar"></label>
+            <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
+          </div>
           <span v-else>{{ scope.row.planPayAmount }}</span>
         </template>
       </el-table-column>
@@ -266,7 +273,7 @@ export default {
     cancelPaymentModify (i) {
       this.addPaymentBtn =false;
       if (!this.tableData[i].id) return this.tableData.splice(i, 1)
-      this.$emit('updatePaymentWithView', { i, edit: false })
+      this.$emit('updatePaymentWithView', { i, edit: false,btnstatus:'cancel' })
     },
     switchStatus (i, url,title) {
       this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
@@ -287,5 +294,10 @@ export default {
 <style scoped lang="less">
   .payment/deep/.el-table .warning-row {
     background: yellow;
+  }
+  .reqiuredStar:before{
+    content: '*';
+    color: #f56c6c;
+    margin-right: 4px;
   }
 </style>

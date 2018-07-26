@@ -32,15 +32,15 @@
           <div class="fn btn">
             <div v-if="pageType === 'plan'">
               <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(isArchive&&fillterVal==5&&viewBy=='plan')">{{ $i.logistic.archive }}</el-button>
               <el-button v-authorize="auth[pageType]&&auth[pageType].CREATE||''" @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
             </div>
             <div v-if="pageType === 'loadingList'">
               <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(isArchive&&fillterVal==4&&viewBy=='plan')">{{ $i.logistic.archive }}</el-button>
             </div>
             <div v-if="pageType === 'draft'">
-              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(isArchive&&viewBy=='plan')">{{ $i.logistic.archive }}</el-button>
               <el-button v-authorize="auth[pageType]&&auth[pageType].SEND||''" @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}</el-button>
             </div>
           </div>
@@ -192,7 +192,8 @@
               db: this.$db.logistic.sku
             }
           },
-          downloadIds:[]
+          downloadIds:[],
+          isArchive:true
         }
       }
     },
@@ -203,7 +204,7 @@
     },
     watch: {
       viewBy(newVal) {
-        // this.initPage();
+        this.initPage();
         this.fetchDataList()
       },
       pageType() {
@@ -316,7 +317,8 @@
         })
       },
       changeChecked(arr) {
-        this.selectCount = arr
+        this.selectCount = arr;
+        // this.isArchive = 
         this.downloadIds = arr.map(el => {
           return el.id.value
         })
