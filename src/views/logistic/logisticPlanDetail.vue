@@ -1027,8 +1027,6 @@
         }).some(el=> el)){
           return
         }
-        console.log(obj || this.oldPlanObject)
-        return
         this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
           this.$message({
             message: this.$i.logistic.jumping,
