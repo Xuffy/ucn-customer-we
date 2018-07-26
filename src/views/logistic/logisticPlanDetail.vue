@@ -57,7 +57,7 @@
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table ref="productInfo" :code="configUrl[pageName]&&configUrl[pageName].setTheField" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct"
-        native-sort="orderNo"
+        native-sort="onlyID"
         @change-sort="$refs.productInfo.setSort(productList)"
         >
         <div slot="header" class="product-header" v-if="edit">
@@ -517,6 +517,7 @@
         this.sendfee = feeListb ? res.fee : null;
         res.product = res.product.map((item, i) => {
           item.vId = i;
+          item.onlyID = new Date().getTime();
           return item;
         });
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
@@ -600,6 +601,7 @@
             return item.id;
           })
           this.containerInfo = _.difference(this.containerInfo, this.selectionContainer);
+          this.oldPlanObject.containerDetail = this.containerInfo;
           this.$message({
             type: 'success',
             message: this.$i.logistic.operationSuccess
@@ -624,6 +626,7 @@
           vgm: 0
         };
         this.containerInfo.push(obj);
+        this.oldPlanObject.containerDetail = this.containerInfo;
         this.containerinfoMatch.push(obj);
       },
       arraySplite(array, index) {
@@ -740,7 +743,8 @@
           let sliceStr = this.selectArr.skuIncoterm.find(item => item.code == a.skuIncoterm).name;
           sliceStr = sliceStr.slice(0, 1) + sliceStr.slice(1 - sliceStr.length).toLowerCase();
           a.id = null
-          a.vId = +new Date()
+          a.vId = +new Date();
+          a.onlyID = new Date().getTime();
           a.blSkuName = null
           a.hsCode = null
           a.currency = null
@@ -1015,11 +1019,16 @@
         if (this.$validateForm(obj || this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
           return;
         }
+        console.log(this.oldPlanObject.containerDetail&&this.oldPlanObject.containerDetail.map(el => {
+          return this.$validateForm(el, this.$db.logistic.dbcontainerInfo);
+        }))
         if(this.oldPlanObject.containerDetail&&this.oldPlanObject.containerDetail.map(el => {
           return this.$validateForm(el, this.$db.logistic.dbcontainerInfo);
         }).some(el=> el)){
           return
         }
+        console.log(obj || this.oldPlanObject)
+        return
         this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
           this.$message({
             message: this.$i.logistic.jumping,
