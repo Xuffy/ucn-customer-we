@@ -30,10 +30,9 @@
               <el-date-picker
                 type="date"
                 :placeholder="$i.common.inputSearch"
-                value-format="timestamp"
                 v-model="form.birthday"
                 style="max-width:300px;"
-                @change="()=>$dateFormat(form.birthday,'yyyy-mm-dd HH:MM:ss')"
+                @change="val => {form.birthday = $dateFormat(form.birthday,'yyyy-mm-dd')}"
                 :disabled="isModify"></el-date-picker>
             </div>
           </el-form-item>
@@ -248,6 +247,7 @@
               type: 'success',
               message: this.$i.common.modifySuccess
             });
+            this.getUserProfile();
             this.isModifyPass = false;
             this.isModify = true;
             this.summaryDisabled=true;
@@ -277,7 +277,6 @@
           .then(res => {
             this.dialogVisibleO = false;
             this.$message({type: 'success', message: this.$i.common.modifySuccess});
-            this.getUserProfile();
             this.modifyPass = {
               password:'',
               newPassword:'',

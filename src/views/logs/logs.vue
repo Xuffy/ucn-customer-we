@@ -38,7 +38,7 @@
             </el-form>
 
           <div class="btn-group">
-            <el-button @click="getbizlogs" type="primary" class="search" >{{$i.common.search}}</el-button>
+            <el-button @click="searchLog" type="primary" class="search" >{{$i.common.search}}</el-button>
             <el-button @click="clear()">{{$i.common.clear}}</el-button>
           </div>
             <!--<el-input-->
@@ -143,6 +143,11 @@
             formatter(row, column) {
                 return row.remark;
             },
+            searchLog(){
+              this.params.pn = '';
+              this.params.ps ='';
+              this.getbizlogs();
+            },
             //清除填写的表格数据
             clear() {
               this.params.operatorName = '';
@@ -169,7 +174,7 @@
                      this.pageData = res
                      this.logslist = this.$getDB(this.$db.logs.table, res.datas,  item => {
                        _.mapObject(item, val => {
-                         val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
+                         val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd HH:MM:ss'))
                          return val
                        })
                      });
