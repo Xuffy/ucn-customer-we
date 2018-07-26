@@ -32,7 +32,7 @@
                 :placeholder="$i.common.inputSearch"
                 v-model="form.birthday"
                 style="max-width:300px;"
-                @change="()=>$dateFormat(form.birthday,'yyyy-mm-dd')"
+                @change="val => {form.birthday = $dateFormat(form.birthday,'yyyy-mm-dd')}"
                 :disabled="isModify"></el-date-picker>
             </div>
           </el-form-item>
