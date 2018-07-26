@@ -187,7 +187,6 @@
                         width="240">
                     <template slot-scope="scope" v-if="scope.row[v.key]">
                         <div v-if="v.showType==='qc'">
-                            {{111}}
                         </div>
                         <div v-else-if="v.fromService"></div>
                         <div v-else-if="v.showType==='number'">
@@ -488,8 +487,8 @@
                         this.qcOrderConfig.qcOrderDetailCreateParams.push({
                             expectQcQty: v.expectQcQty.value ? v.expectQcQty.value : 0,
                             inboundSkuId: v.id.value,
-                            samplingRate: v.samplingRate,
-                            unqualifiedProcessingMode: v.unqualifiedProcessingMode
+                            samplingRate: v.samplingRate.value,
+                            unqualifiedProcessingMode: v.unqualifiedProcessingMode.value
                         });
                     }
                 });
@@ -654,6 +653,8 @@
                                 v.actOuterCartonInnerBoxQty = '';
                                 v.outerCartonInnerBoxQty = '来自Order';
                                 v.actOuterCartonSkuQty = '';
+                                v.unqualifiedProcessingMode = '';
+                                v.samplingRate = '';
                                 this.productTableData.push(v);
                             }
                         });

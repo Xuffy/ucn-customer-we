@@ -3,6 +3,7 @@ export default {
         _hide:true
     },
     skuQcResultDictCode:{
+        showType:'qc'
     },
     skuInventoryStatusDictCode:{},
     skuCode:{},
@@ -30,7 +31,7 @@ export default {
         key:'samplingRate',
         showType:'number'
     },
-    unqualifiedProcessingMode:{
+    unqualifiedProcessingMode:{//不合格处理方式
         key:'unqualifiedProcessingMode',
         showType:'input'
     },
