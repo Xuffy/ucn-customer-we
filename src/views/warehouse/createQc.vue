@@ -187,7 +187,7 @@
                         width="240">
                     <template slot-scope="scope" v-if="scope.row[v.key]">
                         <div v-if="v.showType==='qc'">
-                            {{scope.row[v.key].value}}
+                            {{111}}
                         </div>
                         <div v-else-if="v.fromService"></div>
                         <div v-else-if="v.showType==='number'">
@@ -356,7 +356,7 @@
                 qcOrderConfig: {
                     attachments: [],
                     exchangeCurrencyDictCode: "CNY",
-                    exchangeCurrencyDictId: "",
+                    exchangeCurrencyDictId: "33",
                     factoryAddress: "",
                     factoryContactPhone: "",
                     qcOrderDetailCreateParams: [],
@@ -483,11 +483,11 @@
                 _.map(this.productTableData, v => {
                     if (v.id !== 0) {
                         if (!checkExpectQcQty) {
-                            checkExpectQcQty = (!v.expectQcQty && v.expectQcQty !== 0);
+                            checkExpectQcQty = (!v.expectQcQty.value && v.expectQcQty.value !== 0);
                         }
                         this.qcOrderConfig.qcOrderDetailCreateParams.push({
-                            expectQcQty: v.expectQcQty ? v.expectQcQty : 0,
-                            inboundSkuId: v.id,
+                            expectQcQty: v.expectQcQty.value ? v.expectQcQty.value : 0,
+                            inboundSkuId: v.id.value,
                             samplingRate: v.samplingRate,
                             unqualifiedProcessingMode: v.unqualifiedProcessingMode
                         });
@@ -627,19 +627,40 @@
                                 v.volumeUnitDictCode = vo.name || "";
                                 v.weightUnitDictCode = wo.name || "";
                                 v.lengthUnitDictCode = lo.name || "";
-                                v.skuQcResult = '';
-                                v.remark = ''
+                                v.skuQcResultDictCode = '';
+                                v.checkOuterCartonQty = '';
+                                v.qcPic = '';
+                                v.remark = '';
+                                v.shippingMarkResultDictCode = '';
+                                v.outerCartonBarCodeResultDictCode = '';
+                                v.innerPackingBarCodeResultDictCode = '';
+                                v.skuLabelResultDictCode = '';
+                                v.skuBarCodeResultDictCode = '';
+                                v.unqualifiedSkuGrossWeight = '';
+                                v.qualifiedSkuGrossWeight = '';
+                                v.unqualifiedSkuVolume = '';
+                                v.qualifiedSkuVolume = '';
+                                v.unqualifiedSkuNetWeight = '';
+                                v.qualifiedSkuNetWeight = '';
+                                v.unqualifiedSkuQty = '';
+                                v.qualifiedSkuQty = '';
+                                v.actSkuQty = '';
+                                v.unqualifiedSkuCartonTotalQty = '';
+                                v.qualifiedSkuCartonTotalQty = '';
+                                v.actSkuCartonTotalQty = '';
+                                v.outerCartonGrossWeight = '';
+                                v.actInnerCartonSkuQty = '';
+                                v.innerCartonSkuQty = '来自Order';
+                                v.actOuterCartonInnerBoxQty = '';
+                                v.outerCartonInnerBoxQty = '来自Order';
+                                v.actOuterCartonSkuQty = '';
                                 this.productTableData.push(v);
                             }
                         });
                         let arr = this.$copyArr(this.productTableData)
-                        // for (let k in this.$db.warehouse.createQcProductTable) {
-                        //     if (arr[0][k] === undefined) {
-                        //         arr[0][k] = null
-                        //     }
-                        // }
                         arr = this.$getDB(this.$db.warehouse.createQcProductTable, arr);
                         this.$refs.filterColumn.update(false, arr).then(data => {
+                            console.log(data)
                             this.productTableData = this.$refs.filterColumn.getFilterData(arr, data);
                             this.columnConfig = this.productTableData[0];
                         });

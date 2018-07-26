@@ -2,9 +2,7 @@ export default {
     id: {
         _hide:true
     },
-    skuQcResult:{
-        showType:'qc',
-        value:'Waiting QC'
+    skuQcResultDictCode:{
     },
     skuInventoryStatusDictCode:{},
     skuCode:{},
@@ -36,23 +34,31 @@ export default {
         key:'unqualifiedProcessingMode',
         showType:'input'
     },
+    outerCartonTotalQty:{},
     skuLength:{},
     skuWidth:{},
     skuHeight:{},
     skuNetWeight:{},
     outerCartonSkuQty:{},
     actQtyOfOuterCarton:{
-        fromService:true
+        fromService:true,
+        key: 'actOuterCartonSkuQty'
     },
     //外箱中包数(create的时候不要)
     actQuantityOfInnerBoxOuterCarton:{
+        // fromService:true,
+        key: 'outerCartonInnerBoxQty' // 来自order
+    },
+    actOuterCartonInnerBoxQty:{
         fromService:true
     },
     //中包产品数(create的时候不要)
     actualQuantityInnerCarton:{
-        fromService:true
+        // fromService:true,
+        key: 'innerCartonSkuQty' // 来自order
     },
-    innerCartonLength:{
+    actInnerCartonSkuQty:{},
+    innerCartonLength:{ // 中包长
         fromService:true
     },
     innerCartonWidth:{
@@ -86,72 +92,91 @@ export default {
         fromService:true
     },
     grossWeightOfOuterCarton:{
-        fromService:true
+        fromService:true,
+        key: 'outerCartonGrossWeight'
     },
     actualProductTotalCTNS:{
-        fromService:true
+        fromService:true,
+        key: 'actSkuCartonTotalQty'
     },
     qualifiedProductsTotalCTNS:{
-        fromService:true
+        fromService:true,
+        key: 'qualifiedSkuCartonTotalQty'
     },
     unqualifiedProductTotalCTNS:{
-        fromService:true
+        fromService:true,
+        key: 'unqualifiedSkuCartonTotalQty'
     },
     actProductQuantity:{
-        fromService:true
+        fromService:true,
+        key: 'actSkuQty'
     },
-    qualifiedProductsTotalQTYS:{
-        fromService:true
+    qualifiedProductsTotalQTYS:{ // 合格产品数
+        fromService:true,
+        key: 'qualifiedSkuQty'
     },
     unqualifiedProductsQTY:{
-        fromService:true
+        fromService:true,
+        key: 'unqualifiedSkuQty'
     },
     qualifiedProductTotalNW:{
-        fromService:true
+        fromService:true,
+        key: 'qualifiedSkuNetWeight'
     },
     unqualifiedProductTotalNW:{
-        fromService:true
+        fromService:true,
+        key: 'unqualifiedSkuNetWeight'
     },
     qualifiedProductsTotalCBM:{
-        fromService:true
+        fromService:true,
+        key: 'qualifiedSkuVolume'
     },
     unqualifiedProductsTotalCBM:{
-        fromService:true
+        fromService:true,
+        key: 'unqualifiedSkuVolume'
     },
     qualifiedProductTotalGW:{
-        fromService:true
+        fromService:true,
+        key: 'qualifiedSkuGrossWeight'
     },
     unqualifiedProductTotalGW:{
-        fromService:true
+        fromService:true,
+        key: 'unqualifiedSkuGrossWeight'
     },
-    unqualifiedType:{
+    unqualifiedType:{//不合格类型
         fromService:true
     },
     skuBarCode:{},
     productBarCodeResults:{
-        fromService:true
+        fromService:true,
+        key: 'skuBarCodeResultDictCode'
     },
     skuLabel:{},
     productLabelResults:{
-        fromService:true
+        fromService:true,
+        key: 'skuLabelResultDictCode'
     },
     innerPackingBarCode:{},
     innerPackingBarCodeResults:{
-        fromService:true
+        fromService:true,
+        key: 'innerPackingBarCodeResultDictCode'
     },
     outerCartonBarCode:{},
     outerCartonBarCodeResults:{
-        fromService:true
+        fromService:true,
+        key: 'outerCartonBarCodeResultDictCode'
     },
     shippingMark:{},
     outerCartonMarksResults:{
-        fromService:true
+        fromService:true,
+        key: 'shippingMarkResultDictCode'
     },
     qcPic:{
         fromService:true
     },
     checkOuterCartons:{
-        fromService:true
+        fromService:true,
+        key: 'checkOuterCartonQty'
     },
     remark:{
         fromService:true
