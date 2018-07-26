@@ -38,7 +38,7 @@
             </el-form>
 
           <div class="btn-group">
-            <el-button @click="getbizlogs" type="primary" class="search" >{{$i.common.search}}</el-button>
+            <el-button @click="searchLog" type="primary" class="search" >{{$i.common.search}}</el-button>
             <el-button @click="clear()">{{$i.common.clear}}</el-button>
           </div>
             <!--<el-input-->
@@ -142,6 +142,11 @@
         methods:{
             formatter(row, column) {
                 return row.remark;
+            },
+            searchLog(){
+              this.params.pn = '';
+              this.params.ps ='';
+              this.getbizlogs();
             },
             //清除填写的表格数据
             clear() {
