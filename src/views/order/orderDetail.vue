@@ -1573,7 +1573,6 @@
                     _.map(this.$db.order.orderDetail, v => {
                         v._isModified = false;
                     });
-                    this.orderForm.fieldUpdate = {};
                     if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
                         _.map(this.orderForm.fieldUpdate, (v, k) => {
                             if(k==='attachments'){
@@ -1587,6 +1586,7 @@
                             v.fieldUpdate = {};
                         });
                     }
+                    this.orderForm.fieldUpdate = {};
                     this.initialData = this.$depthClone(this.orderForm);
                     this.savedIncoterm = Object.assign({}, res).incoterm;
                     _.map(this.supplierOption, v => {
@@ -1634,6 +1634,7 @@
                         this.productTableData.push(v);
                     });
                     if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
+                        console.log(this.$depthClone(this.productTableData),'this.productTableData')
                         _.map(this.productTableData, v => {
                             if (v.fieldUpdate.value) {
                                 _.map(v.fieldUpdate.value, (value, key) => {
@@ -1643,28 +1644,35 @@
                                 });
                                 v.fieldUpdate.value = {};
                             }
+                            if(v._remark){
+                                console.log(this.$depthClone(v.fieldRemarkUpdate),'fieldRemarkUpdate')
+                            }
                         });
                     }
                     this.markImportant = this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
                     if (res.status !== "2" && res.status !== "3" && res.status !== "4") {
                         this.disableModify = true;
-                    } else {
+                    }
+                    else {
                         this.disableModify = false;
                     }
                     if (res.status !== "2") {
                         this.disableConfirm = true;
-                    } else {
+                    }
+                    else {
                         this.disableConfirm = false;
                     }
                     if (res.status === "4") {
                         this.hasFinishOrder = true;
-                    } else {
+                    }
+                    else {
                         this.hasFinishOrder = false;
                     }
                     if (res.status === "5") {
                         this.hasCancelOrder = true;
-                    } else {
+                    }
+                    else {
                         this.hasCancelOrder = false;
                     }
                     //代表已经接单了
@@ -1744,7 +1752,8 @@
                         });
                     }
                     else{
-                        if(!item.fieldRemarkUpdate){
+                        console.log(item,'item')
+                        if(!item.fieldRemarkUpdate || !item.fieldRemarkUpdate.value){
                             item.fieldRemarkUpdate={value:{}}
                         }
                         _.map(item, (v, k) => {
