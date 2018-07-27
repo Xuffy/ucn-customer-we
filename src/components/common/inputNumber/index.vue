@@ -35,6 +35,7 @@
       :min="min"
       :name="name"
       :label="label"
+      :placeholder="placeholder"
       @keydown.up.native.prevent="increase"
       @keydown.down.native.prevent="decrease"
       @blur="handleBlur"
@@ -96,6 +97,10 @@ export default {
       validator(val) {
         return val >= 0 && val === parseInt(val, 10);
       }
+    },
+    placeholder:{
+      type:String,
+      default:''
     }
   },
   data() {
