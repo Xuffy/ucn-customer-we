@@ -151,6 +151,9 @@
     }
   }
   .form {
+    /deep/.el-form-item__label{
+      font-weight: bold;
+    }
     /deep/.el-form-item p{
       min-width: 150px;
     }
