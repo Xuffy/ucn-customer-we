@@ -276,11 +276,9 @@ export default {
     //     }
     //     // disabled:true
     // },
-    skuLabelPic:{
-        _slot:'skuLabelPic',
-        _image:true,
+    skuLabelPics:{
         _upload:{
-            limit:1
+            limit:20
         }
     },
     skuLabelDesc:{},

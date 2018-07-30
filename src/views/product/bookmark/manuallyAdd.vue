@@ -47,7 +47,12 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isReadilyAvailable">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" filterable :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speInput"
+                                           size="mini"
+                                           v-model="productForm[v.key]"
+                                           filterable
+                                           clearable
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in availableOption"
                                             :key="item.id"
@@ -430,7 +435,11 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isOem">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speInput"
+                                           size="mini"
+                                           v-model="productForm[v.key]"
+                                           clearable
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in oemOption"
                                             :key="item.id"
@@ -672,7 +681,12 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isAdjustPackage">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select
+                                        class="speInput"
+                                        size="mini"
+                                        v-model="productForm[v.key]"
+                                        clearable
+                                        :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in packageAdjustOption"
                                             :key="item.id"
@@ -682,7 +696,12 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isUseDisplayBox">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select
+                                        class="speInput"
+                                        size="mini"
+                                        v-model="productForm[v.key]"
+                                        clearable
+                                        :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in showDisplayBoxOption"
                                             :key="item.id"
@@ -833,7 +852,7 @@
                 //整个页面数据配置
                 productForm:{
                     attachments:[],
-                    adjustPackage: '1',
+                    adjustPackage: null,
                     barcode: "",
                     brand: "",
                     brandRelated: "",
@@ -878,7 +897,7 @@
                     nameCustomer: "",
                     nameEn: "",
                     noneSellCountry: '',
-                    oem: '1',
+                    oem: null,
                     origin: "",
                     otherPackInfoCn: "",
                     otherPackInfoEn: "",
@@ -903,7 +922,7 @@
                         }
                     ],
                     qualityStander: "",
-                    readilyAvailable: '1',
+                    readilyAvailable: null,
                     recycle: false,
                     specialTransportRequire: "",
                     status: '1',
@@ -916,7 +935,7 @@
                     unitLength: '5',
                     unitVolume: '3',
                     unitWeight: '7',
-                    useDisplayBox: '1',
+                    useDisplayBox: null,
                     warehourceDefault: "",
                     yearListed: ""
                 },
