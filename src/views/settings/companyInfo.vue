@@ -809,7 +809,6 @@
                   cancelButtonText: this.$i.common.cancel,
                   type: 'warning'
                 }).then(() => {
-                  console.log(this.addressData.def)
                   if (this.addressData.def){
                     this.addressData.def = true;
                     this.$message({
@@ -824,7 +823,6 @@
                     });
                   }
                 }).catch(() => {
-                  console.log(this.addressData.def)
                   if (this.addressData.def){
                     this.addressData.def = false;
                     this.$message({
