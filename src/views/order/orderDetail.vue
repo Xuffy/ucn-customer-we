@@ -314,7 +314,6 @@
                 </el-table-column>
             </el-table>
         </div>
-
         <div class="title">
             {{$i.order.payment}}
         </div>
@@ -545,7 +544,6 @@
                 </el-table-column>
             </el-table>
         </div>
-
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -578,7 +576,6 @@
                 </div>
             </template>
         </v-table>
-
         <div class="summary">
             <div class="second-title">
                 {{$i.order.summary}}
@@ -628,7 +625,6 @@
                 </el-row>
             </el-form>
         </div>
-
         <div class="footBtn">
             <div v-if="isModify">
                 <el-button
@@ -677,7 +673,6 @@
                 </el-checkbox>
             </div>
         </div>
-
         <el-dialog
                 custom-class="ucn-dialog-center"
                 title=""
@@ -704,7 +699,6 @@
                     :pageSizes="[50,100,200]"
                     :page-data="pageData"></page>
         </el-dialog>
-
         <el-dialog
                 custom-class="ucn-dialog-center"
                 :title="$i.order.addProduct"
@@ -731,7 +725,6 @@
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
-
         <v-history-modify
                 code="uorder_sku_list"
                 @closed="$refs.table.update()"
@@ -1180,7 +1173,6 @@
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
         </v-history-modify>
-
         <v-message-board
                 @send="afterSend"
                 :readonly="orderForm.status==='5'" module="order"
@@ -1511,40 +1503,11 @@
              * 获取页面数据
              * */
             getUnit() {
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
-                //获取币种
-                this.$ajax.get(this.$apis.CURRENCY_ALL, {}, { cache: true }).then(res => {
-                    this.currencyOption = res;
-                    this.allowQuery++;
-                })
-                    .finally(err => {
-
-                        }
-                    );
-
-                //获取国家
-                this.$ajax.get(this.$apis.COUNTRY_ALL, {}, { cache: true }).then(res => {
-                    this.countryOption = res;
-                }).finally(err => {
-
-                });
-
-
-                //获取汇率
-                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY, {}, { cache: true }).then(res => {
-                    this.allowQuery++;
-                    _.map(this.orderForm.exchangeRateList, v => {
-                        _.map(res, m => {
-                            if (v.currency === m.symbol) {
-                                v.exchangeRate = m.price;
-                            }
-                        });
-                    });
-                }).finally(err => {
-
-                });
+                let currency,country,exchangeRate,unit;
+                currency=this.$ajax.get(this.$apis.CURRENCY_ALL, {}, { cache: true });
+                country=this.$ajax.get(this.$apis.COUNTRY_ALL, {}, { cache: true });
+                exchangeRate=this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY, {}, { cache: true });
+                unit=this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "ORDER_STATUS", "SKU_SALE_STATUS", "SKU_STATUS"], { cache: true });
                 this.skuStatusOption = [
                     {
                         code: "PROCESS",
@@ -1555,9 +1518,17 @@
                         name: "CANCLED"
                     }
                 ];
-                this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "ORDER_STATUS", "SKU_SALE_STATUS", "SKU_STATUS"], { cache: true }).then(res => {
-                    this.allowQuery++;
-                    res.forEach(v => {
+                this.$ajax.all([currency,country,exchangeRate,unit]).then(res=>{
+                    this.currencyOption = res[0];
+                    this.countryOption = res[1];
+                    _.map(this.orderForm.exchangeRateList, v => {
+                        _.map(res[2], m => {
+                            if (v.currency === m.symbol) {
+                                v.exchangeRate = m.price;
+                            }
+                        });
+                    });
+                    res[3].forEach(v => {
                         if (v.code === "ITM") {
                             this.incotermOption = v.codes;
                         } else if (v.code === "PMT") {
@@ -1586,81 +1557,36 @@
                             this.skuStatusTotalOption = v.codes;
                         }
                     });
-                }).finally(err => {
-
-                });
-
-                let ids = this.$route.query.ids;
-                if (!ids) {
-                    return;
-                }
-                ids = ids.slice(0, ids.length - 1);
-                this.loadingProductTable = true;
-                this.$ajax.post(this.$apis.ORDER_SKUS, ids.split(",")).then(res => {
-                    let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res, "skuSysCode"), item => {
-                        if (item._remark) {
-                            item.label.value = this.$i.order.remarks;
-                            if (item.skuPictures) {
-                                item.skuPictures._image = false;
-                            }
-                            item.skuLabelPic._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
-                        }
-                        else {
-                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
-                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
-                            item.skuSample.value = item.skuSample.value ? "1" : "0";
-                            item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
-                            item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
-                            item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
-                            item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
-                            item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
-                            item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
-                            item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
-                            if (item.skuCategoryId.value) {
-                                item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
-                            }
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
-                        }
-                    });
-                    _.map(data, v => {
-                        this.productTableData.push(v);
-                    });
-                }).finally(() => {
-                    this.loadingProductTable = false;
+                    this.getDetail();
                 });
             },
-            getDetail(e) {
+            getDetail(e,isTrue) {
                 this.loadingPage = true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL, {
                     orderId: this.$route.query.orderId,
                     orderNo: this.$route.query.orderNo || this.$route.query.code
                 }).then(res => {
                     this.orderForm = res;
-
                     /**
                      * 高亮处理
                      * */
                     _.map(this.$db.order.orderDetail, v => {
                         v._isModified = false;
                     });
-                    _.map(this.orderForm.fieldUpdate, (v, k) => {
-                        if(k==='attachments'){
-                            k='attachment';
-                        }
-                        this.$db.order.orderDetail[k]._isModified = true;
-                    });
+                    if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
+                        _.map(this.orderForm.fieldUpdate, (v, k) => {
+                            if(k==='attachments'){
+                                k='attachment';
+                            }
+                            this.$db.order.orderDetail[k]._isModified = true;
+                        });
+
+                        _.map(this.orderForm.responsibilityList, v => {
+                            v.fieldUpdates = v.fieldUpdate;
+                            v.fieldUpdate = {};
+                        });
+                    }
                     this.orderForm.fieldUpdate = {};
-                    _.map(this.orderForm.responsibilityList, v => {
-                        v.fieldUpdates = v.fieldUpdate;
-                        v.fieldUpdate = {};
-                    });
                     this.initialData = this.$depthClone(this.orderForm);
                     this.savedIncoterm = Object.assign({}, res).incoterm;
                     _.map(this.supplierOption, v => {
@@ -1707,36 +1633,46 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
-                    _.map(this.productTableData, v => {
-                        if (v.fieldUpdate.value) {
-                            _.map(v.fieldUpdate.value, (value, key) => {
-                                if (key !== "skuPictures") {
-                                    v[key]._style = { "backgroundColor": "yellow" };
-                                }
-                            });
-                            v.fieldUpdate.value = {};
-                        }
-                    });
+                    if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
+                        console.log(this.$depthClone(this.productTableData),'this.productTableData')
+                        _.map(this.productTableData, v => {
+                            if (v.fieldUpdate.value) {
+                                _.map(v.fieldUpdate.value, (value, key) => {
+                                    if (key !== "skuPictures") {
+                                        v[key]._style = { "backgroundColor": "yellow" };
+                                    }
+                                });
+                                v.fieldUpdate.value = {};
+                            }
+                            if(v._remark){
+                                console.log(this.$depthClone(v.fieldRemarkUpdate),'fieldRemarkUpdate')
+                            }
+                        });
+                    }
                     this.markImportant = this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
                     if (res.status !== "2" && res.status !== "3" && res.status !== "4") {
                         this.disableModify = true;
-                    } else {
+                    }
+                    else {
                         this.disableModify = false;
                     }
                     if (res.status !== "2") {
                         this.disableConfirm = true;
-                    } else {
+                    }
+                    else {
                         this.disableConfirm = false;
                     }
                     if (res.status === "4") {
                         this.hasFinishOrder = true;
-                    } else {
+                    }
+                    else {
                         this.hasFinishOrder = false;
                     }
                     if (res.status === "5") {
                         this.hasCancelOrder = true;
-                    } else {
+                    }
+                    else {
                         this.hasCancelOrder = false;
                     }
                     //代表已经接单了
@@ -1816,7 +1752,8 @@
                         });
                     }
                     else{
-                        if(!item.fieldRemarkUpdate){
+                        console.log(item,'item')
+                        if(!item.fieldRemarkUpdate || !item.fieldRemarkUpdate.value){
                             item.fieldRemarkUpdate={value:{}}
                         }
                         _.map(item, (v, k) => {
@@ -1966,7 +1903,8 @@
                     })
                 }
             },
-            changeAttachment(){
+            changeAttachment(a,b){
+                if(b){return}
                 if (!this.orderForm.fieldUpdate) {
                     this.orderForm.fieldUpdate = {};
                 }
@@ -2249,7 +2187,6 @@
                                     }
                                 }
                                 else {
-                                    console.log(k,'key')
                                     json[k] = item[k].value;
                                 }
                             }
@@ -2513,6 +2450,9 @@
                             type: "success",
                             message: this.$i.order.handleSuccess
                         });
+                        _.map(this.$db.order.orderDetail, v => {
+                            v._isModified = false;
+                        });
                         this.$set(data, "status", 40);
                         this.$set(data, "version", res.version);
                     }).finally(() => {
@@ -2604,7 +2544,7 @@
                     ids: [this.orderForm.id],
                     orderNos: [this.orderForm.orderNo]
                 }).then(res => {
-                    this.getDetail();
+                    this.getDetail(false,true);
                 }).finally(err => {
                     this.disableClickConfirm = false;
                 });
@@ -3080,13 +3020,6 @@
                 label: this.$i.order.archiveDraft
             });
         },
-        watch: {
-            allowQuery(n) {
-                if (n === 3) {
-                    this.getDetail();
-                }
-            }
-        }
     };
 </script>
 
