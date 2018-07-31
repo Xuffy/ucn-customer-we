@@ -42,12 +42,12 @@
                                 @click='createOrder'
                                 v-authorize="'ORDER:OVERVIEW:CREATE'">
                             {{($i.order.createOrder)}}</el-button>
-                        <el-button
-                                :disabled='disableFinish'
-                                :loading="disableClickFinish"
-                                @click='finish'
-                                v-authorize="'ORDER:OVERVIEW:SHIPPED'">
-                            {{$i.order.shipped}}({{selectedList.length}})</el-button>
+                        <!--<el-button-->
+                                <!--:disabled='disableFinish'-->
+                                <!--:loading="disableClickFinish"-->
+                                <!--@click='finish'-->
+                                <!--v-authorize="'ORDER:OVERVIEW:SHIPPED'">-->
+                            <!--{{$i.order.shipped}}({{selectedList.length}})</el-button>-->
                         <el-button
                                 v-authorize="'ORDER:OVERVIEW:DOWNLOAD'"
                                 @click="downloadOrder">
