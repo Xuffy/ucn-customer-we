@@ -625,6 +625,36 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.orderTotalNetWeight">
+                            <el-input
+                                class="summaryInput"
+                                size="mini"
+                                v-model="orderForm.totalNetWeight"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.orderTotalGrossWeight">
+                            <el-input
+                                class="summaryInput"
+                                size="mini"
+                                v-model="orderForm.totalGrossWeight"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.orderTotalVolume">
+                            <el-input
+                                class="summaryInput"
+                                size="mini"
+                                v-model="orderForm.totalVolume"
+                                :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
         </div>
