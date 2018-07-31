@@ -1369,7 +1369,7 @@
                 tableDataList: [],
                 searchOptions: [
                     {
-                        label: "inquiryNo",
+                        label: this.$i.order.inquiryNo,
                         id: 1
                     }
                 ],
@@ -1541,9 +1541,6 @@
              * 获取页面数据
              * */
             getUnit() {
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
                 //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL, {}, { cache: true }).then(res => {
                     this.currencyOption = res;
