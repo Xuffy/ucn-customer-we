@@ -848,11 +848,11 @@
                 selectSearch:'',
                 productInfoBtn:[
                     {
-                        label: 'Negotiate',
+                        label: this.$i.order.modify,
                         type: 'negotiate'
                     },
                     {
-                        label: 'Detail',
+                        label: this.$i.order.detail,
                         type: 'detail'
                     }
                 ],

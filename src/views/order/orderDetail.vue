@@ -1276,25 +1276,25 @@
                 selectSearch: "",
                 productInfoBtn: [
                     {
-                        label: "Negotiate",
+                        label: this.$i.order.modify,
                         type: "negotiate"
                     },
                     {
-                        label: "History",
+                        label: this.$i.order.history,
                         type: "history"
                     },
                     {
-                        label: "Detail",
+                        label: this.$i.order.detail,
                         type: "detail"
                     }
                 ],
                 productNotModifyBtn: [
                     {
-                        label: "History",
+                        label: this.$i.order.history,
                         type: "history"
                     },
                     {
-                        label: "Detail",
+                        label: this.$i.order.detail,
                         type: "detail"
                     }
                 ],
