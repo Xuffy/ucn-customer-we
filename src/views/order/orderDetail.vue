@@ -1541,6 +1541,7 @@
              * 获取页面数据
              * */
             getUnit() {
+
                 //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL, {}, { cache: true }).then(res => {
                     this.currencyOption = res;
