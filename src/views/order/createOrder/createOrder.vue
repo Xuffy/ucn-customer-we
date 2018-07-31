@@ -875,7 +875,7 @@
                 tableDataList:[],
                 searchOptions:[
                     {
-                        label:'inquiryNo',
+                        label:this.$i.order.inquiryNo,
                         id:1
                     },
                 ],
@@ -1373,31 +1373,6 @@
                             arr.push(v);
                         }
                     });
-                    if(this.$refs.uploadSkuLabelPic){
-                        this.$refs.uploadSkuLabelPic.reset();
-                    }
-                    if(this.$refs.uploadSkuPkgMethodPic){
-                        this.$refs.uploadSkuPkgMethodPic.reset();
-                    }
-                    if(this.$refs.uploadSkuInnerCartonPic){
-                        this.$refs.uploadSkuInnerCartonPic.reset();
-                    }
-                    if(this.$refs.uploadSkuOuterCartonPic){
-                        this.$refs.uploadSkuOuterCartonPic.reset();
-                    }
-                    if(this.$refs.skuAdditionalOne){
-                        this.$refs.skuAdditionalOne.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalTwo){
-                        this.$refs.uploadSkuAdditionalTwo.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalThree){
-                        this.$refs.uploadSkuAdditionalThree.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalFour){
-                        this.$refs.uploadSkuAdditionalFour.reset();
-                    }
-                    console.log(arr,'arr')
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
