@@ -4,7 +4,7 @@
             <span>{{$i.product.compareDetail}}</span>
         </div>
         <div class="name">
-            <span>Compare Name</span>
+            <span>{{$i.supplier.compareName}}</span>
             <el-input
               :disabled="$route.params.type==='modify' && !isModify"
               size="mini"
@@ -19,7 +19,7 @@
           code="udata_pruchase_supplier_compare_detail_overview"
           :loading="loading"
           :data="tableDataList"
-          :buttons="[{label: 'Detail', type: 1}]"
+          :buttons="[{label: $i.common.detail, type: 1}]"
           @action="btnClick"
           @change-checked="changeChecked"
           @change-sort="sort"
@@ -93,11 +93,11 @@
                   :loading="disableClickSaveModify"
                   type="primary"
                   @click='saveModifyCompare'
-                  v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
+                  v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">{{$i.common.save}}</el-button>
                   <el-button
                     v-if="isModify"
                     :disabled="allowBottomClick"
-                    @click="cancelModify" >Cancel</el-button>
+                    @click="cancelModify" >{{$i.common.cancel}}</el-button>
             </div>
         </div>
 
@@ -396,7 +396,7 @@
             saveCompare(){
                 if(!this.compareName){
                     this.$message({
-                        message: 'Please Input Compare Name',
+                        message: this.$i.supplier.inputCompareName,
                         type: 'warning'
                     });
                     return;

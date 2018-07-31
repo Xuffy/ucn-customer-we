@@ -84,7 +84,7 @@
                   <v-table
                     :data="remarkData"
                     style='marginTop:10px'
-                    :buttons="[{label: 'Modify', type: 2},{label: 'Delete', type: 3}]"
+                    :buttons="[{label: $i.common.modify, type: 2},{label: $i.common.delete, type: 3}]"
                     @action="remarkAction"
                     :selection="false"
                   />

@@ -58,8 +58,9 @@ export default {
     nameCustomer:{
         key:'nameCustomer',
         type: 'String',
-        showType:'input',
+        showType:'textarea',
         belongTab:'basicInfo',
+        fullLine:true
     },
     descCustomer:{
         key:'descCustomer',
