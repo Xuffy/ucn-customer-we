@@ -15,16 +15,33 @@
     </div>
 
     <div class="table-container" ref="tableContainer">
-      <div class="fixed-left" v-if="dataList.length && selection"
-           ref="fixedLeft" :class="{show:dataColumn.length}">
-        <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"
-               @change="changeCheckedAll"/>
-      </div>
-      <div class="fixed-right" v-if="dataList.length && buttons"
-           ref="fixedRight" :class="{show:dataColumn.length}">
-        {{$i.table.action}}
+
+      <!--固定header-->
+      <div class="fixed-header fixed-left-header" v-show="dataList.length">
+        <div class="fixed-left-header-item" v-if="selection" ref="fixedLeft">
+          <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"
+                 @change="changeCheckedAll"/>
+        </div>
+        <div class="fixed-left-header-item">#</div>
+
+        <div class="fixed-left-header-item"
+             v-for="item in dataColumn"
+             v-if="!item._hide && !item._hidden && item.key && item._fixed === 'left'">
+          <v-header-item :item="item"
+                         :change-sort="changeSort"
+                         :current-sort="currentSort"
+                         :disabled-sort="disabledSort"></v-header-item>
+        </div>
+
       </div>
 
+      <div class="fixed-header fixed-right-header" v-show="dataList.length">
+        <div class="fixed-right-header-item" v-if="buttons">
+          {{$i.table.action}}
+        </div>
+      </div>
+
+      <!--表格 渲染-->
       <div class="table-box" id="table-box" ref="tableBox" :style="{'max-height':height + 'px'}">
         <table v-if="dataList.length">
           <thead ref="tableTitle">
@@ -37,28 +54,11 @@
             <td>
               <div>#</div>
             </td>
-            <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key"
-                :class="{'sort-wrapper':item._sort,active:currentSort.orderBy === item.key}">
-              <div>
-                <span @click="item._sort && changeSort(item.key)">{{item.label}}</span>
-
-                <el-popover
-                  v-if="item._note"
-                  placement="bottom-start"
-                  trigger="hover"
-                  :content="item._note">
-                  <i slot="reference" class="el-icon-question"></i>
-                </el-popover>
-
-                <div class="sort-box" v-if="!disabledSort || item._sort" @click="item._sort && changeSort(item.key)">
-                  <i class="el-icon-caret-top"
-                     :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
-                     @click.stop="changeSort(item.key,'asc')"></i>
-                  <i class="el-icon-caret-bottom"
-                     :class="{active:currentSort.orderType === 'desc' && currentSort.orderBy === item.key}"
-                     @click.stop="changeSort(item.key,'desc')"></i>
-                </div>
-              </div>
+            <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key">
+              <v-header-item :item="item"
+                             :change-sort="changeSort"
+                             :current-sort="currentSort"
+                             :disabled-sort="disabledSort"></v-header-item>
             </td>
             <td v-if="buttons" ref="tableAction">
               <div>{{$i.table.action}}</div>
@@ -69,7 +69,9 @@
           <tbody ref="tableBody">
           <tr v-for="(item,index) in dataList"
               :class="{rowspan:index % rowspan !== 0,disabled:item._disabled}">
-            <td v-if="selection && (index % rowspan === 0) " :rowspan="rowspan" class="fixed-box">
+
+            <!--checkbox 渲染-->
+            <td v-if="selection && (index % rowspan === 0) " :rowspan="rowspan" class="fixed-left">
               <div>
                 <input type="checkbox" ref="checkbox" :disabled="item._disabled || item._disabledCheckbox"
                        v-if="typeof selection === 'function' ? selection(item) : true"
@@ -77,11 +79,15 @@
                        v-model="item._checked"/>
               </div>
             </td>
-            <td v-if="index % rowspan === 0" :rowspan="rowspan" class="fixed-box">
+
+            <!--序号 渲染-->
+            <td v-if="index % rowspan === 0" :rowspan="rowspan" class="fixed-left">
               <div v-text="(index / rowspan) + 1"></div>
             </td>
 
+            <!--数据内容 渲染-->
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && !cItem._hidden && cItem.key"
+                :class="{'fixed-left':cItem._fixed === 'left'}"
                 :style="cItem._style">
               <!-- 是否为图片显示 -->
               <v-image class="img" v-if="cItem._image"
@@ -105,8 +111,9 @@
                    :style="{color:cItem._color || '','min-width': cItem._width || setWidth(cItem)}"
                    v-text="cItem._value || cItem.value || (cItem.value === 0 ? cItem.value : '--')"></div>
             </td>
-            <!--操作按钮显示-->
-            <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
+
+            <!--操作按钮 渲染-->
+            <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan" class="fixed-right">
               <div style="white-space: nowrap;">
                 <span class="button"
                       v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
@@ -178,11 +185,12 @@
   import VFilterColumn from './filterColumn'
   import VUpload from '../upload/index'
   import VImage from '../image/index'
+  import VHeaderItem from './headerItem'
   import {mapActions, mapState} from 'vuex';
 
   export default {
     name: 'VTable',
-    components: {VFilterValue, VImage, VFilterColumn, VUpload},
+    components: {VFilterValue, VImage, VFilterColumn, VUpload, VHeaderItem},
     props: {
       data: {
         type: Array,
@@ -348,11 +356,11 @@
           this.tableAttr.sl = sl;
 
           if (this.selection) {
-            this.$refs.fixedLeft.style.width = `${this.$refs.tableCheckbox.offsetWidth}px`;
+            // this.$refs.fixedLeft.style.width = `${this.$refs.tableCheckbox.offsetWidth}px`;
           }
 
           if (this.buttons) {
-            this.$refs.fixedRight.style.width = `${this.$refs.tableAction.offsetWidth}px`;
+            // this.$refs.fixedRight.style.width = `${this.$refs.tableAction.offsetWidth}px`;
           }
 
           if (this.$refs.tableFoot) {
@@ -361,20 +369,28 @@
 
           _.map(trs, (val, index) => {
             if (index % this.rowspan !== 0) return false;
-              _.map(val.getElementsByClassName('fixed-box'), v => {
+            _.map(val.getElementsByClassName('fixed-left'), (v, i) => {
+              let eb = this.$refs.tableContainer.getElementsByClassName('fixed-left-header-item')[i];
 
-                // if (this.selection && val.firstChild.style){
-                  v.style.transform = `translate3d(${sl}px,0,0)`;
-                // }
-              });
-              // console.log(val.getElementsByClassName('fixed-box'))
+              v.style.transform = `translate3d(${sl}px,0,100px)`;
+              if (eb) {
+                eb.style.width = `${v.offsetWidth}px`;
+              }
+            });
 
-            if (this.buttons && val.lastChild.style) {
-              val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.offsetWidth - sw + sl - 14}px,0,0)`;
-            }
+            _.map(val.getElementsByClassName('fixed-right'), (v, i) => {
+              let eb = this.$refs.tableContainer.getElementsByClassName('fixed-right-header-item')[i];
+
+              v.style.transform = `translate3d(${this.$refs.tableBox.offsetWidth - sw + sl}px,0,0)`;
+              if (eb) {
+                eb.style.width = `${v.offsetWidth}px`;
+              }
+            });
+
           });
 
           this.$refs.tableTitle.style.transform = `translate3d(0,${!ele.scrollTop ? 0 : st}px,0)`;
+
         });
       },
       getImage(value, split = ',') {
@@ -413,22 +429,14 @@
         this.resetFile();
         if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
           this.$refs.filterColumn.update(false, val).then(res => {
-            // let to = setTimeout(() => {
-            //   clearTimeout(to);
             this.dataList = this.$refs.filterColumn.getFilterData(val, res);
             type && this.filterColumn();
             this.$nextTick(() => this.setSort())
 
-            // }, 50);
           })
         } else {
-          // let to = setTimeout(() => {
-          //   clearTimeout(to);
           this.dataList = val;
-          // this.setSort();
           type && this.filterColumn();
-
-          // }, 50);
         }
       },
       resetFile() {
@@ -484,32 +492,48 @@
     visibility: hidden !important;
   }
 
-  .ucn-table.fixed-left-box .fixed-left,
-  .ucn-table.fixed-right-box .fixed-right {
+  .fixed-header {
     position: absolute;
     z-index: 4;
     top: 0;
     height: 40px;
-    width: 20px;
     line-height: 40px;
     vertical-align: middle;
     text-align: center;
     color: #999999;
-    display: none;
     background-color: #ECEFF1;
+    display: flex;
+    align-items: center;
   }
 
-  .ucn-table .show {
-    display: block !important;
+  .fixed-right-header {
+    right: 15px;
   }
 
-  .ucn-table.fixed-left-box .fixed-left {
-    left: 0;
-    line-height: 50px;
+  .fixed-left-header-item /deep/ .header-item:before {
+    content: none;
+  }
+
+  .fixed-header > div {
+    position: relative;
+  }
+
+  .fixed-header > div:before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    top: 0;
+    right: -2px;
+    background-color: #dcdbdb;
+  }
+
+  .fixed-right-header > div:before {
+    left: 2px;
   }
 
   .ucn-table .fixed-right {
-    right: 14px;
+    right: 15px;
   }
 
   .ucn-table .table-box {
@@ -530,6 +554,7 @@
     zoom: 130%;
     cursor: pointer;
     margin: 0;
+    vertical-align: middle;
   }
 
   .ucn-table tr {
@@ -542,7 +567,6 @@
     vertical-align: middle;
     text-align: center;
     border-bottom: 1px solid #ebeef5;
-
   }
 
   .ucn-table thead td {
@@ -550,15 +574,8 @@
     color: #999999;
   }
 
-  .ucn-table thead td .el-icon-question {
-    font-size: 16px;
-  }
-
-  .ucn-table thead td,
   .ucn-table tfoot td {
-    word-break: keep-all;
-    padding: 0 10px;
-    position: relative;
+    padding: 0 20px;
   }
 
   .ucn-table tfoot td {
@@ -578,7 +595,6 @@
   }
 
   .ucn-table tfoot td:before {
-    /*content: '';*/
     width: 1px;
     height: 100%;
     position: absolute;
@@ -608,15 +624,13 @@
     white-space: nowrap;
   }
 
-  .ucn-table thead tr td.checkbox:first-child > div {
-    width: 20px;
-  }
-
   .ucn-table tbody td {
     padding: 10px;
     border-right: 1px solid #ebeef5;
   }
 
+  .ucn-table tbody tr:nth-child(even) td.fixed-left,
+  .ucn-table tbody tr:nth-child(even) td.fixed-right,
   .ucn-table tfoot tr:nth-child(even),
   .ucn-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
@@ -631,27 +645,34 @@
     color: #dad8d8;
   }
 
-  .ucn-table.fixed-left-box tbody tr:not(.rowspan) td:first-child,
-  .ucn-table.fixed-right-box tbody tr:not(.rowspan) td:last-child {
-    background-color: #FFFFFF;
+  .ucn-table .fixed-left,
+  .ucn-table .fixed-right {
     position: relative;
+    background-color: #FFFFFF;
   }
 
-  .ucn-table.fixed-right-box tbody tr:not(.rowspan) td:last-child:after,
-  .ucn-table.fixed-left-box tbody tr:not(.rowspan) td:first-child:after {
+  .ucn-table .fixed-left:after {
     content: '';
     position: absolute;
     height: 100%;
     width: 1px;
     top: 0;
-    right: 0;
+    right: -1px;
     background-color: #ebeef5;
-    box-shadow: 3px 0 10px rgba(0, 0, 0, .4);
+  }
+
+  .ucn-table .fixed-right:after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    top: 0;
+    left: 0;
+    background-color: #ebeef5;
   }
 
   .ucn-table.fixed-right-box tbody tr:not(.rowspan) td:last-child:after {
     left: 0;
-    box-shadow: -3px 0 10px rgba(0, 0, 0, .2);
   }
 
   .ucn-table .button {
@@ -708,29 +729,11 @@
   }
 
   .sort-wrapper {
-    padding: 0 10px 0 34px !important;
     cursor: pointer;
+    box-sizing: border-box;
   }
 
-  /*thead td:not(.sort-wrapper) .sort-box {
-    display: none;
-    cursor: initial;
-  }*/
-
-  .sort-box {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    width: 24px;
-    height: 24px;
-    vertical-align: middle;
-    overflow: initial;
-    position: relative;
-    transition: all .3s;
-    opacity: 0;
-  }
-
-  .sort-wrapper.active .sort-box,
+/*  .sort-wrapper.active .sort-box,
   .sort-wrapper:hover .sort-box {
     opacity: 1;
   }
@@ -742,5 +745,5 @@
   .sort-box i.active,
   .sort-box i:hover {
     color: #409EFF;
-  }
+  }*/
 </style>
