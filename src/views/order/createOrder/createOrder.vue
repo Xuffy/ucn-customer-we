@@ -216,7 +216,7 @@
                 <el-table-column
                         prop="customer"
                         align="center"
-                        label="Me">
+                        :label="$i.order.customerBig">
                     <template slot-scope="scope">
                         <el-date-picker
                                 v-model="scope.row.customer"
@@ -232,7 +232,7 @@
                 <el-table-column
                         prop="supplier"
                         align="center"
-                        label="Supplier">
+                        :label="$i.order.supplierBig">
                     <template slot-scope="scope">
                         <el-date-picker
                                 v-model="scope.row.supplier"
@@ -248,7 +248,7 @@
                 <el-table-column
                         prop="Remark"
                         align="center"
-                        label="Remark">
+                        :label="$i.order.remarkBig">
                     <template slot-scope="scope">
                         <el-input
                                 :disabled="true"
@@ -261,7 +261,7 @@
                 <el-table-column
                         prop="actualDate"
                         align="center"
-                        label="Actual Date">
+                        :label="$i.order.actualDate">
                     <template slot-scope="scope">
                         <el-date-picker
                                 v-model="scope.row.actualDt"
