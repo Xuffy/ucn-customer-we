@@ -254,7 +254,7 @@ export default {
     skuComments:{},
     skuStatus:{
         _slot:'skuStatus',
-        _fixed:true
+        _fixed:'left'
     },
     skuSaleStatus:{
         _disabled:true
