@@ -11,6 +11,7 @@
         <el-checkbox v-model="hideSameChecked" @change="changeTbaleData">{{$i.common.hideTheSame}}</el-checkbox>
 
         <v-filter-column v-if="code" ref="filterColumn" :code="code"
+                         :table-ref="() => $refs.tableBox"
                          @change="val => {dataList = $refs.filterColumn.getFilterData(dataList, val)}"></v-filter-column>
       </div>
 
@@ -18,6 +19,8 @@
         :data="dataList"
         height="400"
         style="display:flex;flex-direction:column;"
+        ref="tableBox"
+        stripe
         :cell-style="setCellStyle"
         border>
         <el-table-column v-for="(item,columnIndex) in dataColumn" :key="item.id"
@@ -25,6 +28,7 @@
                          min-width="200px"
                          :fixed="!!item._title || item._fixed"
                          :prop="item.key"
+                         :label-class-name="'location-' + item.key"
                          :label="item.label">
           <template slot-scope="{ row }" v-if="(row[item.key] && !row[item.key]._hide) || item._title">
             <div v-if="!row[item.key]._edit || row[item.key]._title">

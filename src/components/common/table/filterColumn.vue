@@ -22,6 +22,10 @@
             :indent="5"
             :filter-node-method="filterNode"
             ref="columnTree">
+            <div slot-scope="{ node, data }" style="display: flex;justify-content: space-between;width: 100%">
+              {{data._name}}<i class="el-icon-location field-location" v-if="!data.children && data.isChecked"
+                               @click="locationField(data)"></i>
+            </div>
           </el-tree>
         </div>
         <br/>
@@ -49,6 +53,9 @@
         default: '',
       },
       getConfig: {
+        type: Function
+      },
+      tableRef: {
         type: Function
       }
     },
@@ -141,6 +148,30 @@
       cancel() {
         this.visible = false;
         this.update();
+      },
+      locationField(item) {
+        let pe = this.tableRef()
+          , key = item.property
+          , timeout = null
+          , be = pe
+          , e;
+
+        if (_.isUndefined(pe.scrollLeft)) {
+          pe = pe.$el;
+          be = pe.querySelector('.el-table__body-wrapper');
+        }
+
+        e = pe.querySelector(`.location-${key}`);
+
+        if (!_.isEmpty(e)) {
+          be.scrollLeft = e.offsetLeft - (pe.offsetWidth / 2);
+          e.setAttribute('ucn-flicker', 'true');
+          this.cancel();
+          timeout = setTimeout(() => {
+            clearTimeout(timeout);
+            e.removeAttribute('ucn-flicker');
+          }, 4000)
+        }
       }
     }
   }
@@ -168,10 +199,55 @@
     margin-left: 20px;
   }
 
+  .field-location {
+    font-size: 14px;
+    margin-left: 10px;
+    color: #999999;
+  }
+
+  .field-location:hover {
+    color: #3a8ee6;
+  }
+
 
 </style>
 <style>
   .ucn-table .ivu-poptip-body {
     padding: 0;
+  }
+
+  @keyframes ucn-flicker-fade {
+    from {
+      background-color: #b7b7b7;
+      color: #ECEFF1;
+    }
+    50% {
+      background-color: #ECEFF1;
+      color: #999999;
+    }
+    to {
+      background-color: #b7b7b7;
+      color: #ECEFF1;
+    }
+  }
+
+  @-webkit-keyframes ucn-flicker-fade {
+    from {
+      background-color: #b7b7b7;
+      color: #ECEFF1;
+    }
+    50% {
+      background-color: #ECEFF1;
+      color: #999999;
+    }
+    to {
+      background-color: #b7b7b7;
+      color: #ECEFF1;
+    }
+  }
+
+  [ucn-flicker='true'] {
+    animation: ucn-flicker-fade 1.5s infinite;
+    -webkit-animation: ucn-flicker-fade 1.5s infinite;
   }
 </style>

@@ -10,6 +10,7 @@
                         @change="val => {$emit('filter-value',val)}"></v-filter-value>-->
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
+                         :table-ref="() => $refs.tableBox"
                          @change="val => {dataList = $refs.filterColumn.getFilterData(dataList, val)}"></v-filter-column>
       </div>
     </div>
@@ -54,7 +55,8 @@
             <td>
               <div>#</div>
             </td>
-            <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key">
+            <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key"
+                :class="['location-' + item.key]">
               <v-header-item :item="item"
                              :change-sort="changeSort"
                              :current-sort="currentSort"
@@ -355,14 +357,6 @@
           this.tableAttr.st = st;
           this.tableAttr.sl = sl;
 
-          if (this.selection) {
-            // this.$refs.fixedLeft.style.width = `${this.$refs.tableCheckbox.offsetWidth}px`;
-          }
-
-          if (this.buttons) {
-            // this.$refs.fixedRight.style.width = `${this.$refs.tableAction.offsetWidth}px`;
-          }
-
           if (this.$refs.tableFoot) {
             this.$refs.tableFoot.style.transform = `translate3d(0,${-(sh - ele.clientHeight - st - 1)}px,0)`;
           }
@@ -504,6 +498,7 @@
     background-color: #ECEFF1;
     display: flex;
     align-items: center;
+    padding-right: 1px;
   }
 
   .fixed-right-header {
