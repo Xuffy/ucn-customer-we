@@ -361,11 +361,14 @@
 
           _.map(trs, (val, index) => {
             if (index % this.rowspan !== 0) return false;
+              _.map(val.getElementsByClassName('fixed-box'), v => {
 
-            if (this.selection && val.firstChild.style) {
-              console.log(val.getElementsByClassName('fixed-box'))
-              val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
-            }
+                // if (this.selection && val.firstChild.style){
+                  v.style.transform = `translate3d(${sl}px,0,0)`;
+                // }
+              });
+              // console.log(val.getElementsByClassName('fixed-box'))
+
             if (this.buttons && val.lastChild.style) {
               val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.offsetWidth - sw + sl - 14}px,0,0)`;
             }
@@ -547,7 +550,7 @@
     color: #999999;
   }
 
-  .ucn-table thead td .el-icon-question{
+  .ucn-table thead td .el-icon-question {
     font-size: 16px;
   }
 
