@@ -10,16 +10,6 @@ export default {
         showType:'select',
         belongTab:'basicInfo',
         isSaleStatus:true,
-        options:[
-            {
-                label:'下架',
-                value:0
-            },
-            {
-                label:'上架',
-                value:1
-            }
-        ]
     },
     code:{
         key:'code',
@@ -95,16 +85,6 @@ export default {
         showType:'select',
         belongTab:'basicInfo',
         isSkuUnit:true,
-        options:[
-            {
-                label:'kg',
-                value:1
-            },
-            {
-                label:'g',
-                value:2
-            }
-        ]
     },
     formation:{
         key:'formation',
@@ -172,16 +152,6 @@ export default {
         showType:'select',
         belongTab:'basicInfo',
         isReadilyAvailable:true,
-        options:[
-            {
-                label:'有货',
-                value:true
-            },
-            {
-                label:'无货',
-                value:false
-            }
-        ],
     },
     availableQty:{
         key:'availableQty',
@@ -343,6 +313,7 @@ export default {
         key:'refFobPrice',
         showType:'number',
         belongTab:'priceInfo',
+        _note:'Reference FOB price=(EXW+$985/68*CTN volume/Product QTY per CTN)*1.05'
     },
     fobPort:{
         key:'fobPort',
@@ -369,6 +340,7 @@ export default {
         key:'refCifPrice',
         showType:'number',
         belongTab:'priceInfo',
+        _note:'Reference CIF price= FOB+( Ocean freight_USD（40HC）+ Insurance expenses_USD （40HC））/68*CTN volume/ Product QTY per CTN'
     },
     cifCurrency:{
         key:'cifCurrency',
@@ -390,6 +362,7 @@ export default {
         key:'refDduPrice',
         showType:'number',
         belongTab:'priceInfo',
+        _note:'Reference CIF price= FOB+( Ocean freight_USD（40HC）+ Insurance expenses_USD （40HC））/68*CTN volume/ Product QTY per CTN'
     },
     dduCurrency:{
         key:'dduCurrency',
@@ -620,16 +593,6 @@ export default {
         showType:'select',
         belongTab:'packingInfo',
         isOem:true,
-        options:[
-            {
-                label:'yes',
-                value:true
-            },
-            {
-                label:'no',
-                value:false
-            }
-        ]
     },
 
     /**
@@ -742,16 +705,6 @@ export default {
         showType:'select',
         belongTab:'otherInfo',
         isUseDisplayBox:true,
-        options:[
-            {
-                label:'yes',
-                value:true,
-            },
-            {
-                label:'no',
-                value:false,
-            },
-        ]
     },
     displayBoxQty:{
         key:'displayBoxQty',
@@ -783,16 +736,6 @@ export default {
         showType:'select',
         belongTab:'otherInfo',
         isAdjustPackage:true,
-        options:[
-            {
-                label:'yes',
-                value:true,
-            },
-            {
-                label:'no',
-                value:false,
-            },
-        ]
     },
 
 
