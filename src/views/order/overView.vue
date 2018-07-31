@@ -125,13 +125,18 @@
                     {
                         id: 2,
                         label: this.$i.order.skuCode
-                    }
+                    },
+                    {
+                        id: 3,
+                        label: this.$i.order.supplierAbbr
+                    },
                 ],
                 id: '',
                 params: {
                     orderNo: '',
                     skuCode: '',
                     status: '',
+                    supplierAbbr:'',
                     ps: 50,
                     pn: 1,
                     draftCustomer:false,
@@ -201,14 +206,22 @@
                 if (val.id === 1) {
                     this.params.orderNo = val.value;
                     this.params.skuCode = '';
+                    this.params.supplierAbbr = '';
                     this.view='1';
-                    this.getData()
-                } else {
+                }
+                else if(val.id===2){
                     this.params.orderNo = '';
                     this.params.skuCode = val.value;
+                    this.params.supplierAbbr = '';
                     this.view='2';
-                    this.getData()
                 }
+                else if(val.id===3){
+                    this.params.orderNo = '';
+                    this.params.skuCode = '';
+                    this.params.supplierAbbr = val.value;
+                    this.view='1';
+                }
+                this.getData()
             },
             finish() {
                 let ids=[],orderNos=[];
