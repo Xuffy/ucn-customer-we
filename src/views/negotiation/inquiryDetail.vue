@@ -498,11 +498,10 @@ export default {
       }
       let outerCartonQty = item.skuOuterCartonQty.value; // 外箱产品数量
       let outerCartonVolume = item.skuOuterCartonVolume.value; // 外箱体积
-      let exchangeRate = this.custom.exchangeRateUSD; // 汇率
       if (field === 'skuExwPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
         let exwPrice = item.skuExwPrice.value;
-        if (codeUtils.isNumber(exwPrice, outerCartonVolume, outerCartonQty, exchangeRate)) {
-          let fob = exwPrice + 6500 / 68 * outerCartonVolume / outerCartonQty / exchangeRate * 1.05;
+        if (codeUtils.isNumber(exwPrice, outerCartonVolume, outerCartonQty)) {
+          let fob = exwPrice + 6500 / 68 * outerCartonVolume / outerCartonQty * 1.05;
           item.skuRefFobPrice.value = Number(fob.toFixed(8));
         }
       }
@@ -562,7 +561,10 @@ export default {
       parentNode.draft = 0;
       let saveData = this.$filterModify(parentNode);
       saveData.attachment = null;
-      saveData.skuQty = saveData.details.length;
+      saveData.skuQty = 0;
+      saveData.details.filter(i => !isNaN(i.qty)).forEach(i => {
+        saveData.skuQty += Number(i.qty);
+      });
       saveData.deleteDetailIds = this.deleteDetailIds;
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, saveData).then(res => {
         this.newTabData[0].status.originValue = res.status;
