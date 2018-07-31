@@ -2,6 +2,18 @@ export default {
     id: {
         _hide:true
     },
+    expectQcQty:{
+        key:'expectQcQty',
+        showType:'number'
+    },
+    samplingRate:{
+        key:'samplingRate',
+        showType:'number'
+    },
+    unqualifiedProcessingMode:{//不合格处理方式
+        key:'unqualifiedProcessingMode',
+        showType:'input'
+    },
     skuQcResultDictCode:{
         showType:'qc'
     },
@@ -23,18 +35,6 @@ export default {
     weightUnitDictCode:{},
     inboundNo:{},
     orderSkuQty:{},
-    expectQcQty:{
-        key:'expectQcQty',
-        showType:'number'
-    },
-    samplingRate:{
-        key:'samplingRate',
-        showType:'number'
-    },
-    unqualifiedProcessingMode:{//不合格处理方式
-        key:'unqualifiedProcessingMode',
-        showType:'input'
-    },
     outerCartonTotalQty:{},
     skuLength:{},
     skuWidth:{},

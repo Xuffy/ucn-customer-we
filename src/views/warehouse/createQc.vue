@@ -649,9 +649,9 @@
                                 v.actSkuCartonTotalQty = '';
                                 v.outerCartonGrossWeight = '';
                                 v.actInnerCartonSkuQty = '';
-                                v.innerCartonSkuQty = '来自Order';
+                                v.innerCartonSkuQty = '';// 来自Order
                                 v.actOuterCartonInnerBoxQty = '';
-                                v.outerCartonInnerBoxQty = '来自Order';
+                                v.outerCartonInnerBoxQty = '';// 来自Order
                                 v.actOuterCartonSkuQty = '';
                                 v.unqualifiedProcessingMode = '';
                                 v.samplingRate = '';
