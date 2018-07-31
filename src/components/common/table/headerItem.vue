@@ -64,6 +64,7 @@
     align-items: center;
     padding: 0 20px;
     position: relative;
+    justify-content: center;
   }
 
   .header-item:before {

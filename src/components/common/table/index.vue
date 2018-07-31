@@ -460,8 +460,12 @@
         });
       },
       setWidth(item) {
+        // item.value = 'sadasd耍哈斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬sadasd耍哈斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬sadasd耍哈斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬'
         let val = item._value || item.value;
-        return _.isString(val) && val.length > 50 ? `${val.length * 2}px` : '80px';
+        if (_.isString(val)) {
+
+          return `${val.length / 2 * 14}px`;
+        }
       }
     },
     beforeDestroy() {
@@ -728,17 +732,17 @@
     box-sizing: border-box;
   }
 
-/*  .sort-wrapper.active .sort-box,
-  .sort-wrapper:hover .sort-box {
-    opacity: 1;
-  }
+  /*  .sort-wrapper.active .sort-box,
+    .sort-wrapper:hover .sort-box {
+      opacity: 1;
+    }
 
-  .sort-box i {
-    height: 10px;
-  }
+    .sort-box i {
+      height: 10px;
+    }
 
-  .sort-box i.active,
-  .sort-box i:hover {
-    color: #409EFF;
-  }*/
+    .sort-box i.active,
+    .sort-box i:hover {
+      color: #409EFF;
+    }*/
 </style>
