@@ -5,7 +5,10 @@
       @after-leave="update()"
       placement="bottom-end"
       trigger="click">
-      <i slot="reference" class="iconfont icon-shezhi"></i>
+      <div slot="reference" class="icon-btn">
+        <i class="iconfont icon-shezhi"></i>&nbsp;
+        <span>{{$i.table.setField}}</span>
+      </div>
       <div v-loading="loading">
         <el-input v-model="filterText" :placeholder="$i.common.content" prefix-icon="el-icon-search"
                   size="mini" clearable style="margin-bottom: 10px"></el-input>
@@ -156,6 +159,15 @@
     color: #666666;
     cursor: pointer;
   }
+
+  .filter-column .icon-btn {
+    color: #666666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+  }
+
 
 </style>
 <style>

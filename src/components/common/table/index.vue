@@ -34,15 +34,23 @@
                 <input type="checkbox" :class="{visibility:selectionRadio}"/>
               </div>
             </td>
-            <td v-if="rowspan < 2">
+            <td>
               <div>#</div>
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key"
-                :class="{'sort-wrapper':item._sort,active:currentSort.orderBy === item.key}"
-                @click="item._sort && changeSort(item.key)">
+                :class="{'sort-wrapper':item._sort,active:currentSort.orderBy === item.key}">
               <div>
-                {{item.label}}
-                <div class="sort-box" v-if="!disabledSort || item._sort">
+                <span @click="item._sort && changeSort(item.key)">{{item.label}}</span>
+
+                <el-popover
+                  v-if="item._note"
+                  placement="bottom-start"
+                  trigger="hover"
+                  :content="item._note">
+                  <i slot="reference" class="el-icon-question"></i>
+                </el-popover>
+
+                <div class="sort-box" v-if="!disabledSort || item._sort" @click="item._sort && changeSort(item.key)">
                   <i class="el-icon-caret-top"
                      :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
                      @click.stop="changeSort(item.key,'asc')"></i>
@@ -61,7 +69,7 @@
           <tbody ref="tableBody">
           <tr v-for="(item,index) in dataList"
               :class="{rowspan:index % rowspan !== 0,disabled:item._disabled}">
-            <td v-if="selection && (index % rowspan === 0) " :rowspan="rowspan">
+            <td v-if="selection && (index % rowspan === 0) " :rowspan="rowspan" class="fixed-box">
               <div>
                 <input type="checkbox" ref="checkbox" :disabled="item._disabled || item._disabledCheckbox"
                        v-if="typeof selection === 'function' ? selection(item) : true"
@@ -69,8 +77,8 @@
                        v-model="item._checked"/>
               </div>
             </td>
-            <td v-if="rowspan < 2" :rowspan="rowspan">
-              <div v-text="index + 1"></div>
+            <td v-if="index % rowspan === 0" :rowspan="rowspan" class="fixed-box">
+              <div v-text="(index / rowspan) + 1"></div>
             </td>
 
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && !cItem._hidden && cItem.key"
@@ -355,6 +363,7 @@
             if (index % this.rowspan !== 0) return false;
 
             if (this.selection && val.firstChild.style) {
+              console.log(val.getElementsByClassName('fixed-box'))
               val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
             }
             if (this.buttons && val.lastChild.style) {
@@ -538,6 +547,10 @@
     color: #999999;
   }
 
+  .ucn-table thead td .el-icon-question{
+    font-size: 16px;
+  }
+
   .ucn-table thead td,
   .ucn-table tfoot td {
     word-break: keep-all;
@@ -598,17 +611,12 @@
 
   .ucn-table tbody td {
     padding: 10px;
-    border-right: 1px solid #FFFFFF;
+    border-right: 1px solid #ebeef5;
   }
 
   .ucn-table tfoot tr:nth-child(even),
   .ucn-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
-  }
-
-  .ucn-table tfoot tr:nth-child(even) td,
-  .ucn-table tbody tr:nth-child(even) td {
-    border-right: 1px solid #f9f9f9;
   }
 
   .ucn-table tbody td .img {

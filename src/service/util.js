@@ -283,24 +283,26 @@ export default {
    * @type {{contrast(*=, *=): *, setHighlight(*=): *, setHideSame(*=): *}}
    */
   $table: {
-    contrast(data, type) {
+    contrast(data, type, ignore) {
       if (_.isEmpty(data)) return [];
 
       let first = data[0], keyData = {};
 
       _.map(data, value => {
-        _.mapObject(value, (val, key) => {
-          if (type === 'same' && first[key]) {
-            keyData[key] = first[key].value === val.value;
-          } else if (type === 'def' && first[key] && first[key].value !== val.value) {
-            keyData[key] = true;
-          }
-        });
+        if (!ignore || _.isEmpty(value[ignore])) {
+          _.mapObject(value, (val, key) => {
+            if (type === 'same' && first[key]) {
+              keyData[key] = first[key].value === val.value;
+            } else if (type === 'def' && first[key] && first[key].value !== val.value) {
+              keyData[key] = true;
+            }
+          });
+        }
       });
       return keyData;
     },
-    setHighlight(data) {
-      let keyData = this.contrast(data, 'def')
+    setHighlight(data, ignore) {
+      let keyData = this.contrast(data, 'def', ignore)
         , len = _.values(keyData).length
         , i = 0;
       keyData = _.mapObject(keyData, (val) => {
@@ -323,12 +325,24 @@ export default {
         });
       });
     },
-    setHideSame(data) {
-      let keyData = this.contrast(data, 'same');
+    setHideSame(data, ignore) {
+      let keyData = this.contrast(data, 'same', ignore);
       return _.map(data, value => {
         return _.mapObject(value, (val, key) => {
           if (keyData[key] && _.isObject(val)) {
             val._hide = keyData[key];
+            val._hideSame = true;
+          }
+          return val;
+        });
+      });
+    },
+    revertHideSame(data){
+      console.log(data)
+      return _.map(data, value => {
+        return _.mapObject(value, (val, key) => {
+          if (_.isObject(val) && val._hideSame) {
+            val._hide = false;
           }
           return val;
         });
