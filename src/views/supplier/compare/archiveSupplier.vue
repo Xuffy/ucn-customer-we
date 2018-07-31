@@ -8,8 +8,6 @@
       v-loading="loadingTable"
       class="speTable"
       :data="tableDataList"
-      :buttons="[{label: $i.button.detail, type: 2}]"
-      @action="btnClick"
       @change-checked="changeChecked">
       <template slot="header">
         <div class="btns">
@@ -122,30 +120,6 @@
       getSort(val, key) {
         console.log(val, key)
       },
-
-      btnClick(e,type){
-        if(type===1){
-          //modify
-          this.$windowOpen({
-            url:'/supplier/compareDetail/modify',
-            params:{
-              isModify:true,
-              compareId:e.id.value,
-              compareName:e.name.value
-            },
-          });
-        }else if(type===2){
-          //Detail
-          this.$windowOpen({
-            url:'/supplier/compareDetail/modify',
-            params:{
-              compareId:e.id.value,
-              compareName:e.name.value
-            },
-          });
-        }
-      },
-
       changeChecked(e){
         this.selectList=e;
       },

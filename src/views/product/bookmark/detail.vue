@@ -113,7 +113,7 @@
                                                 {{productForm[v.key]}}
                                             </div>
                                             <div v-else>
-                                                <div v-if="v.key==='descCustomer'">
+                                                <div v-if="v.key==='descCustomer' || v.key==='nameCustomer'">
                                                     <el-input
                                                             :disabled="notEdit"
                                                             type="textarea"
@@ -122,7 +122,7 @@
                                                             v-model="productForm[v.key]">
                                                     </el-input>
                                                 </div>
-                                                <div v-else-if="v.key==='customerSkuCode' || v.key==='nameCustomer'">
+                                                <div v-else-if="v.key==='customerSkuCode'">
                                                     <el-input :disabled="notEdit" v-model="productForm[v.key]"
                                                               placeholder="please input"></el-input>
                                                 </div>
