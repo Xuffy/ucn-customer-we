@@ -22,7 +22,6 @@
                 </selectSearch>
             </div>
         </div>
-        <!--form-->
         <v-table
                 :code="tableCode"
                 ref='vtable'
@@ -121,11 +120,11 @@
                 options: [
                     {
                         id: 1,
-                        label: 'Order No'
+                        label: this.$i.order.orderNo
                     },
                     {
                         id: 2,
-                        label: 'Sku Code'
+                        label: this.$i.order.skuCode
                     }
                 ],
                 id: '',

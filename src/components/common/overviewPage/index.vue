@@ -2,11 +2,6 @@
     <div class="overview">
         <div class="title">
             <span>{{title}}</span>
-            <el-button class="title-btn"
-                       v-if="showAdvancedBtn"
-                       @click="hideBody = !hideBody"
-                       type="text">{{hideBody?$i.product.advanced:$i.product.hideTheAdvanced}}
-            </el-button>
         </div>
         <div class="search-option">
             <el-form :label-width="`${labelWidth}px`">
@@ -101,8 +96,21 @@
             </el-form>
         </div>
         <div class="search-btn">
-            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
+            <el-button
+                    @click="search"
+                    :loading="disabledSearch"
+                    type="primary">{{$i.product.search}}</el-button>
+            <el-button
+                    @click="clear"
+                    type="info"
+                    plain>{{$i.product.clear}}</el-button>
+            <el-button
+                    class="advancedBtn"
+                    type="text"
+                    v-if="showAdvancedBtn"
+                    @click="hideBody = !hideBody">
+                {{hideBody?$i.product.advanced:$i.product.hideTheAdvanced}}
+            </el-button>
         </div>
         <div class="table">
             <v-table
@@ -350,9 +358,8 @@
         color: #666666;
         margin-bottom: 5px;
     }
-    .title-btn {
-        float: right;
-        margin-right: 5px;
+    .advancedBtn >>> span{
+        text-decoration: underline;
     }
     .body {
         overflow: hidden;

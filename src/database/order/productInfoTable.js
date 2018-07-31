@@ -250,7 +250,8 @@ export default {
     },
     skuComments:{},
     skuStatus:{
-        _slot:'skuStatus'
+        _slot:'skuStatus',
+        _fixed:true
     },
     skuSaleStatus:{
         _disabled:true
