@@ -518,7 +518,7 @@
                     pn: 1,
                     ps: 10,
                     sorts: [],
-                    id: Number(this.$route.query.id)
+                    id: this.$route.query.id
                 },
                 formLabelWidth: "80px",
                 remarkTableData: [],
@@ -607,8 +607,6 @@
                 this.productForm.descCustomer = this.copyDescCustomer;
                 this.productForm.nameCustomer = this.copyNameCustomer;
             },
-
-            //删除bookmark
             deleteBookmark() {
                 this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
                     confirmButtonText: this.$i.product.sure,
@@ -616,7 +614,12 @@
                     type: "warning"
                 }).then(() => {
                     this.disableClickDelete = true;
-                    this.$ajax.post(this.$apis.delete_buyerProductBookmark, [this.$route.query.bookmarkId]).then(res => {
+                    this.$ajax.post(this.$apis.delete_buyerProductBookmark, [
+                        {
+                            id:this.$route.query.bookmarkId,
+                            name:this.productForm.nameEn
+                        }
+                    ]).then(res => {
                         this.$message({
                             type: "success",
                             message: "删除成功!"
@@ -677,7 +680,7 @@
             },
             getTableData() {
                 this.$ajax.get(this.$apis.get_buyerProductDetail, {
-                    id: Number(this.$route.query.id)
+                    id: this.$route.query.id
                 }).then(res => {
                     this.productForm = res;
 

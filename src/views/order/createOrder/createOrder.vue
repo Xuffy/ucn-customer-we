@@ -307,7 +307,6 @@
                 </div>
             </template>
         </v-table>
-
         <div class="footBtn">
             <el-button
                     :disabled="loadingPage"
@@ -325,7 +324,6 @@
                     type="primary"
                     @click="quickCreate">{{$i.order.quickCreate}}</el-button>
         </div>
-
         <el-dialog
             :visible.sync="quickCreateDialogVisible"
             width="70%">
@@ -352,7 +350,6 @@
                     :pageSizes="[50,100,200]"
                     :page-data="pageData"></page>
         </el-dialog>
-
         <el-dialog
                 custom-class="ucn-dialog-center"
                 :title="$i.order.addProduct"
@@ -380,7 +377,6 @@
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
-
         <v-history-modify
                 code="uorder_sku_list"
                 @closed="$refs.table.update()"
@@ -1225,10 +1221,6 @@
                     // this.orderForm.orderNo=this.$route.query.orderId;
                     this.getSupplier();
                 }else{
-
-                    // this.orderForm.orderNo='1241241245125125152135';
-                    // this.getSupplier();
-
                     this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
                         this.orderForm.orderNo=res;
                         this.getSupplier();
