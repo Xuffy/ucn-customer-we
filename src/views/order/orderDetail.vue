@@ -1249,7 +1249,6 @@
         data() {
             return {
                 options: [],
-                test: 1,
                 /**
                  * 字典配置
                  * */
@@ -2053,7 +2052,6 @@
                     _.map(res.datas, v => {
                         array.push(JSON.parse(v.history));
                     });
-                    console.log(array,'array')
 
                     let history=this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode"),item=>{
                         if (item._remark) {

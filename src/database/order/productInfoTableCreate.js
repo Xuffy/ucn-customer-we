@@ -263,11 +263,9 @@ export default {
     skuShippingMarks:{},
     skuOuterCartonBarCode:{},
     skuOuterCartonCode:{},
-    skuLabelPic:{
-        _slot:'skuLabelPic',
-        _image:true,
+    skuLabelPics:{
         _upload: {
-            limit:1
+            limit:20
         }
     },
     skuLabelDesc:{},

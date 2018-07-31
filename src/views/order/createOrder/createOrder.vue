@@ -1073,7 +1073,6 @@
                 }
 
                 params.skuList=this.dataFilter(this.productTableData);
-                // return console.log(params.skuList,'params.skuList')
                 let rightCode=true;
                 _.map(params.skuList,v=>{
                     if(v.skuSupplierCode!==params.supplierCode){
@@ -1081,7 +1080,7 @@
                     }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     v.skuInspectQuarantineCategory=v.skuInspectQuarantineCategory?_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code:'';
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
@@ -1135,7 +1134,7 @@
                     if(v.skuInspectQuarantineCategory){
                         v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
                     }
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
@@ -1176,7 +1175,7 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
@@ -1333,7 +1332,7 @@
                             if(item._remark){
                                 item.label.value=this.$i.order.remarks;
                                 item.skuPictures._image=false;
-                                item.skuLabelPic._image=false;
+                                item.skuLabelPics._image=false;
                                 item.skuPkgMethodPic._image=false;
                                 item.skuInnerCartonPic._image=false;
                                 item.skuOuterCartonPic._image=false;
@@ -1481,7 +1480,7 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
@@ -1582,7 +1581,7 @@
                                         json[k]=_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code;
                                     }
                                     else if(item[k].key==='skuSample'){
-                                        json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                        json[k]=(_.findWhere(this.isNeedSampleOption,{name:item[k]._value}) || {}).code;
                                     }
                                     else if(item[k].key==='skuInspectQuarantineCategory'){
                                         json[k]=_.findWhere(this.quarantineTypeOption,{name:item[k]._value}).code;
@@ -1737,7 +1736,7 @@
                             skuInventoryCostMethod: '',
                             skuLabel: '',
                             skuLabelDesc: '',
-                            skuLabelPic: '',
+                            skuLabelPics: '',
                             skuLength: null,
                             skuLengthWidthHeight: '',
                             skuMainSaleArea: '',
@@ -1918,7 +1917,7 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
