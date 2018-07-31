@@ -210,23 +210,23 @@
             </el-row>
         </el-form>
         <!--<div class="title">-->
-            <!--{{$i.order.exchangeRate}}-->
+        <!--{{$i.order.exchangeRate}}-->
         <!--</div>-->
         <!--<el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">-->
-            <!--<el-row>-->
-                <!--<el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12"-->
-                        <!--:md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order[v.currency]">-->
-                        <!--<el-input-number-->
-                                <!--:disabled="true"-->
-                                <!--:placeholder="$i.order.pleaseInput"-->
-                                <!--class="speInput speNumber"-->
-                                <!--v-model="v.exchangeRate"-->
-                                <!--:controls="false">-->
-                        <!--</el-input-number>-->
-                    <!--</el-form-item>-->
-                <!--</el-col>-->
-            <!--</el-row>-->
+        <!--<el-row>-->
+        <!--<el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12"-->
+        <!--:md="12" :lg="8" :xl="8">-->
+        <!--<el-form-item :label="$i.order[v.currency]">-->
+        <!--<el-input-number-->
+        <!--:disabled="true"-->
+        <!--:placeholder="$i.order.pleaseInput"-->
+        <!--class="speInput speNumber"-->
+        <!--v-model="v.exchangeRate"-->
+        <!--:controls="false">-->
+        <!--</el-input-number>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--</el-row>-->
         <!--</el-form>-->
         <div class="title">
             {{$i.order.responsibility}}
@@ -336,7 +336,6 @@
                     class="payTable"
                     :data="paymentData"
                     border
-                    max-height="300px"
                     :summary-method="getSummaries"
                     show-summary
                     :row-class-name="tableRowClassName"
@@ -360,12 +359,18 @@
                         :label="$i.order.payName"
                         width="180">
                     <template slot-scope="scope">
-                        <el-input
+                        <el-select
                                 v-if="scope.row.isNew || scope.row.isModify"
-                                :placeholder="$i.order.pleaseInput"
                                 v-model="scope.row.name"
-                                clearable>
-                        </el-input>
+                                clearable
+                                :placeholder="$i.order.pleaseChoose">
+                            <el-option
+                                    v-for="item in paymentItemOption"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.code">
+                            </el-option>
+                        </el-select>
                         <span v-else>{{scope.row.name}}</span>
                     </template>
                 </el-table-column>
@@ -459,6 +464,20 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                        prop="remark"
+                        :label="$i.order.remarkBig"
+                        width="200">
+                    <template slot-scope="scope">
+                        <el-input
+                                v-if="scope.row.isNew || scope.row.isModify"
+                                :placeholder="$i.order.pleaseInput"
+                                v-model="scope.row.remark"
+                                clearable>
+                        </el-input>
+                        <span v-else>{{scope.row.remark}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
                         prop="currencyCode"
                         :label="$i.order.payCurrency"
                         width="180">
@@ -480,7 +499,7 @@
                         fixed="right"
                         :label="$i.order.action"
                         align="center"
-                        width="125">
+                        width="160">
                     <template slot-scope="scope">
                         <div v-if="scope.row.status===10">
                             <el-button
@@ -625,30 +644,30 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.order.orderTotalNetWeight">
                             <el-input
-                                class="summaryInput"
-                                size="mini"
-                                v-model="orderForm.totalNetWeight"
-                                :disabled="true">
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalNetWeight"
+                                    :disabled="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.order.orderTotalGrossWeight">
                             <el-input
-                                class="summaryInput"
-                                size="mini"
-                                v-model="orderForm.totalGrossWeight"
-                                :disabled="true">
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalGrossWeight"
+                                    :disabled="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.order.orderTotalVolume">
                             <el-input
-                                class="summaryInput"
-                                size="mini"
-                                v-model="orderForm.totalVolume"
-                                :disabled="true">
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalVolume"
+                                    :disabled="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -1238,7 +1257,7 @@
         data() {
             return {
                 options: [],
-                test: 1,
+
                 /**
                  * 字典配置
                  * */
@@ -1260,6 +1279,7 @@
                 skuStatusOption: [],
                 skuStatusTotalOption: [],
                 skuSaleStatusOption: [],
+                paymentItemOption: [],
 
                 /**
                  * Negotiate 插槽变量
@@ -1533,11 +1553,11 @@
              * 获取页面数据
              * */
             getUnit() {
-                let currency,country,exchangeRate,unit;
-                currency=this.$ajax.get(this.$apis.CURRENCY_ALL, {}, { cache: true });
-                country=this.$ajax.get(this.$apis.COUNTRY_ALL, {}, { cache: true });
-                exchangeRate=this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY, {}, { cache: true });
-                unit=this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "ORDER_STATUS", "SKU_SALE_STATUS", "SKU_STATUS"], { cache: true });
+                let currency, country, exchangeRate, unit;
+                currency = this.$ajax.get(this.$apis.CURRENCY_ALL, {}, { cache: true });
+                country = this.$ajax.get(this.$apis.COUNTRY_ALL, {}, { cache: true });
+                exchangeRate = this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY, {}, { cache: true });
+                unit = this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "ORDER_STATUS", "SKU_SALE_STATUS", "SKU_STATUS", "PAYMENT_ITEM_NAME"], { cache: true });
                 this.skuStatusOption = [
                     {
                         code: "PROCESS",
@@ -1548,7 +1568,7 @@
                         name: "CANCLED"
                     }
                 ];
-                this.$ajax.all([currency,country,exchangeRate,unit]).then(res=>{
+                this.$ajax.all([currency, country, exchangeRate, unit]).then(res => {
                     this.currencyOption = res[0];
                     this.countryOption = res[1];
                     _.map(this.orderForm.exchangeRateList, v => {
@@ -1585,12 +1605,14 @@
                             this.skuSaleStatusOption = v.codes;
                         } else if (v.code === "SKU_STATUS") {
                             this.skuStatusTotalOption = v.codes;
+                        } else if (v.code === "PAYMENT_ITEM_NAME") {
+                            this.paymentItemOption = v.codes;
                         }
                     });
                     this.getDetail();
                 });
             },
-            getDetail(e,isTrue) {
+            getDetail(e, isTrue) {
                 this.loadingPage = true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL, {
                     orderId: this.$route.query.orderId,
@@ -1603,10 +1625,10 @@
                     _.map(this.$db.order.orderDetail, v => {
                         v._isModified = false;
                     });
-                    if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
+                    if (this.orderForm.status === "1" || this.orderForm.status === "2" && !isTrue) {
                         _.map(this.orderForm.fieldUpdate, (v, k) => {
-                            if(k==='attachments'){
-                                k='attachment';
+                            if (k === "attachments") {
+                                k = "attachment";
                             }
                             this.$db.order.orderDetail[k]._isModified = true;
                         });
@@ -1663,8 +1685,7 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
-                    if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
-                        console.log(this.$depthClone(this.productTableData),'this.productTableData')
+                    if (this.orderForm.status === "1" || this.orderForm.status === "2" && !isTrue) {
                         _.map(this.productTableData, v => {
                             if (v.fieldUpdate.value) {
                                 _.map(v.fieldUpdate.value, (value, key) => {
@@ -1674,8 +1695,8 @@
                                 });
                                 v.fieldUpdate.value = {};
                             }
-                            if(v._remark){
-                                console.log(this.$depthClone(v.fieldRemarkUpdate),'fieldRemarkUpdate')
+                            if (v._remark) {
+                                // console.log(this.$depthClone(v.fieldRemarkUpdate),'fieldRemarkUpdate')
                             }
                         });
                     }
@@ -1725,8 +1746,12 @@
                 this.loadingPaymentTable = true;
                 this.$ajax.post(this.$apis.PAYMENT_LIST, {
                     orderNo: this.orderForm.orderNo,
-                    orderType: 10
+                    orderType: 10,
+                    moduleCode: "ORDER"
                 }).then(res => {
+                    _.map(res.datas, v => {
+                        v.name = (_.findWhere(this.paymentItemOption, { code: v.name }) || {}).name;
+                    });
                     this.paymentData = res.datas;
                 }).finally(err => {
                     this.loadingPaymentTable = false;
@@ -1781,10 +1806,10 @@
                             }
                         });
                     }
-                    else{
-                        console.log(item,'item')
-                        if(!item.fieldRemarkUpdate || !item.fieldRemarkUpdate.value){
-                            item.fieldRemarkUpdate={value:{}}
+                    else {
+                        console.log(item, "item");
+                        if (!item.fieldRemarkUpdate || !item.fieldRemarkUpdate.value) {
+                            item.fieldRemarkUpdate = { value: {} };
                         }
                         _.map(item, (v, k) => {
                             if (v._isModified) {
@@ -1913,39 +1938,41 @@
                     this.orderForm.fieldUpdate = {};
                 }
                 this.orderForm.fieldUpdate[key] = "";
-                if(key==='incoterm'){
-                    _.map(this.productTableData,item=>{
-                        if(!item._remark){
-                            if(this.orderForm[key] === '1'){
+                if (key === "incoterm") {
+                    _.map(this.productTableData, item => {
+                        if (!item._remark) {
+                            if (this.orderForm[key] === "1") {
                                 //fob
-                                item.skuPrice.value=item.skuFobPrice.value*(item.skuQty.value?item.skuQty.value:0);
-                            }else if(this.orderForm[key] === '2'){
+                                item.skuPrice.value = item.skuFobPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            } else if (this.orderForm[key] === "2") {
                                 //exw
-                                item.skuPrice.value=item.skuExwPrice.value*(item.skuQty.value?item.skuQty.value:0);
-                            }else if(this.orderForm[key] === '3'){
+                                item.skuPrice.value = item.skuExwPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            } else if (this.orderForm[key] === "3") {
                                 //cif
-                                item.skuPrice.value=item.skuCifPrice.value*(item.skuQty.value?item.skuQty.value:0);
-                            }else if(this.orderForm[key] === '4'){
+                                item.skuPrice.value = item.skuCifPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            } else if (this.orderForm[key] === "4") {
                                 //ddu
-                                item.skuPrice.value=item.skuDduPrice.value*(item.skuQty.value?item.skuQty.value:0);
+                                item.skuPrice.value = item.skuDduPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
                             }
                         }
-                    })
+                    });
                 }
             },
-            changeAttachment(a,b){
-                if(b){return}
+            changeAttachment(a, b) {
+                if (b) {
+                    return;
+                }
                 if (!this.orderForm.fieldUpdate) {
                     this.orderForm.fieldUpdate = {};
                 }
-                this.orderForm.fieldUpdate['attachments'] = "";
+                this.orderForm.fieldUpdate["attachments"] = "";
             },
 
             /**
              * responsibility事件
              * */
             handleResponsibilityChange(data, key) {
-                this.orderForm.responsibilityFlag=true;
+                this.orderForm.responsibilityFlag = true;
                 if (!data.fieldUpdate) {
                     data.fieldUpdate = {};
                 }
@@ -1981,7 +2008,7 @@
                             arr.push(v);
                         }
                     });
-                    this.chooseProduct=this.getHistory(e,arr,true);
+                    this.chooseProduct = this.getHistory(e, arr, true);
                 }
                 else if (type === "detail") {
                     this.$windowOpen({
@@ -1995,16 +2022,16 @@
                     let data = _.filter(this.productTableData, (m) =>
                         m.skuSysCode.value === e.skuSysCode.value
                     );
-                    this.getHistory(e,data);
+                    this.getHistory(e, data);
                 }
             },
-            getHistory(e,data,isTrue){
+            getHistory(e, data, isTrue) {
                 let param = {
                     operatorFilters: [],
                     orderId: this.$route.query.orderId,
                     pn: 1,
                     ps: 50,
-                    skuId: e.skuId.value,
+                    skuId: e.skuId.value
                 };
 
                 this.$ajax.post(this.$apis.ORDER_HISTORY, param).then(res => {
@@ -2013,7 +2040,7 @@
                         array.push(JSON.parse(v.history));
                     });
 
-                    let history=this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode"),item=>{
+                    let history = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode"), item => {
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
                             if (item.skuPictures) {
@@ -2048,7 +2075,7 @@
                         }
                     });
 
-                    return this.$refs.HM.init(data, history, isTrue?true:false);
+                    return this.$refs.HM.init(data, history, isTrue ? true : false);
                 }).finally(() => {
 
                 });
@@ -2174,9 +2201,9 @@
                     jsons = {};
                     if (item._remark) { //拼装remark 数据
                         for (let k in item) {
-                            if(k==='fieldRemarkUpdate'){
-                                json[k]=item[k].value;
-                            }else{
+                            if (k === "fieldRemarkUpdate") {
+                                json[k] = item[k].value;
+                            } else {
                                 jsons[k] = item[k].value;
                             }
                         }
@@ -2243,10 +2270,10 @@
                         actualPayAmount: "",
                         currencyCode: this.initialData.currency,
                         status: 20,
+                        remark:'',
                         isNew: true
                     });
-                    // this.disableApplyPay=true;
-                }).finally(err => {
+                }).finally(() => {
                     this.disableClickApplyPay = false;
                 });
             },
@@ -2291,7 +2318,9 @@
                     payToCompanyName: this.orderForm.supplierName,
                     planPayAmount: data.planPayAmount,
                     planPayDt: data.planPayDt,
-                    type: 10
+                    remark:data.remark,
+                    type: 10,
+                    moduleCode: "ORDER"
                 };
                 _.map(this.currencyOption, v => {
                     if (v.code === data.currencyCode) {
@@ -2305,6 +2334,7 @@
                         message: this.$i.order.saveSuccess,
                         type: "success"
                     });
+                    this.$set(data,'name',(_.findWhere(this.paymentItemOption,{code:res.name} || {}).name));
                     this.$set(data, "isNew", false);
                     this.$set(data, "version", res.version);
                     this.$set(data, "id", res.id);
@@ -2321,6 +2351,7 @@
                 });
             },
             modifyPay(data) {
+                data.name = (_.findWhere(this.paymentItemOption, { name: data.name }) || {}).code;
                 this.$set(data, "isModify", true);
                 let has = false;
                 this.copyList.forEach(v => {
@@ -2340,7 +2371,9 @@
                     name: data.name,
                     planPayAmount: data.planPayAmount,
                     planPayDt: data.planPayDt,
-                    version: data.version
+                    version: data.version,
+                    remark:data.remark,
+                    moduleCode: "ORDER"
                 };
                 this.loadingPaymentTable = true;
                 this.$ajax.post(this.$apis.PAYMENT_UPDATE, param).then(res => {
@@ -2357,8 +2390,10 @@
                             this.$set(v, "planPayAmount", obj.planPayAmount);
                             this.$set(v, "actualPayDt", obj.actualPayDt);
                             this.$set(v, "actualPayAmount", obj.actualPayAmount);
+                            this.$set(v, "remark", obj.remark);
                         }
                     });
+                    this.$set(data, "name", (_.findWhere(this.paymentItemOption, { code: res.name }) || {}).name);
                     this.$set(data, "isModify", false);
                     this.$set(data, "version", res.version);
                     this.$set(data, "status", res.status);
@@ -2370,11 +2405,12 @@
                 this.copyList.forEach(v => {
                     if (v.no === data.no) {
                         let obj = Object.assign({}, v);
-                        this.$set(data, "name", obj.name);
+                        this.$set(data, "name", (_.findWhere(this.paymentItemOption, { code: obj.name }) || {}).name);
                         this.$set(data, "planPayDt", obj.planPayDt);
                         this.$set(data, "planPayAmount", obj.planPayAmount);
                         this.$set(data, "actualPayDt", obj.actualPayDt);
                         this.$set(data, "actualPayAmount", obj.actualPayAmount);
+                        this.$set(data, "remark", obj.remark);
                     }
                 });
                 this.$set(data, "isModify", false);
@@ -2388,7 +2424,8 @@
                     this.loadingPaymentTable = true;
                     this.$ajax.post(this.$apis.PAYMENT_ABANDON, {
                         id: data.id,
-                        version: data.version
+                        version: data.version,
+                        moduleCode: "ORDER"
                     }).then(res => {
                         this.$message({
                             type: "success",
@@ -2412,7 +2449,8 @@
                     this.loadingPaymentTable = true;
                     this.$ajax.post(this.$apis.PAYMENT_RESTORE, {
                         id: data.id,
-                        version: data.version
+                        version: data.version,
+                        moduleCode: "ORDER"
                     }).then(res => {
                         this.$message({
                             type: "success",
@@ -2431,7 +2469,10 @@
                 if (row.status === -1) {
                     return "warning-row";
                 } else if (row.status === 10 || row.status === 20 || row.status === 30) {
-                    return "waiting-row";
+                    if (!row.isNew) {
+                        return "waiting-row";
+                    }
+
                 }
                 return "";
             },
@@ -2474,7 +2515,8 @@
                     this.loadingPaymentTable = true;
                     this.$ajax.post(this.$apis.PAYMENT_ACCEPT, {
                         id: data.id,
-                        version: data.version
+                        version: data.version,
+                        moduleCode:"ORDER"
                     }).then(res => {
                         this.$message({
                             type: "success",
@@ -2574,7 +2616,7 @@
                     ids: [this.orderForm.id],
                     orderNos: [this.orderForm.orderNo]
                 }).then(res => {
-                    this.getDetail(false,true);
+                    this.getDetail(false, true);
                 }).finally(err => {
                     this.disableClickConfirm = false;
                 });
@@ -3027,29 +3069,29 @@
             this.setMenuLink({
                 path: "/order/draft",
                 type: 10,
-                auth:'ORDER:DRAFT_OVERVIEW',
+                auth: "ORDER:DRAFT_OVERVIEW",
                 label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: "/logs/index",
                 query: { code: "ORDER" },
                 type: 20,
-                auth:'ORDER:LOG',
+                auth: "ORDER:LOG",
                 label: this.$i.common.log
             });
             this.setMenuLink({
                 path: "/order/archiveOrder",
                 type: 30,
-                auth:'ORDER:OVERVIEW:ARCHIVE_LINK',
+                auth: "ORDER:OVERVIEW:ARCHIVE_LINK",
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: "/order/archiveDraft",
                 type: 40,
-                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK',
+                auth: "ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK",
                 label: this.$i.order.archiveDraft
             });
-        },
+        }
     };
 </script>
 
@@ -3063,19 +3105,23 @@
         margin-top: 10px;
     }
 
-    .isModify >>> input{
+    .isModify >>> input {
         background-color: yellow !important;
     }
-    .high-light >>> input{
+
+    .high-light >>> input {
         background-color: yellow !important;
     }
-    .isModify >>> textarea{
+
+    .isModify >>> textarea {
         background-color: yellow !important;
     }
-    .isModify >>> li{
+
+    .isModify >>> li {
         background-color: yellow !important;
     }
-    .high-light >>> textarea{
+
+    .high-light >>> textarea {
         background-color: yellow !important;
     }
 
