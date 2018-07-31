@@ -424,7 +424,7 @@
                     pn: 1,
                     ps: 10,
                     sorts: [],
-                    id:Number(this.$route.query.id),
+                    id:this.$route.query.id,
                 },
                 loadingRemarkTable:false,
                 formLabelWidth:'80px',
@@ -469,7 +469,7 @@
             },
             getTableData(){
                 this.$ajax.get(this.$apis.get_buyerProductDetail,{
-                    id:Number(this.$route.query.id)
+                    id:this.$route.query.id
                 }).then(res=>{
                     this.productForm=res;
 
