@@ -1835,7 +1835,7 @@
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
-                return console.log(this.$depthClone(params.skuList), "params.skuList");
+                // return console.log(this.$depthClone(params.skuList), "params.skuList");
                 let rightCode = true;
                 _.map(params.skuList, v => {
                     if (v.skuSupplierCode !== params.supplierCode) {
