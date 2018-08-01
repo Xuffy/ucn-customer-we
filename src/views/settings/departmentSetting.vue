@@ -283,7 +283,6 @@
                 :editable="false"
                 v-model="addUser.birthday"
                 type="date"
-                format="yyyy-MM-dd"
                 @change="() => addUser.birthday = $dateFormat(addUser.birthday, 'yyyy-mm-dd')"
                 :placeholder="$i.setting.pleaseChoose">
               </el-date-picker>
@@ -427,6 +426,11 @@
       this.getUnit();
     },
     mounted() {
+      this.setMenuLink({
+        type: 100,
+        query: {code: 'DEPARTMENT_SETTING', bizCode: 'BIZ_USER'},
+        label: this.$i.common.log
+      });
     },
     watch: {
       searchDepartment(val) {
@@ -440,6 +444,7 @@
       },
     },
     methods: {
+      ...mapActions(['setMenuLink']),
       pageSizeChange(val) {
         this.userListPage.ps = val;
         this.getDepartmentUser();
@@ -491,7 +496,7 @@
             if (item.status.value !== 0) {
               item._disabledCheckbox = true;
             }
-            item.birthday.value = this.$dateFormat(item.birthday.value, 'yyyy-mm-dd');
+            item.birthday.value = this.$dateFormat(item.birthday.value, 'dd-mmm-yyyy');
             gender = _.findWhere(this.genderOption, {code: item.gender.value}) || {};
             status = _.findWhere(this.actionOption, {code: item.status.value}) || {};
             lang = _.findWhere(this.languageOption, {code: item.lang.value}) || {};
