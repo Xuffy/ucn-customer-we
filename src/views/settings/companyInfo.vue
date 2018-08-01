@@ -231,6 +231,13 @@
                       <el-input size="mini" v-model="addressData.receiveAddress" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                    <el-form-item>
+                      <el-checkbox-group v-model="addressData.def" size="medium">
+                        <el-checkbox :label="$i.setting.setDefaultAddress"  @change="setAddress"></el-checkbox>
+                      </el-checkbox-group>
+                    </el-form-item>
+                  </el-col>
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -408,7 +415,8 @@
 </template>
 
 <script>
-    import { VTable,VUpload } from '@/components/index'
+    import { VTable,VUpload } from '@/components/index';
+    import { mapActions } from 'vuex'
     export default {
         name: "companyInfo",
         components:{
@@ -466,7 +474,8 @@
                     receiveCity: "",
                     receiveCountry: "",
                     receiveProvince: "",
-                    version: ""
+                    version: "",
+                    def: false
                 },
                 contactData:{
                   cellphone: "",
@@ -547,6 +556,7 @@
             }
         },
         methods:{
+          ...mapActions(['setMenuLink']),
             handleClick(tab, event) {
               switch(Number(tab.index)){
                 case 5:
@@ -573,6 +583,7 @@
                       const receiveAddress = e.receiveAddress.value || '';
                       e.companyAddress.value = e.country._value +' '+province+' '+city+' '+address;
                       e.receiverAddress.value = e.receiveCountry._value +' '+receiveProvince+' '+receiveCity+' '+receiveAddress
+                      e.def.value ? e.def._value = '是' : e.def._value = ''
                       return e;
 
                     });
@@ -785,6 +796,48 @@
                 }).catch(() => {
 
                 });
+            },
+             //更改默认地址
+            setAddress(){
+              let def;
+              this.addressDatas.forEach(v=>{
+                def = _.findWhere(v,{key:'def'}).value;
+              })
+              if (def){
+                this.$confirm(this.$i.setting.isReplace, this.$i.common.prompt, {
+                  confirmButtonText: this.$i.common.confirm,
+                  cancelButtonText: this.$i.common.cancel,
+                  type: 'warning'
+                }).then(() => {
+                  if (this.addressData.def){
+                    this.addressData.def = true;
+                    this.$message({
+                      type: 'success',
+                      message: this.$i.setting.replaceSuccess
+                    });
+                  }else{
+                    this.addressData.def = false;
+                    this.$message({
+                      type: 'success',
+                      message: this.$i.setting.cancelReplace
+                    });
+                  }
+                }).catch(() => {
+                  if (this.addressData.def){
+                    this.addressData.def = false;
+                    this.$message({
+                      type: 'success',
+                      message: this.$i.setting.cancelReplace
+                    });
+                  }else{
+                    this.addressData.def = true;
+                    this.$message({
+                      type: 'success',
+                      message: this.$i.setting.replaceSuccess
+                    });
+                  }
+                });
+              }
             },
 
             /**
@@ -1059,6 +1112,14 @@
              this.getCurrency();
              this.getCountryAll();
              this.getDepartment();
+        },
+        mounted(){
+          this.setMenuLink({
+              path: '/logs',
+              query: {code: 'CUSTOMER_SETTING',bizCode: 'BIZ_CUSTOMER_SETTING'},
+              type: 100,
+              label: this.$i.common.log,
+            });
         },
         watch:{
             addressDialogVisible(n){
