@@ -132,7 +132,8 @@
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :mark="v.label"
-                                    :accuracy="1"></v-input-number>
+                                    :placeholder="$i.product.pleaseInput"
+                                    :accuracy="v.accuracy"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -834,7 +835,6 @@
                 },
                 //整个页面数据配置
                 productForm:{
-                    minOrderQty:11,
                     attachments:[],
                     adjustPackage: '1',
                     barcode: "",

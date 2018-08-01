@@ -122,12 +122,14 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:2
     },
     deliveryDates:{
         key:'deliveryDates',
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:0
     },
     design:{
         key:'design',
@@ -159,6 +161,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:1
     },
     noneSellCountry:{
         key:'noneSellCountry',
@@ -178,6 +181,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:0
     },
     expireUnit:{
         key:'expireUnit',
