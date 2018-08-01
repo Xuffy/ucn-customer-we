@@ -234,5 +234,6 @@
   "Negociate" : "Negociate",
   "Copy" : "Copy",
   "Detail" : "Detail",
-  "History" : "History"
+  "History" : "History",
+  "totalContainerGrossWeight":"totalContainerGrossWeight"
 }

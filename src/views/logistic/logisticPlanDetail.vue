@@ -473,7 +473,7 @@
         })
       },
       getPaymentList(logisticsNo) {
-        this.$ajax.post(`${this.$apis.get_payment_list}${logisticsNo}/30`).then(res => {
+        this.$ajax.post(`${this.$apis.get_payment_list}${logisticsNo}/30?moduleCode=LOGISTIC`).then(res => {
           this.createdPaymentData(res)
         })
       },
@@ -675,9 +675,9 @@
           this.$refs.HM.init(this.productModifyList, []);
         }
       },
-      addPayment() {
+      addPayment() {       
         const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
-        this.$ajax.post(this.$apis.get_payment_no).then(res => this.paymentList.push({
+        this.$ajax.post(`${this.$apis.get_payment_no}?moduleCode=LOGISTIC`).then(res => this.paymentList.push({
           edit: true,
           no: res,
           status: 20,
@@ -709,7 +709,7 @@
         if (this.$validateForm(paymentData, this.$db.logistic.payMentInfo)) {
           return;
         }
-        this.$ajax.post(url, paymentData).then(res => {
+        this.$ajax.post(url+'?moduleCode=LOGISTIC', paymentData).then(res => {
           this.paymentList[i] = res
           this.$refs.payment.addPaymentBtn = false;
           this.updatePaymentWithView({

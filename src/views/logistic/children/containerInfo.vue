@@ -38,6 +38,11 @@
             <span v-else>{{ scope.row.containerType }}</span>
           </template>
         </el-table-column>
+        <el-table-column :label="$i.logistic.totalContainerGrossWeight" prop='{"key":"totalContainerGrossWeight","total":true}' width="120" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.totalContainerGrossWeight }}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$i.logistic.vgm" prop='{"key":"vgm","total":true}' width="120" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.vgm }}</span>

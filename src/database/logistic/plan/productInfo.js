@@ -189,6 +189,11 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
+  "totalContainerGrossWeight": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
   "totalQuantityInContainer": {
     key: 'totalContainerQty',
     _filed: 'totalContainerQty',
