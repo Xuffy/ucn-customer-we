@@ -235,5 +235,17 @@
   "Copy" : "Copy",
   "Detail" : "Detail",
   "History" : "History",
-  "totalContainerGrossWeight":"totalContainerGrossWeight"
+  "totalContainerGrossWeight":"totalContainerGrossWeight",
+  "isDelay":"是否延期",
+  "dateInfo":"Date Info",
+  "dateName" : "Date Name",
+  "EstDate" : "Est.Date",
+  "ActDate" : "Act.Date",
+  "Booking" : "Booking",
+  "Loading" : "Loading",
+  "declared" : "declared",
+  "shipped" : "shipped",
+  "cleance" : "cleance",
+  "release" : "release",
+  "arrival" : "arrival"
 }

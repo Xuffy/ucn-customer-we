@@ -63,7 +63,9 @@ export default {
   "toShipCartonQty": {
     type: 'String',
     typeSlef: 'text',
-    _important: true
+    correlationKey:'toShipQty',
+    computedKey:'skuOuterCartonQty',
+    _important: true,
   },
   "fieldDisplay": {
     type: 'String',
@@ -73,6 +75,13 @@ export default {
   },
   "toShipQty": {
     type: 'String',
+    _disabled: true,
+    typeSlef: 'String',
+    _important: true
+  },
+  "skuOuterCartonQty": {
+    type: 'String',
+    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -226,11 +235,6 @@ export default {
     typeSlef: 'text',
     _important: true
   },
-  "skuOuterCartonQty": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
   "skuOuterCartonLength": {
     type: 'String',
     _disabled: true,
@@ -288,9 +292,9 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "shipmentStatus": {
-    type: 'String',
-    typeSlef: 'text',
-    _disabled: true
-  }
+  // "shipmentStatus": {
+  //   type: 'String',
+  //   typeSlef: 'text',
+  //   _disabled: true
+  // }
 }

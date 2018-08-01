@@ -12,9 +12,10 @@
         <template slot-scope="scope">
           <div v-if="scope.row.edit" style="display:flex;">
             <label class="reqiuredStar"></label>
+            {{scope.row.name}}
             <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
-            <span v-else>{{ scope.row.name }}</span>
           </div>
+          <span v-else>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
