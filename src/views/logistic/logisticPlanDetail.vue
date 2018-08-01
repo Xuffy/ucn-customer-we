@@ -25,10 +25,15 @@
       </div>
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
-    <form-list :DeliveredEdit="deliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"
-    />
+    <!-- 需求改动暂时隐藏 -->
+    <!-- <form-list :DeliveredEdit="deliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/> -->
     <form-list :DeliveredEdit="deliveredEdit" name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun"
       :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle" :selectArr="selectArr"/>
+
+    <!-- 日期列表 -->
+    <form-list :DeliveredEdit="deliveredEdit" name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun"
+      :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle" :selectArr="selectArr"/>
+
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
@@ -91,8 +96,9 @@
       :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
     <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext"
       :code="configUrl[pageName]&&configUrl[pageName].setTheField"
-      @closed="$refs.productInfo.update()"
-    ></v-history-modify>
+      @closed="$refs.productInfo.update()" 
+      @change ="autoComputed">
+    </v-history-modify>
   </div>
 </template>
 <script>
@@ -157,6 +163,7 @@
         productModifyList: [],
         paymentList: [],
         containerInfo: [],
+        mediatorDate: [],
         containerinfoMatch: [],
         paymentSum: {},
         selectArr: {
@@ -178,7 +185,7 @@
           transportationWay: 'MD_TN',
           payment: 'PMT',
           skuIncoterm: 'ITM',
-          ShipmentStatus: 'SKU_LOGISTICS_STATUS'
+          shipmentStatus: 'LOGISTICS_SHIP_STATUS'
         },
         auth:{
           logisticPlanDetail: {
@@ -375,6 +382,14 @@
       this.countryAll();
     },
     methods: {
+      autoComputed(data,row){
+        console.log(data)
+        console.log(row)
+        if(data.hasOwnProperty('correlationKey')){
+          row[data.correlationKey].value =  this.$calc.multiply(data.value,row[data.computedKey].value);
+          data._isModified = row[data.correlationKey]._isModified = true;
+        }
+      },
       ...mapActions(['setMenuLink']),
       //初始化页面数据
       pageInit(){
@@ -473,7 +488,7 @@
         })
       },
       getPaymentList(logisticsNo) {
-        this.$ajax.post(`${this.$apis.get_payment_list}${logisticsNo}/30`).then(res => {
+        this.$ajax.post(`${this.$apis.get_payment_list}${logisticsNo}/30?moduleCode=LOGISTIC`).then(res => {
           this.createdPaymentData(res)
         })
       },
@@ -494,18 +509,43 @@
       },
       createdPlanData(res = this.initData) {
         this.oldPlanObject = JSON.parse(JSON.stringify(res))
-        const stringArray = [
-          'payment',
-          'permitedForTransportation',
-          'blType'
-        ]
         this.basicInfoArr.forEach(a => {
           if (this.isCopy && a.key == 'logisticsNo') {
             a.value = this.logisticsNo;
           } else {
-            a.value = stringArray.includes(a.key) ? res[a.key] : res[a.key]
+            a.value = res[a.key];
           }
         })
+        //日期信息
+
+
+        // 未开船：Undepartured（初始状态，未到实际订舱日期时默认未开船状态）、
+        // 已放舱：Release Space，当前置状态是已订舱，发运状态可下拉选择已放舱或已提柜、
+        // 已提柜：Pick-up the Empty，当前置状态是已订舱或已放舱，发运状态可下拉选择已提柜、
+        // 在传入时  改变某些状态
+        let currObj = this.basicInfoArr.find(el=> el.key == 'shipmentStatus');
+        if(currObj){
+          let arr = this.$depthClone(this.selectArr.shipmentStatus).map(el=> {
+            el.disabled = true;
+            return el;
+          });
+          if(currObj.value==0||currObj.value==1){
+            arr = this.$depthClone(arr).map(el=> {
+              if(el.code==2||el.code==3){
+                el.disabled = false;
+              }
+              return el;
+            });
+          }else if(currObj.value==0||currObj.value==1||currObj.value==2){
+            arr = this.$depthClone(arr).map(el=> {
+              if(el.code==3){
+                el.disabled = false;
+              }
+              return el;
+            });
+          }
+          this.$set(this.selectArr,'shipmentStatus',arr);
+        }
         this.transportInfoArr.forEach(a => {
           a.value = res[a.key]
         })
@@ -530,9 +570,9 @@
           return item;
         });
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
-          let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item =>
+          let shipmentStatus = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(item =>
             item.code == el.shipmentStatus)
-          el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+          el.shipmentStatus = shipmentStatus ? shipmentStatus.name : '';
           return el;
         }));
         this.productList.forEach((item) => {
@@ -577,19 +617,7 @@
         const params = _.map(this.dictionaryPart, v => v)
         this.$ajax.post(this.$apis.get_dictionary, params).then(res => {
           _.mapObject(this.dictionaryPart, (v, k) => {
-            this.$set(this.selectArr, k, res.find(a => a.code === v).codes)
-            if (k == "ShipmentStatus") {
-              this.selectArr[k].unshift({
-                code: "0",
-                defaultCode: 0,
-                id: 0,
-                name: " ",
-                remark: "",
-                seqNum: "",
-                typeCode: "SKU_LOGISTICS_STATUS",
-                value: "0"
-              })
-            }
+            this.$set(this.selectArr, k, res.find(a => a.code === v).codes);
           })
           this.pageInit();
         }).catch(()=>{
@@ -662,8 +690,8 @@
           }else{
             this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
               this.productModifyList = this.$getDB(this.$db.logistic.productModify,res.history.map(el => {
-                let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
-                el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+                let shipmentStatus = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+                el.shipmentStatus = shipmentStatus ? shipmentStatus.name : '';
                 el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm:ss');
                 return el;
               }));
@@ -675,9 +703,9 @@
           this.$refs.HM.init(this.productModifyList, []);
         }
       },
-      addPayment() {
+      addPayment() {       
         const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
-        this.$ajax.post(this.$apis.get_payment_no).then(res => this.paymentList.push({
+        this.$ajax.post(`${this.$apis.get_payment_no}?moduleCode=LOGISTIC`).then(res => this.paymentList.push({
           edit: true,
           no: res,
           status: 20,
@@ -709,7 +737,7 @@
         if (this.$validateForm(paymentData, this.$db.logistic.payMentInfo)) {
           return;
         }
-        this.$ajax.post(url, paymentData).then(res => {
+        this.$ajax.post(url+'?moduleCode=LOGISTIC', paymentData).then(res => {
           this.paymentList[i] = res
           this.$refs.payment.addPaymentBtn = false;
           this.updatePaymentWithView({
@@ -752,6 +780,7 @@
           sliceStr = sliceStr.slice(0, 1) + sliceStr.slice(1 - sliceStr.length).toLowerCase();
           a.id = null
           a.vId = this.$getUUID();
+          a.totalContainerGrossWeight = 0;
           a.blSkuName = null
           a.hsCode = null
           a.currency = null
@@ -1119,6 +1148,7 @@
         text-align: right;
         padding-right: 10px;
         box-sizing: border-box;
+        font-weight: bold;
       }
     }
     .product-header {

@@ -15,6 +15,9 @@
       <el-button size="mini" type="primary" @click.stop="$emit('sendData', 'send')">{{ $i.logistic.send }}</el-button>
       <el-button size="mini" type="danger" v-if="pageTypeCurr=='loadingListDetail'|| pageTypeCurr=='logisticPlanDetail' " @click.stop="$emit('toExit')">{{ $i.logistic.exit }}</el-button>
     </div>
+    <div>
+      <el-checkbox v-model="isDelay">{{$i.logistic.isDelay}}</el-checkbox>
+    </div> 
   </el-row>
 </template>
 <script>
@@ -30,6 +33,7 @@ export default {
   },
   data () {
     return {
+      isDelay : false,
       btnWidth: 0,
       scale: 1,
       auth:{
@@ -82,5 +86,7 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 100;
+    display:flex;
+    align-items: center;
   }
 </style>
