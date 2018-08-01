@@ -50,13 +50,13 @@ export default {
         _disabled:true
     },
     skuDescCustomer:{
-        _disabled:true
+        type:'String'
     },
     skuNameCustomer:{
-        _disabled:true
+        type:'String'
     },
     skuCustomerSkuCode:{
-        _disabled:true
+        type:'String'
     },
     skuCode:{
         _disabled:true
@@ -276,11 +276,9 @@ export default {
     //     }
     //     // disabled:true
     // },
-    skuLabelPic:{
-        _slot:'skuLabelPic',
-        _image:true,
+    skuLabelPics:{
         _upload:{
-            limit:1
+            limit:20
         }
     },
     skuLabelDesc:{},

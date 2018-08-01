@@ -139,14 +139,13 @@
                             </div>
                         </div>
                         <div v-else-if="v.type==='number'">
-                            <el-input-number
+                            <v-input-number
                                     :placeholder="$i.order.pleaseInput"
                                     :disabled="v.disabled"
                                     class="speInput speNumber"
                                     v-model="orderForm[v.key]"
                                     :controls="false">
-
-                            </el-input-number>
+                            </v-input-number>
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
@@ -182,13 +181,13 @@
             <el-row>
                 <el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                     <el-form-item :label="$i.order[v.currency]">
-                        <el-input-number
+                        <v-input-number
                                 :disabled="true"
                                 :placeholder="$i.order.pleaseInput"
                                 class="speInput speNumber"
                                 v-model="v.exchangeRate"
                                 :controls="false">
-                        </el-input-number>
+                        </v-input-number>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -380,6 +379,7 @@
         <v-history-modify
                 code="uorder_sku_list"
                 @closed="$refs.table.update()"
+                :beforeSave="beforeSave"
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
@@ -531,260 +531,247 @@
                         :value="item.name">
                 </el-option>
             </el-select>
-            <!--<el-select-->
-                    <!--slot="skuStatus"-->
-                    <!--v-model="data._value"-->
-                    <!--slot-scope="{data}"-->
-                    <!--clearable-->
-                    <!--:placeholder="$i.order.pleaseChoose">-->
-                <!--<el-option-->
-                        <!--v-for="item in skuStatusOption"-->
-                        <!--:key="item.id"-->
-                        <!--:label="item.name"-->
-                        <!--:value="item.name">-->
-                <!--</el-option>-->
-            <!--</el-select>-->
 
-            <el-input-number
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuQty"
                     @blur="handlePriceBlur(data)"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuPrice"
                     :disabled="true"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     :max="1"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuRateValueAddedTax"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     :max="1"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuTaxRefundRate"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuWidth"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuHeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuNetWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuVolume"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonQty"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonWidth"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonHeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonWeightNet"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonRoughWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonVolume"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonOuterNum"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonQty"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonWidth"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonHeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonNetWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonRoughWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonVolume"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuApplicableAge"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuExpireDates"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuSampleQty"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuSamplePrice"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
+                    v-model="data.value"></v-input-number>
         </v-history-modify>
     </div>
 </template>
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,overviewPage,VProduct} from '@/components/index'
+    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,overviewPage,VProduct,VInputNumber} from '@/components/index'
     import { mapActions } from 'vuex'
 
     export default {
@@ -796,7 +783,8 @@
             VUpload,
             VHistoryModify,
             overviewPage,
-            VProduct
+            VProduct,
+            VInputNumber
         },
         data(){
             return{
@@ -844,11 +832,11 @@
                 selectSearch:'',
                 productInfoBtn:[
                     {
-                        label: 'Negotiate',
+                        label: this.$i.order.modify,
                         type: 'negotiate'
                     },
                     {
-                        label: 'Detail',
+                        label: this.$i.order.detail,
                         type: 'detail'
                     }
                 ],
@@ -947,7 +935,7 @@
                     lcNo: "",
                     orderNo: "",
                     payment: "",
-                    paymentDays: 0,
+                    paymentDays: null,
                     productFlag:false,
                     quotationNo: "",
                     remark: "",
@@ -1054,8 +1042,37 @@
                         params.supplierCompanyId=v.companyId;
                     }
                 });
+
+                if(this.productTableData.length===0){
+                    return this.$message({
+                        message: this.$i.order.pleaseAddProduct,
+                        type: 'warning'
+                    });
+                }
+                //判断产品客户语言描述，产品客户语言品名和客户货号必填
+                if(!this.productTableData[0].skuDescCustomer.value){
+                    this.$message({
+                        message: this.productTableData[0].skuDescCustomer.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }
+                else if(!this.productTableData[0].skuNameCustomer.value){
+                    this.$message({
+                        message: this.productTableData[0].skuNameCustomer.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }
+                else if(!this.productTableData[0].skuCustomerSkuCode.value){
+                    this.$message({
+                        message: this.productTableData[0].skuCustomerSkuCode.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }
+
                 params.skuList=this.dataFilter(this.productTableData);
-                // return console.log(params.skuList,'params.skuList')
                 let rightCode=true;
                 _.map(params.skuList,v=>{
                     if(v.skuSupplierCode!==params.supplierCode){
@@ -1063,7 +1080,7 @@
                     }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     v.skuInspectQuarantineCategory=v.skuInspectQuarantineCategory?_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code:'';
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
@@ -1117,7 +1134,7 @@
                     if(v.skuInspectQuarantineCategory){
                         v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
                     }
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
@@ -1158,7 +1175,7 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
@@ -1315,7 +1332,7 @@
                             if(item._remark){
                                 item.label.value=this.$i.order.remarks;
                                 item.skuPictures._image=false;
-                                item.skuLabelPic._image=false;
+                                item.skuLabelPics._image=false;
                                 item.skuPkgMethodPic._image=false;
                                 item.skuInnerCartonPic._image=false;
                                 item.skuOuterCartonPic._image=false;
@@ -1389,7 +1406,6 @@
                     if(this.$refs.uploadSkuAdditionalFour){
                         this.$refs.uploadSkuAdditionalFour.reset();
                     }
-                    console.log(arr,'arr')
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
@@ -1464,7 +1480,7 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
@@ -1495,6 +1511,27 @@
             },
             handleCancel(){
                 this.productTableDialogVisible=false;
+            },
+            beforeSave(data){
+                if(!data[0].skuDescCustomer.value){
+                    this.$message({
+                        message: data[0].skuDescCustomer.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }else if(!data[0].skuNameCustomer.value){
+                    this.$message({
+                        message: data[0].skuNameCustomer.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }else if(!data[0].skuCustomerSkuCode.value){
+                    this.$message({
+                        message: data[0].skuCustomerSkuCode.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }
             },
             saveNegotiate(e){
                 _.map(this.productTableData,(v,k)=>{
@@ -1544,7 +1581,7 @@
                                         json[k]=_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code;
                                     }
                                     else if(item[k].key==='skuSample'){
-                                        json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                        json[k]=(_.findWhere(this.isNeedSampleOption,{name:item[k]._value}) || {}).code;
                                     }
                                     else if(item[k].key==='skuInspectQuarantineCategory'){
                                         json[k]=_.findWhere(this.quarantineTypeOption,{name:item[k]._value}).code;
@@ -1699,7 +1736,7 @@
                             skuInventoryCostMethod: '',
                             skuLabel: '',
                             skuLabelDesc: '',
-                            skuLabelPic: '',
+                            skuLabelPics: '',
                             skuLength: null,
                             skuLengthWidthHeight: '',
                             skuMainSaleArea: '',
@@ -1880,7 +1917,7 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
