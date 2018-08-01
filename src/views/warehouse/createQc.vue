@@ -194,6 +194,7 @@
                                     v-model="scope.row[v.key].value"
                                     :min="0"
                                     :controls="false"
+                                    @change="val => changeInput(val, scope.row)"
                                     label="please input"></el-input-number>
                         </div>
                         <div v-else-if="v.showType==='input'">
@@ -605,17 +606,16 @@
             },
             postProduct() {
                 this.productConfig.ids = [];
-
                 _.map(this.selectProductList, v => {
                     this.productConfig.ids.push(v.id.value);
                 });
-
                 this.productDialogVisible = false;
                 if (this.productConfig.ids.length !== 0) {
                     this.productConfig.orderNo = '';
                     this.loadingProductTable = true;
                     this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
                         this.loadingProductTable = false;
+                        this.productTableData = []
                         _.map(res, v => {
                             if (v.id !== 0) {
                                 let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
@@ -661,7 +661,7 @@
                         let arr = this.$copyArr(this.productTableData)
                         arr = this.$getDB(this.$db.warehouse.createQcProductTable, arr);
                         this.$refs.filterColumn.update(false, arr).then(data => {
-                            console.log(data)
+                            // console.log(data)
                             this.productTableData = this.$refs.filterColumn.getFilterData(arr, data);
                             this.columnConfig = this.productTableData[0];
                         });
@@ -784,6 +784,10 @@
                     this.loadingData = false;
                 });
 
+            },
+            changeInput (val, e) {
+                console.log(val, e)
+                // e.expectQcQty.value = 100
             }
         },
         created() {
@@ -792,7 +796,7 @@
         mounted() {
             this.loadingData = true;
             this.columnConfig = this.$db.warehouse.createQcProductTable;
-            console.log(this.columnConfig)
+            // console.log(this.columnConfig)
         },
         watch: {
             selectProductTableData(n) {
