@@ -30,7 +30,7 @@
   "outerCartonSkuQty": "外箱产品数",
   "outerCartonVolume": "外箱体积(m³)",
   "outerCartonGrossWeight": "外箱毛重(kg)",
-  "outerCartonNetWeight": "外箱净重",
+  "outerCartonNetWeight": "外箱净重(kg)",
   "unqualifiedType": "不合格类型",
   "packingMethodCn": "产品包装方式CN",
   "innerCartonPackingMethodCn": "中包包装方式",

@@ -30,7 +30,7 @@
   "outerCartonSkuQty": "SKU QTY of outer carton",
   "outerCartonVolume": "Volume of outer carton(m³)",
   "outerCartonGrossWeight": "G.W. of ourter carton(kg)",
-  "outerCartonNetWeight": "N.W. of ourter carton",
+  "outerCartonNetWeight": "N.W. of ourter carton(kg)",
   "unqualifiedType": "Unqualified Type",
   "packingMethodCn": "Packing method(CN)",
   "innerCartonPackingMethodCn": "Packing method of inner carton",
