@@ -228,29 +228,37 @@
         <!--</el-col>-->
         <!--</el-row>-->
         <!--</el-form>-->
-        <div class="title">
-            {{$i.order.responsibility}}
-        </div>
         <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
+            <div class="title">
+                {{$i.order.responsibility}}
+            </div>
+            <el-button
+                    class="addBtn"
+                    :disabled="!isModify"
+                    @click="addResponsibility">
+                {{$i.order.addResponsibility}}</el-button>
             <el-table
                     :data="orderForm.responsibilityList"
-                    style="width: 100%">
+                    style="width: 100%;border-top:1px solid #ebeef5;">
                 <el-table-column
                         prop="type"
-                        label="Type">
+                        align="center"
+                        :label="$i.order.type">
                     <template slot-scope="scope">
-                        <span v-if="scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
-                        <span v-if="scope.row.type===1">{{$i.order.labelDesignDate}}</span>
-                        <span v-if="scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
-                        <span v-if="scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
-                        <span v-if="scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
-                        <span v-if="scope.row.type===5">{{$i.order.otherResponsibility}}</span>
+
+                        <el-input
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseInput:''"
+                                v-model="scope.row.type"
+                                clearable>
+                        </el-input>
+
                     </template>
                 </el-table-column>
                 <el-table-column
                         prop="customer"
                         align="center"
-                        label="Me">
+                        :label="$i.order.customer">
                     <template slot-scope="scope">
                         <el-date-picker
                                 :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.customer===''}"
@@ -259,8 +267,8 @@
                                 :editable="false"
                                 align="right"
                                 type="date"
-                                :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                                :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseChoose:''">
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseChoose:''">
                         </el-date-picker>
                     </template>
                 </el-table-column>
@@ -276,7 +284,8 @@
                                 align="right"
                                 :editable="false"
                                 type="date"
-                                :disabled="true">
+                                :placeholder="isModify?$i.order.pleaseChoose:''"
+                                :disabled="!isModify">
                         </el-date-picker>
                     </template>
                 </el-table-column>
@@ -288,8 +297,8 @@
                         <el-input
                                 :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.remark===''}"
                                 @change="handleResponsibilityChange(scope.row,'remark')"
-                                :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                                :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseInput:''"
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseInput:''"
                                 v-model="scope.row.remark"
                                 clearable>
                         </el-input>
@@ -307,8 +316,8 @@
                                 align="right"
                                 type="date"
                                 :editable="false"
-                                :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                                :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseChoose:''">
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseChoose:''">
                         </el-date-picker>
                     </template>
                 </el-table-column>
@@ -722,32 +731,6 @@
                 </el-checkbox>
             </div>
         </div>
-        <el-dialog
-                custom-class="ucn-dialog-center"
-                title=""
-                :visible.sync="quickCreateDialogVisible"
-                width="70%">
-            <v-table
-                    :height="400"
-                    :loading="loadingTable"
-                    :data="tableDataList"
-                    :buttons="[{label: this.$i.order.createOrder, type: 1}]"
-                    @change-checked="changeChecked"
-                    @action="btnClick">
-                <template slot="header">
-                    <select-search
-                            class="search"
-                            @inputEnter="searchInquiry"
-                            v-model="searchId"
-                            :options="searchOptions"></select-search>
-                </template>
-            </v-table>
-            <page
-                    @size-change="changeSize"
-                    @change="changePage"
-                    :pageSizes="[50,100,200]"
-                    :page-data="pageData"></page>
-        </el-dialog>
         <el-dialog
                 custom-class="ucn-dialog-center"
                 :title="$i.order.addProduct"
@@ -1313,7 +1296,6 @@
                         return time.getTime() > Date.now();
                     }
                 },
-                quickCreateDialogVisible: false,
                 tableData: [],
                 selectSearch: "",
                 productInfoBtn: [
@@ -1768,7 +1750,6 @@
                     }
                 });
                 let orderSkuUpdateList = [];
-
                 _.map(this.productTableData, item => {
                     let isModify = false, isModifyStatus = false;
                     _.map(item, (val, index) => {
@@ -1807,7 +1788,6 @@
                         });
                     }
                     else {
-                        console.log(item, "item");
                         if (!item.fieldRemarkUpdate || !item.fieldRemarkUpdate.value) {
                             item.fieldRemarkUpdate = { value: {} };
                         }
@@ -1820,7 +1800,6 @@
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
-                // return console.log(this.$depthClone(params.skuList), "params.skuList");
                 let rightCode = true;
                 _.map(params.skuList, v => {
                     if (v.skuSupplierCode !== params.supplierCode) {
@@ -1845,6 +1824,7 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
+                // return console.log(this.$depthClone(params.responsibilityList),'params')
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -1897,10 +1877,6 @@
                 }).catch(err => {
                     // this.loadingPage=false;
                 });
-            },
-            quickCreate() {
-                this.quickCreateDialogVisible = true;
-                this.getInquiryData();
             },
             getInquiryData() {
                 this.loadingTable = true;
@@ -1977,6 +1953,16 @@
                     data.fieldUpdate = {};
                 }
                 data.fieldUpdate[key] = "";
+            },
+            addResponsibility(){
+                this.orderForm.responsibilityList.push({
+                    type: '',
+                    customer: '',
+                    supplier: '',
+                    remark: '',
+                    actualDt: '',
+                    orderNo:this.orderForm.orderNo
+                })
             },
 
             /**
@@ -2664,326 +2650,6 @@
             changeChecked() {
 
             },
-            btnClick(e) {
-                this.quickCreateDialogVisible = false;
-                this.loadingProductTable = true;
-                this.$ajax.get(this.$apis.INQUIRY_ID, {
-                    id: e.id.value
-                }).then(res => {
-                    this.orderForm.quotationNo = res.quotationNo;
-                    this.productTableData = [];
-                    let arr = [];
-                    _.map(res.details, v => {
-                        let obj = {
-                            bookmarkId: "",
-                            companyId: null,
-                            entryDt: "",
-                            entryId: null,
-                            entryName: "",
-                            fieldRemark: {},
-                            fieldUpdate: {},
-                            fieldsRemark: "",
-                            fieldsUpdate: "",
-                            id: null,
-                            orderId: null,
-                            orderNo: "",
-                            ownerId: null,
-                            skuAdditionalFour: "",
-                            skuAdditionalOne: "",
-                            skuAdditionalThree: "",
-                            skuAdditionalTwo: "",
-                            skuAdjustPackage: true,
-                            skuApplicableAge: null,
-                            skuAvailableQty: null,
-                            skuBarCode: "",
-                            skuBrand: "",
-                            skuBrandRelated: "",
-                            skuBrandRemark: "",
-                            skuCategoryFour: "",
-                            skuCategoryId: null,
-                            skuCategoryOne: "",
-                            skuCategoryThree: "",
-                            skuCategoryTwo: "",
-                            skuCertificat: "",
-                            skuCifCurrency: "",
-                            skuCifPort: "",
-                            skuCifPrice: null,
-                            skuCode: "",
-                            skuColourCn: "",
-                            skuColourEn: "",
-                            skuComments: "",
-                            skuCommodityInspectionCn: "",
-                            skuCommodityInspectionEn: "",
-                            skuCustomerCreate: true,
-                            skuCustomerSkuCode: "",
-                            skuCustomsCode: "",
-                            skuCustomsNameCn: "",
-                            skuCustomsNameEn: "",
-                            skuDduCurrency: "",
-                            skuDduPort: "",
-                            skuDduPrice: null,
-                            skuDeclareElement: "",
-                            skuDeliveredQty: null,
-                            skuDeliveryDates: null,
-                            skuDepartureDt: null,
-                            skuDescCn: "",
-                            skuDescCustomer: "",
-                            skuDescEn: "",
-                            skuDesign: "",
-                            skuDisplayBoxQty: null,
-                            skuExpireDates: null,
-                            skuExpireUnit: null,
-                            skuExwCurrency: "",
-                            skuExwPrice: null,
-                            skuFobCurrency: "",
-                            skuFobPort: "",
-                            skuFobPrice: null,
-                            skuFormation: "",
-                            skuGp20SkuQty: null,
-                            skuGp40SkuQty: null,
-                            skuGrossWeight: null,
-                            skuHeight: null,
-                            skuHq40SkuQty: null,
-                            skuId: null,
-                            skuInboundQty: null,
-                            skuIncoterm: "",
-                            skuIncotermArea: "",
-                            skuInnerCartonDesc: "",
-                            skuInnerCartonHeight: null,
-                            skuInnerCartonLength: null,
-                            skuInnerCartonMethodCn: "",
-                            skuInnerCartonMethodEn: "",
-                            skuInnerCartonOuterNum: null,
-                            skuInnerCartonPic: "",
-                            skuInnerCartonQty: null,
-                            skuInnerCartonRoughWeight: null,
-                            skuInnerCartonUnit: "",
-                            skuInnerCartonVolume: null,
-                            skuInnerCartonWeightNet: null,
-                            skuInnerCartonWidth: null,
-                            skuInnerPackBarCode: "",
-                            skuInnerPackCode: "",
-                            skuInnerPackLabel: "",
-                            skuInspectQuarantineCategory: "",
-                            skuInventory: null,
-                            skuInventoryCostMethod: "",
-                            skuLabel: "",
-                            skuLabelDesc: "",
-                            skuLabelPic: "",
-                            skuLength: null,
-                            skuLengthWidthHeight: "",
-                            skuMainSaleArea: "",
-                            skuMainSaleCountry: "",
-                            skuMaterialCn: "",
-                            skuMaterialEn: "",
-                            skuMethodPkgCn: "",
-                            skuMethodPkgEn: "",
-                            skuMinInventory: null,
-                            skuMinOrderQty: null,
-                            skuModifyStatus: null,
-                            skuNameCn: "",
-                            skuNameCustomer: "",
-                            skuNameEn: "",
-                            skuNetWeight: null,
-                            skuNoneSellCountry: "",
-                            skuOem: true,
-                            skuOrigin: "",
-                            skuOtherPackInfoCn: "",
-                            skuOtherPackInfoEn: "",
-                            skuOuterCartonBarCode: "",
-                            skuOuterCartonCode: "",
-                            skuOuterCartonDesc: "",
-                            skuOuterCartonHeight: null,
-                            skuOuterCartonLength: null,
-                            skuOuterCartonMethodCn: "",
-                            skuOuterCartonMethodEn: "",
-                            skuOuterCartonNetWeight: null,
-                            skuOuterCartonPic: "",
-                            skuOuterCartonQty: null,
-                            skuOuterCartonRoughWeight: null,
-                            skuOuterCartonUnit: "",
-                            skuOuterCartonVolume: null,
-                            skuOuterCartonWidth: null,
-                            skuPic: "",
-                            skuPkgMethodPic: "",
-                            skuPrice: null,
-                            skuProductionDates: null,
-                            skuQty: null,
-                            skuQtyPerTray: null,
-                            skuQualifiedQty: null,
-                            skuQualityStander: "",
-                            skuQuotationNo: "",
-                            skuRateValueAddedTax: null,
-                            skuReadilyAvailable: true,
-                            skuRecycle: true,
-                            skuRefunQty: null,
-                            skuRemarkOne: "",
-                            skuRemarkThree: "",
-                            skuRemarkTwo: "",
-                            skuSafeInventory: null,
-                            skuSaleStatus: null,
-                            skuSample: true,
-                            skuSamplePrice: null,
-                            skuSampleQty: null,
-                            skuShippingMarks: "",
-                            skuSpecialTransportRequire: "",
-                            skuStatus: "",
-                            skuSupplierCode: "",
-                            skuSupplierCompanyId: null,
-                            skuSupplierId: null,
-                            skuSupplierName: "",
-                            skuSupplierTenantId: null,
-                            skuSysCode: "",
-                            skuTaxRefundRate: null,
-                            skuTradeMarkCn: "",
-                            skuTradeMarkEn: "",
-                            skuTryDimension: null,
-                            skuUndeliveredQty: null,
-                            skuUnit: null,
-                            skuUnitLength: null,
-                            skuUnitVolume: null,
-                            skuUnitWeight: null,
-                            skuUntestedQty: null,
-                            skuUseDisplayBox: true,
-                            skuVolume: null,
-                            skuWarehourceDefault: "",
-                            skuWidth: null,
-                            skuYearListed: "",
-                            tenantId: null,
-                            timeZone: "",
-                            updateDt: "",
-                            updateId: null,
-                            updateName: "",
-                            version: null
-                        };
-                        obj.skuId = v.skuId;
-                        obj.skuPic = v.skuPic;
-                        obj.skuNameEn = v.skuNameEn;
-                        obj.skuNameCn = v.skuNameCn;
-                        obj.skuDescCn = v.skuDescCn;
-                        obj.skuDescEn = v.skuDescEn;
-                        obj.skuDescCustomer = v.skuDescCustomer;
-                        obj.skuNameCustomer = v.skuNameCustomer;
-                        obj.skuCustomerSkuCode = v.skuCustomerSkuCode;
-                        obj.skuCode = v.skuCode;
-                        obj.skuSupplierName = v.skuSupplierName;
-                        obj.skuSupplierCode = v.skuSupplierCode;
-                        obj.skuFobCurrency = v.skuFobCurrency;
-                        obj.skuFobPrice = v.skuFobPrice;
-                        obj.skuFobPort = v.skuFobPort;
-                        obj.skuExwCurrency = v.skuExwCurrency;
-                        obj.skuExwPrice = v.skuExwPrice;
-                        obj.skuCifCurrency = v.skuCifCurrency;
-                        obj.skuCifPrice = v.skuCifPrice;
-                        obj.skuCifPort = v.skuCifArea;
-                        obj.skuDduCurrency = v.skuDduCurrency;
-                        obj.skuDduPrice = v.skuDduPrice;
-                        obj.skuDduPort = v.skuDduArea;
-                        obj.skuUnit = v.skuUnit;
-                        obj.skuMaterialCn = v.skuMaterialCn;
-                        obj.skuMaterialEn = v.skuMaterialEn;
-                        obj.skuRateValueAddedTax = v.skuRateValueAddedTax;
-                        obj.skuTaxRefundRate = v.skuTaxRefundRate;
-                        obj.skuColourCn = v.skuColourCn;
-                        obj.skuColourEn = v.skuColourEn;
-                        obj.skuMinOrderQty = v.skuMinOrderQty;
-                        obj.skuDeliveryDates = v.skuDeliveryDates;
-                        obj.skuDesign = v.skuDesign;
-                        obj.skuCategoryId = v.skuCategoryId;
-                        obj.skuCustomsCode = v.skuCustomsCode;
-                        obj.skuCustomsNameCn = v.skuCustomsNameCn;
-                        obj.skuCustomsNameEn = v.skuCustomsNameEn;
-                        obj.skuTradeMarkCn = v.skuTradeMarkCn;
-                        obj.skuTradeMarkEn = v.skuTradeMarkEn;
-                        obj.skuCommodityInspectionCn = v.skuCommodityInspectionCn;
-                        obj.skuCommodityInspectionEn = v.skuCommodityInspectionEn;
-                        obj.skuDeclareElement = v.skuDeclareElement;
-                        obj.skuOrigin = v.skuOrigin;
-                        obj.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory;
-                        obj.skuUnitLength = v.skuUnitLength;
-                        obj.skuUnitWidth = v.skuUnitWidth;
-                        obj.skuUnitVolumn = v.skuUnitVolumn;
-                        obj.skuLength = v.skuLength;
-                        obj.skuWidth = v.skuWidth;
-                        obj.skuHeight = v.skuHeight;
-                        obj.skuNetWeight = v.skuNetWeight;
-                        obj.skuGrossWeight = v.skuGrossWeight;
-                        obj.skuVolume = v.skuVolume;
-                        obj.skuMethodPkgCn = v.skuMethodPkgCn;
-                        obj.skuMethodPkgEn = v.skuMethodPkgEn;
-                        obj.skuInnerCartonUnit = v.skuInnerCartonUnit;
-                        obj.skuInnerCartonQty = v.skuInnerCartonQty;
-                        obj.skuInnerCartonLength = v.skuInnerCartonLength;
-                        obj.skuInnerCartonWidth = v.skuInnerCartonWidth;
-                        obj.skuInnerCartonHeight = v.skuInnerCartonHeight;
-                        obj.skuInnerCartonWeightNet = v.skuInnerCartonWeightNet;
-                        obj.skuInnerCartonRoughWeight = v.skuInnerCartonRoughWeight;
-                        obj.skuInnerCartonVolume = v.skuInnerCartonVolume;
-                        obj.skuInnerCartonDesc = v.skuInnerCartonDesc;
-                        obj.skuInnerCartonMethodCn = v.skuInnerCartonMethodCn;
-                        obj.skuInnerCartonMethodEn = v.skuInnerCartonMethodEn;
-                        obj.skuOuterCartonUnit = v.skuOuterCartonUnit;
-                        obj.skuOuterCartonDesc = v.skuOuterCartonDesc;
-                        obj.skuOuterCartonQty = v.skuOuterCartonQty;
-                        obj.skuOuterCartonLength = v.skuOuterCartonLength;
-                        obj.skuOuterCartonWidth = v.skuOuterCartonWidth;
-                        obj.skuOuterCartonHeight = v.skuOuterCartonHeight;
-                        obj.skuInnerCartonOuterNum = v.skuInnerCartonOuterNum;
-                        obj.skuOuterCartonNetWeight = v.skuOuterCartonNetWeight;
-                        obj.skuOuterCartonRoughWeight = v.skuOuterCartonRoughWeight;
-                        obj.skuOuterCartonVolume = v.skuOuterCartonVolume;
-                        obj.skuOuterCartonMethodCn = v.skuOuterCartonMethodCn;
-                        obj.skuOuterCartonMethodEn = v.skuOuterCartonMethodEn;
-                        obj.skuBrand = v.skuBrand;
-                        obj.skuApplicableAge = v.skuApplicableAge;
-                        obj.skuExpireDates = v.skuExpireDates;
-                        obj.skuExpireUnit = v.skuExpireUnit;
-                        obj.skuComments = v.skuComments;
-                        obj.skuBarCode = v.skuBarcode;
-                        obj.skuSaleStatus = v.skuStatus;
-                        obj.skuQuotationNo = v.quotationNo;
-                        obj.skuSysCode = v.skuSysCode;
-                        arr.push(obj);
-                    });
-                    let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(arr, "skuSysCode"), item => {
-                        if (item._remark) {
-                            item.label.value = this.$i.order.remarks;
-                            item.skuPictures._image = false;
-                            item.skuLabelPic._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
-                        }
-                        else {
-                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
-                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
-                            item.skuSample.value = item.skuSample.value ? "1" : "0";
-                            item.skuUnit._value = item.skuUnit.value ? _.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }).name : "";
-                            item.skuUnitWeight._value = item.skuUnitWeight.value ? _.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }).name : "";
-                            item.skuUnitLength._value = item.skuUnitLength.value ? _.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }).name : "";
-                            item.skuExpireUnit._value = item.skuExpireUnit.value ? _.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }).name : "";
-                            item.skuStatus._value = item.skuStatus.value ? _.findWhere(this.skuStatusTotalOption, { code: String(item.skuStatus.value) }).name : "";
-                            item.skuUnitVolume._value = item.skuUnitVolume.value ? _.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }).name : "";
-                            item.skuSaleStatus._value = item.skuSaleStatus.value ? _.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }).name : "";
-                            /**
-                             * 后续处理
-                             * */
-                            // item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
-                            console.log(8);
-                        }
-                    });
-                    _.map(data, v => {
-                        this.productTableData.push(v);
-                    });
-                }).finally(err => {
-                    this.loadingProductTable = false;
-                });
-            },
 
             /**
              * message board事件
@@ -3028,17 +2694,6 @@
                 console.log(e);
             },
 
-            /**
-             * 分页操作
-             * */
-            changePage(e) {
-                this.inquiryConfig.pn = e;
-                this.getInquiryData();
-            },
-            changeSize(e) {
-                this.inquiryConfig.ps = e;
-                this.getInquiryData();
-            }
         },
         created() {
             let category = [];
@@ -3176,6 +2831,9 @@
 
     .el-table >>> .waiting-row {
         background: yellow;
+    }
+    .addBtn{
+        margin: 5px 0;
     }
 
     .summaryInput {

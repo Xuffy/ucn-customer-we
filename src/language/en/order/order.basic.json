@@ -75,5 +75,8 @@
   "hasConfirm":"已确认",
   "hasCanceled":"已取消",
   "supplierAbbr":"Supplier Abbr",
-  "customerAbbr":"Customer Abbr"
+  "customerAbbr":"Customer Abbr",
+  "addResponsibility":"Add Responsibility",
+  "type":"Type",
+  "customer":"Customer"
 }

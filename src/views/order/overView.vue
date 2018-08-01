@@ -229,7 +229,6 @@
                     ids.push(v.id.value);
                     orderNos.push(v.orderNo.value);
                 });
-                console.log(this.selectedList,'this.selectedList')
                 this.disableClickFinish=true;
                 this.$ajax.post(this.$apis.ORDER_FINISH, {
                     draftCustomer: false,
