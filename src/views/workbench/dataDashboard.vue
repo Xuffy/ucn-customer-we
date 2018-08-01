@@ -96,9 +96,7 @@
               });
             });
           })
-          .finally(() => {
-            this.loading = false;
-          });
+          .finally(() => this.loading = false);
       },
       getCode() {
         return this.$ajax.post(this.$apis.POST_CODE_PART, ['UDA_BIZ_CODE', 'STAT_POINT', 'STAT_ITEM_UNIT'], {cache: true});

@@ -340,8 +340,12 @@
                 });
             },
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit, ['SKU_SALE_STATUS', 'WT_UNIT', 'ED_UNIT', 'VE_UNIT', 'LH_UNIT', 'SKU_UNIT'], {cache: true}).then(res => {
-                    res.forEach(v => {
+                let unit,country;
+                unit=this.$ajax.post(this.$apis.get_partUnit, ['SKU_SALE_STATUS', 'WT_UNIT', 'ED_UNIT', 'VE_UNIT', 'LH_UNIT', 'SKU_UNIT'], {cache: true});
+                country=this.$ajax.get(this.$apis.get_country, {}, {cache: true});
+
+                this.$ajax.all([unit,country]).then(res=>{
+                    res[0].forEach(v => {
                         if (v.code === 'SKU_SALE_STATUS') {
                             this.statusOption = v.codes;
                         } else if (v.code === 'WT_UNIT') {
@@ -359,14 +363,9 @@
                     if (this.$route.params.supplierName) {
                         this.productForm.supplierNameLike = this.$route.params.supplierName;
                     }
-                    //国家
-                    this.$ajax.get(this.$apis.get_country, {}, {cache: true}).then(res => {
-                        this.countryOption = res;
-                        this.getData();
-                    }).catch(err => {
-
-                    });
-                }).catch(err => {
+                    this.countryOption = res[1];
+                    this.getData();
+                }).finally(()=>{
                     this.loadingTable = false;
                 });
             },
@@ -409,11 +408,6 @@
                 auth:'PRODUCT:ARCHIVE',
                 label: this.$i.common.archive
             });
-        },
-        watch:{
-            selectList(){
-
-            },
         },
     }
 </script>

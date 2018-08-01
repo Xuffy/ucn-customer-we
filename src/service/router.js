@@ -790,19 +790,20 @@ let router = new Router({
 router.beforeResolve((to, from, next) => {
   let ts = localStore.get('token');
 
+  // 登录验证
+  if (to.path !== '/login' || from.path === '/login') {
+    if (_.isEmpty(ts)) {
+      return next({path: '/login'});
+    }
+  }
+
+  // 权限验证
   if (to.meta && to.meta.auth && !Util.$auth(to.meta.auth)) {
 
     return Notification.error({
       title: $i.hintMessage.systemHints,
       message: $i.hintMessage.noAuthority
     });
-    // return next({path: '/'});
-  }
-
-  if (to.path !== '/login' || from.path === '/login') {
-    if (_.isEmpty(ts)) { // 登录验证
-      return next({path: '/login'});
-    }
   }
 
   next();

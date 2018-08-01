@@ -32,15 +32,15 @@
           <div class="fn btn">
             <div v-if="pageType === 'plan'">
               <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(isArchive&&viewBy=='plan')">{{ $i.logistic.archive }}</el-button>
               <el-button v-authorize="auth[pageType]&&auth[pageType].CREATE||''" @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
             </div>
             <div v-if="pageType === 'loadingList'">
               <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(isArchive&&viewBy=='plan')">{{ $i.logistic.archive }}</el-button>
             </div>
             <div v-if="pageType === 'draft'">
-              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(isArchive&&viewBy=='plan')">{{ $i.logistic.archive }}</el-button>
               <el-button v-authorize="auth[pageType]&&auth[pageType].SEND||''" @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}</el-button>
             </div>
           </div>
@@ -63,6 +63,7 @@
     name: 'logisticPlanOverview',
     data() {
       return {
+        isArchive:false,
         selectSearch:'',
         height:500,
         tableLoading: false,
@@ -192,7 +193,7 @@
               db: this.$db.logistic.sku
             }
           },
-          downloadIds:[]
+          downloadIds:[],
         }
       }
     },
@@ -203,7 +204,7 @@
     },
     watch: {
       viewBy(newVal) {
-        // this.initPage();
+        this.initPage();
         this.fetchDataList()
       },
       pageType() {
@@ -316,7 +317,16 @@
         })
       },
       changeChecked(arr) {
-        this.selectCount = arr
+        this.selectCount = arr;
+        this.isArchive = arr.length&&arr.map(el=>{
+          if( this.pageType === 'loadingList'){
+            return el.logisticsStatus.value == 4;
+          }else if(this.pageType === 'plan'){
+            return (el.logisticsStatus.value == 4 || el.logisticsStatus.value == 5)
+          }else if(this.pageType === 'draft'){
+            return true;
+          }
+        }).every(el=> el);
         this.downloadIds = arr.map(el => {
           return el.id.value
         })
@@ -355,6 +365,7 @@
         // if(arg){
         //  this.initPage();
         // }
+        this.isArchive = false;
         const url = this.urlObj[this.pageType][this.viewBy].url
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true

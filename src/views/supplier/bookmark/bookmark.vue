@@ -45,7 +45,7 @@
                 code="udata_pruchase_supplier_bookmark_overview"
                 :height=500
                 :data="tabData"
-                :buttons="[{label: 'Detail', type: 1}]"
+                :buttons="[{label: $i.common.detail, type: 1}]"
                 @action="detail"
                 @change-checked='checked'
                 :loading='loading'
