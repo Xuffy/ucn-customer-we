@@ -9,7 +9,7 @@ export default {
         _hide:true
     },
     skuInventoryStatusDictCode:{
-        _hide:true
+        // _hide:true
     },
     orderNo:{},
     skuBarCode:{},
