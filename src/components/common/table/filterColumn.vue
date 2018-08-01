@@ -88,13 +88,17 @@
 
         return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {cache: !isUpdate})
           .then(res => {
-            let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
-              , dataList = [];
+            let list = [], dataList = [], isSubmit = false;
 
             this.columns = _.map(this.columns, val => {
               let item = _.findWhere(res, {property: val._filed || val.key})
               if (!val._hide && item) {
                 item._name = val.label;
+                if (val._mustChecked) {
+                  item.isChecked = 1;
+                  isSubmit = true;
+                  val._mustChecked = false;
+                }
                 dataList.push(item);
               }
 
@@ -104,15 +108,20 @@
               return val;
             });
 
-            this.init(dataList, list);
+            list = _.pluck(_.where(res, {isChecked: 1}), 'property');
+
+            this.init(dataList, list, isSubmit);
 
             return list;
           });
       },
-      init(data, checkList) {
+      init(data, checkList, isSubmit) {
         this.dataList[0].children = data;
 
-        this.$nextTick(() => this.$refs.columnTree.setCheckedKeys(checkList));
+        this.$nextTick(() => {
+          this.$refs.columnTree.setCheckedKeys(checkList);
+          isSubmit && this.submitFilter();
+        });
       },
       filterNode(value, data) {
         if (!value) return true;
@@ -218,36 +227,30 @@
 
   @keyframes ucn-flicker-fade {
     from {
-      background-color: #b7b7b7;
-      color: #ECEFF1;
+      background-color: #ffffff;
     }
     50% {
       background-color: #ECEFF1;
-      color: #999999;
     }
     to {
-      background-color: #b7b7b7;
-      color: #ECEFF1;
+      background-color: #ffffff;
     }
   }
 
   @-webkit-keyframes ucn-flicker-fade {
     from {
-      background-color: #b7b7b7;
-      color: #ECEFF1;
+      background-color: #ffffff;
     }
     50% {
       background-color: #ECEFF1;
-      color: #999999;
     }
     to {
-      background-color: #b7b7b7;
-      color: #ECEFF1;
+      background-color: #ffffff;
     }
   }
 
   [ucn-flicker='true'] {
-    animation: ucn-flicker-fade 1.5s infinite;
-    -webkit-animation: ucn-flicker-fade 1.5s infinite;
+    animation: ucn-flicker-fade 1s infinite;
+    -webkit-animation: ucn-flicker-fade 1s infinite;
   }
 </style>
