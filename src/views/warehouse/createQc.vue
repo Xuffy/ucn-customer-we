@@ -792,7 +792,6 @@
         mounted() {
             this.loadingData = true;
             this.columnConfig = this.$db.warehouse.createQcProductTable;
-            console.log(this.columnConfig)
         },
         watch: {
             selectProductTableData(n) {
