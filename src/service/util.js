@@ -33,7 +33,7 @@ const deleteObject = (list, fieldRemark, details) => {
 // 需要直接下载的文件格式
 const NEED_DOWNLOAD_FILE = ['jpg', 'gif', 'png', 'pdf', 'txt', 'bmp', 'jpeg', 'webp'];
 
-export default {
+const Util = {
   /**
    * 本地永久缓存
    */
@@ -56,6 +56,11 @@ export default {
    * 国际化语言配置
    */
   $i,
+
+
+  $ic(str, params) {
+    return _.template(str)(params);
+  },
 
   /**
    * 公共请求
@@ -123,6 +128,34 @@ export default {
     return (val / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
   },
 
+  /**
+   * 小数长度截取
+   * @param value    值
+   * @param length   限制长度
+   * @param label    需提示字段名
+   * @returns {*}
+   */
+  $toFixed(value, length, label) {
+    let n = '', b;
+
+    value = _.isString(value) ? Number(value) : value;
+
+    if (!_.isNumber(value)) {
+      return '';
+    }
+
+    b = value.toString().split('.');
+
+    if (label && b[1] && b[1].length > length) {
+      Message.warning(`${label} ${Util.$ic($i.common.decimalLimit, {length})}`);
+    }
+
+    _.map(_.range(length), () => n += 0);
+
+    n = Number('1' + n);
+
+    return Math.floor(value * n) / n;
+  },
 
   /**
    * 权限验证
@@ -145,6 +178,11 @@ export default {
     return pass;
   },
 
+  /**
+   * 下载
+   * @param url
+   * @returns {boolean}
+   */
   $download(url) {
     let str, flag;
 
@@ -337,7 +375,7 @@ export default {
         });
       });
     },
-    revertHideSame(data){
+    revertHideSame(data) {
       console.log(data)
       return _.map(data, value => {
         return _.mapObject(value, (val, key) => {
@@ -570,3 +608,5 @@ export default {
     },
   }
 }
+
+export default Util;

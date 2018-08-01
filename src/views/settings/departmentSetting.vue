@@ -426,6 +426,11 @@
       this.getUnit();
     },
     mounted() {
+      this.setMenuLink({
+        type: 100,
+        query: {code: 'DEPARTMENT_SETTING', bizCode: 'BIZ_USER'},
+        label: this.$i.common.log
+      });
     },
     watch: {
       searchDepartment(val) {

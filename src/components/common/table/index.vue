@@ -460,11 +460,10 @@
         });
       },
       setWidth(item) {
-        // item.value = 'sadasd耍哈斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬sadasd耍哈斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬sadasd耍哈斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬'
         let val = item._value || item.value;
-        if (_.isString(val)) {
+        if (_.isString(val) && (val.length / 2 * 8) < 300) {
 
-          return `${val.length / 2 * 14}px`;
+          return `${val.length / 2 * 8}px`;
         }
       }
     },
@@ -484,6 +483,7 @@
     position: relative;
     margin-bottom: 10px;
     width: 100%;
+    border-top: 1px solid #e2e2e2;
   }
 
   .ucn-table .visibility {
@@ -616,6 +616,7 @@
   .ucn-table thead td > div {
     line-height: 40px;
     white-space: nowrap;
+    box-sizing: border-box;
   }
 
   .ucn-table tfoot td > div {
@@ -626,6 +627,9 @@
   .ucn-table tbody td {
     padding: 10px;
     border-right: 1px solid #ebeef5;
+    white-space: normal;
+    word-break: break-all;
+    max-width: 300px;
   }
 
   .ucn-table tbody tr:nth-child(even) td.fixed-left,
@@ -703,15 +707,14 @@
 
   .header-content {
     width: 100%;
-    position: relative;
-    min-height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
   }
 
   .header-content .fixed {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    margin-top: -10px;
+    margin-right: 5px;
   }
 
   .ucn-table /deep/ .ucn-image .image,
