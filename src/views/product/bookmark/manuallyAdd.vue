@@ -598,6 +598,9 @@
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
                                     label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
@@ -729,8 +732,7 @@
                                         size="mini"
                                         :controls="false"
                                         v-model="boxSize.length"
-                                        :min="0"
-                                        label="描述文字">
+                                        :min="0">
                                 </v-input-number>
                                 <div class="speIcon">*</div>
                                 <v-input-number
@@ -758,7 +760,9 @@
                                         v-model="productForm[v.key]"
                                         :controls="false"
                                         :min="0"
-                                        label="please input"></v-input-number>
+                                        :placeholder="$i.product.pleaseInput"
+                                        :mark="v.label"
+                                        :accuracy="v.accuracy"></v-input-number>
                             </div>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
