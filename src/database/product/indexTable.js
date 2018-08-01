@@ -19,11 +19,11 @@ export default {
         key:'pictures',
         _fixed:'left'
     },
-    skuSaleStatus: {
-        key:'status'
-    },
     code:{
         _fixed:'left'
+    },
+    skuSaleStatus: {
+        key:'status'
     },
     nameCn:{
         
