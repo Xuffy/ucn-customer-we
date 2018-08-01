@@ -24,6 +24,9 @@ export default {
     fieldUpdate:{
         _hide:true
     },
+    fieldRemarkUpdate:{
+        _hide:true
+    },
     skuPic:{
         _slot:'skuPictures',
         type:'pic',

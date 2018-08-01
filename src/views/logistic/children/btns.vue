@@ -33,7 +33,21 @@ export default {
       btnWidth: 0,
       scale: 1,
       auth:{
+        placeLogisticPlan: {
+          DRAFT:'LOGISTICS:PLAN_DETAIL:DRAFT',
+          MODIFY:'LOGISTICS:PLAN_DETAIL:MODIFY',
+          DOWNLOAD:'LOGISTICS:PLAN_DETAIL:DOWNLOAD',
+          CANCEL:'LOGISTICS:PLAN_DETAIL:CANCEL',
+          COPY:'LOGISTICS:PLAN_DETAIL:COPY'
+        },
         logisticPlanDetail: {
+          DRAFT:'LOGISTICS:PLAN_DETAIL:DRAFT',
+          MODIFY:'LOGISTICS:PLAN_DETAIL:MODIFY',
+          DOWNLOAD:'LOGISTICS:PLAN_DETAIL:DOWNLOAD',
+          CANCEL:'LOGISTICS:PLAN_DETAIL:CANCEL',
+          COPY:'LOGISTICS:PLAN_DETAIL:COPY'
+        },
+        logisticDraftDetail: {
           DRAFT:'LOGISTICS:PLAN_DETAIL:DRAFT',
           MODIFY:'LOGISTICS:PLAN_DETAIL:MODIFY',
           DOWNLOAD:'LOGISTICS:PLAN_DETAIL:DOWNLOAD',
