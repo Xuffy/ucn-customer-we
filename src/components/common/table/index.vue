@@ -111,7 +111,7 @@
 
               <div v-else
                    :style="{color:cItem._color || '','min-width': cItem._width || setWidth(cItem)}"
-                   v-text="cItem._value || cItem.value || (cItem.value === 0 ? cItem.value : '--')"></div>
+                   v-text="setDataFilter(cItem)"></div>
             </td>
 
             <!--操作按钮 渲染-->
@@ -360,7 +360,7 @@
           this.tableAttr.sl = sl;
           this.tableAttr.w = sw;
           this.tableAttr.h = sh;
-          
+
           if (this.$refs.tableFoot) {
             this.$refs.tableFoot.style.transform = `translate3d(0,${-(sh - ele.clientHeight - st - 1)}px,0)`;
           }
@@ -422,7 +422,7 @@
         let e = this.$refs.tableBox, timeout = null;
 
         this.tableLoading = true;
-        if (this.dataList.length !== val.length || e.scrollTop !== this.tableAttr.h || e.scrollLeft !== this.tableAttr.w) {
+        if (this.dataList.length !== val.length) {
           e.scrollTop = 0;
           e.scrollLeft = 0;
         }
@@ -477,6 +477,18 @@
 
           return `${val.length / 2 * 8}px`;
         }
+      },
+      setDataFilter(item) {
+        let value = '';
+        value = item._value || item.value;
+        if (item._toFixed) {
+          value = this.$toFixed(value, item._toFixed);
+        }
+
+        if (value !== 0 && !value) {
+          value = '--';
+        }
+        return value;
       }
     },
     beforeDestroy() {

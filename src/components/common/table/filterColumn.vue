@@ -149,6 +149,11 @@
 
         this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
           .then(res => {
+            let e = this.tableRef();
+            if (!_.isUndefined(e.scrollLeft)) {
+              e.scrollTop = 0;
+              e.scrollLeft = 0;
+            }
             this.visible = false;
             this.update(true).then(data => this.$emit('change', data));
           })

@@ -301,6 +301,9 @@
       },
       changeOperate(item, row) {
         item._isModified = true;
+        if (item._toFixed) {
+          item.value = this.$toFixed(item.value, item._toFixed, item.label);
+        }
         this.$emit('change', item, row);
       },
       changeTbaleData(type) {
