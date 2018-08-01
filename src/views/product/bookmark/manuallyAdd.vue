@@ -132,8 +132,7 @@
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :mark="v.label"
-                                    :accuracy="1"
-                                    :controls="false"></v-input-number>
+                                    :accuracy="1"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down

@@ -83,7 +83,7 @@
             size: String,
             controls: {
                 type: Boolean,
-                default: true
+                default: false
             },
             controlsPosition: {
                 type: String,
