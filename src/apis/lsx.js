@@ -112,7 +112,7 @@ export default {
   set_qcResultConfirm: ['/qc/result/confirm', 'BASE_URL'],
   set_qcResultRework: ['/qc/rework', 'BASE_URL'],
   set_qcResultReturn: ['/qc/return', 'BASE_URL'],
-  get_qcPaymentData: ['/payment/list/{orderNo}/{orderType}', 'BASE_URL'],
+  get_qcPaymentData: ['/payment/list/{orderNo}/{orderType}?moduleCode={moduleCode}', 'BASE_URL'],
   get_qcPaymentNo: ['/payment/genNo', 'BASE_URL'],
   save_qcPayment: ['/payment/save', 'BASE_URL'],
   update_qcPayment: ['/payment/update', 'BASE_URL'],

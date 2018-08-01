@@ -190,11 +190,13 @@
                         </div>
                         <div v-else-if="v.fromService"></div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <!-- <el-input-number
                                     v-model="scope.row[v.key].value"
                                     :min="0"
                                     :controls="false"
-                                    label="please input"></el-input-number>
+                                    @change="val => changeInput(val, scope.row[v.key], scope.$index)"
+                                    label="please input"></el-input-number> -->
+                            <el-input :min="0" style="width:150px"  @change="val => changeInput(val, scope.row[v.key], scope.$index)" v-model="scope.row[v.key].value" type="number"></el-input>
                         </div>
                         <div v-else-if="v.showType==='input'">
                             <el-input
@@ -605,17 +607,16 @@
             },
             postProduct() {
                 this.productConfig.ids = [];
-
                 _.map(this.selectProductList, v => {
                     this.productConfig.ids.push(v.id.value);
                 });
-
                 this.productDialogVisible = false;
                 if (this.productConfig.ids.length !== 0) {
                     this.productConfig.orderNo = '';
                     this.loadingProductTable = true;
                     this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
                         this.loadingProductTable = false;
+                        this.productTableData = []
                         _.map(res, v => {
                             if (v.id !== 0) {
                                 let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
@@ -661,7 +662,7 @@
                         let arr = this.$copyArr(this.productTableData)
                         arr = this.$getDB(this.$db.warehouse.createQcProductTable, arr);
                         this.$refs.filterColumn.update(false, arr).then(data => {
-                            console.log(data)
+                            // console.log(data)
                             this.productTableData = this.$refs.filterColumn.getFilterData(arr, data);
                             this.columnConfig = this.productTableData[0];
                         });
@@ -784,6 +785,9 @@
                     this.loadingData = false;
                 });
 
+            },
+            changeInput (val, e, index) {
+                e.value = this.$toFixed(Math.abs(val), 2, e.label)
             }
         },
         created() {

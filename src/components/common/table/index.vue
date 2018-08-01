@@ -1,5 +1,5 @@
 <template>
-  <div class="ucn-table" v-loading="loading"
+  <div class="ucn-table" v-loading="loading || tableLoading"
        :class="{'fixed-left-box':selection,'fixed-right-box':buttons}">
     <div class="header-content" v-if="!hideFilterColumn || !hideFilterValue">
       <div>
@@ -11,7 +11,7 @@
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
                          :table-ref="() => $refs.tableBox"
-                         @change="val => {dataList = $refs.filterColumn.getFilterData(dataList, val)}"></v-filter-column>
+                         @change="val => setDataList(dataList)"></v-filter-column>
       </div>
     </div>
 
@@ -44,7 +44,7 @@
 
       <!--表格 渲染-->
       <div class="table-box" id="table-box" ref="tableBox" :style="{'max-height':height + 'px'}">
-        <table v-if="dataList.length">
+        <table v-if="dataList.length" ref="table">
           <thead ref="tableTitle">
           <tr>
             <td ref="tableCheckbox" v-if="selection" class="checkbox">
@@ -52,7 +52,7 @@
                 <input type="checkbox" :class="{visibility:selectionRadio}"/>
               </div>
             </td>
-            <td>
+            <td style="min-width: 50px">
               <div>#</div>
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key"
@@ -111,7 +111,7 @@
 
               <div v-else
                    :style="{color:cItem._color || '','min-width': cItem._width || setWidth(cItem)}"
-                   v-text="cItem._value || cItem.value || (cItem.value === 0 ? cItem.value : '--')"></div>
+                   v-text="setDataFilter(cItem)"></div>
             </td>
 
             <!--操作按钮 渲染-->
@@ -258,11 +258,12 @@
     },
     data() {
       return {
+        tableLoading: false,
         dataList: [],
         dataColumn: [],
         checkedAll: false,
         interval: null,
-        tableAttr: {st: 0, sl: 0},
+        tableAttr: {st: 0, sl: 0, w: 0, h: 0},
         currentSort: {orderBy: '', orderType: ''}
       }
     },
@@ -354,8 +355,11 @@
           sl = e ? ele.scrollLeft : this.tableAttr.sl;
           sw = ele.scrollWidth;
           sh = ele.scrollHeight;
+
           this.tableAttr.st = st;
           this.tableAttr.sl = sl;
+          this.tableAttr.w = sw;
+          this.tableAttr.h = sh;
 
           if (this.$refs.tableFoot) {
             this.$refs.tableFoot.style.transform = `translate3d(0,${-(sh - ele.clientHeight - st - 1)}px,0)`;
@@ -415,23 +419,31 @@
           _.where(this.dataList, {_checked: true});
       },
       setDataList(val, type) {
+        let e = this.$refs.tableBox, timeout = null;
+
+        this.tableLoading = true;
         if (this.dataList.length !== val.length) {
-          this.$refs.tableBox.scrollTop = 0;
-          this.$refs.tableBox.scrollLeft = 0;
+          e.scrollTop = 0;
+          e.scrollLeft = 0;
         }
 
-        this.resetFile();
-        if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
-          this.$refs.filterColumn.update(false, val).then(res => {
-            this.dataList = this.$refs.filterColumn.getFilterData(val, res);
+        timeout = setTimeout(() => {
+          this.tableLoading = false;
+          clearTimeout(timeout);
+          this.resetFile();
+          if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
+            this.$refs.filterColumn.update(false, val).then(res => {
+              this.dataList = this.$refs.filterColumn.getFilterData(val, res);
+              type && this.filterColumn();
+              this.$nextTick(() => this.setSort())
+              this.tableLoading = false;
+            })
+          } else {
+            this.dataList = val;
             type && this.filterColumn();
-            this.$nextTick(() => this.setSort())
-
-          })
-        } else {
-          this.dataList = val;
-          type && this.filterColumn();
-        }
+            this.tableLoading = false;
+          }
+        }, 500);
       },
       resetFile() {
         _.mapObject(this.dataList, value => {
@@ -465,6 +477,18 @@
 
           return `${val.length / 2 * 8}px`;
         }
+      },
+      setDataFilter(item) {
+        let value = '';
+        value = item._value || item.value;
+        if (item._toFixed) {
+          value = this.$toFixed(value, item._toFixed);
+        }
+
+        if (value !== 0 && !value) {
+          value = '--';
+        }
+        return value;
       }
     },
     beforeDestroy() {
