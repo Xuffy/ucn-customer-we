@@ -35,6 +35,7 @@
                 :min="min"
                 :name="name"
                 :label="label"
+                :placeholder="placeholder"
                 @keydown.up.native.prevent="increase"
                 @keydown.down.native.prevent="decrease"
                 @blur="handleBlur"
@@ -104,7 +105,11 @@
             accuracy:{
                 type:Number,
                 default:null
-            }
+            },
+            placeholder:{
+                type:String,
+                default:''
+            },
         },
         data() {
             return {
@@ -136,7 +141,6 @@
                         }
                     }
                     this.currentValue = newVal;
-                    this.$emit("changeNumber");
                     this.$emit("input", newVal);
                 }
             }

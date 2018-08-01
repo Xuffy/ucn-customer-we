@@ -329,8 +329,22 @@ export default {
       });
     },
     showDetails(details) {
+      let db = this.$db.inquiry.productInfo;
+      let keys = new Set();
+      details.map(i => i.fieldDisplay).forEach(i => {
+        if (i) {
+          Object.keys(i).forEach(k => keys.add(k));
+        }
+      });
+
+      for (let field in db) { 
+        if (!field) continue;
+        let key = db[field].key || field;
+        db[field]._mustChecked = keys.has(key);
+      }
+
       this.productTabData = this.newProductTabData = this.$getDB(
-        this.$db.inquiry.productInfo,
+        db,
         this.$refs.HM.getFilterData(details, 'skuId'),
         item => this.$filterDic(item)
       );
@@ -479,8 +493,8 @@ export default {
       let exchangeRate = this.custom.exchangeRateUSD; // 汇率
       if (field === 'skuExwPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
         let exwPrice = item.skuExwPrice.value;
-        if (codeUtils.isNumber(exwPrice, outerCartonVolume, outerCartonQty, exchangeRate)) {
-          let fob = exwPrice + 6500 / 68 * outerCartonVolume / outerCartonQty / exchangeRate * 1.05;
+        if (codeUtils.isNumber(exwPrice, outerCartonVolume, outerCartonQty)) {
+          let fob = (exwPrice + 6500 / 68 * outerCartonVolume / outerCartonQty) * 1.05;
           item.skuRefFobPrice.value = Number(fob.toFixed(8));
         }
       }
@@ -497,7 +511,7 @@ export default {
         let cifPrice = item.skuCifPrice.value;
         let portWarehouse = this.custom.portWarehousePrice40HC; // 港口到仓库运费
         if (codeUtils.isNumber(cifPrice, outerCartonQty, outerCartonVolume, portWarehouse)) {
-          let ddu = cifPrice + portWarehouse / 68 * outerCartonVolume / outerCartonQty / this.exchangeRate;
+          let ddu = cifPrice + portWarehouse / 68 * outerCartonVolume / outerCartonQty;
           item.skuRefDduPrice.value = Number(ddu.toFixed(8));
         }
       }
