@@ -16,13 +16,14 @@ export default {
     },
     pictures: {
         _image:true,
-        key:'pictures'
+        key:'pictures',
+        _fixed:'left'
+    },
+    code:{
+        _fixed:'left'
     },
     skuSaleStatus: {
         key:'status'
-    },
-    code:{
-
     },
     nameCn:{
 

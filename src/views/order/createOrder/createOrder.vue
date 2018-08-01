@@ -194,88 +194,88 @@
             </el-row>
         </el-form>
 
-        <div class="title">
-            {{$i.order.responsibility}}
-        </div>
-        <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
-            <el-table
-                    :data="orderForm.responsibilityList"
-                    style="width: 100%">
-                <el-table-column
-                        prop="type"
-                        label="Type">
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.type==='0' || scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
-                        <span v-if="scope.row.type==='1' || scope.row.type===1">{{$i.order.labelDesignDate}}</span>
-                        <span v-if="scope.row.type==='2' || scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
-                        <span v-if="scope.row.type==='3' || scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
-                        <span v-if="scope.row.type==='4' || scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
-                        <span v-if="scope.row.type==='5' || scope.row.type===5">{{$i.order.otherResponsibility}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="customer"
-                        align="center"
-                        label="Me">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-model="scope.row.customer"
-                                :editable="false"
-                                align="right"
-                                type="date"
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseChoose"
-                                :picker-options="pickerOptions1">
-                        </el-date-picker>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="supplier"
-                        align="center"
-                        label="Supplier">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-model="scope.row.supplier"
-                                align="right"
-                                :editable="false"
-                                type="date"
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseChoose"
-                                :picker-options="pickerOptions1">
-                        </el-date-picker>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="Remark"
-                        align="center"
-                        label="Remark">
-                    <template slot-scope="scope">
-                        <el-input
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseInput"
-                                v-model="scope.row.remark"
-                                clearable>
-                        </el-input>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualDate"
-                        align="center"
-                        label="Actual Date">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-model="scope.row.actualDt"
-                                align="right"
-                                type="date"
-                                :editable="false"
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseChoose"
-                                :picker-options="pickerOptions1">
-                        </el-date-picker>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
+        <!--<div class="title">-->
+            <!--{{$i.order.responsibility}}-->
+        <!--</div>-->
+        <!--<div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">-->
+            <!--<el-table-->
+                    <!--:data="orderForm.responsibilityList"-->
+                    <!--style="width: 100%">-->
+                <!--<el-table-column-->
+                        <!--prop="type"-->
+                        <!--label="Type">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<span v-if="scope.row.type==='0' || scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>-->
+                        <!--<span v-if="scope.row.type==='1' || scope.row.type===1">{{$i.order.labelDesignDate}}</span>-->
+                        <!--<span v-if="scope.row.type==='2' || scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>-->
+                        <!--<span v-if="scope.row.type==='3' || scope.row.type===3">{{$i.order.receiveSampleDate}}</span>-->
+                        <!--<span v-if="scope.row.type==='4' || scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>-->
+                        <!--<span v-if="scope.row.type==='5' || scope.row.type===5">{{$i.order.otherResponsibility}}</span>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="customer"-->
+                        <!--align="center"-->
+                        <!--:label="$i.order.customerBig">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-date-picker-->
+                                <!--v-model="scope.row.customer"-->
+                                <!--:editable="false"-->
+                                <!--align="right"-->
+                                <!--type="date"-->
+                                <!--:disabled="true"-->
+                                <!--:placeholder="$i.order.pleaseChoose"-->
+                                <!--:picker-options="pickerOptions1">-->
+                        <!--</el-date-picker>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="supplier"-->
+                        <!--align="center"-->
+                        <!--:label="$i.order.supplierBig">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-date-picker-->
+                                <!--v-model="scope.row.supplier"-->
+                                <!--align="right"-->
+                                <!--:editable="false"-->
+                                <!--type="date"-->
+                                <!--:disabled="true"-->
+                                <!--:placeholder="$i.order.pleaseChoose"-->
+                                <!--:picker-options="pickerOptions1">-->
+                        <!--</el-date-picker>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="Remark"-->
+                        <!--align="center"-->
+                        <!--:label="$i.order.remarkBig">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-input-->
+                                <!--:disabled="true"-->
+                                <!--:placeholder="$i.order.pleaseInput"-->
+                                <!--v-model="scope.row.remark"-->
+                                <!--clearable>-->
+                        <!--</el-input>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="actualDate"-->
+                        <!--align="center"-->
+                        <!--:label="$i.order.actualDate">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-date-picker-->
+                                <!--v-model="scope.row.actualDt"-->
+                                <!--align="right"-->
+                                <!--type="date"-->
+                                <!--:editable="false"-->
+                                <!--:disabled="true"-->
+                                <!--:placeholder="$i.order.pleaseChoose"-->
+                                <!--:picker-options="pickerOptions1">-->
+                        <!--</el-date-picker>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+            <!--</el-table>-->
+        <!--</div>-->
 
         <div class="title">
             {{$i.order.productInfoBig}}
@@ -844,11 +844,11 @@
                 selectSearch:'',
                 productInfoBtn:[
                     {
-                        label: 'Negotiate',
+                        label: this.$i.order.modify,
                         type: 'negotiate'
                     },
                     {
-                        label: 'Detail',
+                        label: this.$i.order.detail,
                         type: 'detail'
                     }
                 ],
@@ -871,7 +871,7 @@
                 tableDataList:[],
                 searchOptions:[
                     {
-                        label:'inquiryNo',
+                        label:this.$i.order.inquiryNo,
                         id:1
                     },
                 ],
@@ -952,56 +952,7 @@
                     quotationNo: "",
                     remark: "",
                     responsibilityFlag:false,
-                    responsibilityList: [
-                        {
-                            type: '0',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '1',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '2',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '3',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '4',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '5',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                    ],
+                    responsibilityList: [],
                     skuList: [],
                     supplierCode: "",
                     supplierId: 0,
@@ -1365,31 +1316,6 @@
                             arr.push(v);
                         }
                     });
-                    if(this.$refs.uploadSkuLabelPic){
-                        this.$refs.uploadSkuLabelPic.reset();
-                    }
-                    if(this.$refs.uploadSkuPkgMethodPic){
-                        this.$refs.uploadSkuPkgMethodPic.reset();
-                    }
-                    if(this.$refs.uploadSkuInnerCartonPic){
-                        this.$refs.uploadSkuInnerCartonPic.reset();
-                    }
-                    if(this.$refs.uploadSkuOuterCartonPic){
-                        this.$refs.uploadSkuOuterCartonPic.reset();
-                    }
-                    if(this.$refs.skuAdditionalOne){
-                        this.$refs.skuAdditionalOne.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalTwo){
-                        this.$refs.uploadSkuAdditionalTwo.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalThree){
-                        this.$refs.uploadSkuAdditionalThree.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalFour){
-                        this.$refs.uploadSkuAdditionalFour.reset();
-                    }
-                    console.log(arr,'arr')
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
@@ -1921,7 +1847,7 @@
                     },
                     {
                         code:'5',
-                        name:'CANCLED'
+                        name:'CANCELED'
                     },
                 ];
                 const currency=this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true});

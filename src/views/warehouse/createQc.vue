@@ -190,13 +190,14 @@
                         </div>
                         <div v-else-if="v.fromService"></div>
                         <div v-else-if="v.showType==='number'">
-                            <!-- <el-input-number
+                            <v-input-number
                                     v-model="scope.row[v.key].value"
                                     :min="0"
                                     :controls="false"
-                                    @change="val => changeInput(val, scope.row[v.key], scope.$index)"
-                                    label="please input"></el-input-number> -->
-                            <el-input :min="0" style="width:150px"  @change="val => changeInput(val, scope.row[v.key], scope.$index)" v-model="scope.row[v.key].value" type="number"></el-input>
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy ? v.accuracy : 0"
+                                    label="please input"></v-input-number>
+                            <!-- <el-input :min="0" style="width:150px"  @change="val => changeInput(val, scope.row[v.key], scope.$index)" v-model="scope.row[v.key].value" type="number"></el-input> -->
                         </div>
                         <div v-else-if="v.showType==='input'">
                             <el-input
@@ -308,7 +309,7 @@
 </template>
 <script>
 
-    import { VTimeZone, VPagination, VUpload, VTable, VFilterColumn } from "@/components/index";
+    import { VTimeZone, VPagination, VUpload, VTable, VFilterColumn, VInputNumber } from "@/components/index";
 
     export default {
         name: "createQc",
@@ -317,7 +318,8 @@
             VTimeZone,
             page: VPagination,
             VUpload,
-            VFilterColumn
+            VFilterColumn,
+            VInputNumber
         },
         data() {
             return {
@@ -796,7 +798,6 @@
         mounted() {
             this.loadingData = true;
             this.columnConfig = this.$db.warehouse.createQcProductTable;
-            // console.log(this.columnConfig)
         },
         watch: {
             selectProductTableData(n) {

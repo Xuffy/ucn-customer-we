@@ -2,11 +2,6 @@
     <div class="overview">
         <div class="title">
             <span>{{title}}</span>
-            <el-button class="title-btn"
-                       v-if="showAdvancedBtn"
-                       @click="hideBody = !hideBody"
-                       type="text">{{hideBody?$i.product.advanced:$i.product.hideTheAdvanced}}
-            </el-button>
         </div>
         <div class="search-option">
             <el-form :label-width="`${labelWidth}px`">
@@ -101,8 +96,21 @@
             </el-form>
         </div>
         <div class="search-btn">
-            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
+            <el-button
+                    @click="search"
+                    :loading="disabledSearch"
+                    type="primary">{{$i.product.search}}</el-button>
+            <el-button
+                    @click="clear"
+                    type="info"
+                    plain>{{$i.product.clear}}</el-button>
+            <el-button
+                    class="advancedBtn"
+                    type="text"
+                    v-if="showAdvancedBtn"
+                    @click="hideBody = !hideBody">
+                {{hideBody?$i.product.advanced:$i.product.hideTheAdvanced}}
+            </el-button>
         </div>
         <div class="table">
             <v-table
@@ -117,21 +125,21 @@
                 <template slot="header">
                     <slot name="btns"></slot>
                     <!--<div class="btns" v-if="!hideBtns">-->
-                        <!--&lt;!&ndash;<el-button @click="createInquiry">{{`${$i.product.createInquiry}(${selectList.length})`}}</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button @click="createOrder">{{`${$i.product.createOrder}(${selectList.length})`}}</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button @click="compareProducts" :disabled="disabledCompare">{{`${$i.product.compare}(${selectList.length})`}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button @click="addToBookmark" :loading="disableClickAddBookmark"&ndash;&gt;-->
-                                   <!--&lt;!&ndash;:disabled="disabledAddBookmark">{{`${$i.product.addToBookmark}(${selectList.length})`}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
-                        <!--<el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'" :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
-                        <!--&lt;!&ndash;<el-button type="danger">{{$i.product.delete}}</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button @click="createInquiry">{{`${$i.product.createInquiry}(${selectList.length})`}}</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button @click="createOrder">{{`${$i.product.createOrder}(${selectList.length})`}}</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button @click="compareProducts" :disabled="disabledCompare">{{`${$i.product.compare}(${selectList.length})`}}&ndash;&gt;-->
+                    <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button @click="addToBookmark" :loading="disableClickAddBookmark"&ndash;&gt;-->
+                    <!--&lt;!&ndash;:disabled="disabledAddBookmark">{{`${$i.product.addToBookmark}(${selectList.length})`}}&ndash;&gt;-->
+                    <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                    <!--<el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'" :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
+                    <!--&lt;!&ndash;<el-button type="danger">{{$i.product.delete}}</el-button>&ndash;&gt;-->
                     <!--</div>-->
                     <!--&lt;!&ndash;<div class="btns" v-if="type==='recycle'">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover"&ndash;&gt;-->
-                                   <!--&lt;!&ndash;type="primary">{{$i.product.recover}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button>{{$i.product.download+'('+downloadRecycleListInfo+')'}}</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover"&ndash;&gt;-->
+                    <!--&lt;!&ndash;type="primary">{{$i.product.recover}}&ndash;&gt;-->
+                    <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button>{{$i.product.download+'('+downloadRecycleListInfo+')'}}</el-button>&ndash;&gt;-->
                     <!--&lt;!&ndash;</div>&ndash;&gt;-->
                 </template>
             </v-table>
@@ -350,9 +358,8 @@
         color: #666666;
         margin-bottom: 5px;
     }
-    .title-btn {
-        float: right;
-        margin-right: 5px;
+    .advancedBtn >>> span{
+        text-decoration: underline;
     }
     .body {
         overflow: hidden;

@@ -527,7 +527,11 @@
                         dduCurrency:this.productForm.dduCurrency,
                         dduArea:this.productForm.dduArea,
                     }];
-                    this.priceData = this.$getDB(this.$db.product.detailTab, priceData);
+                    this.priceData = this.$getDB(this.$db.product.detailTab, priceData,item=>{
+                        item.refFobPrice._note=this.$i.product.fobFormula;
+                        item.refCifPrice._note=this.$i.product.cifFormula;
+                        item.refDduPrice._note=this.$i.product.dduFormula;
+                    });
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory).then(res=>{
                         if(!res || !res.datas || res.datas.length===0){return}
