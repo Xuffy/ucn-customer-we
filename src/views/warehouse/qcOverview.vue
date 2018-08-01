@@ -90,7 +90,7 @@
                     orderNo: "",
                     qcOrderNo: "",
                     qcStatusDictCode: "",
-                    sorts:[{orderBy:"entryDt",orderType:"desc"}]
+                    sorts:[{orderBy:"updateDt",orderType:"desc"}]
                 },
                 tabData: [],
                 selectList: [],
