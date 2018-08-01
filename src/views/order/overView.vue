@@ -415,7 +415,7 @@
                     disableArchive=true;
                 }else{
                     _.map(n,v=>{
-                        if(v.status.value!=='CANCLED'){
+                        if(v.status.value!=='CANCELED'){
                             disableArchive=true;
                         }else{
                             archiveLength++;

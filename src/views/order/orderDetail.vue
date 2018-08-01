@@ -1546,8 +1546,8 @@
                         name: "PROCESS"
                     },
                     {
-                        code: "CANCLED",
-                        name: "CANCLED"
+                        code: "CANCELED",
+                        name: "CANCELED"
                     }
                 ];
                 this.$ajax.all([currency, country, exchangeRate, unit]).then(res => {

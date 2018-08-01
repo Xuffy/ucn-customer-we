@@ -1847,7 +1847,7 @@
                     },
                     {
                         code:'5',
-                        name:'CANCLED'
+                        name:'CANCELED'
                     },
                 ];
                 const currency=this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true});
