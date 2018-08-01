@@ -327,22 +327,30 @@
           <el-row>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.oceanFreight +'：'">
-                <el-input size="mini" v-model="customData.oceanFreightUSD40HC" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <el-input size="mini" v-model="customData.oceanFreightUSD40HC"
+                          @change="val=>customData.oceanFreightUSD40HC = this.$toFixed(val,4,$i.setting.oceanFreight)"
+                          :placeholder="$i.common.inputkeyWordToSearch"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.insuranceExpenses +'：'">
-                <el-input size="mini" v-model="customData.insuranceExpensesUSD40HC" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <el-input size="mini" v-model="customData.insuranceExpensesUSD40HC"
+                          @change="val=>customData.insuranceExpensesUSD40HC = this.$toFixed(val,4,$i.setting.insuranceExpenses)"
+                          :placeholder="$i.common.inputkeyWordToSearch"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item  :label="$i.setting.priceCurrency +'：'">
-                <el-input size="mini" v-model="customData.portWarehousePrice40HC" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <el-input size="mini" v-model="customData.portWarehousePrice40HC"
+                          @change="val=>customData.portWarehousePrice40HC = this.$toFixed(val,4,$i.setting.priceCurrency)"
+                          :placeholder="$i.common.inputkeyWordToSearch"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.exchangeRate +'：'">
-                <el-input size="mini" v-model="customData.exchangeRateUSD" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <el-input size="mini" v-model="customData.exchangeRateUSD"
+                          @change="val=>customData.exchangeRateUSD = this.$toFixed(val,4,$i.setting.exchangeRate)"
+                          :placeholder="$i.common.inputkeyWordToSearch"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -368,7 +376,9 @@
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
               <el-form-item  :label="$i.setting.tradeExchangeRate +'：'" required>
-                <el-input size="mini" v-model="exchangerateData.price" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <el-input size="mini" v-model="exchangerateData.price"
+                          @change="val=>exchangerateData.price = this.$toFixed(val,4,$i.setting.tradeExchangeRate)"
+                          :placeholder="$i.common.inputkeyWordToSearch"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -933,7 +943,6 @@
               documents:[],
               settingId: this.companyInfo.id
             }
-            console.log(this.documentTypeClone)
             this.documentTypeClone.forEach(v=>{
               documentParmas.documents.push({
                 attachments: this.$refs['uploadDocument'+v.code][0].getFiles() ,
@@ -945,6 +954,10 @@
             });
 
             this.$ajax.post(this.$apis.post_purchase_customer_document,documentParmas).then(res=>{
+              this.$message({
+                message: this.$i.common.uploadSuccess,
+                type: 'success'
+              });
               this.getDocument();
             })
           },
