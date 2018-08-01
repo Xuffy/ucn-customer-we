@@ -190,12 +190,13 @@
                         </div>
                         <div v-else-if="v.fromService"></div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <!-- <el-input-number
                                     v-model="scope.row[v.key].value"
                                     :min="0"
                                     :controls="false"
-                                    @change="val => changeInput(val, scope.row)"
-                                    label="please input"></el-input-number>
+                                    @change="val => changeInput(val, scope.row[v.key], scope.$index)"
+                                    label="please input"></el-input-number> -->
+                            <el-input :min="0" style="width:150px"  @change="val => changeInput(val, scope.row[v.key], scope.$index)" v-model="scope.row[v.key].value" type="number"></el-input>
                         </div>
                         <div v-else-if="v.showType==='input'">
                             <el-input
@@ -785,9 +786,8 @@
                 });
 
             },
-            changeInput (val, e) {
-                console.log(val, e)
-                // e.expectQcQty.value = 100
+            changeInput (val, e, index) {
+                e.value = this.$toFixed(Math.abs(val), 2, e.label)
             }
         },
         created() {
