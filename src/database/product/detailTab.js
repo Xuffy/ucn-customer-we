@@ -122,7 +122,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
-        accuracy:2
+        accuracy:1
     },
     deliveryDates:{
         key:'deliveryDates',
@@ -315,13 +315,13 @@ export default {
         key:'fobPrice',
         showType:'number',
         belongTab:'priceInfo',
-        accuracy:2
+        accuracy:4
     },
     refFobPrice:{
         key:'refFobPrice',
         showType:'number',
         belongTab:'priceInfo',
-        accuracy:2
+        accuracy:4
     },
     fobPort:{
         key:'fobPort',
@@ -332,7 +332,7 @@ export default {
         key:'exwPrice',
         showType:'number',
         belongTab:'priceInfo',
-        accuracy:2
+        accuracy:4
     },
     exwCurrency:{
         key:'exwCurrency',
@@ -344,13 +344,13 @@ export default {
         key:'cifPrice',
         showType:'number',
         belongTab:'priceInfo',
-        accuracy:2
+        accuracy:4
     },
     refCifPrice:{
         key:'refCifPrice',
         showType:'number',
         belongTab:'priceInfo',
-        accuracy:2
+        accuracy:4
     },
     cifCurrency:{
         key:'cifCurrency',
@@ -367,13 +367,13 @@ export default {
         key:'dduPrice',
         showType:'number',
         belongTab:'priceInfo',
-        accuracy:2
+        accuracy:4
     },
     refDduPrice:{
         key:'refDduPrice',
         showType:'number',
         belongTab:'priceInfo',
-        accuracy:2
+        accuracy:4
     },
     dduCurrency:{
         key:'dduCurrency',
@@ -562,42 +562,49 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:1
     },
     outerCartonLength:{
         key:'outerCartonLength',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonWidth:{
         key:'outerCartonWidth',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonHeight:{
         key:'outerCartonHeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonNetWeight:{
         key:'outerCartonNetWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonRoughWeight:{
         key:'outerCartonRoughWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonVolume:{
         key:'outerCartonVolume',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:3
     },
     outerCartonMethodCn:{
         key:'outerCartonMethodCn',
@@ -627,18 +634,21 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     gp40SkuQty:{
         key:'gp40SkuQty',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     hq40SkuQty:{
         key:'hq40SkuQty',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     tryDimension:{
         key:'tryDimension',
@@ -651,6 +661,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     specialTransportRequire:{
         key:'specialTransportRequire',
@@ -675,18 +686,21 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     safeInventory:{
         key:'safeInventory',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     minInventory:{
         key:'minInventory',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
 
     /**
@@ -710,6 +724,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'otherInfo',
+        accuracy:0
     },
     qualityStander:{
         key:'qualityStander',
