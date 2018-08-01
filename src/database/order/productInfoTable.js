@@ -1,11 +1,12 @@
 export default {
+    label:{
+        _important:true,
+        _title:'Remark',
+        _fixed:'left'
+    },
     skuStatus:{
         _slot:'skuStatus',
         _fixed:'left'
-    },
-    label:{
-        _important:true,
-        _title:'Remark'
     },
     _remark:{
         _hide:true
