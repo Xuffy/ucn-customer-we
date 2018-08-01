@@ -327,30 +327,54 @@
           <el-row>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.oceanFreight +'：'">
-                <el-input size="mini" v-model="customData.oceanFreightUSD40HC"
-                          @change="val=>customData.oceanFreightUSD40HC = this.$toFixed(val,4,$i.setting.oceanFreight)"
-                          :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.oceanFreightUSD40HC"
+                  :accuracy="4"
+                  :mark="$i.setting.oceanFreight"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.insuranceExpenses +'：'">
-                <el-input size="mini" v-model="customData.insuranceExpensesUSD40HC"
-                          @change="val=>customData.insuranceExpensesUSD40HC = this.$toFixed(val,4,$i.setting.insuranceExpenses)"
-                          :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.insuranceExpensesUSD40HC"
+                  :accuracy="4"
+                  :mark="$i.setting.insuranceExpenses"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item  :label="$i.setting.priceCurrency +'：'">
-                <el-input size="mini" v-model="customData.portWarehousePrice40HC"
-                          @change="val=>customData.portWarehousePrice40HC = this.$toFixed(val,4,$i.setting.priceCurrency)"
-                          :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.portWarehousePrice40HC"
+                  :accuracy="4"
+                  :mark="$i.setting.priceCurrency"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.exchangeRate +'：'">
-                <el-input size="mini" v-model="customData.exchangeRateUSD"
-                          @change="val=>customData.exchangeRateUSD = this.$toFixed(val,4,$i.setting.exchangeRate)"
-                          :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.exchangeRateUSD"
+                  :accuracy="4"
+                  :mark="$i.setting.exchangeRate"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
           </el-row>
@@ -376,9 +400,15 @@
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
               <el-form-item  :label="$i.setting.tradeExchangeRate +'：'" required>
-                <el-input size="mini" v-model="exchangerateData.price"
-                          @change="val=>exchangerateData.price = this.$toFixed(val,4,$i.setting.tradeExchangeRate)"
-                          :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="exchangerateData.price"
+                  :accuracy="4"
+                  :mark="$i.setting.tradeExchangeRate"
+                  :controls="false"
+                  style="width: 100%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
           </el-row>
@@ -393,13 +423,14 @@
 </template>
 
 <script>
-    import { VTable,VUpload } from '@/components/index';
+    import { VTable,VUpload,VInputNumber } from '@/components/index';
     import { mapActions } from 'vuex'
     export default {
         name: "companyInfo",
         components:{
           VTable,
-          VUpload
+          VUpload,
+          VInputNumber
         },
         data(){
             return{
