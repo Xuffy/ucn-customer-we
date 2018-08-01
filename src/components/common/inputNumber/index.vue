@@ -141,7 +141,6 @@
                         }
                     }
                     this.currentValue = newVal;
-                    this.$emit("changeNumber");
                     this.$emit("input", newVal);
                 }
             }

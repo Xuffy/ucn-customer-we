@@ -206,12 +206,14 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'customerInfo',
+        accuracy:2
     },
     taxRefundRate:{
         key:'taxRefundRate',
         type: 'String',
         showType:'number',
         belongTab:'customerInfo',
+        accuracy:2
     },
     customsCode:{
         key:'customsCode',
@@ -313,12 +315,13 @@ export default {
         key:'fobPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:2
     },
     refFobPrice:{
         key:'refFobPrice',
         showType:'number',
         belongTab:'priceInfo',
-        _note:'Reference FOB price=(EXW+$985/68*CTN volume/Product QTY per CTN)*1.05'
+        accuracy:2
     },
     fobPort:{
         key:'fobPort',
@@ -329,6 +332,7 @@ export default {
         key:'exwPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:2
     },
     exwCurrency:{
         key:'exwCurrency',
@@ -340,12 +344,13 @@ export default {
         key:'cifPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:2
     },
     refCifPrice:{
         key:'refCifPrice',
         showType:'number',
         belongTab:'priceInfo',
-        _note:'Reference CIF price= FOB+( Ocean freight_USD（40HC）+ Insurance expenses_USD （40HC））/68*CTN volume/ Product QTY per CTN'
+        accuracy:2
     },
     cifCurrency:{
         key:'cifCurrency',
@@ -362,12 +367,13 @@ export default {
         key:'dduPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:2
     },
     refDduPrice:{
         key:'refDduPrice',
         showType:'number',
         belongTab:'priceInfo',
-        _note:'Reference CIF price= FOB+( Ocean freight_USD（40HC）+ Insurance expenses_USD （40HC））/68*CTN volume/ Product QTY per CTN'
+        accuracy:2
     },
     dduCurrency:{
         key:'dduCurrency',
@@ -415,30 +421,35 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     width:{
         key:'width',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     height:{
         key:'height',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     netWeight:{
         key:'netWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     volume:{
         key:'volume',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:3
     },
     methodPkgCn:{
         key:'methodPkgCn',
@@ -463,42 +474,49 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonLength:{
         key:'innerCartonLength',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonWidth:{
         key:'innerCartonWidth',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonHeight:{
         key:'innerCartonHeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonWeightNet:{
         key:'innerCartonWeightNet',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonRoughWeight:{
         key:'innerCartonRoughWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonVolume:{
         key:'innerCartonVolume',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:3
     },
     innerCartonDesc:{
         key:'innerCartonDesc',
@@ -537,6 +555,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonQty:{
         key:'outerCartonQty',

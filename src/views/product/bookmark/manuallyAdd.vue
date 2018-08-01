@@ -246,6 +246,9 @@
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
                                     label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
@@ -357,6 +360,9 @@
                                     v-model="productForm.price[0][v.key]"
                                     :controls="false"
                                     :min="0"
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
                                     label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
@@ -478,6 +484,9 @@
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
                                     label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
