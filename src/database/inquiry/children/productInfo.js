@@ -118,7 +118,8 @@ export default {
   },
   minimumOrderQuantity: {
     key: 'skuMinOrderQty',
-    type: 'Number'
+    type: 'Number',
+    _toFixed: 1
   },
   deliveryDays: {
     key: 'skuDeliveryDates',
@@ -146,7 +147,13 @@ export default {
   },
   skuAvailable: {
     key: 'skuAvailableQty',
-    type: 'Number'
+    type: 'Number',
+    _toFixed: 1
+  },
+  qty: {
+    key: 'qty',
+    type: 'Number',
+    _toFixed: 1
   },
   restrictedSellingCountry: {
     key: 'skuNoneSellCountry',
@@ -181,13 +188,15 @@ export default {
   fobPrice: {
     key: 'skuFobPrice',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 4
   },
   referenceFobPriceUsd: {
     key: 'skuRefFobPrice',
     type: 'Number',
     _disabled: true,
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 4
   },
   fobPort: {
     key: 'skuFobPort',
@@ -196,7 +205,8 @@ export default {
   exwPrice: {
     key: 'skuExwPrice',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 4
   },
   exwCurrency: {
     key: 'skuExwCurrency',
@@ -206,7 +216,8 @@ export default {
   cifPrice: {
     key: 'skuCifPrice',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 4
   },
   referenceCifPriceUsd: {
     key: 'skuRefCifPrice',
@@ -226,13 +237,15 @@ export default {
   dduOrice: {
     key: 'skuDduPrice',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 4
   },
   referenceDdupriceUsd: {
     key: 'skuRefDduPrice',
     type: 'Number',
     _disabled: true,
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 4
   },
   dduCurrency: {
     key: 'skuDduCurrency',
@@ -248,14 +261,16 @@ export default {
     type: 'Number',
     unit: '%',
     max: 100,
-    min: 0
+    min: 0,
+    _toFixed: 2
   },
   taxRefundRate: {
     key: 'skuTaxRefundRate',
     type: 'Number',
     unit: '%',
     max: 100,
-    min: 0
+    min: 0,
+    _toFixed: 2
   },
   hsCode: {
     key: 'skuCustomsCode',
@@ -334,27 +349,32 @@ export default {
   skuLength: {
     key: 'skuLength',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   skuBreadth: {
     key: 'skuWidth',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   skuHeight: {
     key: 'skuHeight',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   skuNetWeight: {
     key: 'skuNetWeight',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   skuVolume: {
     key: 'skuVolume',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 3
   },
   packingMethodCn: {
     key: 'skuMethodPkgCn',
@@ -374,37 +394,44 @@ export default {
   skuQuantityOfInnerCarton: {
     key: 'skuInnerCartonQty',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 1
   },
   lengthOfInnerCarton: {
     key: 'skuInnerCartonLength',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   breadthOfInnerCarton: {
     key: 'skuInnerCartonWidth',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   heightOfInnerCarton: {
     key: 'skuInnerCartonHeight',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   netWeightOfInnerCarton: {
     key: 'skuInnerCartonWeightNet',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   grossWeightofInnerCarton: {
     key: 'skuInnerCartonRoughWeight',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   volumeOfInnerCarton: {
     key: 'skuInnerCartonVolume',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 3
   },
   descriptionOfInnerCarton: {
     key: 'skuInnerCartonDesc',
@@ -438,37 +465,44 @@ export default {
   skuQuantityOfOuterCarton: {
     key: 'skuOuterCartonQty',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 1
   },
   lengthOfOuterCarton: {
     key: 'skuOuterCartonLength',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   breadthOfOuterCarton: {
     key: 'skuOuterCartonWidth',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   heightOfOuterCarton: {
     key: 'skuOuterCartonHeight',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   netWeightOfOuterCarton: {
     key: 'skuOuterCartonNetWeight',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   grossWeightOfOuterCarton: {
     key: 'skuOuterCartonRoughWeight',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 2
   },
   volumeOfOuterCarton: {
     key: 'skuOuterCartonVolume',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 3
   },
   packingMethodOfOuterCartonCn: {
     key: 'skuOuterCartonMethodCn',
@@ -486,17 +520,20 @@ export default {
   gp20SkuQuantity: {
     key: 'skuGp20SkuQty',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 1
   },
   gp40SkuQuantity: {
     key: 'skuGp40SkuQty',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 1
   },
   hq40SkuQuantity: {
     key: 'skuHq40SkuQty',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 1
   },
   trayDimension: {
     key: 'skuTryDimension',
@@ -526,12 +563,14 @@ export default {
     key: 'skuInventory',
     type: 'Number',
     min: 0,
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 1
   },
   supplierSafeInventoryQuantity: {
     key: 'skuSafeInventory',
     type: 'Number',
-    _totalRow: true
+    _totalRow: true,
+    _toFixed: 1
   },
   supplierMinimumInventory: {
     key: 'skuMinInventory',
@@ -567,7 +606,8 @@ export default {
   },
   skuQuantityInDisplayBox: {
     key: 'skuDisplayBoxQty',
-    type: 'Number'
+    type: 'Number',
+    _toFixed: 1
   },
   lengthBreadthAndHeightOfDisplayBox: {
     key: 'skuLengthWidthHeight',
