@@ -98,27 +98,28 @@
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.documentRequired">
-                    <div class="section-btn">
-                        <el-button @click="addDocument(documentData)" type="primary">{{$i.button.modify}}</el-button>
+                    <div class="section-btn" style="margin-bottom:50px;">
+                        <el-button @click="modifyDocument()" type="primary" :disabled="!checkList.length>0">{{$i.button.modify}}</el-button>
                     </div>
-                  <el-form label-width="200px" :model="documentData">
+                  <el-form label-width="200px">
                     <el-row>
-                      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
-                        <el-form-item  :label="$i.setting.documentRequired +'：' ">
-                          <span>{{documentData.document}}</span>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.factoryInspectionReport +'：'">
-                          <span>{{documentData.aduitDetails}}</span>
-                        </el-form-item>
-                        <el-form-item  :label="$i.setting.packingList +'：'">
-                          <span>{{documentData.packingList}}</span>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.invoice +'：'">
-                          <span>{{documentData.invoice}}</span>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.examiningReport +'：'">
-                          <span>{{documentData.examiningReport}}</span>
-                        </el-form-item>
+                      <el-col :span="24">
+                        <div class="documentBox">
+                            <el-checkbox v-for="(item,index) in documentTypeClone"
+                                         :label="item" :key="item.id"
+                                         v-model="checkList"
+                                         :checked="item.checked"
+                                         @change="handleCheckedDocument(item)">
+                              <div class="attachments">
+                                <v-upload
+                                  :ref="'uploadDocument'+item.code"
+                                  :readonly="documentRedonly"
+                                  :limit="20"
+                                  :list="item.attachments"
+                                />
+                              </div>
+                              {{item.name}}</el-checkbox>
+                        </div>
                       </el-col>
                     </el-row>
                   </el-form>
@@ -311,42 +312,6 @@
             </div>
         </el-dialog>
 
-      <el-dialog width="70%" :title="$i.setting.documentRequired +'：'" :visible.sync="documentDialogVisible">
-        <el-form label-width="250px" :model="documentData">
-          <el-row>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item  :label="$i.setting.documentRequired +'：'" required>
-                <el-input size="mini" v-model="documentData.document" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item :label="$i.setting.factoryInspectionReport +'：'">
-                <el-input size="mini" v-model="documentData.aduitDetails" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.packingList +'：' ">
-                  <el-input size="mini" v-model="documentData.packingList" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-                </el-form-item>
-            </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.invoice +'：'">
-                  <el-input size="mini" v-model="documentData.invoice" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-                </el-form-item>
-            </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.examiningReport+'：'">
-                  <el-input size="mini" v-model="documentData.examiningReport" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-                </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="documentDialogVisible=false">{{$i.button.cancel}}</el-button>
-          <el-button :loading="allowAddAccount" type="primary" @click="modifyDocument">{{$i.button.confirm}}</el-button>
-        </div>
-      </el-dialog>
-
       <el-dialog width="70%" :title="$i.setting.custom" :visible.sync="customDialogVisible">
         <el-form label-width="300px" :model="customData">
           <el-row>
@@ -408,7 +373,7 @@
 </template>
 
 <script>
-    import { VTable,VUpload } from '@/components/index'
+    import { VTable,VUpload } from '@/components/index';
     export default {
         name: "companyInfo",
         components:{
@@ -496,16 +461,6 @@
                     skype:'',
                     qq:''
                 },
-              documentData:{
-                  aduitDetails: "",
-                  customerId: "",
-                  document: "",
-                  examiningReport: "",
-                  id: "",
-                  invoice: "",
-                  packingList: "",
-                  version: ""
-              },
               customData:{
                 customerId: "",
                 exchangeRateUSD: "",
@@ -527,6 +482,18 @@
                 type: "PICTURE",
                 url: ""
               },
+              documentParmas:{
+                documents: [
+                  {
+                    attachments: [],
+                    checked: true,
+                    code: '',
+                    id: null,
+                    version: null
+                  }
+                ],
+                settingId: null
+              },
               addressDatas:[],
               accountsData:[],
               sex:[],
@@ -543,12 +510,22 @@
               isModify:false,
               options:{},
               department:[],
-              currencyList:[]
+              currencyList:[],
+              documentType: [],
+              checkList:[],
+              documentRedonly:false,
+              documentList:[],
+              documentTypeClone:[],
+
+
             }
         },
         methods:{
             handleClick(tab, event) {
               switch(Number(tab.index)){
+                case 2:
+                  this.getDocument();
+                  break;
                 case 5:
                   this.getGridfavoritePartData();
                   break;
@@ -587,9 +564,6 @@
                     if(res.custom){
                       this.customData = res.custom
                     }
-                    if(res.documents[0]){
-                      this.documentData = res.documents[0];
-                    }
                 })
             },
             postUpdateIsSetting(){
@@ -610,12 +584,13 @@
           },
           //获取字典
           getCodePart(){
-            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX"]).then(res=>{
+            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX","DOCUMENT_TYPE"],{cache:true}).then(res=>{
               this.options.payment = _.findWhere(res, {'code': 'PMT'}).codes;
               this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
               this.options.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
               this.options.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
               this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
+              this.documentType = _.findWhere(res, {'code': 'DOCUMENT_TYPE'}).codes;
             }).catch(err=>{
               console.log(err)
             });
@@ -879,47 +854,46 @@
           /**
            * document操作
            * */
-          addDocument(e){
-              this.documentData = Object.assign({}, e);
-              this.documentDialogVisible = true;
+          getDocument(){
+            this.$ajax.get(this.$apis.get_purchase_customer_document).then(res=>{
+              // this.documentList = res
+              this.documentTypeClone = this.$depthClone(this.documentType)
+              this.documentTypeClone.forEach(v=>{
+                res.forEach(m =>{
+                  if (v.code === m.code){
+                      v.attachments= m.attachments,
+                      v.checked= m.checked,
+                      v.code= m.code,
+                      v.newId= m.id,
+                      v.version= m.version
+                  }
+                })
+              });
+              console.log(this.documentTypeClone)
+              // this.documentList = this.documentType
+            })
           },
           modifyDocument(){
-            if (this.$validateForm(this.documentData, this.$db.setting.documentRequired)) {
-              return false;
+            const documentParmas = {
+              documents:[],
+              settingId: this.companyInfo.id
             }
-            this.documentDialogVisible = false;
-            this.documentData.customerId=this.companyInfo.id;
-            if (!this.documentData.id){
-              this.$ajax.post(this.$apis.post_purchase_customer_document,this.documentData).then(res=>{
-                if (!this.companyInfo.setting){
-                  this.postUpdateIsSetting();
-                }
-                this.$message({
-                  message: this.$i.common.addSuccess,
-                  type: 'success'
-                });
-                this.getWholeData();
-                this.documentDialogVisible = false;
-              }).catch(err=>{
-                this.getWholeData();
-                this.documentDialogVisible=false;
-              });
-            }else{
-              this.$ajax.post(`${this.$apis.post_purchase_customer_document_id}/${this.documentData.id}`,this.documentData).then(res=>{
-                if (!this.companyInfo.setting){
-                  this.postUpdateIsSetting();
-                }
-                this.$message({
-                  message: this.$i.common.modifySuccess,
-                  type: 'success'
-                });
-                this.getWholeData();
-                this.documentDialogVisible = false;
-              }).catch(err=>{
-                this.getWholeData();
-                this.documentDialogVisible=false;
-              });
-            }
+            this.checkList.forEach(v=>{
+              documentParmas.documents.push({
+                attachments: this.$refs['uploadDocument'+v.code][0].getFiles(),
+                code: v.code,
+                id: v.newId || '',
+                checked: true,
+                version: v.version
+              })
+            });
+            this.$ajax.post(this.$apis.post_purchase_customer_document,documentParmas).then(res=>{
+              this.getDocument();
+            })
+          },
+          handleCheckedDocument(value){
+            // this.documentRedonly = value
+            console.log(value)
           },
           /**
            * custom操作
@@ -1131,4 +1105,21 @@
     .dialog-footer{
         text-align: center;
     }
+  .attachmentList{
+    padding-top: 20px;
+  }
+  .attachments{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    bottom: -30px;
+  }
+  .el-checkbox{
+    margin-right: 15%;
+  }
+  .documentBox{
+    position: relative;
+    height:300px;
+    margin: 0 10%;
+  }
 </style>
