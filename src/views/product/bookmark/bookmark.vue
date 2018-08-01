@@ -170,25 +170,6 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_buyerBookmarkList, params).then(res => {
                     this.productData=this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
-                        e.length.label=`${e.length.label}(${this.$i.common.cm})`;
-                        e.width.label=`${e.width.label}(${this.$i.common.cm})`;
-                        e.height.label=`${e.height.label}(${this.$i.common.cm})`;
-                        e.netWeight.label=`${e.netWeight.label}(${this.$i.common.g})`;
-                        e.volume.label=`${e.volume.label}(${this.$i.common.m3})`;
-                        e.innerCartonHeight.label=`${e.innerCartonHeight.label}(${this.$i.common.cm})`;
-                        e.innerCartonLength.label=`${e.innerCartonLength.label}(${this.$i.common.cm})`;
-                        e.innerCartonWidth.label=`${e.innerCartonWidth.label}(${this.$i.common.cm})`;
-                        e.innerCartonWeightNet.label=`${e.innerCartonWeightNet.label}(${this.$i.common.g})`;
-                        e.innerCartonRoughWeight.label=`${e.innerCartonRoughWeight.label}(${this.$i.common.g})`;
-                        e.innerCartonVolume.label=`${e.innerCartonVolume.label}(${this.$i.common.m3})`;
-                        e.outerCartonHeight.label=`${e.outerCartonHeight.label}(${this.$i.common.cm})`;
-                        e.outerCartonLength.label=`${e.outerCartonLength.label}(${this.$i.common.cm})`;
-                        e.outerCartonWidth.label=`${e.outerCartonWidth.label}(${this.$i.common.cm})`;
-                        e.outerCartonNetWeight.label=`${e.outerCartonNetWeight.label}(${this.$i.common.g})`;
-                        e.outerCartonRoughWeight.label=`${e.outerCartonRoughWeight.label}(${this.$i.common.g})`;
-                        e.outerCartonVolume.label=`${e.outerCartonVolume.label}(${this.$i.common.m3})`;
-
-
                         let noneSellCountry = '';
                         e.noneSellCountry.value.split(',').forEach(v => {
                             this.countryOption.forEach(m => {
