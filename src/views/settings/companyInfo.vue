@@ -99,26 +99,29 @@
 
                 <el-tab-pane :label="$i.setting.documentRequired">
                     <div class="section-btn" style="margin-bottom:50px;">
-                        <el-button @click="modifyDocument()" type="primary" :disabled="!checkList.length>0">{{$i.button.modify}}</el-button>
+                        <el-button @click="modifyDocument()" type="primary">{{$i.button.modify}}</el-button>
                     </div>
                   <el-form label-width="200px">
                     <el-row>
                       <el-col :span="24">
                         <div class="documentBox">
-                            <el-checkbox v-for="(item,index) in documentTypeClone"
-                                         :label="item" :key="item.id"
-                                         v-model="checkList"
-                                         :checked="item.checked"
-                                         @change="handleCheckedDocument(item)">
-                              <div class="attachments">
+                          <ul class="documentBoxCon">
+                            <li class="documentBoxCon1" v-for="(item,index) in documentTypeClone" :key="item.id" >
+                              <el-checkbox
+                                :checked="item.checked"
+                                @change="handleCheckedDocument(item,index)">
+                                {{item.name}}
+                              </el-checkbox>
+                              <div class="uploadBox" disabled="item.checked">
                                 <v-upload
-                                  :ref="'uploadDocument'+item.code"
-                                  :readonly="documentRedonly"
-                                  :limit="20"
-                                  :list="item.attachments"
+                                oss-private
+                                :ref="'uploadDocument'+item.code"
+                                :limit="20"
+                                :list="item.attachments"
                                 />
                               </div>
-                              {{item.name}}</el-checkbox>
+                            </li>
+                          </ul>
                         </div>
                       </el-col>
                     </el-row>
@@ -390,6 +393,7 @@
         },
         data(){
             return{
+              checked:false,
                 summaryDisabled:true,
                 addressDialogVisible:false,
                 accountDialogVisible:false,
@@ -922,8 +926,6 @@
                   }
                 })
               });
-              console.log(this.documentTypeClone)
-              // this.documentList = this.documentType
             })
           },
           modifyDocument(){
@@ -931,22 +933,25 @@
               documents:[],
               settingId: this.companyInfo.id
             }
-            this.checkList.forEach(v=>{
+            console.log(this.documentTypeClone)
+            this.documentTypeClone.forEach(v=>{
               documentParmas.documents.push({
-                attachments: this.$refs['uploadDocument'+v.code][0].getFiles(),
+                attachments: this.$refs['uploadDocument'+v.code][0].getFiles() ,
                 code: v.code,
                 id: v.newId || '',
-                checked: true,
+                checked: v.checked,
                 version: v.version
               })
             });
+
             this.$ajax.post(this.$apis.post_purchase_customer_document,documentParmas).then(res=>{
               this.getDocument();
             })
           },
-          handleCheckedDocument(value){
-            // this.documentRedonly = value
-            console.log(value)
+          handleCheckedDocument(item,index){
+            item.checked = !item.checked;
+            this.$set(this.documentTypeClone,index, item)
+
           },
           /**
            * custom操作
@@ -1169,18 +1174,15 @@
   .attachmentList{
     padding-top: 20px;
   }
-  .attachments{
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    bottom: -30px;
+
+  .documentBoxCon{
+    overflow: hidden;
   }
-  .el-checkbox{
-    margin-right: 15%;
+  .documentBoxCon1{
+    width: 18%;
+    float: left;
   }
-  .documentBox{
-    position: relative;
-    height:300px;
-    margin: 0 10%;
+  .uploadBox{
+    padding-top: 10px;
   }
 </style>
