@@ -132,7 +132,8 @@
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :mark="v.label"
-                                    :accuracy="1"></v-input-number>
+                                    :placeholder="$i.product.pleaseInput"
+                                    :accuracy="v.accuracy"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -245,6 +246,9 @@
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
                                     label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
@@ -356,6 +360,9 @@
                                     v-model="productForm.price[0][v.key]"
                                     :controls="false"
                                     :min="0"
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
                                     label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
@@ -477,6 +484,9 @@
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
                                     label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
@@ -834,7 +844,6 @@
                 },
                 //整个页面数据配置
                 productForm:{
-                    minOrderQty:11,
                     attachments:[],
                     adjustPackage: '1',
                     barcode: "",
