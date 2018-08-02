@@ -12,10 +12,10 @@
           </el-alert>
         </div>
         <div class="summary">
-            <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
+            <el-form ref="summary"   label-width="190px">
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                        <el-form-item class="speWidth" :prop="v.key" :label="v.label +'：'" :required="v._rules?v._rules.required:false">
+                        <el-form-item class="speWidth"  :label="v.label +'：'" :required="v._rules?v._rules.required:false">
                             <div v-if="v.type==='input'">
                                 <el-input
                                         :disabled="v.key==='code'?true:summaryDisabled"
@@ -24,6 +24,15 @@
                                         v-model="companyInfo[v.key]">
                                 </el-input>
                             </div>
+                          <div v-if="v.type==='customValidation'">
+                            <el-input
+                              :disabled="v.key==='code'?true:summaryDisabled"
+                              size="mini"
+                              :placeholder="$i.common.inputkeyWordToSearch"
+                              @blur="customValidation"
+                              v-model="companyInfo[v.key]">
+                            </el-input>
+                          </div>
                             <div v-if="v.type==='select'">
                                 <el-select :disabled="summaryDisabled" class="speWidth" v-model="companyInfo[v.key]" :placeholder="$i.common.inputSearch">
                                     <el-option
@@ -1144,6 +1153,41 @@
                 type: 'warning'
               });
               return false;
+            }
+          },
+          customValidation(){
+            if(this.companyInfo.shortName === ""){ //输入不能为空
+              this.$message({
+                message: `${this.$i.util.validateRequired} ${this.$i.setting.customerShortName}`,
+                type: 'warning'
+              });
+            }else if(this.companyInfo.shortName.length>6){
+              this.$message({
+                message: this.$i.setting.shortNameLength,
+                type: 'warning'
+              });
+            }else if (!/^[0-9a-zA-Z]+$/.test(this.companyInfo.shortName)){
+              this.$message({
+                message: this.$i.setting.numberLetter,
+                type: 'warning'
+              });
+            }else if (!/^[0-9a-hj-np-yA-HJ-NP-Y]+$/g.test(this.companyInfo.shortName)){
+              this.$message({
+                message: this.$i.setting.abbreviationAllowed,
+                type: 'warning'
+              });
+            }else{
+              this.$ajax.post(this.$apis.post_purchase_customer_exist,{
+                id: this.companyInfo.id,
+                shortName: this.companyInfo.shortName
+              }).then(res=>{
+                if (res){
+                  this.$message({
+                    message: this.$i.setting.abbreviationOnly,
+                    type: 'warning'
+                  });
+                }
+              })
             }
           },
         },
