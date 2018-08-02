@@ -61,7 +61,7 @@ export default {
         key: 'shortName',
         type: 'input',
         belong:'summary',
-        _rules:{
+        _rules: {
           required:true,
           length:6,
         }

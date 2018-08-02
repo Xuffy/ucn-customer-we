@@ -3,7 +3,7 @@
         <div class="title" :style="{'height': companyInfo.shortName ? '32px':'0'}">
             <span><span style="color:red;font-weight: bold"></span>{{$i.setting.companyInfo}}</span>
         </div>
-        <div class="alert" v-show="!companyInfo.shortName">
+        <div class="alert" v-show="showNameBox">
           <el-alert
             :title="$i.setting.requiredPage"
             type="warning"
@@ -573,6 +573,7 @@
               isModifyContact:false,
             //判断是否修改过
               isModify:false,
+              showNameBox:false,
               options:{},
               department:[],
               currencyList:[],
@@ -603,9 +604,10 @@
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
                     //判断shortName是否存在
-                  console.log(this.companyInfo.shortName)
                   if (this.companyInfo.shortName){
                     this.$localStore.remove('router_intercept')
+                  }else{
+                    this.showNameBox = true;
                   }
 
                     this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
