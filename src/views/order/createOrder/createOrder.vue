@@ -139,14 +139,14 @@
                             </div>
                         </div>
                         <div v-else-if="v.type==='number'">
-                            <el-input-number
+                            <v-input-number
                                     :placeholder="$i.order.pleaseInput"
                                     :disabled="v.disabled"
                                     class="speInput speNumber"
                                     v-model="orderForm[v.key]"
                                     :controls="false">
 
-                            </el-input-number>
+                            </v-input-number>
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
@@ -175,107 +175,107 @@
                 </el-col>
             </el-row>
         </el-form>
-        <div class="title">
-            {{$i.order.exchangeRate}}
-        </div>
-        <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
-            <el-row>
-                <el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                    <el-form-item :label="$i.order[v.currency]">
-                        <el-input-number
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseInput"
-                                class="speInput speNumber"
-                                v-model="v.exchangeRate"
-                                :controls="false">
-                        </el-input-number>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
+        <!--<div class="title">-->
+            <!--{{$i.order.exchangeRate}}-->
+        <!--</div>-->
+        <!--<el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">-->
+            <!--<el-row>-->
+                <!--<el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                    <!--<el-form-item :label="$i.order[v.currency]">-->
+                        <!--<v-input-number-->
+                                <!--:disabled="true"-->
+                                <!--:placeholder="$i.order.pleaseInput"-->
+                                <!--class="speInput speNumber"-->
+                                <!--v-model="v.exchangeRate"-->
+                                <!--:controls="false">-->
+                        <!--</v-input-number>-->
+                    <!--</el-form-item>-->
+                <!--</el-col>-->
+            <!--</el-row>-->
+        <!--</el-form>-->
 
-        <div class="title">
-            {{$i.order.responsibility}}
-        </div>
-        <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
-            <el-table
-                    :data="orderForm.responsibilityList"
-                    style="width: 100%">
-                <el-table-column
-                        prop="type"
-                        label="Type">
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.type==='0' || scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
-                        <span v-if="scope.row.type==='1' || scope.row.type===1">{{$i.order.labelDesignDate}}</span>
-                        <span v-if="scope.row.type==='2' || scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
-                        <span v-if="scope.row.type==='3' || scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
-                        <span v-if="scope.row.type==='4' || scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
-                        <span v-if="scope.row.type==='5' || scope.row.type===5">{{$i.order.otherResponsibility}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="customer"
-                        align="center"
-                        label="Me">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-model="scope.row.customer"
-                                :editable="false"
-                                align="right"
-                                type="date"
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseChoose"
-                                :picker-options="pickerOptions1">
-                        </el-date-picker>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="supplier"
-                        align="center"
-                        label="Supplier">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-model="scope.row.supplier"
-                                align="right"
-                                :editable="false"
-                                type="date"
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseChoose"
-                                :picker-options="pickerOptions1">
-                        </el-date-picker>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="Remark"
-                        align="center"
-                        label="Remark">
-                    <template slot-scope="scope">
-                        <el-input
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseInput"
-                                v-model="scope.row.remark"
-                                clearable>
-                        </el-input>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualDate"
-                        align="center"
-                        label="Actual Date">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-model="scope.row.actualDt"
-                                align="right"
-                                type="date"
-                                :editable="false"
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseChoose"
-                                :picker-options="pickerOptions1">
-                        </el-date-picker>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
+        <!--<div class="title">-->
+            <!--{{$i.order.responsibility}}-->
+        <!--</div>-->
+        <!--<div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">-->
+            <!--<el-table-->
+                    <!--:data="orderForm.responsibilityList"-->
+                    <!--style="width: 100%">-->
+                <!--<el-table-column-->
+                        <!--prop="type"-->
+                        <!--label="Type">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<span v-if="scope.row.type==='0' || scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>-->
+                        <!--<span v-if="scope.row.type==='1' || scope.row.type===1">{{$i.order.labelDesignDate}}</span>-->
+                        <!--<span v-if="scope.row.type==='2' || scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>-->
+                        <!--<span v-if="scope.row.type==='3' || scope.row.type===3">{{$i.order.receiveSampleDate}}</span>-->
+                        <!--<span v-if="scope.row.type==='4' || scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>-->
+                        <!--<span v-if="scope.row.type==='5' || scope.row.type===5">{{$i.order.otherResponsibility}}</span>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="customer"-->
+                        <!--align="center"-->
+                        <!--:label="$i.order.customerBig">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-date-picker-->
+                                <!--v-model="scope.row.customer"-->
+                                <!--:editable="false"-->
+                                <!--align="right"-->
+                                <!--type="date"-->
+                                <!--:disabled="true"-->
+                                <!--:placeholder="$i.order.pleaseChoose"-->
+                                <!--:picker-options="pickerOptions1">-->
+                        <!--</el-date-picker>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="supplier"-->
+                        <!--align="center"-->
+                        <!--:label="$i.order.supplierBig">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-date-picker-->
+                                <!--v-model="scope.row.supplier"-->
+                                <!--align="right"-->
+                                <!--:editable="false"-->
+                                <!--type="date"-->
+                                <!--:disabled="true"-->
+                                <!--:placeholder="$i.order.pleaseChoose"-->
+                                <!--:picker-options="pickerOptions1">-->
+                        <!--</el-date-picker>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="Remark"-->
+                        <!--align="center"-->
+                        <!--:label="$i.order.remarkBig">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-input-->
+                                <!--:disabled="true"-->
+                                <!--:placeholder="$i.order.pleaseInput"-->
+                                <!--v-model="scope.row.remark"-->
+                                <!--clearable>-->
+                        <!--</el-input>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="actualDate"-->
+                        <!--align="center"-->
+                        <!--:label="$i.order.actualDate">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-date-picker-->
+                                <!--v-model="scope.row.actualDt"-->
+                                <!--align="right"-->
+                                <!--type="date"-->
+                                <!--:editable="false"-->
+                                <!--:disabled="true"-->
+                                <!--:placeholder="$i.order.pleaseChoose"-->
+                                <!--:picker-options="pickerOptions1">-->
+                        <!--</el-date-picker>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+            <!--</el-table>-->
+        <!--</div>-->
 
         <div class="title">
             {{$i.order.productInfoBig}}
@@ -545,246 +545,246 @@
                 <!--</el-option>-->
             <!--</el-select>-->
 
-            <el-input-number
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuQty"
                     @blur="handlePriceBlur(data)"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuPrice"
                     :disabled="true"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     :max="1"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuRateValueAddedTax"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     :max="1"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuTaxRefundRate"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuWidth"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuHeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuNetWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuVolume"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonQty"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonWidth"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonHeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonWeightNet"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonRoughWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonVolume"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonOuterNum"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonQty"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonWidth"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonHeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonNetWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonRoughWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuOuterCartonVolume"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuApplicableAge"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuExpireDates"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuSampleQty"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuSamplePrice"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
+                    v-model="data.value"></v-input-number>
         </v-history-modify>
     </div>
 </template>
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,overviewPage,VProduct} from '@/components/index'
+    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,overviewPage,VProduct,VInputNumber} from '@/components/index'
     import { mapActions } from 'vuex'
 
     export default {
@@ -796,7 +796,8 @@
             VUpload,
             VHistoryModify,
             overviewPage,
-            VProduct
+            VProduct,
+            VInputNumber
         },
         data(){
             return{
@@ -844,11 +845,11 @@
                 selectSearch:'',
                 productInfoBtn:[
                     {
-                        label: 'Negotiate',
+                        label: this.$i.order.modify,
                         type: 'negotiate'
                     },
                     {
-                        label: 'Detail',
+                        label: this.$i.order.detail,
                         type: 'detail'
                     }
                 ],
@@ -871,7 +872,7 @@
                 tableDataList:[],
                 searchOptions:[
                     {
-                        label:'inquiryNo',
+                        label:this.$i.order.inquiryNo,
                         id:1
                     },
                 ],
@@ -947,61 +948,12 @@
                     lcNo: "",
                     orderNo: "",
                     payment: "",
-                    paymentDays: 0,
+                    paymentDays: null,
                     productFlag:false,
                     quotationNo: "",
                     remark: "",
                     responsibilityFlag:false,
-                    responsibilityList: [
-                        {
-                            type: '0',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '1',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '2',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '3',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '4',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '5',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                    ],
+                    responsibilityList: [],
                     skuList: [],
                     supplierCode: "",
                     supplierId: 0,
@@ -1089,9 +1041,9 @@
                 });
             },
             saveAsDraft(){
-                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
-                    return;
-                }
+                // if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
+                //     return;
+                // }
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
@@ -1129,12 +1081,12 @@
                 });
 
                 //如果选的产品和上面选的供应商不一致，要给出提示
-                if(!rightCode){
-                    return this.$message({
-                        message: this.$i.order.supplierNotTheSame,
-                        type: 'warning'
-                    });
-                }
+                // if(!rightCode){
+                //     return this.$message({
+                //         message: this.$i.order.supplierNotTheSame,
+                //         type: 'warning'
+                //     });
+                // }
                 this.disableClickSaveDraft=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE_DRAFT,params).then(res=>{
                     this.$router.push('/order/draft');
@@ -1365,31 +1317,6 @@
                             arr.push(v);
                         }
                     });
-                    if(this.$refs.uploadSkuLabelPic){
-                        this.$refs.uploadSkuLabelPic.reset();
-                    }
-                    if(this.$refs.uploadSkuPkgMethodPic){
-                        this.$refs.uploadSkuPkgMethodPic.reset();
-                    }
-                    if(this.$refs.uploadSkuInnerCartonPic){
-                        this.$refs.uploadSkuInnerCartonPic.reset();
-                    }
-                    if(this.$refs.uploadSkuOuterCartonPic){
-                        this.$refs.uploadSkuOuterCartonPic.reset();
-                    }
-                    if(this.$refs.skuAdditionalOne){
-                        this.$refs.skuAdditionalOne.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalTwo){
-                        this.$refs.uploadSkuAdditionalTwo.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalThree){
-                        this.$refs.uploadSkuAdditionalThree.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalFour){
-                        this.$refs.uploadSkuAdditionalFour.reset();
-                    }
-                    console.log(arr,'arr')
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
@@ -1921,7 +1848,7 @@
                     },
                     {
                         code:'5',
-                        name:'CANCLED'
+                        name:'CANCELED'
                     },
                 ];
                 const currency=this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true});

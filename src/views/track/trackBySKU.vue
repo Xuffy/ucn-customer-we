@@ -4,8 +4,8 @@
           {{$i.track.trackBySKU}}
         </div>
         <div class="body">
-          <div class="head">
-            <div>
+          <div class="status">
+            <div class="btn-wrap">
               <span class="text">{{$i.payment.status}} : </span>
               <el-radio-group size="mini" @change="getList" v-model="params.status">
                 <el-radio-button label="" border>{{$i.common.all}}</el-radio-button>
@@ -15,6 +15,15 @@
                 <el-radio-button label="4" >{{$i.track.shipped}}</el-radio-button>
                 <el-radio-button label="5" >{{$i.track.canceled}}</el-radio-button>
               </el-radio-group>
+            </div>
+            <div class="select-wrap">
+              <select-search
+                v-model="searchId"
+                class="search"
+                :options=options
+                @inputEnter="inputEnter"
+                :searchLoad="searchLoad">
+              </select-search>
             </div>
           </div>
         </div>
@@ -26,21 +35,12 @@
               @change-checked='checked'
               :loading='loading'>
               <template slot="header">
-               <div style="overflow: hidden">
-                 <div style="float: left">
+               <div class="box">
+                 <div class="btn">
                    <el-button @click="download" :disabled='!(dataList.length)>0'>
                      {{$i.common.download}}
                      ({{selectedData.length===0?$i.common.all:selectedData.length}})
                    </el-button>
-                 </div>
-                 <div class="search"style="float: right;margin-right:10px">
-                   <select-search
-                     v-model="searchId"
-                     class="search"
-                     :options=options
-                     @inputEnter="inputEnter"
-                     :searchLoad="searchLoad">
-                   </select-search>
                  </div>
                </div>
               </template>
@@ -191,4 +191,42 @@
     .head>div{
       margin-bottom: 10px;
     }
+    .status {
+      display: flex;
+      height: 60px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 15px;
+      box-sizing: border-box;
+      .btn-wrap {
+        display: flex;
+        align-items: center;
+          span {
+            font-size: 14px;
+          }
+            button {
+              padding: 2px 5px;
+              cursor: pointer;
+              border: 1px solid #108ee9;
+              background-color: #fff;
+              margin-left: 10px;
+              border-radius: 5px;
+              transition: all .5s ease;
+                &:hover,
+                &.active {
+                   background-color: #108ee9;
+                   color: #fff;
+                 }
+              }
+          }
+        .select-wrap {
+          display: flex;
+          align-items: center;
+        .select {
+          width: 110px;
+          margin-right: 5px;
+
+        }
+     }
+  }
 </style>

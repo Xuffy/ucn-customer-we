@@ -9,6 +9,7 @@
             :data="tabData"
             hide-filter-value
             :height="500"
+            disabled-sort
             :selection="false"
           />
           <page

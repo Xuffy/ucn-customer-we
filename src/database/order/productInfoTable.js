@@ -1,7 +1,12 @@
 export default {
     label:{
         _important:true,
-        _title:'Remark'
+        _title:'Remark',
+        _fixed:'left'
+    },
+    skuStatus:{
+        _slot:'skuStatus',
+        _fixed:'left'
     },
     _remark:{
         _hide:true
@@ -252,9 +257,6 @@ export default {
         _slot:'skuExpireUnit',
     },
     skuComments:{},
-    skuStatus:{
-        _slot:'skuStatus'
-    },
     skuSaleStatus:{
         _disabled:true
     },

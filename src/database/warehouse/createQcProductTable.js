@@ -4,11 +4,13 @@ export default {
     },
     expectQcQty:{
         key:'expectQcQty',
-        showType:'number'
+        showType:'number',
+        accuracy: 2
     },
     samplingRate:{
         key:'samplingRate',
-        showType:'number'
+        showType:'number',
+        accuracy: 2
     },
     unqualifiedProcessingMode:{//不合格处理方式
         key:'unqualifiedProcessingMode',

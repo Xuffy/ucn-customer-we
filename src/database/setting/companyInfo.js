@@ -60,7 +60,11 @@ export default {
   customerShortName:{
         key: 'shortName',
         type: 'input',
-        belong:'summary'
+        belong:'summary',
+        _rules: {
+          required:true,
+          length:6,
+        }
     },
   shipAgent:{
     key: 'shipAgent',

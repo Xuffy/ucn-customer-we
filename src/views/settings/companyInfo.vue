@@ -1,7 +1,15 @@
 <template>
     <div class="company-info">
-        <div class="title">
+        <div class="title" :style="{'height': companyInfo.shortName ? '32px':'0'}">
             <span><span style="color:red;font-weight: bold"></span>{{$i.setting.companyInfo}}</span>
+        </div>
+        <div class="alert" v-show="showNameBox">
+          <el-alert
+            :title="$i.setting.requiredPage"
+            type="warning"
+            :closable="false"
+            show-icon>
+          </el-alert>
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
@@ -82,6 +90,7 @@
                     :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                     @action="addressAction"
                     :selection="false"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.setting.contactInfo">
@@ -94,31 +103,35 @@
                     :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                     @action="accountAction"
                     :selection="false"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.documentRequired">
                     <div class="section-btn" style="margin-bottom:50px;">
-                        <el-button @click="modifyDocument()" type="primary" :disabled="!checkList.length>0">{{$i.button.modify}}</el-button>
+                        <el-button @click="modifyDocument()" type="primary">{{$i.button.modify}}</el-button>
                     </div>
                   <el-form label-width="200px">
                     <el-row>
                       <el-col :span="24">
                         <div class="documentBox">
-                            <el-checkbox v-for="(item,index) in documentTypeClone"
-                                         :label="item" :key="item.id"
-                                         v-model="checkList"
-                                         :checked="item.checked"
-                                         @change="handleCheckedDocument(item)">
-                              <div class="attachments">
+                          <ul class="documentBoxCon">
+                            <li class="documentBoxCon1" v-for="(item,index) in documentTypeClone" :key="item.id" >
+                              <el-checkbox
+                                :checked="item.checked"
+                                @change="handleCheckedDocument(item,index)">
+                                {{item.name}}
+                              </el-checkbox>
+                              <div class="uploadBox" disabled="item.checked">
                                 <v-upload
-                                  :ref="'uploadDocument'+item.code"
-                                  :readonly="documentRedonly"
-                                  :limit="20"
-                                  :list="item.attachments"
+                                oss-private
+                                :ref="'uploadDocument'+item.code"
+                                :limit="20"
+                                :list="item.attachments"
                                 />
                               </div>
-                              {{item.name}}</el-checkbox>
+                            </li>
+                          </ul>
                         </div>
                       </el-col>
                     </el-row>
@@ -163,6 +176,7 @@
                     :buttons="[{label: 'Modify', type: 1}]"
                     :selection="false"
                     @action="rateAction"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
             </el-tabs>
@@ -324,22 +338,54 @@
           <el-row>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.oceanFreight +'：'">
-                <el-input size="mini" v-model="customData.oceanFreightUSD40HC" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.oceanFreightUSD40HC"
+                  :accuracy="4"
+                  :mark="$i.setting.oceanFreight"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.insuranceExpenses +'：'">
-                <el-input size="mini" v-model="customData.insuranceExpensesUSD40HC" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.insuranceExpensesUSD40HC"
+                  :accuracy="4"
+                  :mark="$i.setting.insuranceExpenses"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item  :label="$i.setting.priceCurrency +'：'">
-                <el-input size="mini" v-model="customData.portWarehousePrice40HC" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.portWarehousePrice40HC"
+                  :accuracy="4"
+                  :mark="$i.setting.priceCurrency"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.exchangeRate +'：'">
-                <el-input size="mini" v-model="customData.exchangeRateUSD" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.exchangeRateUSD"
+                  :accuracy="4"
+                  :mark="$i.setting.exchangeRate"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
           </el-row>
@@ -365,7 +411,15 @@
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
               <el-form-item  :label="$i.setting.tradeExchangeRate +'：'" required>
-                <el-input size="mini" v-model="exchangerateData.price" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="exchangerateData.price"
+                  :accuracy="4"
+                  :mark="$i.setting.tradeExchangeRate"
+                  :controls="false"
+                  style="width: 100%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
           </el-row>
@@ -380,16 +434,18 @@
 </template>
 
 <script>
-    import { VTable,VUpload } from '@/components/index';
+    import { VTable,VUpload,VInputNumber } from '@/components/index';
     import { mapActions } from 'vuex'
     export default {
         name: "companyInfo",
         components:{
           VTable,
-          VUpload
+          VUpload,
+          VInputNumber
         },
         data(){
             return{
+              checked:false,
                 summaryDisabled:true,
                 addressDialogVisible:false,
                 accountDialogVisible:false,
@@ -517,6 +573,7 @@
               isModifyContact:false,
             //判断是否修改过
               isModify:false,
+              showNameBox:false,
               options:{},
               department:[],
               currencyList:[],
@@ -546,6 +603,13 @@
                 this.companyInfo.concats=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
+                    //判断shortName是否存在
+                  if (this.companyInfo.shortName){
+                    this.$localStore.remove('router_intercept')
+                  }else{
+                    this.showNameBox = true;
+                  }
+
                     this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
                       let country,receiveCountry;
                       country = _.findWhere(this.options.country, {code: e.country.value}) || {};
@@ -579,15 +643,14 @@
             },
             postUpdateIsSetting(){
               this.$ajax.post(this.$apis.post_purchase_customer_updateIsSetting,{id:this.companyInfo.id}).then(res=>{
-                console.log(res)
-                    this.isModify = res;
+                this.isModify = res;
               }).catch(err=>{
                 console.log(err)
               });
             },
           //获取币种
           getCurrency(){
-              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+              this.$ajax.get(this.$apis.get_currency_all,{},{cache:true}).then(res=>{
                   this.options.currency = res
               }).catch(err=>{
                 console.log(err)
@@ -608,17 +671,16 @@
           },
           //获取国家
           getCountryAll(){
-            this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+            this.$ajax.get(this.$apis.GET_COUNTRY_ALL,{},{cache:true}).then(res=>{
               this.options.country = res
               this.$sessionStore.set('country', res);
-              this.getWholeData();
             }).catch(err=>{
               console.log(err)
             });
           },
           //获取部门列表
           getDepartment(){
-            this.$ajax.get(this.$apis.GET_DEPARTMENT).then(res=>{
+            this.$ajax.get(this.$apis.GET_DEPARTMENT,{},{cache:true}).then(res=>{
               this.department = res
             }).catch(err=>{
               console.log(err)
@@ -922,8 +984,6 @@
                   }
                 })
               });
-              console.log(this.documentTypeClone)
-              // this.documentList = this.documentType
             })
           },
           modifyDocument(){
@@ -931,22 +991,28 @@
               documents:[],
               settingId: this.companyInfo.id
             }
-            this.checkList.forEach(v=>{
+            this.documentTypeClone.forEach(v=>{
               documentParmas.documents.push({
-                attachments: this.$refs['uploadDocument'+v.code][0].getFiles(),
+                attachments: this.$refs['uploadDocument'+v.code][0].getFiles() ,
                 code: v.code,
                 id: v.newId || '',
-                checked: true,
+                checked: v.checked,
                 version: v.version
               })
             });
+
             this.$ajax.post(this.$apis.post_purchase_customer_document,documentParmas).then(res=>{
+              this.$message({
+                message: this.$i.common.uploadSuccess,
+                type: 'success'
+              });
               this.getDocument();
             })
           },
-          handleCheckedDocument(value){
-            // this.documentRedonly = value
-            console.log(value)
+          handleCheckedDocument(item,index){
+            item.checked = !item.checked;
+            this.$set(this.documentTypeClone,index, item)
+
           },
           /**
            * custom操作
@@ -1086,6 +1152,7 @@
              this.getCurrency();
              this.getCountryAll();
              this.getDepartment();
+             this.getWholeData();
         },
         mounted(){
           this.setMenuLink({
@@ -1131,7 +1198,6 @@
     .title{
         font-weight: bold;
         font-size: 18px;
-        height: 32px;
         line-height: 32px;
         color:#666666;
     }
@@ -1169,18 +1235,20 @@
   .attachmentList{
     padding-top: 20px;
   }
-  .attachments{
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    bottom: -30px;
+
+  .documentBoxCon{
+    overflow: hidden;
   }
-  .el-checkbox{
-    margin-right: 15%;
+  .documentBoxCon1{
+    width: 18%;
+    float: left;
   }
-  .documentBox{
-    position: relative;
-    height:300px;
-    margin: 0 10%;
+  .uploadBox{
+    padding-top: 10px;
+  }
+  .alert{
+    width: 40%;
+    margin: 0 auto;
+    padding: 15px;
   }
 </style>
