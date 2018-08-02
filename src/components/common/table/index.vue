@@ -85,7 +85,7 @@
 
             <!--序号 渲染-->
             <td v-if="index % newRowspan === 0" :rowspan="newRowspan" class="fixed-left">
-              <div v-text="(index / newRowspan) + 1"></div>
+              <div v-text="(index / rowspan) + 1"></div>
             </td>
 
             <!--数据内容 渲染-->
@@ -224,7 +224,11 @@
         type: Boolean,
         default: false,
       },
-      newRowspan: { // 原 rowspan
+      rowspan: { // 原 rowspan
+        type: Number,
+        default: 1,
+      },
+      newRowspan: {
         type: Number,
         default: 1,
       },
