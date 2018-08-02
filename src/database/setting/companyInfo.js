@@ -63,6 +63,7 @@ export default {
         belong:'summary',
         _rules:{
           required:true,
+          length:6,
         }
     },
   shipAgent:{

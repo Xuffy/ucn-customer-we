@@ -245,14 +245,12 @@
                         align="center"
                         :label="$i.order.type">
                     <template slot-scope="scope">
-
                         <el-input
                                 :disabled="!isModify"
                                 :placeholder="isModify?$i.order.pleaseInput:''"
                                 v-model="scope.row.type"
                                 clearable>
                         </el-input>
-
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -275,7 +273,7 @@
                 <el-table-column
                         prop="supplier"
                         align="center"
-                        label="Supplier">
+                        :label="$i.order.supplier">
                     <template slot-scope="scope">
                         <el-date-picker
                                 :class="{'high-light':scope.row && scope.row.fieldUpdates &&  scope.row.fieldUpdates.supplier===''}"
@@ -292,7 +290,7 @@
                 <el-table-column
                         prop="Remark"
                         align="center"
-                        label="Remark">
+                        :label="$i.order.remarkBig">
                     <template slot-scope="scope">
                         <el-input
                                 :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.remark===''}"
@@ -307,7 +305,7 @@
                 <el-table-column
                         prop="actualDate"
                         align="center"
-                        label="Actual Date">
+                        :label="$i.order.actualDate">
                     <template slot-scope="scope">
                         <el-date-picker
                                 :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.actualDt===''}"
@@ -1961,6 +1959,13 @@
                     supplier: '',
                     remark: '',
                     actualDt: '',
+                    fieldUpdate:{
+                        type:'',
+                        customer: '',
+                        supplier: '',
+                        remark: '',
+                        actualDt: '',
+                    },
                     orderNo:this.orderForm.orderNo
                 })
             },
