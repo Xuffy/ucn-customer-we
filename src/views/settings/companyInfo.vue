@@ -1,6 +1,6 @@
 <template>
     <div class="company-info">
-        <div class="title" :style="{'height': companyInfo.shortName ? '32px':'0'}">
+        <div class="title" :style="{'height': !showNameBox ? '32px':'0'}">
             <span><span style="color:red;font-weight: bold"></span>{{$i.setting.companyInfo}}</span>
         </div>
         <div class="alert" v-show="showNameBox">
@@ -604,11 +604,11 @@
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
                     //判断shortName是否存在
-                  if (this.companyInfo.shortName){
-                    this.$localStore.remove('router_intercept')
-                  }else{
-                    this.showNameBox = true;
-                  }
+                    if (this.companyInfo.shortName){
+                      this.$localStore.remove('router_intercept')
+                    }else{
+                      this.showNameBox = true;
+                    }
 
                     this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
                       let country,receiveCountry;
