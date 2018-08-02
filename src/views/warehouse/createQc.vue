@@ -195,7 +195,7 @@
                                     :min="0"
                                     :controls="false"
                                     :mark="v.label"
-                                    :accuracy="v.accuracy ? v.accuracy : 0"
+                                    :accuracy="v.accuracy ? v.accuracy : null"
                                     label="please input"></v-input-number>
                             <!-- <el-input :min="0" style="width:150px"  @change="val => changeInput(val, scope.row[v.key], scope.$index)" v-model="scope.row[v.key].value" type="number"></el-input> -->
                         </div>
