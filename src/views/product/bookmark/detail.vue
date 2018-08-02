@@ -203,7 +203,10 @@
                     </v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
-                    <v-upload readonly :list="productForm.attachments" :limit="20" ref="upload"></v-upload>
+                    <div class="bigFont" v-if="!productForm.attachments || productForm.attachments.length===0">
+                        {{$i.product.noAttachments}}
+                    </div>
+                    <v-upload v-else readonly :list="productForm.attachments" :limit="20" ref="upload"></v-upload>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.remark" name="Remark">
                     <div>
@@ -1110,6 +1113,11 @@
 
     .Details .body .list >>> label {
         /*text-align: right;*/
+    }
+    .bigFont{
+        font-weight: 600;
+        font-size: 14px;
+        color:#777777;
     }
 
     .speForm .el-form-item--small.el-form-item {

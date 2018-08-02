@@ -69,7 +69,7 @@
                 title: this.$i.product.title,
                 type: "product",
                 formDatabase: this.$db.product.overview,
-                labelWidth: 220,
+                labelWidth: 250,
                 productData: [],
                 pageData: {},            //分页配置
                 selectList: [],

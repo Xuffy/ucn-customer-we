@@ -505,10 +505,11 @@
             display: flex;
             justify-content: space-between;
             padding: 5px 0;
+            width: 100%;
             box-sizing: border-box;
             .viewBy {
-                display: flex;
-                align-items: center;
+                /*display: flex;*/
+                /*align-items: center;*/
                 margin-right: 70px;
                 span {
                     font-size: 14px;
