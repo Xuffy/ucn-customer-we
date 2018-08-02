@@ -63,7 +63,9 @@ export default {
   "toShipCartonQty": {
     type: 'String',
     typeSlef: 'text',
-    _important: true
+    correlationKey:'toShipQty',
+    computedKey:'skuOuterCartonQty',
+    _important: true,
   },
   "fieldDisplay": {
     type: 'String',
@@ -73,6 +75,13 @@ export default {
   },
   "toShipQty": {
     type: 'String',
+    _disabled: true,
+    typeSlef: 'String',
+    _important: true
+  },
+  "skuOuterCartonQty": {
+    type: 'String',
+    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -189,6 +198,11 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
+  "totalContainerGrossWeight": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
   "totalQuantityInContainer": {
     key: 'totalContainerQty',
     _filed: 'totalContainerQty',
@@ -220,11 +234,6 @@ export default {
     _disabled: true,
     typeSlef: 'text',
     _important: true
-  },
-  "skuOuterCartonQty": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
   },
   "skuOuterCartonLength": {
     type: 'String',
@@ -282,10 +291,5 @@ export default {
     _disabled: true,
     typeSlef: 'text',
     _hide: true
-  },
-  "shipmentStatus": {
-    type: 'String',
-    typeSlef: 'text',
-    _disabled: true
   }
 }

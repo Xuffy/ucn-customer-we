@@ -54,7 +54,7 @@
                                 <el-select
                                         class="speInput"
                                         v-model="orderForm[v.key]"
-                                        @change="handleChangeIncoterm"
+                                        @change="handleChangeIncoterm(v.key)"
                                         filterable
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
@@ -1236,7 +1236,7 @@
             handleChangeSupplier(data){
                 this.supplierNo=_.findWhere(this.supplierOption,{id:data}).code;
             },
-            handleChangeIncoterm(){
+            handleChangeIncoterm(key){
                 _.map(this.productTableData,item=>{
                     if(!item._remark){
                         if(this.orderForm[key] === '1'){

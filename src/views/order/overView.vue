@@ -33,7 +33,7 @@
                 @change-checked='checked'
                 @change-sort="val=>{getData(val)}"
                 :height="500"
-                style='marginTop:10px'>
+                style='margin-top:10px'>
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
@@ -505,10 +505,11 @@
             display: flex;
             justify-content: space-between;
             padding: 5px 0;
+            width: 100%;
             box-sizing: border-box;
             .viewBy {
-                display: flex;
-                align-items: center;
+                /*display: flex;*/
+                /*align-items: center;*/
                 margin-right: 70px;
                 span {
                     font-size: 14px;

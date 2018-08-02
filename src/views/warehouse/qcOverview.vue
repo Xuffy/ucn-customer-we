@@ -27,7 +27,7 @@
                 :height="500"
                 :data="tabData"
                 :loading='loading'
-                :buttons="[{label: $i.warehouse.detail, type: 1}]"
+                :buttons="[{label: $i.warehouse.detail, type: 1, auth:'QC:ORDER_DETAIL'}]"
                 @action="onAction"
                 @change-sort="val=>{getQcOrderList(val)}"
                 @change-checked='checked'>
@@ -196,7 +196,7 @@
         mounted() {
             this.setMenuLink({
                 path: '/logs/index',
-                query: {code: 'WAREHOUSE'},
+                query: {code: 'QC'},
                 type: 10,
                 auth:'QC:LOG',
                 label: this.$i.common.log
