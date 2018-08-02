@@ -1,7 +1,15 @@
 <template>
     <div class="company-info">
-        <div class="title">
+        <div class="title" :style="{'height': companyInfo.shortName ? '32px':'0'}">
             <span><span style="color:red;font-weight: bold"></span>{{$i.setting.companyInfo}}</span>
+        </div>
+        <div class="alert" v-show="!companyInfo.shortName">
+          <el-alert
+            :title="$i.setting.requiredPage"
+            type="warning"
+            :closable="false"
+            show-icon>
+          </el-alert>
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
@@ -594,6 +602,12 @@
                 this.companyInfo.concats=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
+                    //判断shortName是否存在
+                  console.log(this.companyInfo.shortName)
+                  if (this.companyInfo.shortName){
+                    this.$localStore.remove('router_intercept')
+                  }
+
                     this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
                       let country,receiveCountry;
                       country = _.findWhere(this.options.country, {code: e.country.value}) || {};
@@ -658,7 +672,6 @@
             this.$ajax.get(this.$apis.GET_COUNTRY_ALL,{},{cache:true}).then(res=>{
               this.options.country = res
               this.$sessionStore.set('country', res);
-              this.getWholeData();
             }).catch(err=>{
               console.log(err)
             });
@@ -1137,6 +1150,7 @@
              this.getCurrency();
              this.getCountryAll();
              this.getDepartment();
+             this.getWholeData();
         },
         mounted(){
           this.setMenuLink({
@@ -1182,7 +1196,6 @@
     .title{
         font-weight: bold;
         font-size: 18px;
-        height: 32px;
         line-height: 32px;
         color:#666666;
     }
@@ -1230,5 +1243,10 @@
   }
   .uploadBox{
     padding-top: 10px;
+  }
+  .alert{
+    width: 40%;
+    margin: 0 auto;
+    padding: 15px;
   }
 </style>

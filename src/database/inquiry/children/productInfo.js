@@ -155,6 +155,10 @@ export default {
     type: 'Number',
     _toFixed: 1
   },
+  qty: {
+    key: 'qty',
+    type: 'Number'
+  },
   restrictedSellingCountry: {
     key: 'skuNoneSellCountry',
     _disabled: true,
