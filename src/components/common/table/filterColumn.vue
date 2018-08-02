@@ -226,25 +226,31 @@
 
   @keyframes ucn-flicker-fade {
     from {
-      background-color: #ffffff;
+      background-color: #409EFF;
+      color: #ffffff;
     }
     50% {
-      background-color: #ECEFF1;
+      background-color: #ffffff;
+      color: #409EFF;
     }
     to {
-      background-color: #ffffff;
+      background-color: #409EFF;
+      color: #ffffff;
     }
   }
 
   @-webkit-keyframes ucn-flicker-fade {
     from {
-      background-color: #ffffff;
+      background-color: #409EFF;
+      color: #ffffff;
     }
     50% {
-      background-color: #ECEFF1;
+      background-color: #ffffff;
+      color: #409EFF;
     }
     to {
-      background-color: #ffffff;
+      background-color: #409EFF;
+      color: #ffffff;
     }
   }
 
