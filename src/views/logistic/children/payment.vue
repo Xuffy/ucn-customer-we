@@ -10,7 +10,11 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.paymentItem" align="center" width="140">
         <template slot-scope="scope">
-          <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
+          <div v-if="scope.row.edit" style="display:flex;">
+            <label class="reqiuredStar"></label>
+            {{scope.row.name}}
+            <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
+          </div>
           <span v-else>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
@@ -282,7 +286,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.addPaymentBtn = false;
-        this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}`).then(({ status,orderNo }) => {
+        this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}&moduleCode=LOGISTIC`).then(({ status,orderNo }) => {
           this.$emit('updatePaymentWithView', { i, edit: false, status,res:{'orderNo':orderNo},title})
         })
       })

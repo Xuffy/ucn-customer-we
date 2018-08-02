@@ -75,5 +75,6 @@
   "shippingMarkResultDictCode": "Shipping Mark Result",
   "qcPic": "QC Pic",
   "checkOuterCartonQty": "Checked Outer Carton QTY",
-  "remarks": "Remarks"
+  "remarks": "Remarks",
+  "pleaseText": "please"
 }
