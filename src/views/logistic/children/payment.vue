@@ -286,7 +286,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.addPaymentBtn = false;
-        this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}?moduleCode=LOGISTIC`).then(({ status,orderNo }) => {
+        this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}&moduleCode=LOGISTIC`).then(({ status,orderNo }) => {
           this.$emit('updatePaymentWithView', { i, edit: false, status,res:{'orderNo':orderNo},title})
         })
       })

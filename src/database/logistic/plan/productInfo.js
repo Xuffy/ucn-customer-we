@@ -291,10 +291,5 @@ export default {
     _disabled: true,
     typeSlef: 'text',
     _hide: true
-  },
-  // "shipmentStatus": {
-  //   type: 'String',
-  //   typeSlef: 'text',
-  //   _disabled: true
-  // }
+  }
 }
