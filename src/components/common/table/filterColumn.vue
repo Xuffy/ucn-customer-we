@@ -7,7 +7,7 @@
       trigger="click">
       <div slot="reference" class="icon-btn">
         <i class="iconfont icon-shezhi"></i>&nbsp;
-        <span>{{$i.table.setField}}</span>
+        <div style="white-space: nowrap">{{$i.table.setField}}</div>
       </div>
       <div v-loading="loading">
         <el-input v-model="filterText" :placeholder="$i.common.content" prefix-icon="el-icon-search"
@@ -193,12 +193,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-  .filter-column {
-    margin-left: 10px;
-    display: inline-block;
-  }
-
   .filter-column .icon-shezhi {
     font-size: 20px;
     color: #666666;

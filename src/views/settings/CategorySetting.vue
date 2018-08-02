@@ -39,9 +39,10 @@
             class="filter-tree"
             :data="myCategoryData"
             :props="defaultProps"
-            default-expand-all
             highlight-current
+            default-expand-all
             draggable
+            node-key="id"
             :allow-drop="allowDrop"
             @node-drop="categoryDrop"
             :filter-node-method="filterNode"
@@ -137,14 +138,18 @@
     methods: {
       ...mapActions(['setMenuLink']),
       allowDrop(b, a, t) {
-        // console.log(b, a)
-        if(t === 'prev' && !a.childNodes.length && b.data.parentId === a.data.parentId){
+        if (t === 'prev' && !a.childNodes.length && b.data.parentId === a.data.parentId) {
           return true;
         }
+
       },
       categoryDrop(node) {
         let sorts = []
           , data = this.$depthClone(this.myCategoryData);
+
+        if (node.data.parentId) {
+          data = _.map(this.$refs.tree.getNode(node.data.parentId).childNodes, val => val.data);
+        }
 
         _.map(data, (val, index) => sorts.push({id: val.id, sort: index + 1}));
 
