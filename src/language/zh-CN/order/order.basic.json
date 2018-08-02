@@ -77,5 +77,6 @@
   "customerAbbr":"客户简称",
   "addResponsibility":"新增责任信息",
   "type":"类型",
-  "customer":"采购商"
+  "customer":"采购商",
+  "supplier":"供应商"
 }

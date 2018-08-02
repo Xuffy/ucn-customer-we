@@ -788,13 +788,17 @@ let router = new Router({
 });
 
 router.beforeResolve((to, from, next) => {
-  let ts = localStore.get('token');
+  let ts = localStore.get('token')
+    , ri = localStore.get('router_intercept');
 
   // 登录验证
-  if (to.path !== '/login' || from.path === '/login') {
-    if (_.isEmpty(ts)) {
-      return next({path: '/login'});
-    }
+  if ((to.path !== '/login' || from.path === '/login') && _.isEmpty(ts)) {
+    return next({path: '/login'});
+  }
+
+  // 数据验证拦截
+  if (ri && (to.path !== ri.path || from.path === ri.path)) {
+    return next(ri);
   }
 
   // 权限验证
