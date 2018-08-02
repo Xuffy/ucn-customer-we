@@ -589,7 +589,7 @@
             //获取整个页面数据
             getWholeData(){
                 this.companyInfo.concats=[];
-                this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
+                this.$ajax.get(this.$apis.get_purchase_customer_getCustomer,{},{cache:false}).then(res=>{
                     this.companyInfo=res;
                     this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
                       let country,receiveCountry;
