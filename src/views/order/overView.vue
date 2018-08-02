@@ -22,7 +22,6 @@
                 </selectSearch>
             </div>
         </div>
-        <!--form-->
         <v-table
                 :code="tableCode"
                 ref='vtable'
@@ -34,7 +33,7 @@
                 @change-checked='checked'
                 @change-sort="val=>{getData(val)}"
                 :height="500"
-                style='marginTop:10px'>
+                style='margin-top:10px'>
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
@@ -42,12 +41,12 @@
                                 @click='createOrder'
                                 v-authorize="'ORDER:OVERVIEW:CREATE'">
                             {{($i.order.createOrder)}}</el-button>
-                        <el-button
-                                :disabled='disableFinish'
-                                :loading="disableClickFinish"
-                                @click='finish'
-                                v-authorize="'ORDER:OVERVIEW:SHIPPED'">
-                            {{$i.order.shipped}}({{selectedList.length}})</el-button>
+                        <!--<el-button-->
+                                <!--:disabled='disableFinish'-->
+                                <!--:loading="disableClickFinish"-->
+                                <!--@click='finish'-->
+                                <!--v-authorize="'ORDER:OVERVIEW:SHIPPED'">-->
+                            <!--{{$i.order.shipped}}({{selectedList.length}})</el-button>-->
                         <el-button
                                 v-authorize="'ORDER:OVERVIEW:DOWNLOAD'"
                                 @click="downloadOrder">
@@ -121,18 +120,23 @@
                 options: [
                     {
                         id: 1,
-                        label: 'Order No'
+                        label: this.$i.order.orderNo
                     },
                     {
                         id: 2,
-                        label: 'Sku Code'
-                    }
+                        label: this.$i.order.skuCode
+                    },
+                    {
+                        id: 3,
+                        label: this.$i.order.supplierAbbr
+                    },
                 ],
                 id: '',
                 params: {
                     orderNo: '',
                     skuCode: '',
                     status: '',
+                    supplierAbbr:'',
                     ps: 50,
                     pn: 1,
                     draftCustomer:false,
@@ -202,14 +206,22 @@
                 if (val.id === 1) {
                     this.params.orderNo = val.value;
                     this.params.skuCode = '';
+                    this.params.supplierAbbr = '';
                     this.view='1';
-                    this.getData()
-                } else {
+                }
+                else if(val.id===2){
                     this.params.orderNo = '';
                     this.params.skuCode = val.value;
+                    this.params.supplierAbbr = '';
                     this.view='2';
-                    this.getData()
                 }
+                else if(val.id===3){
+                    this.params.orderNo = '';
+                    this.params.skuCode = '';
+                    this.params.supplierAbbr = val.value;
+                    this.view='1';
+                }
+                this.getData()
             },
             finish() {
                 let ids=[],orderNos=[];
@@ -217,7 +229,6 @@
                     ids.push(v.id.value);
                     orderNos.push(v.orderNo.value);
                 });
-                console.log(this.selectedList,'this.selectedList')
                 this.disableClickFinish=true;
                 this.$ajax.post(this.$apis.ORDER_FINISH, {
                     draftCustomer: false,
@@ -404,7 +415,7 @@
                     disableArchive=true;
                 }else{
                     _.map(n,v=>{
-                        if(v.status.value!=='CANCLED'){
+                        if(v.status.value!=='CANCELED'){
                             disableArchive=true;
                         }else{
                             archiveLength++;
@@ -494,10 +505,11 @@
             display: flex;
             justify-content: space-between;
             padding: 5px 0;
+            width: 100%;
             box-sizing: border-box;
             .viewBy {
-                display: flex;
-                align-items: center;
+                /*display: flex;*/
+                /*align-items: center;*/
                 margin-right: 70px;
                 span {
                     font-size: 14px;

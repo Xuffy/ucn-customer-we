@@ -203,7 +203,10 @@
                     </v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
-                    <v-upload readonly :list="productForm.attachments" :limit="20" ref="upload"></v-upload>
+                    <div class="bigFont" v-if="!productForm.attachments || productForm.attachments.length===0">
+                        {{$i.product.noAttachments}}
+                    </div>
+                    <v-upload v-else readonly :list="productForm.attachments" :limit="20" ref="upload"></v-upload>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.remark" name="Remark">
                     <div>
@@ -736,7 +739,11 @@
                         dduCurrency: this.productForm.dduCurrency,
                         dduArea: this.productForm.dduArea
                     }];
-                    this.priceTable = this.$getDB(this.$db.product.detailTab, priceData);
+                    this.priceTable = this.$getDB(this.$db.product.detailTab, priceData,item=>{
+                        item.refFobPrice._note=this.$i.product.fobFormula;
+                        item.refCifPrice._note=this.$i.product.cifFormula;
+                        item.refDduPrice._note=this.$i.product.dduFormula;
+                    });
                     this.tradeHistory.skuCode = this.productForm.code;
                     this.loadingTable = true;
                     this.$ajax.post(this.$apis.get_buyerProductTradeList, this.tradeHistory)
@@ -1106,6 +1113,11 @@
 
     .Details .body .list >>> label {
         /*text-align: right;*/
+    }
+    .bigFont{
+        font-weight: 600;
+        font-size: 14px;
+        color:#777777;
     }
 
     .speForm .el-form-item--small.el-form-item {

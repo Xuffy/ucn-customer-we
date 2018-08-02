@@ -58,4 +58,7 @@ export default {
     key: '',
     _important:true,
   },
+  defaultAddress: {
+    key: 'def'
+  }
 }

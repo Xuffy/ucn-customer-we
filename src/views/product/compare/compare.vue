@@ -26,7 +26,7 @@
                         @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button
                         v-authorize="'PRODUCT:COMPARE_DETAIL:DELETE'"
-                        @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                        @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.deleteProduct}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
                 <el-button

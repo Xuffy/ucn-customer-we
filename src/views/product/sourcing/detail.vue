@@ -139,7 +139,10 @@
                     </v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
-                    <v-upload readonly :list="productForm.attachments" ref="uploadAttachment"></v-upload>
+                    <div class="bigFont" v-if="!productForm.attachments || productForm.attachments.length===0">
+                        {{$i.product.noAttachments}}
+                    </div>
+                    <v-upload v-else readonly :list="productForm.attachments" ref="uploadAttachment"></v-upload>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.remark" name="Remark">
                     <div>
@@ -201,7 +204,6 @@
                             <el-button @click="addRemarkFormVisible = false">{{$i.product.cancel}}</el-button>
                         </div>
                     </el-dialog>
-
 
                     <el-dialog :title="$i.product.changeRemark" :visible.sync="editRemarkFormVisible" center width="600px">
                         <el-form :model="editRemarkData">
@@ -410,19 +412,14 @@
                  * compareList配置
                  * */
                 showCompareList:false,      //是否显示比较列表
-                compareData:[
-
-                ],
-                // compareConfig:{
-                //
-                // },
+                compareData:[],
 
                 /**
                  * remark data
                  * */
                 remarkConfig:{
                     pn: 1,
-                    ps: 10,
+                    ps: 100,
                     sorts: [],
                     id:this.$route.query.id,
                 },
@@ -472,6 +469,7 @@
                     id:this.$route.query.id
                 }).then(res=>{
                     this.productForm=res;
+                    console.log(this.productForm.attachments,'this.productForm')
 
                     //处理国家显示
                     if(this.productForm.noneSellCountry){
@@ -490,7 +488,6 @@
                         });
                         this.productForm.mainSaleCountry=this.productForm.mainSaleCountry.slice(0,this.productForm.mainSaleCountry.length-1);
                     }
-
 
                     /**
                      * 字典转换
@@ -527,7 +524,11 @@
                         dduCurrency:this.productForm.dduCurrency,
                         dduArea:this.productForm.dduArea,
                     }];
-                    this.priceData = this.$getDB(this.$db.product.detailTab, priceData);
+                    this.priceData = this.$getDB(this.$db.product.detailTab, priceData,item=>{
+                        item.refFobPrice._note=this.$i.product.fobFormula;
+                        item.refCifPrice._note=this.$i.product.cifFormula;
+                        item.refDduPrice._note=this.$i.product.dduFormula;
+                    });
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory).then(res=>{
                         if(!res || !res.datas || res.datas.length===0){return}
@@ -895,6 +896,11 @@
     }
     .Details .body .list >>> label{
         /*text-align: right;*/
+    }
+    .bigFont{
+        font-weight: 600;
+        font-size: 14px;
+        color:#777777;
     }
 
     .speForm .el-form-item--small.el-form-item{
