@@ -250,7 +250,9 @@ export default {
     compareByChange() {
       this.params.sorts = null;
       this.disableds = [];
-      this.argDisabled = [];
+      if (!this.addInquiryIds) {
+        this.argDisabled = [];
+      }
       this.checkedInquiryIds = [];
       this.getData();
     },

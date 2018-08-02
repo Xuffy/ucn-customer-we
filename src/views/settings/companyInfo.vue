@@ -1,7 +1,15 @@
 <template>
     <div class="company-info">
-        <div class="title">
+        <div class="title" :style="{'height': companyInfo.shortName ? '32px':'0'}">
             <span><span style="color:red;font-weight: bold"></span>{{$i.setting.companyInfo}}</span>
+        </div>
+        <div class="alert" v-show="showNameBox">
+          <el-alert
+            :title="$i.setting.requiredPage"
+            type="warning"
+            :closable="false"
+            show-icon>
+          </el-alert>
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
@@ -82,6 +90,7 @@
                     :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                     @action="addressAction"
                     :selection="false"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.setting.contactInfo">
@@ -94,6 +103,7 @@
                     :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                     @action="accountAction"
                     :selection="false"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
 
@@ -166,6 +176,7 @@
                     :buttons="[{label: 'Modify', type: 1}]"
                     :selection="false"
                     @action="rateAction"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
             </el-tabs>
@@ -562,6 +573,7 @@
               isModifyContact:false,
             //判断是否修改过
               isModify:false,
+              showNameBox:false,
               options:{},
               department:[],
               currencyList:[],
@@ -589,8 +601,15 @@
             //获取整个页面数据
             getWholeData(){
                 this.companyInfo.concats=[];
-                this.$ajax.get(this.$apis.get_purchase_customer_getCustomer,{},{cache:false}).then(res=>{
+                this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
+                    //判断shortName是否存在
+                  if (this.companyInfo.shortName){
+                    this.$localStore.remove('router_intercept')
+                  }else{
+                    this.showNameBox = true;
+                  }
+
                     this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
                       let country,receiveCountry;
                       country = _.findWhere(this.options.country, {code: e.country.value}) || {};
@@ -624,15 +643,14 @@
             },
             postUpdateIsSetting(){
               this.$ajax.post(this.$apis.post_purchase_customer_updateIsSetting,{id:this.companyInfo.id}).then(res=>{
-                console.log(res)
-                    this.isModify = res;
+                this.isModify = res;
               }).catch(err=>{
                 console.log(err)
               });
             },
           //获取币种
           getCurrency(){
-              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+              this.$ajax.get(this.$apis.get_currency_all,{},{cache:true}).then(res=>{
                   this.options.currency = res
               }).catch(err=>{
                 console.log(err)
@@ -653,17 +671,16 @@
           },
           //获取国家
           getCountryAll(){
-            this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+            this.$ajax.get(this.$apis.GET_COUNTRY_ALL,{},{cache:true}).then(res=>{
               this.options.country = res
               this.$sessionStore.set('country', res);
-              this.getWholeData();
             }).catch(err=>{
               console.log(err)
             });
           },
           //获取部门列表
           getDepartment(){
-            this.$ajax.get(this.$apis.GET_DEPARTMENT).then(res=>{
+            this.$ajax.get(this.$apis.GET_DEPARTMENT,{},{cache:true}).then(res=>{
               this.department = res
             }).catch(err=>{
               console.log(err)
@@ -1135,6 +1152,7 @@
              this.getCurrency();
              this.getCountryAll();
              this.getDepartment();
+             this.getWholeData();
         },
         mounted(){
           this.setMenuLink({
@@ -1180,7 +1198,6 @@
     .title{
         font-weight: bold;
         font-size: 18px;
-        height: 32px;
         line-height: 32px;
         color:#666666;
     }
@@ -1228,5 +1245,10 @@
   }
   .uploadBox{
     padding-top: 10px;
+  }
+  .alert{
+    width: 40%;
+    margin: 0 auto;
+    padding: 15px;
   }
 </style>

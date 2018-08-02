@@ -33,6 +33,10 @@ export default {
   currency: { // 币种 系统带入：当前inquiry选的币种
     transForm: 'CY_UNIT'
   },
+  qty: {
+    key: 'qty',
+    type: 'Number'
+  },
   skuFobCurrency: { // FOB币种
     transForm: 'CY_UNIT'
   },

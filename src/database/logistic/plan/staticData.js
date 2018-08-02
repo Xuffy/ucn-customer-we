@@ -13,77 +13,19 @@ export const basicInfoObj = {
     defaultVal: 2,
     disabled:true 
   },
+  shipmentStatus: {
+    type: 'selector',
+    value: null
+  },
   customerName: {
     type: 'input',
     value: null,
     disabled:true 
   },
-  bookingDate: {
-    type: 'date',
-    value: null
-  },
-  estContainerStuffingDate: {
-    type: 'date',
-    value: null
-  },
-  actContainerStuffingDate: {
-    type: 'date',
-    value: null
-  },
-  estCustomsCleanceDate: {
-    type: 'date',
-    value: null
-  },
-  actCustomsCleanceDate: {
-    type: 'date',
-    value: null
-  },
-  estDepartureDate: {
-    type: 'date',
-    value: null
-  },
-  actDepartureDate: {
-    type: 'date',
-    value: null
-  },
-  estArrivalDate: {
-    type: 'date',
-    value: null
-  },
-  actArrivalDate: {
-    type: 'date',
-    value: null
-  },
-  estReleaseDate: {
-    type: 'date',
-    value: null
-  },
-  actReleaseDate: {
-    type: 'date',
-    value: null
-  },
-  estDeliveryDate: {
-    key:'estDelivaryDate',
-    type: 'date',
-    value: null
-  },
-  actDeliveryDate: {
-    type: 'date',
-    value: null
-  },
-  createDate: {
-    type: 'date',
-    value: null
-  },
-  declareDate: {
-    type: 'date',
-    value: null
-  },
   shipServiceProvider: {
     type: 'input',
     value: null
   },
-  // customerName: {     type: 'selector',     value: null   },
   receiptCompany: {
     type: 'input',
     value: null,
@@ -241,6 +183,11 @@ export const dbBasicInfoObj ={
     typeSlef: 'text',
     _important: true
   },
+  "skuOuterCartonQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
   "skuCode": {
     type: 'String',
     _disabled: true,
@@ -380,11 +327,6 @@ export const dbBasicInfoObj ={
     typeSlef: 'text',
     _important: true
   },
-  "skuOuterCartonQty": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
   "skuOuterCartonLength": {
     type: 'String',
     _disabled: true,
@@ -443,7 +385,7 @@ export const dbBasicInfoObj ={
     _hide: true
   },
   "shipmentStatus": {
-    type: 'String',
+    type: 'selector',
     typeSlef: 'text',
     _disabled: true
   }
@@ -568,11 +510,6 @@ export const dbProductInfo = {
       type:'Number'
     }
   },
-  // "shipmentStatus":{
-  //   _rules:{
-  //     required:true
-  //   }
-  // },
   "toShipQty": {
     _rules:{
       type:'Number'
