@@ -102,9 +102,6 @@ export default {
     paymentDays:{
         type:'number',
         belong:'basicInfo',
-        _rules:{
-            type:'Number'
-        }
     },
     // paymentStatus:{
     //     type:'select',
