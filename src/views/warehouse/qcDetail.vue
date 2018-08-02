@@ -190,11 +190,19 @@
                                 </el-date-picker>
                             </div>
                             <div v-else-if="v.type==='number'">
-                                <el-input-number
+                                <!-- <el-input-number
                                         class="speNumber"
                                         v-model="scope.row[v.realKey]"
                                         :min="0"
-                                        :controls="false"></el-input-number>
+                                        :controls="false"></el-input-number> -->
+                                <v-input-number
+                                    v-model="scope.row[v.realKey]"
+                                    :min="0"
+                                    class="speNumber"
+                                    :controls="false"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy ? v.accuracy : null"
+                                    label="please input"></v-input-number>
                             </div>
                             <div v-else-if="v.type==='select'">
                                 <el-select :disabled="true" v-model="scope.row[v.realKey]" :placeholder="$i.warehouse.pleaseChoose">
@@ -444,7 +452,7 @@
 </template>
 <script>
 
-    import {VTable,VUpload,VMessageBoard} from '@/components/index';
+    import {VTable,VUpload,VMessageBoard,VInputNumber} from '@/components/index';
     import { mapActions } from 'vuex'
 
     export default {
@@ -452,7 +460,8 @@
         components:{
             VTable,
             VUpload,
-            VMessageBoard
+            VMessageBoard,
+            VInputNumber
         },
         data(){
             return{
