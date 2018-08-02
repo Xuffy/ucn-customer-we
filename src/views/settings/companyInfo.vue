@@ -594,6 +594,12 @@
                 this.companyInfo.concats=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
+                    //判断shortName是否存在
+                  if (companyInfo.shortName){
+                    this.$localStore.remove('router_intercept')
+                  }
+
+
                     this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
                       let country,receiveCountry;
                       country = _.findWhere(this.options.country, {code: e.country.value}) || {};
