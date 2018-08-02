@@ -175,6 +175,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:0
     },
     expireDates:{
         key:'expireDates',
