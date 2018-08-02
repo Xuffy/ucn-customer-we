@@ -1007,7 +1007,6 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
-                // return console.log(params.skuList,'params.skuList')
                 let rightCode=true;
                 _.map(params.skuList,v=>{
                     if(v.skuSupplierCode!==params.supplierCode){
@@ -1527,7 +1526,7 @@
                     this.orderForm.currency=res.currency;
                     this.orderForm.destCountry=res.destinationCountry;
                     this.orderForm.destPort=res.destinationPort;
-                    this.supplierNo=_.findWhere(this.supplierOption,{id:res.supplierId}).code;
+                    this.supplierNo=(_.findWhere(this.supplierOption,{id:res.supplierId}) || {}).code;
                     this.productTableData=[];
                     let arr=[];
                     _.map(res.details,v=>{
@@ -1758,8 +1757,8 @@
                         obj.skuOrigin=v.skuOrigin;
                         obj.skuInspectQuarantineCategory=v.skuInspectQuarantineCategory;
                         obj.skuUnitLength=v.skuUnitLength;
-                        obj.skuUnitWidth=v.skuUnitWidth;
-                        obj.skuUnitVolumn=v.skuUnitVolumn;
+                        obj.skuUnitWeight=v.skuUnitWeight;
+                        obj.skuUnitVolume=v.skuUnitVolume;
                         obj.skuLength=v.skuLength;
                         obj.skuWidth=v.skuWidth;
                         obj.skuHeight=v.skuHeight;

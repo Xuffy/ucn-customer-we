@@ -1777,7 +1777,7 @@
                     }
                     if (!item._remark) {
                         _.map(item, (v, k) => {
-                            if (v._isModified) {
+                            if (v._isModified || v._isModifyStatus) {
                                 if (!item.fieldUpdate.value) {
                                     item.fieldUpdate.value = {};
                                 }
@@ -1790,7 +1790,7 @@
                             item.fieldRemarkUpdate = { value: {} };
                         }
                         _.map(item, (v, k) => {
-                            if (v._isModified) {
+                            if (v._isModified || v._isModifyStatus) {
                                 item.fieldRemarkUpdate.value[k] = "";
                             }
                         });
@@ -1822,7 +1822,7 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
-                // return console.log(this.$depthClone(params.responsibilityList),'params')
+                // return console.log(this.$depthClone(params.skuList),'params')
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
