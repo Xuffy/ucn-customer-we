@@ -82,6 +82,7 @@
                     :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                     @action="addressAction"
                     :selection="false"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.setting.contactInfo">
@@ -94,6 +95,7 @@
                     :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                     @action="accountAction"
                     :selection="false"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
 
@@ -166,6 +168,7 @@
                     :buttons="[{label: 'Modify', type: 1}]"
                     :selection="false"
                     @action="rateAction"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
             </el-tabs>
@@ -624,15 +627,14 @@
             },
             postUpdateIsSetting(){
               this.$ajax.post(this.$apis.post_purchase_customer_updateIsSetting,{id:this.companyInfo.id}).then(res=>{
-                console.log(res)
-                    this.isModify = res;
+                this.isModify = res;
               }).catch(err=>{
                 console.log(err)
               });
             },
           //获取币种
           getCurrency(){
-              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+              this.$ajax.get(this.$apis.get_currency_all,{},{cache:true}).then(res=>{
                   this.options.currency = res
               }).catch(err=>{
                 console.log(err)
@@ -653,7 +655,7 @@
           },
           //获取国家
           getCountryAll(){
-            this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+            this.$ajax.get(this.$apis.GET_COUNTRY_ALL,{},{cache:true}).then(res=>{
               this.options.country = res
               this.$sessionStore.set('country', res);
               this.getWholeData();
@@ -663,7 +665,7 @@
           },
           //获取部门列表
           getDepartment(){
-            this.$ajax.get(this.$apis.GET_DEPARTMENT).then(res=>{
+            this.$ajax.get(this.$apis.GET_DEPARTMENT,{},{cache:true}).then(res=>{
               this.department = res
             }).catch(err=>{
               console.log(err)

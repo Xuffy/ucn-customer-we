@@ -157,6 +157,7 @@
                 <v-filter-column
                     ref="filterColumn"
                     code="uwarehouse_qc_order_detail"
+                    :table-ref="() => $refs.tableBox"
                     @change="changeColumn">
                 </v-filter-column>
             </div>
@@ -166,6 +167,7 @@
                     :data="productTableData"
                     border
                     show-summary
+                    ref="tableBox"
                     :summary-method="getSummaries"
                     @selection-change="handleProductTableChange"
                     style="width: 100%">
@@ -183,6 +185,7 @@
                         v-if="!v._hidden && !v._hide"
                         :label="$i.warehouse[v.key]"
                         align="center"
+                        :label-class-name="'location-' + v.key"
                         :class-name="v.key === 'expectQcQty' ? 'ucn-table-required' : ''"
                         width="240">
                     <template slot-scope="scope" v-if="scope.row[v.key]">
@@ -195,7 +198,7 @@
                                     :min="0"
                                     :controls="false"
                                     :mark="v.label"
-                                    :accuracy="v.accuracy ? v.accuracy : 0"
+                                    :accuracy="v.accuracy ? v.accuracy : null"
                                     label="please input"></v-input-number>
                             <!-- <el-input :min="0" style="width:150px"  @change="val => changeInput(val, scope.row[v.key], scope.$index)" v-model="scope.row[v.key].value" type="number"></el-input> -->
                         </div>
