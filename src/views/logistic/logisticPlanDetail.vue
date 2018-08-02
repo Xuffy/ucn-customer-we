@@ -701,11 +701,7 @@
               this.productModifyList = this.$getDB(this.$db.logistic.productModify,res.history.map(el => {
                 el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm:ss');
                 return el;
-              }),el=>{
-                el.entryDt._hidden =false;
-                el.entryName._hidden =false;
-                return el;
-              });
+              }));
               this.$refs.HM.init(this.productModifyList,[],false);
             })
           }
