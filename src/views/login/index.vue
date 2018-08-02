@@ -51,9 +51,11 @@
         this.$localStore.set('token', token);
         this.$ajax.get(this.$apis.USER_PRIVILEGE).then(data => {
           this.$localStore.set('user', data);
-          data.userType === 0 && this.checkCompanyInfo(data).then(res => {
-            res ? this.$router.push('/') : this.$router.push(this.$localStore.get('router_intercept'));
-          });
+          data.userType === 0
+            ? this.checkCompanyInfo(data).then(res => {
+              res ? this.$router.push('/') : this.$router.push(this.$localStore.get('router_intercept'));
+            })
+            : this.$router.push('/');
         });
       },
       checkCompanyInfo() {

@@ -137,8 +137,8 @@
     methods: {
       ...mapActions(['setMenuLink']),
       allowDrop(b, a, t) {
+        // console.log(b, a)
         if(t === 'prev' && !a.childNodes.length && b.data.parentId === a.data.parentId){
-          // console.log(b, a)
           return true;
         }
       },
