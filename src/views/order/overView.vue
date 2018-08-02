@@ -33,7 +33,7 @@
                 @change-checked='checked'
                 @change-sort="val=>{getData(val)}"
                 :height="500"
-                style='marginTop:10px'>
+                style='margin-top:10px'>
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
