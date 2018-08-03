@@ -168,6 +168,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
+        fullLine:true,
         isCountry:true,
     },
     applicableAge:{
