@@ -603,8 +603,16 @@
                         return e;
                     });
                     let diffData=[];
+                    let qcStatusDictCode = this.qcDetail.qcStatusDictCode
                     this.productInfoData.forEach(v=>{
                         diffData.push(v.skuId.value+v.orderNo.value);
+                        if (qcStatusDictCode === 'COMPLETED_QC') {
+                            _.mapObject(v, (item, k) => {
+                                if (item.isFWS) {
+                                    item._mustChecked = true
+                                }
+                            })
+                        }
                     });
                     this.summaryData.skuQuantity=_.uniq(diffData).length;
 
@@ -650,7 +658,7 @@
                     }else{
                         this.disableAdd=false;
                     }
-                    console.log(this.disableAdd,'this.disableAdd')
+                    // console.log(this.disableAdd,'this.disableAdd')
                 }).catch(err=>{
                     this.loadingPaymentTable=false;
 
@@ -1077,6 +1085,7 @@
                 auth:'QC:LOG',
                 label: this.$i.common.log
             });
+            // this.$ajax.post('')
         },
         watch:{
             selectList(n){
