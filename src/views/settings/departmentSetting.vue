@@ -736,7 +736,7 @@
 
               userData.deptRoles = roles ? roles.deptRoles : [];
               this.departmentClick(userData, this.$refs.roleTree.getCheckedNodes(true));
-              this.getPrivilege(false);
+              this.getPrivilege();
             });
             this.getDepartmentUser();
             this.editUserdialog.show = false;
@@ -806,7 +806,7 @@
           })
           .finally(() => this.loadingPrivilege = false);
       },
-      getPrivilege(isUpdate = true) {
+      getPrivilege() {
         if (this.checkedRole.length !== 1) {
           this.privilegeData = this.$options.data().privilegeData;
           return false;
@@ -815,7 +815,7 @@
         this.$ajax.post(this.$apis.PRIVILEGE_PRIVILEGE_SELECT, {
           deptId: this.userData.deptId,
           roleId: this.checkedRole[0]
-        }, {cache: isUpdate}).then(res => {
+        }).then(res => {
           this.$ajax.all([
             this.getPrivilegeResource(),
             this.getPrivilegeData()
