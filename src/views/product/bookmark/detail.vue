@@ -717,18 +717,17 @@
                     /**
                      * 字典转换
                      * */
-                    this.productForm.status = _.findWhere(this.skuSaleStatusOption, { code: String(this.productForm.status) }).name;
-                    this.productForm.unit = this.productForm.unit ? _.findWhere(this.skuUnitOption, { code: String(this.productForm.unit) }).name : "";
-                    this.productForm.expireUnit = this.productForm.expireUnit ? _.findWhere(this.expirationOption, { code: String(this.productForm.expireUnit) }).name : "";
-                    this.productForm.inspectQuarantineCategory = this.productForm.inspectQuarantineCategory ? _.findWhere(this.quarantineTypeOption, { code: this.productForm.inspectQuarantineCategory }).name : "";
-                    this.productForm.unitLength = this.productForm.unitLength ? _.findWhere(this.lengthOption, { code: String(this.productForm.unitLength) }).name : "";
-                    this.productForm.unitVolume = this.productForm.unitVolume ? _.findWhere(this.volumeOption, { code: String(this.productForm.unitVolume) }).name : "";
-                    this.productForm.unitWeight = this.productForm.unitWeight ? _.findWhere(this.weightOption, { code: String(this.productForm.unitWeight) }).name : "";
-                    this.productForm.oem = _.findWhere(this.oemOption, { code: String(Number(this.productForm.oem)) }).name;
+                    this.productForm.status = (_.findWhere(this.skuSaleStatusOption, { code: String(this.productForm.status) }) || {}).name;
+                    this.productForm.unit = ( _.findWhere(this.skuUnitOption, { code: String(this.productForm.unit) }) || {}).name;
+                    this.productForm.expireUnit = (_.findWhere(this.expirationOption, { code: String(this.productForm.expireUnit) }) || {}).name;
+                    this.productForm.inspectQuarantineCategory =  (_.findWhere(this.quarantineTypeOption, { code: this.productForm.inspectQuarantineCategory }) || {}).name;
+                    this.productForm.unitLength = ( _.findWhere(this.lengthOption, { code: String(this.productForm.unitLength) }) || {}).name;
+                    this.productForm.unitVolume = ( _.findWhere(this.volumeOption, { code: String(this.productForm.unitVolume) }) || {}).name;
+                    this.productForm.unitWeight = ( _.findWhere(this.weightOption, { code: String(this.productForm.unitWeight) }) || {}).name;
+                    this.productForm.oem = (_.findWhere(this.oemOption, { code: String(Number(this.productForm.oem)) }) || {}).name;
                     this.productForm.yearListed = this.$dateFormat(this.productForm.yearListed, "yyyy-mm");
-                    this.productForm.useDisplayBox = _.findWhere(this.udbOption, { code: String(Number(this.productForm.useDisplayBox)) }).name;
-                    this.productForm.adjustPackage = _.findWhere(this.skuPkgOption, { code: String(Number(this.productForm.adjustPackage)) }).name;
-
+                    this.productForm.useDisplayBox = (_.findWhere(this.udbOption, { code: String(Number(this.productForm.useDisplayBox)) }) || {}).name;
+                    this.productForm.adjustPackage = (_.findWhere(this.skuPkgOption, { code: String(Number(this.productForm.adjustPackage)) }) || {}).name;
 
                     this.notLoadingDone = false;
                     this.hideBtns = true;
@@ -753,23 +752,24 @@
                         item.refCifPrice._note=this.$i.product.cifFormula;
                         item.refDduPrice._note=this.$i.product.dduFormula;
                     });
-                    this.tradeHistory.skuCode = this.productForm.code;
-                    this.loadingTable = true;
-                    this.$ajax.post(this.$apis.get_buyerProductTradeList, this.tradeHistory)
-                        .then(res => {
-                            this.historyData = this.$getDB(this.$db.product.tradeHistory, res.datas, e => {
-                                e.incoterm._value = _.findWhere(this.incotermOption, { code: e.incoterm.value }).name;
-                                e.actDeliveryDt._value = this.$dateFormat(e.actDeliveryDt.value, "yyyy-mm-dd");
-                                e.confirmQcDt._value = this.$dateFormat(e.confirmQcDt.value, "yyyy-mm-dd");
-                                e.actDepartureDt._value = this.$dateFormat(e.actDepartureDt.value, "yyyy-mm-dd");
-                            });
-                        }).finally(() => {
-                            this.notLoadingDone = false;
-                            this.loadingTable = false;
-                        }
-                    );
+                    this.notLoadingDone = false;
+                    // this.tradeHistory.skuCode = this.productForm.code;
+                    // this.loadingTable = true;
+                    // this.$ajax.post(this.$apis.get_buyerProductTradeList, this.tradeHistory)
+                    //     .then(res => {
+                    //         this.historyData = this.$getDB(this.$db.product.tradeHistory, res.datas, e => {
+                    //             e.incoterm._value = _.findWhere(this.incotermOption, { code: e.incoterm.value }).name;
+                    //             e.actDeliveryDt._value = this.$dateFormat(e.actDeliveryDt.value, "yyyy-mm-dd");
+                    //             e.confirmQcDt._value = this.$dateFormat(e.confirmQcDt.value, "yyyy-mm-dd");
+                    //             e.actDepartureDt._value = this.$dateFormat(e.actDepartureDt.value, "yyyy-mm-dd");
+                    //         });
+                    //     }).finally(() => {
+                    //         this.notLoadingDone = false;
+                    //         this.loadingTable = false;
+                    //     }
+                    // );
 
-                }).catch(err => {
+                }).catch(() => {
                     this.notLoadingDone = false;
                 });
             },
