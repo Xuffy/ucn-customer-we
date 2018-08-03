@@ -4,7 +4,7 @@
             <span>{{$i.product.compareDetail}}</span>
         </div>
         <div class="name">
-            <span>Compare Name</span>
+            <span>{{$i.product.compareName}}</span>
             <el-input
                     :disabled="$route.params.type==='modify' && !isModify"
                     size="mini"

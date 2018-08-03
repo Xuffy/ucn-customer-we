@@ -123,7 +123,8 @@ export default{
     },
     actOuterCartonSkuQty:{
         key: 'actOuterCartonSkuQty',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     outerCartonInnerBoxQty:{
         key: 'outerCartonInnerBoxQty',
@@ -131,7 +132,8 @@ export default{
     },
     actQuantityOfInnerBoxOuterCarton:{
         key: 'actOuterCartonInnerBoxQty',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonSkuQty:{
         key: 'innerCartonSkuQty',
@@ -139,31 +141,38 @@ export default{
     },
     actualQuantityInnerCarton:{
         key: 'actInnerCartonSkuQty',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonLength:{
         key: 'innerCartonLength',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonWidth:{
         key: 'innerCartonWidth',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonHeight:{
         key: 'innerCartonHeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonNetWeight:{
         key: 'innerCartonNetWeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonGrossWeight:{
         key: 'innerCartonGrossWeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonVolume:{
         key: 'innerCartonVolume',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     outerCartonLength:{
         key: 'outerCartonLength',
@@ -171,15 +180,18 @@ export default{
     },
     outerCartonWidth:{
         key: 'outerCartonWidth',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     outerCartonHeight:{
         key: 'outerCartonHeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     netWeightOfOuterCarton:{
         key: 'outerCartonNetWeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     volumeOfOuterCarton:{
         key: 'outerCartonVolume',
@@ -187,7 +199,8 @@ export default{
     },
     grossWeightofOuterCarton:{
         key: 'outerCartonGrossWeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     actualProductTotalCTNS:{
         key: 'actSkuCartonTotalQty',
@@ -197,12 +210,14 @@ export default{
     qualifiedProductsTotalCTNS:{
         key: 'qualifiedSkuCartonTotalQty',
         type: 'Number',
-        _calculate:true
+        _calculate:true,
+        isFWS: true
     },
     unqualifiedProductTotalCTNS:{
         key: 'unqualifiedSkuCartonTotalQty',
         type: 'Number',
-        _calculate:true
+        _calculate:true,
+        isFWS: true
     },
     actProductQuantity:{
         key: 'actSkuQty',
@@ -251,6 +266,7 @@ export default{
     unqualifiedType:{
         key: 'unqualifiedType',
         type: 'String',
+        isFWS: true
     },
     skuBarCode:{
         key: 'skuBarCode',
@@ -301,10 +317,12 @@ export default{
     checkOuterCartons:{
         key: 'checkOuterCartonQty',
         type: 'Number',
-        _calculate:true
+        _calculate:true,
+        isFWS: true
     },
     remark:{
         key: 'remark',
         type: 'String',
+        isFWS: true
     },
 }
