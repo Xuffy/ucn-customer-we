@@ -6,6 +6,9 @@ export default {
   logisticsNo: {
     type: 'text'
   },
+  orderNo: {
+    type: 'text'
+  },
   estContainerStuffingDate: {
     type: 'textDate'
   },

@@ -55,10 +55,6 @@ export const dateInfo = {
 		type: 'date',
 		value: null
 	},
-	createDate: {
-		type: 'date',
-		value: null
-	},
 	declareDate: {
 		type: 'date',
 		value: null
