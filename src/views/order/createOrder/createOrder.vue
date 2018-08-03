@@ -297,10 +297,8 @@
             <template slot="header">
                 <div class="btns">
                     <el-button
-                            v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'"
                             @click="addProduct">{{$i.order.addProduct}}</el-button>
                     <el-button
-                            v-authorize="'ORDER:DETAIL:PRODUCT_INFO_DELETE'"
                             @click="removeProduct"
                             :disabled="selectProductInfoTable.length===0"
                             type="danger">{{$i.order.remove}}</el-button>
@@ -314,7 +312,6 @@
                     @click="send"
                     type="primary">{{$i.order.send}}</el-button>
             <el-button
-                    v-authorize="'ORDER:DETAIL:DRAFT'"
                     :disabled="loadingPage"
                     :loading="disableClickSaveDraft"
                     @click="saveAsDraft"
