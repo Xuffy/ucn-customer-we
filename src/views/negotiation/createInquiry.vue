@@ -127,6 +127,7 @@
       :buttons="productInfoBtn"
       :loading="tableLoad"
       :height="450"
+      :totalRow="productTotalRow"
       @action="producInfoAction"
       @change-checked="changeChecked"
       :parId="'skuId'"
@@ -207,6 +208,44 @@ export default {
     VUpload,
     VHistoryModify,
     VInputNumber
+  },
+  computed: {
+    productTotalRow() {
+      let obj = {};
+      if (this.tabData.length <= 0) {
+        return false;
+      }
+      let totalUnitKeys = {};
+      Object.values(this.$db.inquiry.productInfo).filter(i => i._total && i._total.unitKey).forEach(i => totalUnitKeys[i._total.unitKey] = new Set());
+
+      this.tabData.filter(i => !i._remark).forEach(v => {
+        _.mapObject(v, (item, key) => {
+          if (item._hide) return;
+          if (item._total) {
+            let unitKey = item._total.unitKey;
+            if (unitKey && v[unitKey] && totalUnitKeys[unitKey]) {
+              totalUnitKeys[unitKey].add(v[unitKey].value || null);
+              if (totalUnitKeys[unitKey].size > 1) {
+                obj[key].value = null;
+                return;
+              }
+            }
+            if (!isNaN(item.value)) {
+              let value = Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0);
+              obj[key] = {
+                value: item._toFixed ? Number(value.toFixed(item._toFixed)) : value
+              };
+            }
+          } else {
+            obj[key] = {
+              value: ''
+            };
+          }
+        });
+      });
+
+      return [obj];
+    }
   },
   created() {
     this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});

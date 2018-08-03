@@ -160,13 +160,13 @@
           this.loadingTable=true;
           if(e.id===1){
             //compareName
-            this.params.compareItem='';
+            this.params.productName='';
             this.params.name=e.value;
             this.getList();
           }else if(e.id===2){
             //compareItem
             this.params.name='';
-            this.params.compareItem=e.value;
+            this.params.productName=e.value;
             this.getList();
           }
         }
