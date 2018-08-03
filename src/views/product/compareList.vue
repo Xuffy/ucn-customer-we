@@ -2,8 +2,8 @@
     <div class="compare-zone" :class="{isTransparent:change}">
         <div class="compare-main" :class="{show:change}">
             <div class="btnGroup">
-                <el-button :disabled="disabledBtn" @click="startCompare" class="btn" type="primary" size="mini">Go Compare ({{data.length}})</el-button>
-                <el-button @click="clearData" class="clearBtn" type="danger" size="mini">Clear</el-button>
+                <el-button :disabled="disabledBtn" @click="startCompare" class="btn" type="primary" size="mini">{{$i.product.goCompare}} ({{data.length}})</el-button>
+                <el-button @click="clearData" class="clearBtn" type="danger" size="mini">{{$i.product.clearData}}</el-button>
             </div>
             <div class="compare-list" style="float: left;">
                 <div class="treeList">

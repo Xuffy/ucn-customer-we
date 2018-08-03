@@ -67,24 +67,17 @@
                 searchValue:1,
                 searchOptions:[
                     {
-                        label:'Compare Name',
+                        label:this.$i.product.compareName,
                         id:1
                     },
                     {
-                        label:'Compare Item',
+                        label:this.$i.product.compareItem,
                         id:2
                     },
                 ],
                 queryParam:{
                     name: '',
                     compareItem:'',
-                    // operatorFilters: [
-                    //     {
-                    //         columnName: "",
-                    //         operator: "",
-                    //         property: "",
-                    //     }
-                    // ],
                     pn: 1,
                     ps: 50,
                     recycle: false,
@@ -195,7 +188,6 @@
                     type: 'warning'
                 }).then(() => {
                     this.disableClickDeleteBtn=true;
-                    // let id=_.pluck(_.pluck(this.selectList,'id'),'value');
                     let params=[];
                     _.map(this.selectList,v=>{
                       params.push({
