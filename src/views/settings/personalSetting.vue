@@ -305,7 +305,7 @@
     mounted(){
       this.setMenuLink({
         path: '/logs',
-        query: {code: 'DEPARTMENT_SETTING',bizCode: 'BIZ_USER'},
+        query: {code: 'PERSONAL_SETTING',bizCode: 'BIZ_USER'},
         type: 100,
         label: this.$i.common.log,
       });

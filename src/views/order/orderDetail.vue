@@ -236,7 +236,8 @@
                     class="addBtn"
                     :disabled="!isModify"
                     @click="addResponsibility">
-                {{$i.order.addResponsibility}}</el-button>
+                {{$i.order.addResponsibility}}
+            </el-button>
             <el-table
                     :data="orderForm.responsibilityList"
                     style="width: 100%;border-top:1px solid #ebeef5;">
@@ -321,255 +322,258 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="title">
-            {{$i.order.payment}}
-        </div>
-        <div class="payment-table" v-authorize="'ORDER:DETAIL:PAYMENT'">
-            <el-button
-                    v-authorize="'ORDER:DETAIL:PAYMENT_APPLY'"
-                    :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable"
-                    :loading="disableClickApplyPay"
-                    @click="applyPay"
-                    type="primary">{{$i.order.applyPay}}
-            </el-button>
-            <el-button
-                    v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
-                    :loading="disableClickDunning"
-                    :disabled="!allowHandlePay || loadingPaymentTable"
-                    @click="dunningPay">{{$i.order.remindSupplierRefund}}
-            </el-button>
-            <el-table
-                    v-loading="loadingPaymentTable"
-                    class="payTable"
-                    :data="paymentData"
-                    border
-                    :summary-method="getSummaries"
-                    show-summary
-                    :row-class-name="tableRowClassName"
-                    style="width: 100%">
-                <el-table-column
-                        fixed="left"
-                        label="#"
-                        align="center"
-                        width="55">
-                    <template slot-scope="scope">
-                        {{scope.$index+1}}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="no"
-                        :label="$i.order.payNo"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="name"
-                        :label="$i.order.payName"
-                        width="180">
-                    <template slot-scope="scope">
-                        <el-select
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                v-model="scope.row.name"
-                                clearable
-                                :placeholder="$i.order.pleaseChoose">
-                            <el-option
-                                    v-for="item in paymentItemOption"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.code">
-                            </el-option>
-                        </el-select>
-                        <span v-else>{{scope.row.name}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        :label="$i.order.planPayDt"
-                        width="200">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speDate"
-                                v-model="scope.row.planPayDt"
-                                type="date"
-                                :picker-options="datePickOption"
-                                :placeholder="$i.order.pleaseChoose">
-                        </el-date-picker>
-                        <span v-else>{{scope.row.planPayDt?$dateFormat(scope.row.planPayDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="planPayAmount"
-                        :label="$i.order.planPayAmount"
-                        width="160">
-                    <template slot-scope="scope">
-                        <el-input-number
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speNumber"
-                                v-model="scope.row.planPayAmount"
-                                :controls="false"
-                                :min="0"></el-input-number>
-                        <span v-else>{{scope.row.planPayAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualPayDt"
-                        :label="$i.order.actualPayDt"
-                        width="200">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                class="speDate"
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                v-model="scope.row.actualPayDt"
-                                type="date"
-                                :picker-options="datePickOption1"
-                                :placeholder="$i.order.pleaseChoose">
-                        </el-date-picker>
-                        <span v-else>{{scope.row.actualPayDt?$dateFormat(scope.row.actualPayDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualPayAmount"
-                        :label="$i.order.actualPayAmount"
-                        width="160">
-                    <template slot-scope="scope">
-                        <el-input-number
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speNumber"
-                                v-model="scope.row.actualPayAmount"
-                                :controls="false"
-                                :min="0"></el-input-number>
-                        <span v-else>{{scope.row.actualPayAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        :label="$i.order.planRefundDt"
-                        width="180">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="planRefundAmount"
-                        :label="$i.order.planRefundAmount"
-                        width="180">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.planRefundAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        :label="$i.order.actualRefundDt"
-                        width="180">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualRefundAmount"
-                        :label="$i.order.actualRefundAmount"
-                        width="180">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.actualRefundAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="remark"
-                        :label="$i.order.remarkBig"
-                        width="200">
-                    <template slot-scope="scope">
-                        <el-input
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                :placeholder="$i.order.pleaseInput"
-                                v-model="scope.row.remark"
-                                clearable>
-                        </el-input>
-                        <span v-else>{{scope.row.remark}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="currencyCode"
-                        :label="$i.order.payCurrency"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        fixed="right"
-                        align="center"
-                        :label="$i.order.available"
-                        width="180">
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.status===-1">{{$i.order.abandon}}</span>
-                        <span v-if="scope.row.status===10">{{$i.order.waitCustomerConfirm}}</span>
-                        <span v-if="scope.row.status===20">{{$i.order.waitSupplierConfirm}}</span>
-                        <span v-if="scope.row.status===30">{{$i.order.waitServiceConfirm}}</span>
-                        <span v-if="scope.row.status===40">{{$i.order.confirm}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        fixed="right"
-                        :label="$i.order.action"
-                        align="center"
-                        width="160">
-                    <template slot-scope="scope">
-                        <div v-if="scope.row.status===10">
-                            <el-button
-                                    v-authorize="'ORDER:DETAIL:CONFIRM_REFUNDS'"
-                                    @click="confirmPay(scope.row)"
-                                    type="text">{{$i.order.confirm}}
-                            </el-button>
-                        </div>
-                        <div v-else-if="scope.row.status===40 && scope.row.planRefundDt">
-
-                        </div>
-                        <div v-else>
-                            <div v-if="scope.row.isNew">
-                                <el-button :disabled="!allowHandlePay" @click="saveNewPay(scope.row)" type="text"
-                                           size="small">{{$i.order.save}}
-                                </el-button>
-                                <el-button :disabled="!allowHandlePay" @click="cancelNewPay(scope.row)" type="text"
-                                           size="small">{{$i.order.cancel}}
+        <div v-authorize="'ORDER:DETAIL:PAYMENT'">
+            <div class="title">
+                {{$i.order.payment}}
+            </div>
+            <div class="payment-table">
+                <el-button
+                        v-authorize="'ORDER:DETAIL:PAYMENT_APPLY'"
+                        :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable"
+                        :loading="disableClickApplyPay"
+                        @click="applyPay"
+                        type="primary">{{$i.order.applyPay}}
+                </el-button>
+                <el-button
+                        v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
+                        :loading="disableClickDunning"
+                        :disabled="!allowHandlePay || loadingPaymentTable"
+                        @click="dunningPay">{{$i.order.remindSupplierRefund}}
+                </el-button>
+                <el-table
+                        v-loading="loadingPaymentTable"
+                        class="payTable"
+                        :data="paymentData"
+                        border
+                        :summary-method="getSummaries"
+                        show-summary
+                        :row-class-name="tableRowClassName"
+                        style="width: 100%">
+                    <el-table-column
+                            fixed="left"
+                            label="#"
+                            align="center"
+                            width="55">
+                        <template slot-scope="scope">
+                            {{scope.$index+1}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="no"
+                            :label="$i.order.payNo"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            :label="$i.order.payName"
+                            width="180">
+                        <template slot-scope="scope">
+                            <el-select
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    v-model="scope.row.name"
+                                    clearable
+                                    :placeholder="$i.order.pleaseChoose">
+                                <el-option
+                                        v-for="item in paymentItemOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
+                            <span v-else>{{scope.row.name}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            :label="$i.order.planPayDt"
+                            width="200">
+                        <template slot-scope="scope">
+                            <el-date-picker
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    class="speDate"
+                                    v-model="scope.row.planPayDt"
+                                    type="date"
+                                    :picker-options="datePickOption"
+                                    :placeholder="$i.order.pleaseChoose">
+                            </el-date-picker>
+                            <span v-else>{{scope.row.planPayDt?$dateFormat(scope.row.planPayDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="planPayAmount"
+                            :label="$i.order.planPayAmount"
+                            width="160">
+                        <template slot-scope="scope">
+                            <el-input-number
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    class="speNumber"
+                                    v-model="scope.row.planPayAmount"
+                                    :controls="false"
+                                    :min="0"></el-input-number>
+                            <span v-else>{{scope.row.planPayAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="actualPayDt"
+                            :label="$i.order.actualPayDt"
+                            width="200">
+                        <template slot-scope="scope">
+                            <el-date-picker
+                                    class="speDate"
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    v-model="scope.row.actualPayDt"
+                                    type="date"
+                                    :picker-options="datePickOption1"
+                                    :placeholder="$i.order.pleaseChoose">
+                            </el-date-picker>
+                            <span v-else>{{scope.row.actualPayDt?$dateFormat(scope.row.actualPayDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="actualPayAmount"
+                            :label="$i.order.actualPayAmount"
+                            width="160">
+                        <template slot-scope="scope">
+                            <el-input-number
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    class="speNumber"
+                                    v-model="scope.row.actualPayAmount"
+                                    :controls="false"
+                                    :min="0"></el-input-number>
+                            <span v-else>{{scope.row.actualPayAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            :label="$i.order.planRefundDt"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="planRefundAmount"
+                            :label="$i.order.planRefundAmount"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.planRefundAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            :label="$i.order.actualRefundDt"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="actualRefundAmount"
+                            :label="$i.order.actualRefundAmount"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.actualRefundAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="remark"
+                            :label="$i.order.remarkBig"
+                            width="200">
+                        <template slot-scope="scope">
+                            <el-input
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    :placeholder="$i.order.pleaseInput"
+                                    v-model="scope.row.remark"
+                                    clearable>
+                            </el-input>
+                            <span v-else>{{scope.row.remark}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="currencyCode"
+                            :label="$i.order.payCurrency"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.order.available"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.status===-1">{{$i.order.abandon}}</span>
+                            <span v-if="scope.row.status===10">{{$i.order.waitCustomerConfirm}}</span>
+                            <span v-if="scope.row.status===20">{{$i.order.waitSupplierConfirm}}</span>
+                            <span v-if="scope.row.status===30">{{$i.order.waitServiceConfirm}}</span>
+                            <span v-if="scope.row.status===40">{{$i.order.confirm}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            :label="$i.order.action"
+                            align="center"
+                            width="160">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.status===10">
+                                <el-button
+                                        v-authorize="'ORDER:DETAIL:CONFIRM_REFUNDS'"
+                                        @click="confirmPay(scope.row)"
+                                        type="text">{{$i.order.confirm}}
                                 </el-button>
                             </div>
+                            <div v-else-if="scope.row.status===40 && scope.row.planRefundDt">
+
+                            </div>
                             <div v-else>
-                                <div v-if="scope.row.status===-1">
-                                    <el-button
-                                            v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
-                                            v-if="scope.row.planPayDt"
-                                            :disabled="!allowHandlePay"
-                                            @click="restorePay(scope.row)"
-                                            type="text">{{$i.order.restore}}
+                                <div v-if="scope.row.isNew">
+                                    <el-button :disabled="!allowHandlePay" @click="saveNewPay(scope.row)" type="text"
+                                               size="small">{{$i.order.save}}
                                     </el-button>
-                                </div>
-                                <div v-else-if="scope.row.isModify">
-                                    <el-button
-                                            :disabled="!allowHandlePay"
-                                            @click="saveModifyPay(scope.row)"
-                                            type="text"
-                                            size="small">{{$i.order.save}}
-                                    </el-button>
-                                    <el-button :disabled="!allowHandlePay" @click="cancelModifyPay(scope.row)"
-                                               type="text" size="small">{{$i.order.cancel}}
+                                    <el-button :disabled="!allowHandlePay" @click="cancelNewPay(scope.row)" type="text"
+                                               size="small">{{$i.order.cancel}}
                                     </el-button>
                                 </div>
                                 <div v-else>
-                                    <el-button
-                                            v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
-                                            @click="modifyPay(scope.row)"
-                                            :disabled="!allowHandlePay"
-                                            type="text">
-                                        {{$i.order.modify}}
-                                    </el-button>
-                                    <el-button
-                                            v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
-                                            @click="abandonPay(scope.row)"
-                                            :disabled="!allowHandlePay"
-                                            type="text">
-                                        {{$i.order.abandon}}
-                                    </el-button>
+                                    <div v-if="scope.row.status===-1">
+                                        <el-button
+                                                v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                                v-if="scope.row.planPayDt"
+                                                :disabled="!allowHandlePay"
+                                                @click="restorePay(scope.row)"
+                                                type="text">{{$i.order.restore}}
+                                        </el-button>
+                                    </div>
+                                    <div v-else-if="scope.row.isModify">
+                                        <el-button
+                                                :disabled="!allowHandlePay"
+                                                @click="saveModifyPay(scope.row)"
+                                                type="text"
+                                                size="small">{{$i.order.save}}
+                                        </el-button>
+                                        <el-button :disabled="!allowHandlePay" @click="cancelModifyPay(scope.row)"
+                                                   type="text" size="small">{{$i.order.cancel}}
+                                        </el-button>
+                                    </div>
+                                    <div v-else>
+                                        <el-button
+                                                v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                                @click="modifyPay(scope.row)"
+                                                :disabled="!allowHandlePay"
+                                                type="text">
+                                            {{$i.order.modify}}
+                                        </el-button>
+                                        <el-button
+                                                v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                                @click="abandonPay(scope.row)"
+                                                :disabled="!allowHandlePay"
+                                                type="text">
+                                            {{$i.order.abandon}}
+                                        </el-button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </template>
-                </el-table-column>
-            </el-table>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
         </div>
+
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -1630,35 +1634,20 @@
                     let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res.skuList, "skuSysCode"), item => {
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
-                            if (item.skuPictures) {
-                                item.skuPictures._image = false;
-                            }
-                            item.skuLabelPic._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
-                            item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
-                            item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
-                            item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
-                            item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
-                            item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
-                            item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
-                            item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
-
-                            if (item.skuCategoryId.value) {
-                                item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
-                            }
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
                         }
                     });
                     this.productTableData = [];
@@ -1714,7 +1703,7 @@
                      * 获取payment数据
                      * */
                     this.getPaymentData();
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingPage = false;
                     this.disableClickCancelModify = false;
                     if (e) {
@@ -1804,8 +1793,8 @@
                         rightCode = false;
                     }
                     v.skuSample = v.skuSample === "1" ? true : false;
-                    v.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory ? _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code : "";
-                    let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
+                    v.skuInspectQuarantineCategory =  (_.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }) || {}).code;
+                    let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
                             v[item] = (v[item][0] ? v[item][0] : null);
@@ -1841,11 +1830,6 @@
                     }
                 });
                 params.skuList = this.dataFilter(this.productTableData);
-                _.map(params.skuList, v => {
-                    if (_.isArray(v.skuLabelPic)) {
-                        v.skuLabelPic = (v.skuLabelPic[0] ? v.skuLabelPic[0] : null);
-                    }
-                });
                 params.attachments = this.$refs.upload[0].getFiles();
                 params.draftCustomer = true;
                 this.disableClickSaveDraft = true;
@@ -1881,7 +1865,7 @@
                 this.$ajax.post(this.$apis.INQUIERY_LIST, this.inquiryConfig).then(res => {
                     this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas);
                     this.pageData = res;
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingTable = false;
                 });
             },
@@ -1952,22 +1936,22 @@
                 }
                 data.fieldUpdate[key] = "";
             },
-            addResponsibility(){
+            addResponsibility() {
                 this.orderForm.responsibilityList.push({
-                    type: '',
-                    customer: '',
-                    supplier: '',
-                    remark: '',
-                    actualDt: '',
-                    fieldUpdate:{
-                        type:'',
-                        customer: '',
-                        supplier: '',
-                        remark: '',
-                        actualDt: '',
+                    type: "",
+                    customer: "",
+                    supplier: "",
+                    remark: "",
+                    actualDt: "",
+                    fieldUpdate: {
+                        type: "",
+                        customer: "",
+                        supplier: "",
+                        remark: "",
+                        actualDt: ""
                     },
-                    orderNo:this.orderForm.orderNo
-                })
+                    orderNo: this.orderForm.orderNo
+                });
             },
 
             /**
@@ -2013,7 +1997,7 @@
                     let data = _.filter(this.productTableData, (m) =>
                         m.skuSysCode.value === e.skuSysCode.value
                     );
-                    this.getHistory(e, data);
+                    this.getHistory(e, []);
                 }
             },
             getHistory(e, data, isTrue) {
@@ -2034,35 +2018,20 @@
                     let history = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode"), item => {
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
-                            if (item.skuPictures) {
-                                item.skuPictures._image = false;
-                            }
-                            // item.skuLabelPics._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
-                            item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
-                            item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
-                            item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
-                            item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
-                            item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
-                            item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
-                            item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
-
-                            // if (item.skuCategoryId.value) {
-                            //     item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
-                            // }
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
                         }
                     });
 
@@ -2139,17 +2108,6 @@
                         item._isNew = true;
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
-                            if (item.skuPictures) {
-                                item.skuPictures._image = false;
-                            }
-                            item.skuLabelPic._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
@@ -2162,7 +2120,8 @@
                             item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
                             item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
-                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
                         }
                     });
                     _.map(data, v => {
@@ -2213,7 +2172,7 @@
                                         json[k] = (_.findWhere(this.weightOption, { name: item[k]._value }) || {}).code;
                                     }
                                     else if (item[k].key === "skuUnitLength") {
-                                        json[k] =( _.findWhere(this.lengthOption, { name: item[k]._value }) || {}).code;
+                                        json[k] = (_.findWhere(this.lengthOption, { name: item[k]._value }) || {}).code;
                                     }
                                     else if (item[k].key === "skuUnitVolume") {
                                         json[k] = (_.findWhere(this.volumeOption, { name: item[k]._value }) || {}).code;
@@ -2261,7 +2220,7 @@
                         actualPayAmount: "",
                         currencyCode: this.initialData.currency,
                         status: 20,
-                        remark:'',
+                        remark: "",
                         isNew: true
                     });
                 }).finally(() => {
@@ -2309,7 +2268,7 @@
                     payToCompanyName: this.orderForm.supplierName,
                     planPayAmount: data.planPayAmount,
                     planPayDt: data.planPayDt,
-                    remark:data.remark,
+                    remark: data.remark,
                     type: 10,
                     moduleCode: "ORDER"
                 };
@@ -2325,7 +2284,7 @@
                         message: this.$i.order.saveSuccess,
                         type: "success"
                     });
-                    this.$set(data,'name',(_.findWhere(this.paymentItemOption,{code:res.name} || {}).name));
+                    this.$set(data, "name", (_.findWhere(this.paymentItemOption, { code: res.name } || {}).name));
                     this.$set(data, "isNew", false);
                     this.$set(data, "version", res.version);
                     this.$set(data, "id", res.id);
@@ -2363,7 +2322,7 @@
                     planPayAmount: data.planPayAmount,
                     planPayDt: data.planPayDt,
                     version: data.version,
-                    remark:data.remark,
+                    remark: data.remark,
                     moduleCode: "ORDER"
                 };
                 this.loadingPaymentTable = true;
@@ -2479,7 +2438,11 @@
                             sums[index] = "-";
                         }
                         else {
-                            const values = data.map(item => Number(item[column.property]));
+                            const values = data.map(item => {
+                                if(item.status===40){
+                                    return Number(item[column.property])
+                                }
+                            });
                             if (!values.every(value => isNaN(value))) {
                                 sums[index] = values.reduce((prev, curr) => {
                                     const value = Number(curr);
@@ -2507,7 +2470,7 @@
                     this.$ajax.post(this.$apis.PAYMENT_ACCEPT, {
                         id: data.id,
                         version: data.version,
-                        moduleCode:"ORDER"
+                        moduleCode: "ORDER"
                     }).then(res => {
                         this.$message({
                             type: "success",
@@ -2530,8 +2493,6 @@
              * history部分事件
              * */
             handleBlurSkuQty(data) {
-                console.log(data.value);     //skuQty
-                console.log(this.copyObj, "copyObj");
                 if (this.orderForm.incoterm === "1") {
                     //FOB
                 } else if (this.orderForm.incoterm === "2") {
@@ -2678,7 +2639,7 @@
                     if (v.skuInspectQuarantineCategory) {
                         v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
                     }
-                    let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
+                    let picKey = [ "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
                             v[item] = (v[item][0] ? v[item][0] : null);
@@ -2691,39 +2652,9 @@
 
                 });
             },
-
-            /**
-             * 搜索框事件
-             * */
-            inputEnter(e) {
-                console.log(e);
-            },
-
         },
         created() {
-            let category = [];
-            this.category = [];
-            this.loadingPage = true;
-            this.$ajax.get(this.$apis.get_buyer_sys_category, {}).then(res => {
-                _.map(res, v => {
-                    category.push(v);
-                });
-                this.$ajax.get(this.$apis.get_buyer_my_category, {}).then(data => {
-                    _.map(data, v => {
-                        category.push(v);
-                    });
-                    _.map(category, data => {
-                        _.map(data.children, ele => {
-                            this.category.push(ele);
-                        });
-                    });
-                    this.getOrderNo();
-                }).catch(err => {
-                    this.loadingPage = false;
-                });
-            }).catch(err => {
-                this.loadingPage = false;
-            });
+            this.getOrderNo();
         },
         mounted() {
             this.setMenuLink({
@@ -2837,7 +2768,8 @@
     .el-table >>> .waiting-row {
         background: yellow;
     }
-    .addBtn{
+
+    .addBtn {
         margin: 5px 0;
     }
 

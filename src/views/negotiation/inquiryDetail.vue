@@ -164,15 +164,27 @@ export default {
       if (this.newProductTabData.length <= 0) {
         return false;
       }
+      let totalUnitKeys = {};
+      Object.values(this.$db.inquiry.productInfo).filter(i => i._total && i._total.unitKey).forEach(i => totalUnitKeys[i._total.unitKey] = new Set());
 
-      _.map(this.newProductTabData, v => {
-        if(v._remark) return;
+      this.newProductTabData.filter(i => !i._remark).forEach(v => {
         _.mapObject(v, (item, key) => {
           if (item._hide) return;
-          if (item._totalRow && !isNaN(item.value)) {
-            obj[key] = {
-              value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
-            };
+          if (item._total) {
+            let unitKey = item._total.unitKey;
+            if (unitKey && v[unitKey] && totalUnitKeys[unitKey]) {
+              totalUnitKeys[unitKey].add(v[unitKey].value || null);
+              if (totalUnitKeys[unitKey].size > 1) {
+                obj[key].value = null;
+                return;
+              }
+            }
+            if (!isNaN(item.value)) {
+              let value = Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0);
+              obj[key] = {
+                value: item._toFixed ? Number(value.toFixed(item._toFixed)) : value
+              };
+            }
           } else {
             obj[key] = {
               value: ''
@@ -337,10 +349,15 @@ export default {
         }
       });
 
-      for (let field in db) { 
+      for (let field in db) {
         if (!field) continue;
         let key = db[field].key || field;
         db[field]._mustChecked = keys.has(key);
+
+        let note = db[field]._i_note;
+        if (note) {
+          db[field]._note = this.$i.inquiry[note];
+        }
       }
 
       this.productTabData = this.newProductTabData = this.$getDB(
@@ -494,7 +511,7 @@ export default {
         let exwPrice = item.skuExwPrice.value;
         if (codeUtils.isNumber(exwPrice, outerCartonVolume, outerCartonQty)) {
           let fob = (exwPrice + 6500 / 68 * outerCartonVolume / outerCartonQty) * 1.05;
-          item.skuRefFobPrice.value = Number(fob.toFixed(8));
+          item.skuRefFobPrice.value = Number(fob.toFixed(item.skuRefFobPrice._toFixed || 8));
         }
       }
       if (field === 'skuFobPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
@@ -503,7 +520,7 @@ export default {
         let insuranceExpenses = this.custom.insuranceExpensesUSD40HC; // 保险费
         if (codeUtils.isNumber(fobPrice, outerCartonQty, outerCartonVolume, oceanFreight, insuranceExpenses)) {
           let cif = fobPrice + (oceanFreight + insuranceExpenses) / 68 * outerCartonVolume / outerCartonQty;
-          item.skuRefCifPrice.value = Number(cif.toFixed(8));
+          item.skuRefCifPrice.value = Number(cif.toFixed(item.skuRefCifPrice._toFixed || 8));
         }
       }
       if (field === 'skuCifPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
@@ -511,7 +528,7 @@ export default {
         let portWarehouse = this.custom.portWarehousePrice40HC; // 港口到仓库运费
         if (codeUtils.isNumber(cifPrice, outerCartonQty, outerCartonVolume, portWarehouse)) {
           let ddu = cifPrice + portWarehouse / 68 * outerCartonVolume / outerCartonQty;
-          item.skuRefDduPrice.value = Number(ddu.toFixed(8));
+          item.skuRefDduPrice.value = Number(ddu.toFixed(item.skuRefDduPrice._toFixed || 8));
         }
       }
     },

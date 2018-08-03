@@ -145,6 +145,9 @@ export default {
     skuCategoryId:{
         _disabled:true
     },
+    skuCategoryName:{
+        _hide:true
+    },
     // skuCategoryOne:{},
     // skuCategoryTwo:{},
     // skuCategoryThree:{},

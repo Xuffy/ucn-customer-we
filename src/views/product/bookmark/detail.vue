@@ -101,8 +101,15 @@
                     <el-form class="speForm" label-width="310px" :label-position="labelPosition">
                         <el-row>
                             <el-row>
-                                <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key"
-                                        class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                                <el-col
+                                        v-if="v.belongTab==='basicInfo'"
+                                        v-for="v in $db.product.detailTab"
+                                        :key="v.key"
+                                        class="list"
+                                        :xs="24"
+                                        :sm="24"
+                                        :md="v.fullLine?24:12"
+                                        :lg="v.fullLine?24:12"
                                         :xl="v.fullLine?24:12">
                                     <el-form-item :prop="v.key" :label="v.label+' :'">
                                         <div v-if="v.key==='status'">
@@ -118,13 +125,15 @@
                                                             :disabled="notEdit"
                                                             type="textarea"
                                                             autosize
-                                                            placeholder="please input"
+                                                            :placeholder="$i.product.pleaseInput"
                                                             v-model="productForm[v.key]">
                                                     </el-input>
                                                 </div>
                                                 <div v-else-if="v.key==='customerSkuCode'">
-                                                    <el-input :disabled="notEdit" v-model="productForm[v.key]"
-                                                              placeholder="please input"></el-input>
+                                                    <el-input
+                                                            :disabled="notEdit"
+                                                            v-model="productForm[v.key]"
+                                                            :placeholder="$i.product.pleaseInput"></el-input>
                                                 </div>
                                                 <div v-else>
                                                     {{productForm[v.key]}}
@@ -708,18 +717,17 @@
                     /**
                      * 字典转换
                      * */
-                    this.productForm.status = _.findWhere(this.skuSaleStatusOption, { code: String(this.productForm.status) }).name;
-                    this.productForm.unit = this.productForm.unit ? _.findWhere(this.skuUnitOption, { code: String(this.productForm.unit) }).name : "";
-                    this.productForm.expireUnit = this.productForm.expireUnit ? _.findWhere(this.expirationOption, { code: String(this.productForm.expireUnit) }).name : "";
-                    this.productForm.inspectQuarantineCategory = this.productForm.inspectQuarantineCategory ? _.findWhere(this.quarantineTypeOption, { code: this.productForm.inspectQuarantineCategory }).name : "";
-                    this.productForm.unitLength = this.productForm.unitLength ? _.findWhere(this.lengthOption, { code: String(this.productForm.unitLength) }).name : "";
-                    this.productForm.unitVolume = this.productForm.unitVolume ? _.findWhere(this.volumeOption, { code: String(this.productForm.unitVolume) }).name : "";
-                    this.productForm.unitWeight = this.productForm.unitWeight ? _.findWhere(this.weightOption, { code: String(this.productForm.unitWeight) }).name : "";
-                    this.productForm.oem = _.findWhere(this.oemOption, { code: String(Number(this.productForm.oem)) }).name;
+                    this.productForm.status = (_.findWhere(this.skuSaleStatusOption, { code: String(this.productForm.status) }) || {}).name;
+                    this.productForm.unit = ( _.findWhere(this.skuUnitOption, { code: String(this.productForm.unit) }) || {}).name;
+                    this.productForm.expireUnit = (_.findWhere(this.expirationOption, { code: String(this.productForm.expireUnit) }) || {}).name;
+                    this.productForm.inspectQuarantineCategory =  (_.findWhere(this.quarantineTypeOption, { code: this.productForm.inspectQuarantineCategory }) || {}).name;
+                    this.productForm.unitLength = ( _.findWhere(this.lengthOption, { code: String(this.productForm.unitLength) }) || {}).name;
+                    this.productForm.unitVolume = ( _.findWhere(this.volumeOption, { code: String(this.productForm.unitVolume) }) || {}).name;
+                    this.productForm.unitWeight = ( _.findWhere(this.weightOption, { code: String(this.productForm.unitWeight) }) || {}).name;
+                    this.productForm.oem = (_.findWhere(this.oemOption, { code: String(Number(this.productForm.oem)) }) || {}).name;
                     this.productForm.yearListed = this.$dateFormat(this.productForm.yearListed, "yyyy-mm");
-                    this.productForm.useDisplayBox = _.findWhere(this.udbOption, { code: String(Number(this.productForm.useDisplayBox)) }).name;
-                    this.productForm.adjustPackage = _.findWhere(this.skuPkgOption, { code: String(Number(this.productForm.adjustPackage)) }).name;
-
+                    this.productForm.useDisplayBox = (_.findWhere(this.udbOption, { code: String(Number(this.productForm.useDisplayBox)) }) || {}).name;
+                    this.productForm.adjustPackage = (_.findWhere(this.skuPkgOption, { code: String(Number(this.productForm.adjustPackage)) }) || {}).name;
 
                     this.notLoadingDone = false;
                     this.hideBtns = true;
@@ -744,23 +752,24 @@
                         item.refCifPrice._note=this.$i.product.cifFormula;
                         item.refDduPrice._note=this.$i.product.dduFormula;
                     });
-                    this.tradeHistory.skuCode = this.productForm.code;
-                    this.loadingTable = true;
-                    this.$ajax.post(this.$apis.get_buyerProductTradeList, this.tradeHistory)
-                        .then(res => {
-                            this.historyData = this.$getDB(this.$db.product.tradeHistory, res.datas, e => {
-                                e.incoterm._value = _.findWhere(this.incotermOption, { code: e.incoterm.value }).name;
-                                e.actDeliveryDt._value = this.$dateFormat(e.actDeliveryDt.value, "yyyy-mm-dd");
-                                e.confirmQcDt._value = this.$dateFormat(e.confirmQcDt.value, "yyyy-mm-dd");
-                                e.actDepartureDt._value = this.$dateFormat(e.actDepartureDt.value, "yyyy-mm-dd");
-                            });
-                        }).finally(() => {
-                            this.notLoadingDone = false;
-                            this.loadingTable = false;
-                        }
-                    );
+                    this.notLoadingDone = false;
+                    // this.tradeHistory.skuCode = this.productForm.code;
+                    // this.loadingTable = true;
+                    // this.$ajax.post(this.$apis.get_buyerProductTradeList, this.tradeHistory)
+                    //     .then(res => {
+                    //         this.historyData = this.$getDB(this.$db.product.tradeHistory, res.datas, e => {
+                    //             e.incoterm._value = _.findWhere(this.incotermOption, { code: e.incoterm.value }).name;
+                    //             e.actDeliveryDt._value = this.$dateFormat(e.actDeliveryDt.value, "yyyy-mm-dd");
+                    //             e.confirmQcDt._value = this.$dateFormat(e.confirmQcDt.value, "yyyy-mm-dd");
+                    //             e.actDepartureDt._value = this.$dateFormat(e.actDepartureDt.value, "yyyy-mm-dd");
+                    //         });
+                    //     }).finally(() => {
+                    //         this.notLoadingDone = false;
+                    //         this.loadingTable = false;
+                    //     }
+                    // );
 
-                }).catch(err => {
+                }).catch(() => {
                     this.notLoadingDone = false;
                 });
             },
@@ -911,19 +920,6 @@
                     this.$localStore.set("compareProductList", compareList);
                 }
             },
-            addToBookmark() {
-                this.$ajax.post(this.$apis.add_buyerBookmark, [this.productForm.id]).then(res => {
-                    console.log(res);
-                }).catch(err => {
-                    console.log(err);
-                });
-                // this.$router.push({
-                //     path:'/product/bookmark/detail',
-                //     query:{
-                //
-                //     }
-                // });
-            },
 
             /**
              * compare-list操作
@@ -975,8 +971,10 @@
             //获取字典
             getUnit() {
                 this.notLoadingDone = true;
-                this.$ajax.post(this.$apis.get_partUnit, ["ITM", "SKU_SALE_STATUS", "SKU_UNIT", "ED_UNIT", "QUARANTINE_TYPE", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS"], { cache: true }).then(res => {
-                    res.forEach(v => {
+                const unit=this.$ajax.post(this.$apis.get_partUnit, ["ITM", "SKU_SALE_STATUS", "SKU_UNIT", "ED_UNIT", "QUARANTINE_TYPE", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS"], { cache: true });
+                const country=this.$ajax.get(this.$apis.get_country, {}, { cache: true });
+                this.$ajax.all([unit,country]).then(res=>{
+                    res[0].forEach(v => {
                         if (v.code === "ITM") {
                             this.incotermOption = v.codes;
                         } else if (v.code === "SKU_SALE_STATUS") {
@@ -1001,17 +999,12 @@
                             this.skuPkgOption = v.codes;
                         }
                     });
-
-                    this.$ajax.get(this.$apis.get_country, {}, { cache: true }).then(res => {
-                        this.countryOption = res;
-                        this.getTableData();
-                        this.getRemarkData();
-                        this.getCompareList();
-                    }).catch(() => {
-                        this.notLoadingDone = false;
-                    });
-                }).finally(() => {
-                    this.notLoadingDone = false;
+                    this.countryOption = res[1];
+                    this.getTableData();
+                    this.getRemarkData();
+                    this.getCompareList();
+                }).finally(()=>{
+                    this.notLoadingDone = true;
                 });
             }
         },

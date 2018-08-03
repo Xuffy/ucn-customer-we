@@ -64,10 +64,10 @@
         <div class="body">
             <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
-                    <el-form class="speForm" label-width="300px" :label-position="labelPosition">
+                    <el-form class="speForm" label-width="320px" :label-position="labelPosition">
                         <el-row>
                             <el-row>
-                                <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                                <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="24" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                     <el-form-item :label="v.label+' :'">
                                         <span v-if="v.key==='status'">
                                            {{productForm[v.key]}}
@@ -486,7 +486,6 @@
                         });
                         this.productForm.mainSaleCountry=this.productForm.mainSaleCountry.slice(0,this.productForm.mainSaleCountry.length-1);
                     }
-                    console.log(124124)
                     /**
                      * 字典转换
                      * */
