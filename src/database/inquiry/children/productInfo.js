@@ -206,6 +206,7 @@ export default {
       require: true,
       unitKey: 'skuFobCurrency'
     },
+    _i_note: 'skuRefFobPriceNote',
     _toFixed: 4
   },
   fobPort: {
@@ -243,6 +244,7 @@ export default {
       require: true,
       unitKey: 'skuCifCurrency'
     },
+    _i_note: 'skuRefCifPriceNote',
     _toFixed: 4
   },
   cifCurrency: {
@@ -271,6 +273,7 @@ export default {
       require: true,
       unitKey: 'skuDduCurrency'
     },
+    _i_note: 'skuRefDduPriceNote',
     _toFixed: 4
   },
   dduCurrency: {
