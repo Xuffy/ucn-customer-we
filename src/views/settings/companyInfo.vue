@@ -12,7 +12,7 @@
           </el-alert>
         </div>
         <div class="summary">
-            <el-form ref="summary"   label-width="190px">
+            <el-form ref="summary"   label-width="220px">
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                         <el-form-item class="speWidth"  :label="v.label +'：'" :required="v._rules?v._rules.required:false">
@@ -118,7 +118,7 @@
 
                 <el-tab-pane :label="$i.setting.documentRequired">
                     <div class="section-btn" style="margin-bottom:50px;">
-                        <el-button @click="modifyDocument()" type="primary">{{$i.button.modify}}</el-button>
+                        <el-button @click="modifyDocument()" type="primary">{{$i.button.save}}</el-button>
                     </div>
                   <el-form label-width="200px">
                     <el-row>
@@ -1281,11 +1281,12 @@
   }
 
   .documentBoxCon{
-    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
   .documentBoxCon1{
-    width: 18%;
-    float: left;
+    width: 25%;
   }
   .uploadBox{
     padding-top: 10px;
