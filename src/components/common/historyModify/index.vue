@@ -307,9 +307,9 @@
         this.$emit('change', item, row);
       },
       changeTbaleData(type) {
-        this.dataList = type
-          ? this.$depthClone(this.$table.setHideSame(this.dataList, '_remark'))
-          : this.$depthClone(this.$table.revertHideSame(this.dataList));
+        this.dataList = this.$depthClone(type
+          ? this.$table.setHideSame(this.dataList, '_remark')
+          : this.$table.revertHideSame(this.dataList));
       }
     },
   }
