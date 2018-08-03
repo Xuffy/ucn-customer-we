@@ -58,7 +58,7 @@
   "remark": "标记",
   "finishEn": "完成",
   "upload": "上传",
-  "recover": "覆盖",
+  "recover": "恢复",
   "compareOverview": "对比预览",
   "compareDetail": "对比详情",
   "operator": "操作员",
@@ -96,7 +96,7 @@
   "sysCategory":"系统分类",
   "bookmark":"收藏夹",
   "all":"All",
-  "detailBig":"Detail",
+  "detailBig":"详情",
   "bookmarkArchive":"收藏夹归档",
   "compareArchive":"Compare Archive",
   "save":"保存",
@@ -109,5 +109,8 @@
   "goCompare":"去对比",
   "clearData":"清除",
   "compareName":"对比名称",
-  "compareItem":"对比项"
+  "compareItem":"对比项",
+  "picture":"图片",
+  "invalid":"无效",
+  "valid":"有效"
 }

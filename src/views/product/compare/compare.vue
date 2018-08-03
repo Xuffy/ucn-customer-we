@@ -53,7 +53,7 @@
                         v-if="isModify"
                         v-authorize="'PRODUCT:COMPARE_DETAIL:DELETE'"
                         @click="deleteProduct"
-                        :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                        :disabled="disableDelete" type="danger">{{$i.product.deleteProduct}}</el-button>
             </span>
             <el-checkbox @change="changeStatus" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
             <el-checkbox @change="changeStatus" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
@@ -64,7 +64,7 @@
                 @change-sort="$refs.table.setSort(tableDataList)"
                 code="udata_purchase_sku_compare_list_detail"
                 :height="500"
-                v-loading="loadingTable"g
+                v-loading="loadingTable"
                 :data="tableDataList"
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="btnClick"
@@ -74,14 +74,18 @@
                 <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.params.type==='modify'">
-                <el-button
-                        v-authorize="'PRODUCT:COMPARE_DETAIL:SAVE'"
-                        @click="saveModify"
-                        :loading="disableClickSaveModify"
-                        :disabled="allowBottomClick"
-                        type="primary"
-                        v-if="isModify">{{$i.product.save}}</el-button>
-                <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify" v-if="isModify">{{$i.product.cancel}}</el-button>
+                <div v-if="isModify">
+                    <el-button
+                            v-authorize="'PRODUCT:COMPARE_DETAIL:SAVE'"
+                            @click="saveModify"
+                            :loading="disableClickSaveModify"
+                            :disabled="allowBottomClick"
+                            type="primary">{{$i.product.save}}</el-button>
+                    <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify">{{$i.product.cancel}}</el-button>
+                </div>
+                <div v-else>
+                    <el-button @click="deleteCompare" type="danger">{{$i.product.delete}}</el-button>
+                </div>
             </div>
         </div>
 
@@ -242,6 +246,7 @@
                         pn:1,
                         ps:100
                     };
+                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             e.status._value=(_.findWhere(this.statusOption,{code:String(e.status.value)}) || {}).name;
@@ -259,7 +264,7 @@
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
-                    }).finally(err=>{
+                    }).finally(()=>{
                         this.loadingTable=false;
                     });
                 }
@@ -316,6 +321,7 @@
                 //     ps: 100,
                 //     recycle: false,
                 // };
+                this.isModify=false;
                 this.getList();
                 // this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                 //     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
@@ -609,16 +615,16 @@
                     type: 'warning'
                 }).then(() => {
                     this.disabledSaveCompare=true;
-                    let id=[];
-                    id.push(Number(this.$route.query.compareId));
-                    this.$ajax.post(this.$apis.delete_buyerProductCompare,id).then(res=>{
+                    this.$ajax.post(this.$apis.delete_buyerProductCompare,[{
+                        id:this.$route.query.compareId,
+                        name:this.compareName
+                    }]).then(res=>{
                         this.$message({
                             type: 'success',
                             message: this.$i.product.deleteSuccess
                         });
-                        this.disabledSaveCompare=false;
                         this.$router.push('/product/compare');
-                    }).catch(err=>{
+                    }).finally(()=>{
                         this.disabledSaveCompare=false;
                     });
                 }).catch(() => {
