@@ -13,17 +13,16 @@
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'input'">
               <el-input maxlength="500" :placeholder="$i.logistic.placeholder" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
-
+            
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')">
               <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="a.key=='exchangeCurrency' ? item.code : item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="item.id"
-                  v-if="selectArr[a.key]" />
+                <el-option :disabled="item.disabled" :label="a.key=='exchangeCurrency' ? item.code : item.name" :value="isNaN(item.code) ? item.code : Number(item.code)" v-for="item of selectArr[a.key]" :key="item.id"/>
               </el-select>
             </el-form-item>
 
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'filterable'">
               <el-select filterable v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr.country" :key="item.id"
+                <el-option :label="item.name" :value="isNaN(item.code) ? item.code : Number(item.code)" v-for="item of selectArr.country" :key="item.id"
                   v-if="selectArr.country" />
               </el-select>
             </el-form-item>
@@ -107,7 +106,7 @@
       }
     },
     methods: {
-      selectChange(value,key,){
+      selectChange(value,key){
         if(key=='exchangeCurrency'){
           this.$emit('selectChange',value); 
         }
@@ -119,14 +118,14 @@
         if (a.type === 'date') return a.value ? this.$dateFormat(a.value, 'yyyy-mm-dd') : null
         if (a.type === 'selector' && this.selectArr[a.key]) {
           let obj = this.selectArr[a.key].find(item => item.code == a.value)
-          return obj ? a.key=='exchangeCurrency' ? obj.code : obj.name : null
+          return obj ? a.key=='exchangeCurrency' ? obj.code : obj.name : null;
         }
         if(a.type === 'filterable' && this.selectArr.country){
           let obj = this.selectArr.country.find(item => item.code == a.value)
           return obj ? obj.name : null
         }
-      }
-    },
+      } 
+    }
   }
 
 </script>
@@ -151,6 +150,9 @@
     }
   }
   .form {
+    /deep/.el-form-item__label{
+      font-weight: bold;
+    }
     /deep/.el-form-item p{
       min-width: 150px;
     }
@@ -167,5 +169,7 @@
       background:yellow;
     }
   }
-
+  .el-select-dropdown__item.is-disabled{
+    display:none;
+  }
 </style>

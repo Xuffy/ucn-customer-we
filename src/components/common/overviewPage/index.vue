@@ -2,16 +2,17 @@
     <div class="overview">
         <div class="title">
             <span>{{title}}</span>
-            <el-button class="title-btn"
-                       v-if="showAdvancedBtn"
-                       @click="hideBody = !hideBody"
-                       type="text">{{hideBody?$i.product.advanced:$i.product.hideTheAdvanced}}
-            </el-button>
         </div>
         <div class="search-option">
             <el-form :label-width="`${labelWidth}px`">
                 <el-row>
-                    <el-col v-for="v in formColumn" :key="v.key" v-if="v._isDefaultShow"  :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                    <el-col
+                            class="search-item"
+                            v-for="v in formColumn"
+                            :key="v.key"
+                            v-if="v._isDefaultShow"
+                            :class="{multipleSelect:v.multipleSelect}"
+                            :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="`${v.label} :`">
                             <div v-if="v.type==='dropdown'">
                                 <drop-down-single
@@ -24,7 +25,12 @@
                             </div>
                             <div v-else-if="v.type==='select'">
                                 <el-select class="speLine"
+                                           :prop="v.key"
+                                           :filterable="v._filterable?true:false"
                                            v-model="formData[v.key]"
+                                           clearable
+                                           :multiple="v._multiple?true:false"
+                                           :collapse-tags="v._collapse?true:false"
                                            :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v._options"
@@ -34,8 +40,23 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-else-if="v.type==='between'">
+                                <between class="speLine"
+                                         :form="formData"
+                                         :between-key="v.betweenKey"></between>
+                            </div>
+                            <div v-else-if="v.type==='number'">
+                                <el-input-number
+                                        class="speNumber speLine"
+                                        :controls="false"
+                                        v-model="formData[v.key]"></el-input-number>
+                            </div>
+                            <div v-else-if="v._slot">
+                                <slot :name="v._slot" :data="formData"></slot>
+                            </div>
                             <div v-else>
                                 <el-input
+                                        :prop="v.key"
                                         class="speLine"
                                         v-model="formData[v.key]"
                                         :placeholder="$i.product.pleaseInput"></el-input>
@@ -46,7 +67,13 @@
             </el-form>
             <el-form :model="formData" ref="formData" class="body" :class="{hide:hideBody}" :label-width="`${labelWidth}px`">
                 <el-row>
-                    <el-col class="search-item" v-for="v in formColumn" :key="v.key" v-if="!v._isDefaultShow"  :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                    <el-col
+                            class="search-item"
+                            v-for="v in formColumn"
+                            :key="v.key"
+                            v-if="!v._isDefaultShow"
+                            :class="{multipleSelect:v.multipleSelect}"
+                            :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="`${v.label} :`">
                             <div v-if="v.type==='dropdown'">
                                 <drop-down-single
@@ -101,8 +128,21 @@
             </el-form>
         </div>
         <div class="search-btn">
-            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
+            <el-button
+                    @click="search"
+                    :loading="disabledSearch"
+                    type="primary">{{$i.product.search}}</el-button>
+            <el-button
+                    @click="clear"
+                    type="info"
+                    plain>{{$i.product.clear}}</el-button>
+            <el-button
+                    class="advancedBtn"
+                    type="text"
+                    v-if="showAdvancedBtn"
+                    @click="hideBody = !hideBody">
+                {{hideBody?$i.product.advanced:$i.product.hideTheAdvanced}}
+            </el-button>
         </div>
         <div class="table">
             <v-table
@@ -116,23 +156,6 @@
                     @action="tableBtnClick">
                 <template slot="header">
                     <slot name="btns"></slot>
-                    <!--<div class="btns" v-if="!hideBtns">-->
-                        <!--&lt;!&ndash;<el-button @click="createInquiry">{{`${$i.product.createInquiry}(${selectList.length})`}}</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button @click="createOrder">{{`${$i.product.createOrder}(${selectList.length})`}}</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button @click="compareProducts" :disabled="disabledCompare">{{`${$i.product.compare}(${selectList.length})`}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button @click="addToBookmark" :loading="disableClickAddBookmark"&ndash;&gt;-->
-                                   <!--&lt;!&ndash;:disabled="disabledAddBookmark">{{`${$i.product.addToBookmark}(${selectList.length})`}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
-                        <!--<el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'" :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
-                        <!--&lt;!&ndash;<el-button type="danger">{{$i.product.delete}}</el-button>&ndash;&gt;-->
-                    <!--</div>-->
-                    <!--&lt;!&ndash;<div class="btns" v-if="type==='recycle'">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover"&ndash;&gt;-->
-                                   <!--&lt;!&ndash;type="primary">{{$i.product.recover}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button>{{$i.product.download+'('+downloadRecycleListInfo+')'}}</el-button>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
                 </template>
             </v-table>
             <slot name="pagination"></slot>
@@ -283,23 +306,17 @@
                 })
             },
             getUnit(codes){
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res,'单位')
-                // });
-                // this.$ajax.get(this.$apis.get_country).then(res=>{
-                //     console.log(res,'国家')
-                // });
                 const unitAjax=this.$ajax.post(this.$apis.get_partUnit,codes,{cache:true});
                 const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
                 return this.$ajax.all([unitAjax,countryAjax]);
             },
-
 
             /**
              *  一些事件
              * */
             search(){
                 this.disabledSearch=true;
+                this.formData.pn=1;
                 this.$emit('search',this.$depthClone(this.formData));
             },
             clear(){
@@ -325,16 +342,12 @@
                 console.log(this.$depthClone(e.sorts[0]),'e')
                 this.$emit('change-sort',e);
             },
-
         },
         created(){
             this.init();
         },
-        mounted(){
-            // console.log(this.formColumn,'formColumn')
-        },
         watch:{
-            tableData(n){
+            tableData(){
                 this.disabledSearch=false;
             }
         },
@@ -350,9 +363,8 @@
         color: #666666;
         margin-bottom: 5px;
     }
-    .title-btn {
-        float: right;
-        margin-right: 5px;
+    .advancedBtn >>> span{
+        text-decoration: underline;
     }
     .body {
         overflow: hidden;
@@ -369,8 +381,30 @@
     .speNumber >>> input{
         text-align: left;
     }
+    .multipleSelect{
+        height: auto !important;
+    }
+    .multipleSelect >>> .el-select{
+        max-height: 70px;
+        overflow: scroll;
+        position: relative;
+    }
+    .multipleSelect >>> .el-select .el-input{
+        width: 100%;
+    }
+    .multipleSelect >>> .el-select::-webkit-scrollbar {
+        width: 5px;
+        height: 1px;
+    }
+    .multipleSelect >>> .el-select .el-select__tags{
+        position: absolute;
+        top:5px;
+        transform: translateY(0);
+    }
+
+
     .search-item{
-        height: 51px;
+        height: 56px;
     }
     .search-btn{
         text-align: center;

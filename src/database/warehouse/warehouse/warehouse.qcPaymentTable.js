@@ -14,7 +14,8 @@ export default {
     },
     planPayAmount:{
         realKey:'planPayAmount',
-        type:'number'
+        type:'number',
+        accuracy: 2
     },
     actualPayDt:{
         realKey:'actualPayDt',
@@ -22,7 +23,8 @@ export default {
     },
     actualPayAmount:{
         realKey:'actualPayAmount',
-        type:'number'
+        type:'number',
+        accuracy: 2
     },
     currencyCode:{
         realKey:'currencyCode',

@@ -69,7 +69,7 @@
                 title: this.$i.product.title,
                 type: "product",
                 formDatabase: this.$db.product.overview,
-                labelWidth: 220,
+                labelWidth: 250,
                 productData: [],
                 pageData: {},            //分页配置
                 selectList: [],
@@ -136,7 +136,7 @@
                         e.unitVolume.value = this.$change(this.volumeOption, "unitVolume", e, true).name;
                         e.unitWeight.value = this.$change(this.weightOption, "unitWeight", e, true).name;
                         e.yearListed.value = this.$dateFormat(e.yearListed.value, "yyyy-mm");
-                        e.inspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, {code:e.inspectQuarantineCategory.value}) || {}).name;
+                        e.inspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: e.inspectQuarantineCategory.value }) || {}).name;
 
                         if (this.disableBookmarkChoose && e.bookmarkId.value) {
                             this.$set(e, "_disabled", true);
@@ -251,7 +251,6 @@
             },
             getUnit() {
                 this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "WT_UNIT", "ED_UNIT", "VE_UNIT", "LH_UNIT", "SKU_UNIT", "QUARANTINE_TYPE"], { cache: true }).then(res => {
-                    console.log(res, "res");
                     res.forEach(v => {
                         if (v.code === "SKU_SALE_STATUS") {
                             this.statusOption = v.codes;

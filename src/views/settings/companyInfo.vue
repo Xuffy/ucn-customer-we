@@ -1,13 +1,21 @@
 <template>
     <div class="company-info">
-        <div class="title">
+        <div class="title" :style="{'height': !showNameBox ? '32px':'0'}">
             <span><span style="color:red;font-weight: bold"></span>{{$i.setting.companyInfo}}</span>
         </div>
+        <div class="alert" v-show="showNameBox">
+          <el-alert
+            :title="$i.setting.requiredPage"
+            type="warning"
+            :closable="false"
+            show-icon>
+          </el-alert>
+        </div>
         <div class="summary">
-            <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
+            <el-form ref="summary"   label-width="190px">
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                        <el-form-item class="speWidth" :prop="v.key" :label="v.label +'：'" :required="v._rules?v._rules.required:false">
+                        <el-form-item class="speWidth"  :label="v.label +'：'" :required="v._rules?v._rules.required:false">
                             <div v-if="v.type==='input'">
                                 <el-input
                                         :disabled="v.key==='code'?true:summaryDisabled"
@@ -16,6 +24,15 @@
                                         v-model="companyInfo[v.key]">
                                 </el-input>
                             </div>
+                          <div v-if="v.type==='customValidation'">
+                            <el-input
+                              :disabled="v.key==='code'?true:summaryDisabled"
+                              size="mini"
+                              :placeholder="$i.common.inputkeyWordToSearch"
+                              @blur="customValidation"
+                              v-model="companyInfo[v.key]">
+                            </el-input>
+                          </div>
                             <div v-if="v.type==='select'">
                                 <el-select :disabled="summaryDisabled" class="speWidth" v-model="companyInfo[v.key]" :placeholder="$i.common.inputSearch">
                                     <el-option
@@ -82,6 +99,7 @@
                     :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                     @action="addressAction"
                     :selection="false"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.setting.contactInfo">
@@ -94,31 +112,36 @@
                     :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                     @action="accountAction"
                     :selection="false"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.documentRequired">
-                    <div class="section-btn">
-                        <el-button @click="addDocument(documentData)" type="primary">{{$i.button.modify}}</el-button>
+                    <div class="section-btn" style="margin-bottom:50px;">
+                        <el-button @click="modifyDocument()" type="primary">{{$i.button.modify}}</el-button>
                     </div>
-                  <el-form label-width="200px" :model="documentData">
+                  <el-form label-width="200px">
                     <el-row>
-                      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
-                        <el-form-item  :label="$i.setting.documentRequired +'：' ">
-                          <span>{{documentData.document}}</span>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.factoryInspectionReport +'：'">
-                          <span>{{documentData.aduitDetails}}</span>
-                        </el-form-item>
-                        <el-form-item  :label="$i.setting.packingList +'：'">
-                          <span>{{documentData.packingList}}</span>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.invoice +'：'">
-                          <span>{{documentData.invoice}}</span>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.examiningReport +'：'">
-                          <span>{{documentData.examiningReport}}</span>
-                        </el-form-item>
+                      <el-col :span="24">
+                        <div class="documentBox">
+                          <ul class="documentBoxCon">
+                            <li class="documentBoxCon1" v-for="(item,index) in documentTypeClone" :key="item.id" >
+                              <el-checkbox
+                                :checked="item.checked"
+                                @change="handleCheckedDocument(item,index)">
+                                {{item.name}}
+                              </el-checkbox>
+                              <div class="uploadBox" disabled="item.checked">
+                                <v-upload
+                                oss-private
+                                :ref="'uploadDocument'+item.code"
+                                :limit="20"
+                                :list="item.attachments"
+                                />
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
                       </el-col>
                     </el-row>
                   </el-form>
@@ -162,6 +185,7 @@
                     :buttons="[{label: 'Modify', type: 1}]"
                     :selection="false"
                     @action="rateAction"
+                    disabled-sort
                   ></v-table>
                 </el-tab-pane>
             </el-tabs>
@@ -229,6 +253,13 @@
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                     <el-form-item  :label="$i.setting.receiverAddress +'：'">
                       <el-input size="mini" v-model="addressData.receiveAddress" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                    <el-form-item>
+                      <el-checkbox-group v-model="addressData.def" size="medium">
+                        <el-checkbox :label="$i.setting.setDefaultAddress"  @change="setAddress"></el-checkbox>
+                      </el-checkbox-group>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -311,63 +342,59 @@
             </div>
         </el-dialog>
 
-      <el-dialog width="70%" :title="$i.setting.documentRequired +'：'" :visible.sync="documentDialogVisible">
-        <el-form label-width="250px" :model="documentData">
-          <el-row>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item  :label="$i.setting.documentRequired +'：'" required>
-                <el-input size="mini" v-model="documentData.document" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item :label="$i.setting.factoryInspectionReport +'：'">
-                <el-input size="mini" v-model="documentData.aduitDetails" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.packingList +'：' ">
-                  <el-input size="mini" v-model="documentData.packingList" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-                </el-form-item>
-            </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.invoice +'：'">
-                  <el-input size="mini" v-model="documentData.invoice" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-                </el-form-item>
-            </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.examiningReport+'：'">
-                  <el-input size="mini" v-model="documentData.examiningReport" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-                </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="documentDialogVisible=false">{{$i.button.cancel}}</el-button>
-          <el-button :loading="allowAddAccount" type="primary" @click="modifyDocument">{{$i.button.confirm}}</el-button>
-        </div>
-      </el-dialog>
-
       <el-dialog width="70%" :title="$i.setting.custom" :visible.sync="customDialogVisible">
         <el-form label-width="300px" :model="customData">
           <el-row>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.oceanFreight +'：'">
-                <el-input size="mini" v-model="customData.oceanFreightUSD40HC" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.oceanFreightUSD40HC"
+                  :accuracy="4"
+                  :mark="$i.setting.oceanFreight"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.insuranceExpenses +'：'">
-                <el-input size="mini" v-model="customData.insuranceExpensesUSD40HC" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.insuranceExpensesUSD40HC"
+                  :accuracy="4"
+                  :mark="$i.setting.insuranceExpenses"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item  :label="$i.setting.priceCurrency +'：'">
-                <el-input size="mini" v-model="customData.portWarehousePrice40HC" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.portWarehousePrice40HC"
+                  :accuracy="4"
+                  :mark="$i.setting.priceCurrency"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item :label="$i.setting.exchangeRate +'：'">
-                <el-input size="mini" v-model="customData.exchangeRateUSD" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="customData.exchangeRateUSD"
+                  :accuracy="4"
+                  :mark="$i.setting.exchangeRate"
+                  :controls="false"
+                  style="width: 90%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
           </el-row>
@@ -393,7 +420,15 @@
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
               <el-form-item  :label="$i.setting.tradeExchangeRate +'：'" required>
-                <el-input size="mini" v-model="exchangerateData.price" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                <v-input-number
+                  class="speInput speNumber"
+                  size="mini"
+                  v-model="exchangerateData.price"
+                  :accuracy="4"
+                  :mark="$i.setting.tradeExchangeRate"
+                  :controls="false"
+                  style="width: 100%"
+                  :placeholder="$i.common.inputkeyWordToSearch"></v-input-number>
               </el-form-item>
             </el-col>
           </el-row>
@@ -408,15 +443,18 @@
 </template>
 
 <script>
-    import { VTable,VUpload } from '@/components/index'
+    import { VTable,VUpload,VInputNumber } from '@/components/index';
+    import { mapActions } from 'vuex'
     export default {
         name: "companyInfo",
         components:{
           VTable,
-          VUpload
+          VUpload,
+          VInputNumber
         },
         data(){
             return{
+              checked:false,
                 summaryDisabled:true,
                 addressDialogVisible:false,
                 accountDialogVisible:false,
@@ -466,7 +504,8 @@
                     receiveCity: "",
                     receiveCountry: "",
                     receiveProvince: "",
-                    version: ""
+                    version: "",
+                    def: false
                 },
                 contactData:{
                   cellphone: "",
@@ -496,16 +535,6 @@
                     skype:'',
                     qq:''
                 },
-              documentData:{
-                  aduitDetails: "",
-                  customerId: "",
-                  document: "",
-                  examiningReport: "",
-                  id: "",
-                  invoice: "",
-                  packingList: "",
-                  version: ""
-              },
               customData:{
                 customerId: "",
                 exchangeRateUSD: "",
@@ -527,6 +556,18 @@
                 type: "PICTURE",
                 url: ""
               },
+              documentParmas:{
+                documents: [
+                  {
+                    attachments: [],
+                    checked: true,
+                    code: '',
+                    id: null,
+                    version: null
+                  }
+                ],
+                settingId: null
+              },
               addressDatas:[],
               accountsData:[],
               sex:[],
@@ -541,14 +582,26 @@
               isModifyContact:false,
             //判断是否修改过
               isModify:false,
+              showNameBox:false,
               options:{},
               department:[],
-              currencyList:[]
+              currencyList:[],
+              documentType: [],
+              checkList:[],
+              documentRedonly:false,
+              documentList:[],
+              documentTypeClone:[],
+
+
             }
         },
         methods:{
+          ...mapActions(['setMenuLink']),
             handleClick(tab, event) {
               switch(Number(tab.index)){
+                case 2:
+                  this.getDocument();
+                  break;
                 case 5:
                   this.getGridfavoritePartData();
                   break;
@@ -559,6 +612,13 @@
                 this.companyInfo.concats=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
+                    //判断shortName是否存在
+                    if (this.companyInfo.shortName){
+                      this.$localStore.remove('router_intercept')
+                    }else{
+                      this.showNameBox = true;
+                    }
+
                     this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
                       let country,receiveCountry;
                       country = _.findWhere(this.options.country, {code: e.country.value}) || {};
@@ -573,6 +633,7 @@
                       const receiveAddress = e.receiveAddress.value || '';
                       e.companyAddress.value = e.country._value +' '+province+' '+city+' '+address;
                       e.receiverAddress.value = e.receiveCountry._value +' '+receiveProvince+' '+receiveCity+' '+receiveAddress
+                      e.def.value ? e.def._value = '是' : e.def._value = ''
                       return e;
 
                     });
@@ -587,22 +648,18 @@
                     if(res.custom){
                       this.customData = res.custom
                     }
-                    if(res.documents[0]){
-                      this.documentData = res.documents[0];
-                    }
                 })
             },
             postUpdateIsSetting(){
               this.$ajax.post(this.$apis.post_purchase_customer_updateIsSetting,{id:this.companyInfo.id}).then(res=>{
-                console.log(res)
-                    this.isModify = res;
+                this.isModify = res;
               }).catch(err=>{
                 console.log(err)
               });
             },
           //获取币种
           getCurrency(){
-              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+              this.$ajax.get(this.$apis.get_currency_all,{},{cache:true}).then(res=>{
                   this.options.currency = res
               }).catch(err=>{
                 console.log(err)
@@ -610,29 +667,29 @@
           },
           //获取字典
           getCodePart(){
-            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX"]).then(res=>{
+            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX","DOCUMENT_TYPE"],{cache:true}).then(res=>{
               this.options.payment = _.findWhere(res, {'code': 'PMT'}).codes;
               this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
               this.options.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
               this.options.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
               this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
+              this.documentType = _.findWhere(res, {'code': 'DOCUMENT_TYPE'}).codes;
             }).catch(err=>{
               console.log(err)
             });
           },
           //获取国家
           getCountryAll(){
-            this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+            this.$ajax.get(this.$apis.GET_COUNTRY_ALL,{},{cache:true}).then(res=>{
               this.options.country = res
               this.$sessionStore.set('country', res);
-              this.getWholeData();
             }).catch(err=>{
               console.log(err)
             });
           },
           //获取部门列表
           getDepartment(){
-            this.$ajax.get(this.$apis.GET_DEPARTMENT).then(res=>{
+            this.$ajax.get(this.$apis.GET_DEPARTMENT,{},{cache:true}).then(res=>{
               this.department = res
             }).catch(err=>{
               console.log(err)
@@ -786,6 +843,48 @@
 
                 });
             },
+             //更改默认地址
+            setAddress(){
+              let def;
+              this.addressDatas.forEach(v=>{
+                def = _.findWhere(v,{key:'def'}).value;
+              })
+              if (def){
+                this.$confirm(this.$i.setting.isReplace, this.$i.common.prompt, {
+                  confirmButtonText: this.$i.common.confirm,
+                  cancelButtonText: this.$i.common.cancel,
+                  type: 'warning'
+                }).then(() => {
+                  if (this.addressData.def){
+                    this.addressData.def = true;
+                    this.$message({
+                      type: 'success',
+                      message: this.$i.setting.replaceSuccess
+                    });
+                  }else{
+                    this.addressData.def = false;
+                    this.$message({
+                      type: 'success',
+                      message: this.$i.setting.cancelReplace
+                    });
+                  }
+                }).catch(() => {
+                  if (this.addressData.def){
+                    this.addressData.def = false;
+                    this.$message({
+                      type: 'success',
+                      message: this.$i.setting.cancelReplace
+                    });
+                  }else{
+                    this.addressData.def = true;
+                    this.$message({
+                      type: 'success',
+                      message: this.$i.setting.replaceSuccess
+                    });
+                  }
+                });
+              }
+            },
 
             /**
              * contact操作
@@ -879,47 +978,50 @@
           /**
            * document操作
            * */
-          addDocument(e){
-              this.documentData = Object.assign({}, e);
-              this.documentDialogVisible = true;
+          getDocument(){
+            this.$ajax.get(this.$apis.get_purchase_customer_document).then(res=>{
+              // this.documentList = res
+              this.documentTypeClone = this.$depthClone(this.documentType)
+              this.documentTypeClone.forEach(v=>{
+                res.forEach(m =>{
+                  if (v.code === m.code){
+                      v.attachments= m.attachments,
+                      v.checked= m.checked,
+                      v.code= m.code,
+                      v.newId= m.id,
+                      v.version= m.version
+                  }
+                })
+              });
+            })
           },
           modifyDocument(){
-            if (this.$validateForm(this.documentData, this.$db.setting.documentRequired)) {
-              return false;
+            const documentParmas = {
+              documents:[],
+              settingId: this.companyInfo.id
             }
-            this.documentDialogVisible = false;
-            this.documentData.customerId=this.companyInfo.id;
-            if (!this.documentData.id){
-              this.$ajax.post(this.$apis.post_purchase_customer_document,this.documentData).then(res=>{
-                if (!this.companyInfo.setting){
-                  this.postUpdateIsSetting();
-                }
-                this.$message({
-                  message: this.$i.common.addSuccess,
-                  type: 'success'
-                });
-                this.getWholeData();
-                this.documentDialogVisible = false;
-              }).catch(err=>{
-                this.getWholeData();
-                this.documentDialogVisible=false;
+            this.documentTypeClone.forEach(v=>{
+              documentParmas.documents.push({
+                attachments: this.$refs['uploadDocument'+v.code][0].getFiles() ,
+                code: v.code,
+                id: v.newId || '',
+                checked: v.checked,
+                version: v.version
+              })
+            });
+
+            this.$ajax.post(this.$apis.post_purchase_customer_document,documentParmas).then(res=>{
+              this.$message({
+                message: this.$i.common.uploadSuccess,
+                type: 'success'
               });
-            }else{
-              this.$ajax.post(`${this.$apis.post_purchase_customer_document_id}/${this.documentData.id}`,this.documentData).then(res=>{
-                if (!this.companyInfo.setting){
-                  this.postUpdateIsSetting();
-                }
-                this.$message({
-                  message: this.$i.common.modifySuccess,
-                  type: 'success'
-                });
-                this.getWholeData();
-                this.documentDialogVisible = false;
-              }).catch(err=>{
-                this.getWholeData();
-                this.documentDialogVisible=false;
-              });
-            }
+              this.getDocument();
+            })
+          },
+          handleCheckedDocument(item,index){
+            item.checked = !item.checked;
+            this.$set(this.documentTypeClone,index, item)
+
           },
           /**
            * custom操作
@@ -1053,12 +1155,56 @@
               return false;
             }
           },
+          customValidation(){
+            if(this.companyInfo.shortName === ""){ //输入不能为空
+              this.$message({
+                message: `${this.$i.util.validateRequired} ${this.$i.setting.customerShortName}`,
+                type: 'warning'
+              });
+            }else if(this.companyInfo.shortName.length>6){
+              this.$message({
+                message: this.$i.setting.shortNameLength,
+                type: 'warning'
+              });
+            }else if (!/^[0-9a-zA-Z]+$/.test(this.companyInfo.shortName)){
+              this.$message({
+                message: this.$i.setting.numberLetter,
+                type: 'warning'
+              });
+            }else if (!/^[0-9a-hj-np-yA-HJ-NP-Y]+$/g.test(this.companyInfo.shortName)){
+              this.$message({
+                message: this.$i.setting.abbreviationAllowed,
+                type: 'warning'
+              });
+            }else{
+              this.$ajax.post(this.$apis.post_purchase_customer_exist,{
+                id: this.companyInfo.id,
+                shortName: this.companyInfo.shortName
+              }).then(res=>{
+                if (res){
+                  this.$message({
+                    message: this.$i.setting.abbreviationOnly,
+                    type: 'warning'
+                  });
+                }
+              })
+            }
+          },
         },
         created(){
              this.getCodePart();
              this.getCurrency();
              this.getCountryAll();
              this.getDepartment();
+             this.getWholeData();
+        },
+        mounted(){
+          this.setMenuLink({
+              path: '/logs',
+              query: {code: 'CUSTOMER_SETTING',bizCode: 'BIZ_CUSTOMER_SETTING'},
+              type: 100,
+              label: this.$i.common.log,
+            });
         },
         watch:{
             addressDialogVisible(n){
@@ -1096,7 +1242,6 @@
     .title{
         font-weight: bold;
         font-size: 18px;
-        height: 32px;
         line-height: 32px;
         color:#666666;
     }
@@ -1131,4 +1276,23 @@
     .dialog-footer{
         text-align: center;
     }
+  .attachmentList{
+    padding-top: 20px;
+  }
+
+  .documentBoxCon{
+    overflow: hidden;
+  }
+  .documentBoxCon1{
+    width: 18%;
+    float: left;
+  }
+  .uploadBox{
+    padding-top: 10px;
+  }
+  .alert{
+    width: 40%;
+    margin: 0 auto;
+    padding: 15px;
+  }
 </style>

@@ -20,7 +20,7 @@ export default {
         key: 'name',
         type: 'input',
         belong:'summary',
-        _rules:{
+        _rules: {
           required:true,
         }
     },
@@ -57,10 +57,14 @@ export default {
         type: 'select',
         belong:'summary'
     },
-  customerShortName:{
+  customerShortName: {
         key: 'shortName',
-        type: 'input',
-        belong:'summary'
+        type: 'customValidation',
+        belong: 'summary',
+      _rules:{
+        required:true,
+        length:6
+      }
     },
   shipAgent:{
     key: 'shipAgent',

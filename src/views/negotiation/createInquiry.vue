@@ -370,6 +370,9 @@ export default {
       });
       this.tabData = _.map(this.tabData, oldItem => {
         let tmp = _.filter(items, item => _.findWhere(oldItem, {'key': 'skuId'}).value === _.findWhere(item, {'key': 'skuId'}).value && !!oldItem._remark === !!item._remark);
+        if (tmp[0] && tmp[0].skuPictures && tmp[0].skuPictures._image) {
+          tmp[0].skuPictures.value = tmp[0].skuPictures._value;
+        }
         return tmp[0] || oldItem;
       });
     },

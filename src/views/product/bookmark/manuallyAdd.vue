@@ -127,11 +127,13 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
-                                    :controls="false"></el-input-number>
+                                    :mark="v.label"
+                                    :placeholder="$i.product.pleaseInput"
+                                    :accuracy="v.accuracy"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -238,13 +240,16 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
-                                    label="please input"></el-input-number>
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
+                                    label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -349,13 +354,16 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm.price[0][v.key]"
                                     :controls="false"
                                     :min="0"
-                                    label="please input"></el-input-number>
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
+                                    label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -470,13 +478,16 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
-                                    label="please input"></el-input-number>
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
+                                    label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -581,13 +592,16 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
-                                    label="please input"></el-input-number>
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
+                                    label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -713,41 +727,42 @@
                         </div>
                         <div v-else-if="v.showType==='number'">
                             <div v-if="v.key==='lengthWidthHeight'">
-                                <el-input-number
+                                <v-input-number
                                         class="speNum"
                                         size="mini"
                                         :controls="false"
                                         v-model="boxSize.length"
-                                        :min="0"
-                                        label="描述文字">
-                                </el-input-number>
+                                        :min="0">
+                                </v-input-number>
                                 <div class="speIcon">*</div>
-                                <el-input-number
+                                <v-input-number
                                         class="speNum"
                                         size="mini"
                                         :controls="false"
                                         v-model="boxSize.width"
                                         :min="0"
                                         label="描述文字">
-                                </el-input-number>
+                                </v-input-number>
                                 <div class="speIcon">*</div>
-                                <el-input-number
+                                <v-input-number
                                         class="speNum"
                                         size="mini"
                                         :controls="false"
                                         v-model="boxSize.height"
                                         :min="0"
                                         label="描述文字">
-                                </el-input-number>
+                                </v-input-number>
                             </div>
                             <div v-else>
-                                <el-input-number
+                                <v-input-number
                                         class="speInput speNumber"
                                         size="mini"
                                         v-model="productForm[v.key]"
                                         :controls="false"
                                         :min="0"
-                                        label="please input"></el-input-number>
+                                        :placeholder="$i.product.pleaseInput"
+                                        :mark="v.label"
+                                        :accuracy="v.accuracy"></v-input-number>
                             </div>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
@@ -785,14 +800,15 @@
 </template>
 
 <script>
-    import {dropDownSingle,VUpload} from '@/components/index'
+    import {dropDownSingle,VUpload,VInputNumber} from '@/components/index'
     import {mapActions} from 'vuex'
 
     export default {
         name: "manually-add",
         components:{
             dropDown:dropDownSingle,
-            VUpload
+            VUpload,
+            VInputNumber
         },
         data(){
             return{
@@ -940,6 +956,14 @@
         },
         methods:{
             ...mapActions(['setMenuLink']),
+
+            handleChangeNumber(key){
+                this.$nextTick(()=>{
+                    this.$set(this.productForm,key,this.$toFixed(this.productForm[key],1,'SKU'));
+                });
+            },
+
+
             //完成新增
             finish(){
                 if(this.$validateForm(this.productForm, this.$db.product.detailTab)){

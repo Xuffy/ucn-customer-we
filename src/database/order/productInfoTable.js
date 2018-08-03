@@ -1,7 +1,12 @@
 export default {
     label:{
         _important:true,
-        _title:'Remark'
+        _title:'Remark',
+        _fixed:'left'
+    },
+    skuStatus:{
+        _slot:'skuStatus',
+        _fixed:'left'
     },
     _remark:{
         _hide:true
@@ -140,6 +145,9 @@ export default {
     skuCategoryId:{
         _disabled:true
     },
+    skuCategoryName:{
+        _hide:true
+    },
     // skuCategoryOne:{},
     // skuCategoryTwo:{},
     // skuCategoryThree:{},
@@ -252,9 +260,6 @@ export default {
         _slot:'skuExpireUnit',
     },
     skuComments:{},
-    skuStatus:{
-        _slot:'skuStatus'
-    },
     skuSaleStatus:{
         _disabled:true
     },
@@ -276,11 +281,10 @@ export default {
     //     }
     //     // disabled:true
     // },
-    skuLabelPic:{
+    skuLabelPics:{
         _slot:'skuLabelPic',
-        _image:true,
         _upload:{
-            limit:1
+            limit:20
         }
     },
     skuLabelDesc:{},

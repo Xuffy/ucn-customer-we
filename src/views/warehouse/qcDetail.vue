@@ -190,11 +190,19 @@
                                 </el-date-picker>
                             </div>
                             <div v-else-if="v.type==='number'">
-                                <el-input-number
+                                <!-- <el-input-number
                                         class="speNumber"
                                         v-model="scope.row[v.realKey]"
                                         :min="0"
-                                        :controls="false"></el-input-number>
+                                        :controls="false"></el-input-number> -->
+                                <v-input-number
+                                    v-model="scope.row[v.realKey]"
+                                    :min="0"
+                                    class="speNumber"
+                                    :controls="false"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy ? v.accuracy : null"
+                                    label="please input"></v-input-number>
                             </div>
                             <div v-else-if="v.type==='select'">
                                 <el-select :disabled="true" v-model="scope.row[v.realKey]" :placeholder="$i.warehouse.pleaseChoose">
@@ -444,7 +452,7 @@
 </template>
 <script>
 
-    import {VTable,VUpload,VMessageBoard} from '@/components/index';
+    import {VTable,VUpload,VMessageBoard,VInputNumber} from '@/components/index';
     import { mapActions } from 'vuex'
 
     export default {
@@ -452,7 +460,8 @@
         components:{
             VTable,
             VUpload,
-            VMessageBoard
+            VMessageBoard,
+            VInputNumber
         },
         data(){
             return{
@@ -594,8 +603,16 @@
                         return e;
                     });
                     let diffData=[];
+                    let qcStatusDictCode = this.qcDetail.qcStatusDictCode
                     this.productInfoData.forEach(v=>{
                         diffData.push(v.skuId.value+v.orderNo.value);
+                        if (qcStatusDictCode === 'COMPLETED_QC') {
+                            _.mapObject(v, (item, k) => {
+                                if (item.isFWS) {
+                                    item._mustChecked = true
+                                }
+                            })
+                        }
                     });
                     this.summaryData.skuQuantity=_.uniq(diffData).length;
 
@@ -628,7 +645,8 @@
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.get_qcPaymentData,{
                     orderNo:this.qcDetail.qcOrderNo,
-                    orderType:20
+                    orderType:20,
+                    moduleCode: 'WAREHOUSE'
                 }).then(res=>{
                     this.loadingPaymentTable=false;
                     this.paymentTableData=res.datas;
@@ -640,7 +658,7 @@
                     }else{
                         this.disableAdd=false;
                     }
-                    console.log(this.disableAdd,'this.disableAdd')
+                    // console.log(this.disableAdd,'this.disableAdd')
                 }).catch(err=>{
                     this.loadingPaymentTable=false;
 
@@ -1062,7 +1080,7 @@
         mounted(){
             this.setMenuLink({
                 path: '/logs/index',
-                query: {code: 'WAREHOUSE'},
+                query: {code: 'QC'},
                 type: 10,
                 auth:'QC:LOG',
                 label: this.$i.common.log
