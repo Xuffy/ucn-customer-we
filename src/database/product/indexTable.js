@@ -17,7 +17,7 @@ export default {
     pictures: {
         _image:true,
         key:'pictures',
-        _fixed:'left'
+        _fixed:'left',
     },
     code:{
         _fixed:'left'
@@ -112,7 +112,9 @@ export default {
     fobPrice:{
 
     },
-    refFobPrice:{},
+    refFobPrice:{
+        _sort:false
+    },
     fobPort:{
 
     },
@@ -123,11 +125,15 @@ export default {
 
     },
     cifPrice:{},
-    refCifPrice:{},
+    refCifPrice:{
+        _sort:false
+    },
     cifCurrency:{},
     cifArea:{},
     dduPrice:{},
-    refDduPrice:{},
+    refDduPrice:{
+        _sort:false
+    },
     dduCurrency:{},
     dduArea:{},
 

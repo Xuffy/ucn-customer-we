@@ -486,7 +486,6 @@
                         });
                         this.productForm.mainSaleCountry=this.productForm.mainSaleCountry.slice(0,this.productForm.mainSaleCountry.length-1);
                     }
-                    console.log(124124)
                     /**
                      * 字典转换
                      * */
