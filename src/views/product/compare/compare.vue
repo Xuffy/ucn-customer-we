@@ -53,7 +53,7 @@
                         v-if="isModify"
                         v-authorize="'PRODUCT:COMPARE_DETAIL:DELETE'"
                         @click="deleteProduct"
-                        :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                        :disabled="disableDelete" type="danger">{{$i.product.deleteProduct}}</el-button>
             </span>
             <el-checkbox @change="changeStatus" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
             <el-checkbox @change="changeStatus" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
@@ -64,7 +64,7 @@
                 @change-sort="$refs.table.setSort(tableDataList)"
                 code="udata_purchase_sku_compare_list_detail"
                 :height="500"
-                v-loading="loadingTable"g
+                v-loading="loadingTable"
                 :data="tableDataList"
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="btnClick"
@@ -74,39 +74,40 @@
                 <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.params.type==='modify'">
-                <el-button
-                        v-authorize="'PRODUCT:COMPARE_DETAIL:SAVE'"
-                        @click="saveModify"
-                        :loading="disableClickSaveModify"
-                        :disabled="allowBottomClick"
-                        type="primary"
-                        v-if="isModify">{{$i.product.save}}</el-button>
-                <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify" v-if="isModify">{{$i.product.cancel}}</el-button>
+                <div v-if="isModify">
+                    <el-button
+                            v-authorize="'PRODUCT:COMPARE_DETAIL:SAVE'"
+                            @click="saveModify"
+                            :loading="disableClickSaveModify"
+                            :disabled="allowBottomClick"
+                            type="primary">{{$i.product.save}}</el-button>
+                    <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify">{{$i.product.cancel}}</el-button>
+                </div>
+                <div v-else>
+                    <el-button @click="deleteCompare" type="danger">{{$i.product.delete}}</el-button>
+                </div>
             </div>
         </div>
 
         <el-dialog :title="$i.product.addProduct" :visible.sync="addProductDialogVisible" width="80%">
             <el-tabs v-model="addProductTabName" type="card" @tab-click="handleClick">
-                <el-tab-pane :label="$i.product.addFromProduct" name="1">
-                    <product
-                            :isInModify="$route.params.type==='modify'?true:false"
-                            :disabledOkBtn="false"
-                            :hideBtn="true"
-                            :disabledLine="disabledLine"
-                            :forceUpdateNumber="forceUpdateNumber"
-                            @handleOK="handleOkClick"
-                            @handleCancel="handleCancel"></product>
+                <el-tab-pane :label="$i.product.addFromProduct" name="product">
+                    <v-product
+                            ref="addProduct"
+                            queryType="product"
+                            :form-column="$db.product.overview"
+                            :disabledLine="disableProductLine"
+                            @sure="handleOkClick"
+                            @cancel="handleCancel"></v-product>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.addFromBookmark" name="2">
-                    <product
-                            :isInModify="$route.params.type==='modify'?true:false"
-                            :disabledOkBtn="false"
-                            :hideBtn="true"
-                            :type="'bookmark'"
-                            :disabledLine="disabledLine"
-                            :forceUpdateNumber="forceUpdateNumber"
-                            @handleOK="handleOkClick"
-                            @handleCancel="handleCancel"></product>
+                <el-tab-pane :label="$i.product.addFromBookmark" name="bookmark">
+                    <v-product
+                            ref="addBookmark"
+                            queryType="bookmark"
+                            :form-column="$db.product.overview"
+                            :disabledLine="disableProductLine"
+                            @sure="handleOkClick"
+                            @cancel="handleCancel"></v-product>
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
@@ -146,8 +147,12 @@
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
-    import product from '../addProduct'
+
+    import {
+        VTable,
+        VProduct
+    } from "@/components/index";
+
     import { mapActions } from 'vuex'
 
     let copySameData,copyLightData;
@@ -157,7 +162,7 @@
         name: "compare",
         components:{
             VTable,
-            product
+            VProduct
         },
         data(){
             return{
@@ -189,6 +194,7 @@
                 isHighlight:true,
                 initialData:[],
                 categoryList:[],
+                disableProductLine:[],
 
                 /**
                  * 字典配置
@@ -242,6 +248,7 @@
                         pn:1,
                         ps:100
                     };
+                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             e.status._value=(_.findWhere(this.statusOption,{code:String(e.status.value)}) || {}).name;
@@ -259,7 +266,7 @@
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
-                    }).finally(err=>{
+                    }).finally(()=>{
                         this.loadingTable=false;
                     });
                 }
@@ -307,38 +314,8 @@
                 this.isModify=true;
             },
             cancelModify(){
-                // this.disableClickCancel=true;
-                // this.loadingTable=true;
-                // this.compareName=this.$route.query.compareName;
-                // let params={
-                //     id: Number(this.$route.query.compareId),
-                //     pn: 1,
-                //     ps: 100,
-                //     recycle: false,
-                // };
+                this.isModify=false;
                 this.getList();
-                // this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
-                //     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
-                //         if(e.status.value===1){
-                //             e.status.value='上架';
-                //         }else if(e.status.value===0){
-                //             e.status.value='下架';
-                //         }
-                //         return e;
-                //     });
-                //     this.hasLoading=true;
-                //     this.disabledLine=this.tableDataList;
-                //     this.allowDeleteCompare=false;
-                //     this.allowBottomClick=false;
-                //
-                //     //额外操作
-                //     this.isModify=false;
-                //     this.disableClickCancel=false;
-                //     this.loadingTable=false;
-                // }).catch(err=>{
-                //     this.disableClickCancel=false;
-                //     this.loadingTable=false;
-                // });
             },
             createInquiry(){
                 if(this.selectList.length===0){
@@ -418,8 +395,22 @@
                 this.$fetch.export_task('SKU_PURCHASE_EXPORT_COMPARE_IDS',{ids:[this.$route.query.compareId]});
             },
             addNewProduct(){
+                this.disableProductLine = [];
+                if (this.tableDataList.length > 0) {
+                    _.map(this.tableDataList, v => {
+                        this.disableProductLine.push(v.skuId.value);
+                    });
+                }
                 this.addProductDialogVisible=true;
-                this.forceUpdateNumber=Math.random();
+                this.addProductTabName = "product";
+                this.$nextTick(() => {
+                    if (this.$refs.addProduct) {
+                        this.$refs.addProduct.getData();
+                    }
+                    if (this.$refs.addBookmark) {
+                        this.$refs.addBookmark.getData();
+                    }
+                });
             },
             deleteProduct(){
                 this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
@@ -464,7 +455,7 @@
 
                 });
             },
-            handleOkClick(e){
+            handleOkClick(e, type){
                 //如果总条数>100，则进行提示
                 let totalLen=0;
                 this.tableDataList.forEach(v=>{
@@ -482,13 +473,8 @@
                     //现在跑出来的东西只是一个productId数组
                     if(this.$route.params.type==='new'){
                         //在新建状态的情况下，直接拿id重新请求获取表格数据
-                        let id=[];
-                        this.tableDataList.forEach(v=>{
-                            id.push(v.id.value);
-                        });
-                        e.forEach(v=>{
-                            id.push(v);
-                        });
+                        let ids = _.pluck(_.pluck(e, type === "product" ? "id" : "skuId"), "value");
+                        if(!ids.length){return this.addProductDialogVisible=false}
                         this.loadingTable=true;
                         this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                             this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
@@ -513,39 +499,28 @@
                     else if(this.$route.params.type==='modify'){
                         //modify状态下，要把拿出来的数据先进行对比，对比之后没有的再请求接口塞进去
                         //如果丢出来的数据的id有table里面产品的id，则把这个id对于的商品从置灰还原
-                        let ids=[];
-                        this.tableDataList.forEach(v=>{
-                            if(!v._disabled){
-                                if(!this.isChangeData){
-                                    ids.push(v.skuId.value);
-                                }else{
-                                    ids.push(v.id.value);
-                                }
-                            }
-                        });
-                        e.forEach(v=>{
-                            ids.push(v);
-                        });
+
+                        let ids = _.pluck(_.pluck(e, type === "product" ? "id" : "skuId"), "value");
+                        if(!ids.length){return this.addProductDialogVisible=false}
                         this.loadingTable=true;
                         this.$ajax.post(this.$apis.get_skuListByIds,ids).then(res=>{
-                            this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
-                                e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
-                                e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
-                                e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
-                                e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
-                                e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
-                                e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                            this.$getDB(this.$db.product.indexTable, res,(e)=>{
+                                e.status._value=(_.findWhere(this.statusOption,{code:String(e.status.value)}) || {}).name;
+                                e.unit._value=(_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}) || {}).name;
+                                e.expireUnit._value = (_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}) || {}).name;
+                                e.unitLength._value = (_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}) || {}).name;
+                                e.unitVolume._value = (_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}) || {}).name;
+                                e.unitWeight._value = (_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}) || {}).name;
                                 e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                                 e.skuId.value=e.id.value;       //把id的值给skuId
-                                return e;
+                                this.tableDataList.push(e);
                             });
                             this.initialData=this.$depthClone(this.tableDataList);
                             this.changeStatus();
                             this.hasLoading=true;
                             this.isChangeData=true;
-                            this.disabledLine=this.tableDataList;
-                            this.loadingTable=false;
-                        }).catch(err=>{
+                            // this.disabledLine=this.tableDataList;
+                        }).finally(()=>{
                             this.loadingTable=false;
                         });
                     }
@@ -609,16 +584,16 @@
                     type: 'warning'
                 }).then(() => {
                     this.disabledSaveCompare=true;
-                    let id=[];
-                    id.push(Number(this.$route.query.compareId));
-                    this.$ajax.post(this.$apis.delete_buyerProductCompare,id).then(res=>{
+                    this.$ajax.post(this.$apis.delete_buyerProductCompare,[{
+                        id:this.$route.query.compareId,
+                        name:this.compareName
+                    }]).then(res=>{
                         this.$message({
                             type: 'success',
                             message: this.$i.product.deleteSuccess
                         });
-                        this.disabledSaveCompare=false;
                         this.$router.push('/product/compare');
-                    }).catch(err=>{
+                    }).finally(()=>{
                         this.disabledSaveCompare=false;
                     });
                 }).catch(() => {

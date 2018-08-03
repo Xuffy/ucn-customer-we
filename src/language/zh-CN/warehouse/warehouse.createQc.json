@@ -37,7 +37,7 @@
   "quantityOfSubQualityProducts": "不合格产品数量",
   "cartonOfSubQualityProducts": "不合格产品箱数",
   "netWeightOfSubQualityProducts": "不合格产品净重(kg)",
-  "volumeOfSubQualityProducts": "不合格产品净重(kg)",
+  "volumeOfSubQualityProducts": "不合格产品体积(m³)",
   "grossWeightOfSubQualityProducts": "不合格产品毛重(kg)",
   "skuQuantity": "SKU款式数",
   "exit": "取消",

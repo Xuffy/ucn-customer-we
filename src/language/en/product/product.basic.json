@@ -109,5 +109,8 @@
   "goCompare":"Go Compare",
   "clearData":"Clear",
   "compareName":"Compare Name",
-  "compareItem":"Compare Item"
+  "compareItem":"Compare Item",
+  "picture":"Picture",
+  "invalid":"Invalid",
+  "valid":"Valid"
 }
