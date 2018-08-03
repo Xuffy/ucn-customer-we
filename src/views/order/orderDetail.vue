@@ -1633,7 +1633,7 @@
                             if (item.skuPictures) {
                                 item.skuPictures._image = false;
                             }
-                            item.skuLabelPic._image = false;
+                            item.skuLabelPics._image = false;
                             item.skuPkgMethodPic._image = false;
                             item.skuInnerCartonPic._image = false;
                             item.skuOuterCartonPic._image = false;

@@ -1014,7 +1014,7 @@
                     }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     v.skuInspectQuarantineCategory=v.skuInspectQuarantineCategory?_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code:'';
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
@@ -1032,6 +1032,7 @@
                     });
                 }
                 params.attachments=this.$refs.upload[0].getFiles();
+                // return console.log(this.$depthClone(params.skuList),'data')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     this.$router.push('/order/overview');
@@ -1109,7 +1110,7 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
@@ -1390,7 +1391,7 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
