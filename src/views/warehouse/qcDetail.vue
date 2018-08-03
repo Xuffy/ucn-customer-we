@@ -1085,7 +1085,6 @@
                 auth:'QC:LOG',
                 label: this.$i.common.log
             });
-            // this.$ajax.post('')
         },
         watch:{
             selectList(n){
