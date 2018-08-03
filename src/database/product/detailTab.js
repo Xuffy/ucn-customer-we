@@ -319,12 +319,12 @@ export default {
         belongTab:'priceInfo',
         accuracy:4
     },
-    refFobPrice:{
-        key:'refFobPrice',
-        showType:'number',
-        belongTab:'priceInfo',
-        accuracy:4
-    },
+    // refFobPrice:{
+    //     key:'refFobPrice',
+    //     showType:'number',
+    //     belongTab:'priceInfo',
+    //     accuracy:4
+    // },
     fobPort:{
         key:'fobPort',
         showType:'input',
@@ -348,12 +348,12 @@ export default {
         belongTab:'priceInfo',
         accuracy:4
     },
-    refCifPrice:{
-        key:'refCifPrice',
-        showType:'number',
-        belongTab:'priceInfo',
-        accuracy:4
-    },
+    // refCifPrice:{
+    //     key:'refCifPrice',
+    //     showType:'number',
+    //     belongTab:'priceInfo',
+    //     accuracy:4
+    // },
     cifCurrency:{
         key:'cifCurrency',
         showType:'select',
@@ -371,12 +371,12 @@ export default {
         belongTab:'priceInfo',
         accuracy:4
     },
-    refDduPrice:{
-        key:'refDduPrice',
-        showType:'number',
-        belongTab:'priceInfo',
-        accuracy:4
-    },
+    // refDduPrice:{
+    //     key:'refDduPrice',
+    //     showType:'number',
+    //     belongTab:'priceInfo',
+    //     accuracy:4
+    // },
     dduCurrency:{
         key:'dduCurrency',
         showType:'select',
@@ -451,7 +451,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
-        accuracy:3
+        accuracy:6
     },
     methodPkgCn:{
         key:'methodPkgCn',
