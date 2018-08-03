@@ -169,6 +169,7 @@
         containerInfo: [],
         mediatorDate: [],
         containerinfoMatch: [],
+        ProductFromOrderChecked: [],
         paymentSum: {},
         selectArr: {
           containerType: [],
@@ -294,6 +295,9 @@
         });
         return [obj];
       },
+      orderType(){
+        return this.pageTypeCurr== 'loadingListDetail' ? 37 : 30;
+      }, 
       attachmentReadonly() {
         return !this.edit;
       },
@@ -372,7 +376,8 @@
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]
       this.getDictionary()
-      this.basicInfoArr = _.map(this.$depthClone(this.$db.logistic.basicInfoObj), (value, key) => {
+      let obj = this.pageTypeCurr == 'placeLogisticPlan' ? this.$db.logistic.CreatPlanBasicInfoObj : this.$db.logistic.basicInfoObj;
+      this.basicInfoArr = _.map(this.$depthClone(obj), (value, key) => {
         return value;
       })
       this.ExchangeRateInfoArr = _.map(this.$db.logistic.ExchangeRateInfo, (value, key) => {
@@ -463,7 +468,6 @@
           this.addProductFromOrder();
         })
       },
-
       ProductFromOrderDetail(e){
         this.$windowOpen({url:'/product/sourcingDetail',params:{id:e.skuId.value}})
       },
@@ -471,7 +475,15 @@
         this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res=>{
           this.showAddProductDialog = true;
           this.ProductFromOrderRes = res.datas;
-          this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas);
+          this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas,el => {          
+            this.productList.forEach(item=>{
+              if(el.skuId.value==item.skuId.value) {
+                el._disabled = true;
+                el._checked = true;
+              }
+            })
+            return el;
+          });
           this.$nextTick(()=>{
             this.$set(this.pageParams,'pn',res.pn);
             this.$set(this.pageParams,'ps',res.ps);
@@ -497,7 +509,7 @@
         })
       },
       getPaymentList(logisticsNo) {
-        this.$ajax.post(`${this.$apis.get_payment_list}${logisticsNo}/30?moduleCode=LOGISTIC`).then(res => {
+        this.$ajax.post(`${this.$apis.get_payment_list}${logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`).then(res => {
           this.createdPaymentData(res)
         })
       },
@@ -716,6 +728,7 @@
           edit: true,
           no: res,
           status: 20,
+          orderType:this.orderType,
           currencyCode: obj.value || null
         }))
       },
@@ -735,7 +748,7 @@
           currency: this.selectArr.exchangeCurrency.find(a => a.code === currencyCode).id,
           currencyCode,
           orderNo: this.oldPlanObject.logisticsNo,
-          orderType: 30,
+          orderType: this.orderType,
           payToCompanyId,
           payToCompanyName: skuSupplierObj ? skuSupplierObj.skuSupplierName : null,
           type: 10
@@ -773,13 +786,18 @@
         this.ProductFromOrderChecked = arr;
       },
       closeAddProduct() {
-        let CheckedIdArr =  this.ProductFromOrderChecked.map(el => {
+        let CheckedIdArr =  this.ProductFromOrderChecked ? this.ProductFromOrderChecked.map(el => {
           return el.id.value;
-        })
-        let arr = CheckedIdArr.map(el=>{
+        }) : []
+        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
           return _.findWhere(this.ProductFromOrderRes,{id:el})
-        });
+        }) : [];
         this.showAddProductDialog = false
+        this.ProductFromOrderChecked.forEach((el,index) => {          
+          if(el._disabled) {
+            arr.splice(index,1);
+          }
+        });
         const selectArrData = this.$depthClone(arr);
         if (!arr.length || !selectArrData.length) return
         selectArrData.forEach((a,i) => {
@@ -788,8 +806,8 @@
           a.id = null
           a.vId = this.$getUUID();
           a.totalContainerGrossWeight = 0;
-          a.blSkuName = null
-          a.hsCode = null
+          a.blSkuName = null      
+          a.hsCode = null 
           a.currency = null
           a.toShipCartonQty = null
           a.toShipQty = null
@@ -809,6 +827,7 @@
           !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
         })
         this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
+        this.ProductFromOrderChecked= [];
       },
 
       selectProduct(arr) {
@@ -1164,6 +1183,7 @@
         padding-right: 10px;
         box-sizing: border-box;
         font-weight: bold;
+        color: #777;
       }
     }
     .product-header {

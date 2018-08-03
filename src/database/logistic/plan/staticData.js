@@ -17,6 +17,11 @@ export const basicInfoObj = {
     type: 'selector',
     value: null
   },
+  createDate: {
+    type: 'date',
+    value: null,
+    disabled:true 
+  },
   customerName: {
     type: 'input',
     value: null,
@@ -98,6 +103,103 @@ export const basicInfoObj = {
   }
 }
 
+
+export const CreatPlanBasicInfoObj = {
+  logisticsNo: {
+    type: 'input',
+    value: null,
+    disabled:true 
+  },
+  logisticsStatus: {
+    type: 'selector',
+    value: 2,
+    defaultVal: 2,
+    disabled:true 
+  },
+  shipmentStatus: {
+    type: 'selector',
+    value: null
+  },
+  customerName: {
+    type: 'input',
+    value: null,
+    disabled:true 
+  },
+  shipServiceProvider: {
+    type: 'input',
+    value: null
+  },
+  receiptCompany: {
+    type: 'input',
+    value: null,
+  },
+  shippingAgent: {
+    type: 'input',
+    value: null
+  },
+  exchangeCurrency: {
+    type: 'selector',
+    value: null,
+    _rules:{
+      required:true
+    }
+  },
+  payment: {
+    type: 'selector',
+    value: null,
+    _rules:{
+      required:true
+    }
+  },
+  paymentTerm: {
+    type: 'input',
+    value: null
+  },
+  transportationWay: {
+    type: 'input',
+    value: '海运',
+    defaultVal:'海运',
+    disabled:true 
+  },
+  loadingType: {
+    type: 'input',
+    value: '集装箱',
+    defaultVal:'集装箱',
+    disabled:true 
+  },
+  permitedForTransportation: {
+    type: 'selector',
+    value: null
+  },
+  blType: {
+    type: 'selector',
+    value: null
+  },
+  blQty: {
+    type: 'input',
+    value: '',
+    _rules:{
+      required:true,
+      type:'Number'
+    }
+  },
+  blNo: {
+    type: 'input',
+    value: null
+  },
+  shipper: {
+    type: 'input',
+    value: null
+  },
+  consignee: {
+    type: 'input',
+    value: null
+  },
+  notify: {
+    type: 'input',
+    value: null
+  }
+}
 
 export const dbBasicInfoObj ={
   "id": {

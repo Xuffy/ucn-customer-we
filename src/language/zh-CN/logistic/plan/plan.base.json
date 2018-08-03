@@ -146,7 +146,7 @@
   "quantityOfOuterCartonsToBeShipped": "预计发运箱数",
   "goodsToBeShipped": "预计发运数量",
   "send": "发送",
-  "exit": "",
+  "exit": "退出",
   "addProductFromOrder": "从订单添加产品",
   "detail": "详情",
   "factorySkuCode": "工厂货号",
