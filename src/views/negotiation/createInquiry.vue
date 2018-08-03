@@ -198,8 +198,9 @@ export default {
       tabColumn: '', // tab top
       tabData: [], // tab Data
       textarea: '',
-      initDetailIds: []
-    }
+      initDetailIds: [],
+      sdbo: null
+    };
   },
   components: {
     'select-search': selectSearch,
@@ -251,6 +252,16 @@ export default {
     this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
     this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+
+    this.sdbo = this.$db.inquiry.productInfo;
+
+    for (let field in this.sdbo) {
+      let note = this.sdbo[field]._i_note;
+      if (note) {
+        this.sdbo[field]._note = this.$i.inquiry[note];
+      }
+    }
+    console.log(this.sdbo);
 
     Promise.all([codeUtils.getInquiryDicCodes(this), codeUtils.getCotegories(this), this.getSuppliers('')]).then(res => {
       let data = res[0];
@@ -361,7 +372,7 @@ export default {
           }
         }
         this.fromArg = res;
-        this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), item => {
+        this.tabData = this.$getDB(this.sdbo, this.$refs.HM.getFilterData(res.details, 'skuId'), item => {
           this.$filterDic(item);
           _.map(item, val => {
             val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
@@ -532,7 +543,7 @@ export default {
       }
       this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids)
         .then(res => {
-          let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
+          let arr = this.$getDB(this.sdbo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
             this.$filterDic(item);
           });
           this.tabData = arr.concat(this.tabData);
@@ -549,7 +560,7 @@ export default {
       });
       if (this.fromArg.quotationNo) {
         this.$ajax.get(this.$apis.GET_INQUIRY_SKU_HISTORY + `?quotationNo=${this.fromArg.quotationNo}&skuCode=${item.skuCode.value}`).then(res => {
-          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuCode')), type === 'modify');
+          this.$refs.HM.init(arr, this.$getDB(this.sdbo, this.$refs.HM.getFilterData(res, 'skuCode')), type === 'modify');
         });
       } else if (type === 'modify') {
         this.$refs.HM.init(arr, [], true);
