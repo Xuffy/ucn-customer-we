@@ -20,6 +20,7 @@
                                         v-model="formData[v.key]"
                                         :list="v._list"
                                         :defaultProps="v._defaultProps"
+                                        :checkInputBoxPl="$i.product.pleaseChoose"
                                         :expandOnClickNode="false">
                                 </drop-down-single>
                             </div>
@@ -81,6 +82,7 @@
                                         v-model="formData[v.key]"
                                         :list="v._list"
                                         :defaultProps="v._defaultProps"
+                                        :checkInputBoxPl="$i.product.pleaseChoose"
                                         :expandOnClickNode="false">
                                 </drop-down-single>
                             </div>
@@ -311,12 +313,12 @@
                 return this.$ajax.all([unitAjax,countryAjax]);
             },
 
-
             /**
              *  一些事件
              * */
             search(){
                 this.disabledSearch=true;
+                this.formData.pn=1;
                 this.$emit('search',this.$depthClone(this.formData));
             },
             clear(){
@@ -342,13 +344,12 @@
                 console.log(this.$depthClone(e.sorts[0]),'e')
                 this.$emit('change-sort',e);
             },
-
         },
         created(){
             this.init();
         },
         watch:{
-            tableData(n){
+            tableData(){
                 this.disabledSearch=false;
             }
         },

@@ -152,8 +152,9 @@
   "totalVolume": "Total Volume of Outer Carton(m³)",
   "paidAmount": "Paid Amount",
   "unpaidAmount": "Unpaid Amount",
-  "orderTotalNetWeight":"Order Total Net Weight(kg)",
-  "orderTotalGrossWeight":"Order Total Gross Weight(kg)",
-  "orderTotalVolume":"Order Total Volume(m³)",
-  "inquiryNo":"Inquiry No"
+  "orderTotalNetWeight": "Order Total Net Weight(kg)",
+  "orderTotalGrossWeight": "Order Total Gross Weight(kg)",
+  "orderTotalVolume": "Order Total Volume(m³)",
+  "inquiryNo": "Inquiry No",
+  "skuLabelPics": "SKU Label Pics"
 }

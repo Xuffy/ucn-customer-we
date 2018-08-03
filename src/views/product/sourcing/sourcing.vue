@@ -118,7 +118,6 @@
                 this.loadingTable = true;
                 this.$ajax.post(this.$apis.get_buyerProductList, params).then(res => {
                     this.productData = this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
-
                         let noneSellCountry = "";
                         e.noneSellCountry.value.split(",").forEach(v => {
                             this.countryOption.forEach(m => {
