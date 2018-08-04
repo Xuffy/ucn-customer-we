@@ -33,8 +33,6 @@ export default {
         _hide:true
     },
     skuPic:{
-        _slot:'skuPictures',
-        type:'pic',
         _image:true,
         key:'skuPictures',
         _upload: {

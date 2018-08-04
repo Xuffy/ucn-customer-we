@@ -18,6 +18,7 @@ export default {
         _image:true,
         key:'pictures',
         _fixed:'left',
+        _sort:false
     },
     code:{
         _fixed:'left'
@@ -29,19 +30,19 @@ export default {
 
     },
     descCn:{
-
+        _sort:false
     },
     nameEn:{
 
     },
     descEn:{
-
+        _sort:false
     },
     nameCustomer:{
 
     },
     descCustomer:{
-
+        _sort:false
     },
     customerSkuCode:{
 
@@ -56,7 +57,7 @@ export default {
 
     },
     formation:{
-
+        _sort:false
     },
     materialEn:{
 
@@ -77,13 +78,14 @@ export default {
 
     },
     design:{
-
+        _sort:false
     },
     categoryName:{
-        key:"categoryName"
+        key:"categoryName",
+        _sort:false
     },
     barcode:{
-
+        _sort:false
     },
     readilyAvailable:{
 
@@ -104,7 +106,7 @@ export default {
 
     },
     comments:{
-
+        _sort:false
     },
     fobCurrency:{
 
@@ -116,7 +118,7 @@ export default {
         _sort:false
     },
     fobPort:{
-
+        _sort:false
     },
     exwPrice:{
 
@@ -129,17 +131,19 @@ export default {
         _sort:false
     },
     cifCurrency:{},
-    cifArea:{},
+    cifArea:{
+        _sort:false
+    },
     dduPrice:{},
     refDduPrice:{
         _sort:false
     },
     dduCurrency:{},
-    dduArea:{},
-
+    dduArea:{
+        _sort:false
+    },
     rateValueAddedTax:{
       _toFixed:2
-
     },
     taxRefundRate:{
 
@@ -166,7 +170,7 @@ export default {
 
     },
     declareElement:{
-
+        _sort:false
     },
     origin:{
 
@@ -175,28 +179,25 @@ export default {
 
     },
     brand:{
-
+        _sort:false
     },
     brandRemark:{
-
+        _sort:false
     },
     brandRelated:{
-
+        _sort:false
     },
     certificat:{
-
+        _sort:false
     },
-
-
-
     unitWeight:{
-
+        _sort:false
     },
     unitLength:{
-
+        _sort:false
     },
     unitVolume:{
-
+        _sort:false
     },
     length:{
 
@@ -214,10 +215,10 @@ export default {
 
     },
     methodPkgCn:{
-
+        _sort:false
     },
     methodPkgEn:{
-
+        _sort:false
     },
     innerCartonUnit:{
 
@@ -244,19 +245,19 @@ export default {
 
     },
     innerCartonDesc:{
-
+        _sort:false
     },
     innerCartonMethodCn:{
-
+        _sort:false
     },
     innerCartonMethodEn:{
-
+        _sort:false
     },
     outerCartonUnit:{
 
     },
     outerCartonDesc:{
-
+        _sort:false
     },
     innerCartonOuterNum:{
 
@@ -283,18 +284,14 @@ export default {
 
     },
     outerCartonMethodCn:{
-
+        _sort:false
     },
     outerCartonMethodEn:{
-
+        _sort:false
     },
     oem:{
 
     },
-
-
-
-
     gp20SkuQty:{
 
     },
@@ -311,13 +308,13 @@ export default {
 
     },
     specialTransportRequire:{
-
+        _sort:false
     },
     inventoryCostMethod:{
-
+        _sort:false
     },
     warehourceDefault:{
-
+        _sort:false
     },
     inventory:{        //自有库存?????不知道对不对
 
@@ -329,16 +326,16 @@ export default {
 
     },
     mainSaleCountry:{
-
+        _sort:false
     },
     mainSaleArea:{
-
+        _sort:false
     },
     productionDates:{
 
     },
     qualityStander:{
-
+        _sort:false
     },
     yearListed:{
 
@@ -353,10 +350,10 @@ export default {
 
     },
     otherPackInfoCn:{
-
+        _sort:false
     },
     otherPackInfoEn:{
-
+        _sort:false
     },
     adjustPackage:{
 
