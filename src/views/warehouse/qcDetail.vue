@@ -707,6 +707,7 @@
                     payToCompanyName: this.qcDetail.serviceName,
                     currency: 0,
                     currencyCode: '',
+                    moduleCode: 'WAREHOUSE'
                 };
                 this.currencyOption.forEach(v=>{
                     if(v.code===this.qcDetail.exchangeCurrencyDictCode){
