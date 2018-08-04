@@ -444,11 +444,61 @@
                         this.productConfig.ids = this.$route.query.ids.split(",");
                         this.loadingProductTable = true;
                         this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
-                            res.forEach(v => {
-                                if (v.id !== 0) {
-                                    this.productTableData.push(v);
-                                }
-                            });
+                            this.loadingProductTable = false;
+                        this.productTableData = []
+                        _.map(res, v => {
+                            if (v.id !== 0) {
+                                // let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
+                                //     , vo = _.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}
+                                //     , wo = _.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}
+                                //     , lo = _.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {};
+                                v.skuUnitDictCode = v.skuUnitDictCode ? (_.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}).name : "";
+                                v.volumeUnitDictCode = v.volumeUnitDictCode ? (_.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}).name : '';
+                                v.weightUnitDictCode = v.weightUnitDictCode ? (_.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}).name : '';
+                                v.lengthUnitDictCode =  v.lengthUnitDictCode ? (_.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {}).name : '';
+                                v.skuQcResultDictCode = '';
+                                v.checkOuterCartonQty = '';
+                                v.qcPic = '';
+                                v.remark = '';
+                                v.shippingMarkResultDictCode = '';
+                                v.outerCartonBarCodeResultDictCode = '';
+                                v.innerPackingBarCodeResultDictCode = '';
+                                v.skuLabelResultDictCode = '';
+                                v.skuBarCodeResultDictCode = '';
+                                v.unqualifiedSkuGrossWeight = '';
+                                v.qualifiedSkuGrossWeight = '';
+                                v.unqualifiedSkuVolume = '';
+                                v.qualifiedSkuVolume = '';
+                                v.unqualifiedSkuNetWeight = '';
+                                v.qualifiedSkuNetWeight = '';
+                                v.unqualifiedSkuQty = '';
+                                v.qualifiedSkuQty = '';
+                                v.actSkuQty = '';
+                                v.unqualifiedSkuCartonTotalQty = '';
+                                v.qualifiedSkuCartonTotalQty = '';
+                                v.actSkuCartonTotalQty = '';
+                                v.outerCartonGrossWeight = '';
+                                v.actInnerCartonSkuQty = '';
+                                v.innerCartonSkuQty = '';// 来自Order
+                                v.actOuterCartonInnerBoxQty = '';
+                                v.outerCartonInnerBoxQty = '';// 来自Order
+                                v.actOuterCartonSkuQty = '';
+                                v.unqualifiedProcessingMode = '';
+                                v.samplingRate = '';
+                                this.productTableData.push(v);
+                            }
+                        });
+                        let arr = this.$copyArr(this.productTableData)
+                        arr = this.$getDB(this.$db.warehouse.createQcProductTable, arr);
+                        this.$refs.filterColumn.update(false, arr).then(data => {
+                            this.productTableData = this.$refs.filterColumn.getFilterData(arr, data);
+                            this.columnConfig = this.productTableData[0];
+                        });
+                            // res.forEach(v => {
+                            //     if (v.id !== 0) {
+                            //         this.productTableData.push(v);
+                            //     }
+                            // });
                         }).finally(err => {
                             this.loadingProductTable = false;
                         });
@@ -624,14 +674,14 @@
                         this.productTableData = []
                         _.map(res, v => {
                             if (v.id !== 0) {
-                                let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
-                                    , vo = _.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}
-                                    , wo = _.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}
-                                    , lo = _.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {};
-                                v.skuUnitDictCode = suo.name || "";
-                                v.volumeUnitDictCode = vo.name || "";
-                                v.weightUnitDictCode = wo.name || "";
-                                v.lengthUnitDictCode = lo.name || "";
+                                // let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
+                                //     , vo = _.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}
+                                //     , wo = _.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}
+                                //     , lo = _.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {};
+                                v.skuUnitDictCode = v.skuUnitDictCode ? (_.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}).name : "";
+                                v.volumeUnitDictCode = v.volumeUnitDictCode ? (_.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}).name : '';
+                                v.weightUnitDictCode = v.weightUnitDictCode ? (_.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}).name : '';
+                                v.lengthUnitDictCode =  v.lengthUnitDictCode ? (_.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {}).name : '';
                                 v.skuQcResultDictCode = '';
                                 v.checkOuterCartonQty = '';
                                 v.qcPic = '';
