@@ -277,6 +277,7 @@
                 code="uorder_sku_list"
                 @closed="$refs.table.update()"
                 @save="saveNegotiate"
+                :beforeSave="beforeSave"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
             <!--<v-upload :limit="20" readonly></v-upload>-->
@@ -869,9 +870,9 @@
         methods:{
             ...mapActions(['setMenuLink']),
             send(){
-                // if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
-                //     return;
-                // }
+                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
+                    return;
+                }
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
@@ -881,27 +882,16 @@
                         params.supplierCompanyId=v.companyId;
                     }
                 });
+
                 params.skuList=this.dataFilter(this.productTableData);
-                console.log(this.$depthClone(params.skuList),'params.skuList')
                 /**
                  * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
                  * */
-                let hasCode=true;
-                _.map(params.skuList,v=>{
-                    if(!v.skuDescCustomer || !v.skuNameCustomer || !v.skuCustomerSkuCode){
-                        hasCode=false;
+                for(let val in params.skuList){
+                    if(this.$validateForm(params.skuList[val], this.$db.order.productInfoTableCreate)){
+                        return;
                     }
-                });
-                if(!hasCode){
-                    return this.$message({
-                        message: '字段必填哦',
-                        type: 'warning'
-                    });
                 }
-
-
-
-                return console.log(this.$depthClone(params.skuList),'params.skuList')
                 let rightCode=true;
                 _.map(params.skuList,v=>{
                     if(v.skuSupplierCode!==params.supplierCode){
@@ -1288,6 +1278,15 @@
             },
             handleCancel(){
                 this.productTableDialogVisible=false;
+            },
+            beforeSave(data){
+                let obj={};
+                _.map(data[0],(val,key)=>{
+                    obj[key]=val.value;
+                });
+                if(this.$validateForm(obj, this.$db.order.productInfoTableCreate)){
+                    return false;
+                }
             },
             saveNegotiate(e){
                 _.map(this.productTableData,(v,k)=>{
