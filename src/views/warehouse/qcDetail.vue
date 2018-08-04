@@ -766,7 +766,8 @@
                     this.loadingPaymentTable=true;
                     this.$ajax.post(this.$apis.abandon_qcPayment,{
                         id:e.id,
-                        version:e.version
+                        version:e.version,
+                        moduleCode: 'WAREHOUSE'
                     }).then(res=>{
                         this.$message({
                             type: 'success',
@@ -791,7 +792,8 @@
                     this.loadingPaymentTable=true;
                     this.$ajax.post(this.$apis.recover_qcPayment,{
                         id:e.id,
-                        version:e.version
+                        version:e.version,
+                        moduleCode: 'WAREHOUSE'
                     }).then(res=>{
                         this.$message({
                             type: 'success',
