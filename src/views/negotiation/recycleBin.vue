@@ -22,6 +22,8 @@
 <script>
 import { VTable, selectSearch } from '@/components/index';
 import { mapActions } from 'vuex';
+import codeUtils from '@/lib/code-utils';
+
 export default {
   name: '',
   data() {
@@ -31,7 +33,7 @@ export default {
       checkedArg: [],
       tabData: [],
       options: [],
-      bodyData: {
+      params: {
         operatorFilters: [],
         ps: 50,
         pn: 1
@@ -65,7 +67,7 @@ export default {
           operator: 'like'
         }];
         this.title = this.$i.common.inquiryRecycleBin;
-        this.bodyData.recycleCustomer = 1;
+        this.params.recycleCustomer = 1;
         break;
       case 'compare':
         this.options = [{
@@ -77,7 +79,7 @@ export default {
           label: this.$i.inquiry.compareItems
         }];
         this.title = this.$i.common.archive;
-        this.bodyData.recycle = 1;
+        this.params.recycle = 1;
         // recycleSupplier
         break;
     }
@@ -85,13 +87,13 @@ export default {
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
 
     this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
-      .then(data => this.setDic(data))
+      .then(data => this.setDic(codeUtils.convertDicValueType(data)))
       .then(this.getList);
   },
   methods: {
     ...mapActions(['setMenuLink', 'setDic']),
     getInquiryList() { // 获取inquirylist
-      this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData).then(res => {
+      this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.params).then(res => {
         this.pageTotal = res.tc;
         this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas, (item) => {
           this.$filterDic(item);
@@ -104,7 +106,7 @@ export default {
       });
     },
     getCompare() { // 获取compare
-      this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData).then(res => {
+      this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.params).then(res => {
         let data = res.datas;
         this.tabLoad = false;
         data.forEach(item => {
@@ -116,10 +118,10 @@ export default {
     },
     searchEnter(option, operatorFilters) { // 搜索框
       if (option.id === 'quotationNoLike' && option.value) {
-        this.bodyData.quotationNoLike = option.value;
+        this.params.quotationNoLike = option.value;
       } else {
-        this.bodyData.quotationNoLike = null;
-        this.bodyData.operatorFilters = operatorFilters;
+        this.params.quotationNoLike = null;
+        this.params.operatorFilters = operatorFilters;
       }
       this.getList();
     },
@@ -154,7 +156,7 @@ export default {
       this.checkedArg = arr;
     },
     onListSortChange(args) {
-      this.bodyData.sorts = args.sorts;
+      this.params.sorts = args.sorts;
       this.getList();
     },
     getList() {
