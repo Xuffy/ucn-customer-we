@@ -115,7 +115,7 @@ export default {
   get_qcPaymentData: ['/payment/list/{orderNo}/{orderType}?moduleCode={moduleCode}', 'BASE_URL'],
   get_qcPaymentNo: ['/payment/genNo', 'BASE_URL'],
   save_qcPayment: ['/payment/save?moduleCode={moduleCode}', 'BASE_URL'],
-  update_qcPayment: ['/payment/update', 'BASE_URL'],
+  update_qcPayment: ['/payment/update?moduleCode={moduleCode}', 'BASE_URL'],
   abandon_qcPayment: ['/payment/abandon/{id}?version={version}', 'BASE_URL'],
   recover_qcPayment: ['/payment/recover/{id}?version={version}', 'BASE_URL'],
   RESTART_QC:['/qc/rework','BASE_URL'],
