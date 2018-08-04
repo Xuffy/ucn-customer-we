@@ -744,10 +744,8 @@
                 code="uorder_sku_list"
                 @closed="$refs.table.update()"
                 @save="saveNegotiate"
+                :beforeSave="beforeSave"
                 ref="HM">
-            <!--<div slot="skuPic" slot-scope="{data}">-->
-            <!--<v-upload :limit="20" readonly></v-upload>-->
-            <!--</div>-->
             <el-select
                     slot="skuFobCurrency"
                     v-model="data.value"
@@ -1525,16 +1523,7 @@
                 country = this.$ajax.get(this.$apis.COUNTRY_ALL, {}, { cache: true });
                 exchangeRate = this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY, {}, { cache: true });
                 unit = this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "ORDER_STATUS", "SKU_SALE_STATUS", "SKU_STATUS", "PAYMENT_ITEM_NAME"], { cache: true });
-                this.skuStatusOption = [
-                    {
-                        code: "PROCESS",
-                        name: "PROCESS"
-                    },
-                    {
-                        code: "CANCELED",
-                        name: "CANCELED"
-                    }
-                ];
+                this.skuStatusOption=[];
                 this.$ajax.all([currency, country, exchangeRate, unit]).then(res => {
                     this.currencyOption = res[0];
                     this.countryOption = res[1];
@@ -1572,6 +1561,11 @@
                             this.skuSaleStatusOption = v.codes;
                         } else if (v.code === "SKU_STATUS") {
                             this.skuStatusTotalOption = v.codes;
+                            _.map(this.skuStatusTotalOption,(v,k)=>{
+                                if(k===1 || k===3){
+                                    this.skuStatusOption.push(v);
+                                }
+                            });
                         } else if (v.code === "PAYMENT_ITEM_NAME") {
                             this.paymentItemOption = v.codes;
                         }
@@ -1770,13 +1764,24 @@
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
+                return console.log(this.$depthClone(params.skuList),'params.skuList')
+
+                /**
+                 * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
+                 * */
+                for (let val in params.skuList) {
+                    if (this.$validateForm(params.skuList[val], this.$db.order.productInfoTable)) {
+                        return;
+                    }
+                }
+
                 let rightCode = true;
                 _.map(params.skuList, v => {
                     if (v.skuSupplierCode !== params.supplierCode) {
                         rightCode = false;
                     }
                     v.skuSample = v.skuSample === "1" ? true : false;
-                    v.skuInspectQuarantineCategory =  (_.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }) || {}).code;
+                    v.skuInspectQuarantineCategory = (_.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }) || {}).code;
                     let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
@@ -1966,9 +1971,9 @@
                             arr.push(v);
                         }
                     });
-                    this.getHistory(e, arr, true).then(data=>{
-                        this.chooseProduct =data;
-                    })
+                    this.getHistory(e, arr, true).then(data => {
+                        this.chooseProduct = data;
+                    });
                 }
                 else if (type === "detail") {
                     this.$windowOpen({
@@ -1995,14 +2000,14 @@
                 };
 
                 return this.$ajax.post(this.$apis.ORDER_HISTORY, param).then(res => {
-                    let array = [],obj={};
+                    let array = [], obj = {};
                     _.map(res.datas, v => {
-                        obj=JSON.parse(v.history);
-                        obj.fieldRemark=JSON.parse(v.fieldsRemark);
+                        obj = JSON.parse(v.history);
+                        obj.fieldRemark = JSON.parse(v.fieldsRemark);
                         array.push(obj);
                     });
 
-                    let history = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode",true), item => {
+                    let history = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode", true), item => {
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
                         }
@@ -2120,6 +2125,15 @@
             handleCancel() {
                 this.productTableDialogVisible = false;
             },
+            beforeSave(data) {
+                let obj = {};
+                _.map(data[0], (val, key) => {
+                    obj[key] = val.value;
+                });
+                if (this.$validateForm(obj, this.$db.order.productInfoTable)) {
+                    return false;
+                }
+            },
             saveNegotiate(e) {
                 _.map(this.productTableData, (v, k) => {
                     _.map(e, m => {
@@ -2230,7 +2244,7 @@
                     });
                 }
                 this.disableClickDunning = true;
-                this.$ajax.post(this.$apis.PAYMENT_DUNNING, params).then(res => {
+                this.$ajax.post(`${this.$apis.PAYMENT_DUNNING}?moduleCode=ORDER`, params).then(res => {
                     this.getPaymentData();
                     this.$message({
                         message: this.$i.order.dunSuccess,
@@ -2425,8 +2439,8 @@
                         }
                         else {
                             const values = data.map(item => {
-                                if(item.status===40){
-                                    return Number(item[column.property])
+                                if (item.status === 40) {
+                                    return Number(item[column.property]);
                                 }
                             });
                             if (!values.every(value => isNaN(value))) {
@@ -2496,28 +2510,28 @@
                 if (this.savedIncoterm === "1") {
                     //fob
                     if (obj.skuFobPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = Number((obj.skuFobPrice.value * obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(Number(obj.skuFobPrice.value * obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.savedIncoterm === "2") {
                     //exw
                     if (obj.skuExwPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = Number((obj.skuExwPrice.value * obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(Number(obj.skuExwPrice.value * obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.savedIncoterm === "3") {
                     //cif
                     if (obj.skuCifPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = Number((obj.skuCifPrice.value * obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(Number(obj.skuCifPrice.value * obj.skuQty.value),4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.savedIncoterm === "4") {
                     //ddu
                     if (obj.skuDduPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = Number((obj.skuDduPrice.value * obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(Number(obj.skuDduPrice.value * obj.skuQty.value),4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
@@ -2602,7 +2616,7 @@
             changeChecked() {
 
             },
-            
+
             /**
              * message board事件
              * */
@@ -2673,7 +2687,7 @@
                         rightCode = false;
                     }
                     v.skuSample = v.skuSample === "1" ? true : false;
-                    v.skuInspectQuarantineCategory =  (_.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }) || {}).code;
+                    v.skuInspectQuarantineCategory = (_.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }) || {}).code;
                     let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
@@ -2695,7 +2709,7 @@
                 this.$ajax.post(this.$apis.ORDER_MESSAGE_TALK, params).then(res => {
 
                 });
-            },
+            }
         },
         created() {
             this.getOrderNo();
