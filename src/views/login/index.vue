@@ -26,7 +26,6 @@
         language: config.LANGUAGE,
         redirect: Base64.encodeURI(`${window.location.origin}/static/authorize/index.html`)
       });
-      console.log(params,'params')
       let redirectUrl = `?${params}`;
       this.$message.closeAll();
       this.loginUrl = config.ENV.LOGIN_URL + redirectUrl;
