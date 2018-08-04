@@ -387,7 +387,7 @@
             this.setMenuLink({
                 path: "/order/draft",
                 type: 10,
-                auth: "ORDER:DRAFT_OVERVIEW",
+
                 label: this.$i.common.draft
             });
             this.setMenuLink({
@@ -400,13 +400,13 @@
             this.setMenuLink({
                 path: "/order/archiveOrder",
                 type: 30,
-                auth: "ORDER:OVERVIEW:ARCHIVE_LINK",
+                auth: "ORDER:OVERVIEW:ARCHIVE",
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: "/order/archiveDraft",
                 type: 40,
-                auth: "ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK",
+                auth: "ORDER:OVERVIEW:ARCHIVE",
                 label: this.$i.order.archiveDraft
             });
         },
