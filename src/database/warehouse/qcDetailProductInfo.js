@@ -16,7 +16,8 @@ export default{
     },
     skuQcResultDictCode: {
         key: 'skuQcResultDictCode',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     skuInventoryStatusDictCode:{
         key: 'skuInventoryStatusDictCode',
@@ -103,7 +104,8 @@ export default{
     },
     skuLength: {
         key: 'skuLength',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     skuWidth: {
         key: 'skuWidth',
@@ -270,7 +272,8 @@ export default{
     },
     skuBarCode:{
         key: 'skuBarCode',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     productBarCodeResults:{
         key: 'skuBarCodeResultDictCode',
@@ -278,7 +281,8 @@ export default{
     },
     skuLabel:{
         key: 'skuLabel',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     productLabelResults:{
         key: 'skuLabelResultDictCode',
@@ -290,7 +294,8 @@ export default{
     },
     innerPackingBarCodeResults:{
         key: 'innerPackingBarCodeResultDictCode',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     outerCartonBarCode:{
         key: 'outerCartonBarCode',
@@ -298,11 +303,13 @@ export default{
     },
     outerCartonBarCodeResults:{
         key: 'outerCartonBarCodeResultDictCode',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     shippingMark:{
         key: 'shippingMark',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     outerCartonMarksResults:{
         key: 'shippingMarkResultDictCode',
@@ -312,7 +319,8 @@ export default{
         key: 'qcPics',
         type: 'String',
         _image:true,
-        _sort:false
+        _sort:false,
+        isFWS: true
     },
     checkOuterCartons:{
         key: 'checkOuterCartonQty',

@@ -43,7 +43,7 @@
   "exit": "Exit",
   "skuQcResult": "SKU QC Result",
   "actQtyOfOuterCarton": "SKU QTY of Outer Carton",
-  "actQuantityOfInnerBoxOuterCarton": "Act. SKU QTY of Outer Carton",
+  "actQuantityOfInnerBoxOuterCarton": "Act. QTY of Inner Box in Outer Carton",
   "actualQuantityInnerCarton": "QTY of Inner Box in Outer Carton",
   "checkOuterCartons": "Checked Outer Carton QTY",
   "outerCartonMarksResults": "Outer Carton Marks",

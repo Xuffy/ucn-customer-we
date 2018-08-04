@@ -31,7 +31,7 @@
       :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle" :selectArr="selectArr"/>
 
     <!-- 日期列表 -->
-    <dateInfo :listData="mediatorDate" :selectArr="selectArr" :basicInfoArr="basicInfoArr" :shipmentStatus="shipmentStatus" :edit="edit" :title="$i.logistic.dateInfo" @shipmentStatus="changeShipmentStatus" @modifyTime="modifyTimeData"></dateInfo>  
+    <dateInfo :listData="mediatorDate" :selectArr="selectArr" :basicInfoArr="basicInfoArr" :shipmentStatus="shipmentStatus" :edit="edit" :title="$i.logistic.dateInfo" @shipmentStatus="changeShipmentStatus" @modifyTime="modifyTimeData"></dateInfo>
     <!-- <form-list :DeliveredEdit="deliveredEdit" name="dateInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun"
       :listData="mediatorDate" :edit="edit" :title="$i.logistic.dateInfo" :selectArr="selectArr"/> -->
 
@@ -97,7 +97,7 @@
       :logisticsStatus="logisticsStatus" :listData="mediatorDate" :selectArr="selectArr" @sendData="sendData" :isCopy="isCopy" :shipmentStatus="shipmentStatus" @shipmentStatus="changeShipmentStatus"/>
     <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext"
       :code="configUrl[pageName]&&configUrl[pageName].setTheField"
-      @closed="$refs.productInfo.update()" 
+      @closed="$refs.productInfo.update()"
       @change ="autoComputed">
     </v-history-modify>
   </div>
@@ -131,7 +131,7 @@
         shipmentStatus:0,
         planId: '',
         fieldDisplay: null,
-        pageParams: {          
+        pageParams: {
           pn: 1,
           ps: 10,
           skuSupplierIds:[]
@@ -169,6 +169,7 @@
         containerInfo: [],
         mediatorDate: [],
         containerinfoMatch: [],
+        ProductFromOrderChecked: [],
         paymentSum: {},
         selectArr: {
           containerType: [],
@@ -294,6 +295,9 @@
         });
         return [obj];
       },
+      orderType(){
+        return this.pageTypeCurr== 'loadingListDetail' ? 37 : 30;
+      },
       attachmentReadonly() {
         return !this.edit;
       },
@@ -330,7 +334,7 @@
         path: '',
         query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
         type: 100,
-        auth: (()=>{ 
+        auth: (()=>{
           let code = null;
           if(this.pageTypeCurr=="logisticPlanDetail"){
             code = 'LOGISTICS:LOG';
@@ -372,7 +376,8 @@
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]
       this.getDictionary()
-      this.basicInfoArr = _.map(this.$depthClone(this.$db.logistic.basicInfoObj), (value, key) => {
+      let obj = this.pageTypeCurr == 'placeLogisticPlan' ? this.$db.logistic.CreatPlanBasicInfoObj : this.$db.logistic.basicInfoObj;
+      this.basicInfoArr = _.map(this.$depthClone(obj), (value, key) => {
         return value;
       })
       this.ExchangeRateInfoArr = _.map(this.$db.logistic.ExchangeRateInfo, (value, key) => {
@@ -463,7 +468,6 @@
           this.addProductFromOrder();
         })
       },
-
       ProductFromOrderDetail(e){
         this.$windowOpen({url:'/product/sourcingDetail',params:{id:e.skuId.value}})
       },
@@ -471,7 +475,15 @@
         this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res=>{
           this.showAddProductDialog = true;
           this.ProductFromOrderRes = res.datas;
-          this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas);
+          this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas,el => {
+            this.productList.forEach(item=>{
+              if(el.skuId.value==item.skuId.value) {
+                el._disabled = true;
+                el._checked = true;
+              }
+            })
+            return el;
+          });
           this.$nextTick(()=>{
             this.$set(this.pageParams,'pn',res.pn);
             this.$set(this.pageParams,'ps',res.ps);
@@ -497,7 +509,7 @@
         })
       },
       getPaymentList(logisticsNo) {
-        this.$ajax.post(`${this.$apis.get_payment_list}${logisticsNo}/30?moduleCode=LOGISTIC`).then(res => {
+        this.$ajax.post(`${this.$apis.get_payment_list}${logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`).then(res => {
           this.createdPaymentData(res)
         })
       },
@@ -526,7 +538,7 @@
           }
         })
         this.shipmentStatus = this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value
-        //日期信息  
+        //日期信息
         this.mediatorDate = this.$getDB(this.$db.logistic.dateInfo,[res])
         // 未开船：Undepartured（初始状态，未到实际订舱日期时默认未开船状态）、
         // 已放舱：Release Space，当前置状态是已订舱，发运状态可下拉选择已放舱或已提柜、
@@ -672,7 +684,7 @@
           vgm: 0
         };
         this.containerInfo.push(obj);
-        this.oldPlanObject.containerDetail.push(obj);
+        this.oldPlanObject.containerDetail && this.oldPlanObject.containerDetail.push(obj);
         this.containerinfoMatch.push(obj);
       },
       arraySplite(array, index) {
@@ -710,12 +722,13 @@
           this.$refs.HM.init(this.productModifyList, []);
         }
       },
-      addPayment() {       
+      addPayment() {
         const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
         this.$ajax.post(`${this.$apis.get_payment_no}?moduleCode=LOGISTIC`).then(res => this.paymentList.push({
           edit: true,
           no: res,
           status: 20,
+          orderType:this.orderType,
           currencyCode: obj.value || null
         }))
       },
@@ -735,7 +748,7 @@
           currency: this.selectArr.exchangeCurrency.find(a => a.code === currencyCode).id,
           currencyCode,
           orderNo: this.oldPlanObject.logisticsNo,
-          orderType: 30,
+          orderType: this.orderType,
           payToCompanyId,
           payToCompanyName: skuSupplierObj ? skuSupplierObj.skuSupplierName : null,
           type: 10
@@ -773,13 +786,18 @@
         this.ProductFromOrderChecked = arr;
       },
       closeAddProduct() {
-        let CheckedIdArr =  this.ProductFromOrderChecked.map(el => {
+        let CheckedIdArr =  this.ProductFromOrderChecked ? this.ProductFromOrderChecked.map(el => {
           return el.id.value;
-        })
-        let arr = CheckedIdArr.map(el=>{
+        }) : []
+        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
           return _.findWhere(this.ProductFromOrderRes,{id:el})
-        });
+        }) : [];
         this.showAddProductDialog = false
+        this.ProductFromOrderChecked.forEach((el,index) => {
+          if(el._disabled) {
+            arr.splice(index,1);
+          }
+        });
         const selectArrData = this.$depthClone(arr);
         if (!arr.length || !selectArrData.length) return
         selectArrData.forEach((a,i) => {
@@ -809,6 +827,7 @@
           !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
         })
         this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
+        this.ProductFromOrderChecked= [];
       },
 
       selectProduct(arr) {
@@ -963,7 +982,7 @@
       download(){
         let code;
         if(this.pageTypeCurr=="loadingListDetail"){
-          code = 'LOGISTICS_ORDER';         
+          code = 'LOGISTICS_ORDER';
         }else{
           code = 'LOGISTICS_PLAN';
         }
@@ -1164,6 +1183,7 @@
         padding-right: 10px;
         box-sizing: border-box;
         font-weight: bold;
+        color: #777;
       }
     }
     .product-header {

@@ -76,7 +76,7 @@ export default {
   "toShipQty": {
     type: 'String',
     _disabled: true,
-    typeSlef: 'String',
+    typeSlef: 'text',
     _important: true
   },
   "skuOuterCartonQty": {

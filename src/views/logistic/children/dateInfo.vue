@@ -111,10 +111,10 @@
         return ((new Date(d1.replace(/-/g,"\/"))) - (new Date(d2.replace(/-/g,"\/"))));
       },
       modifyTime(arg,key){
-        let _shipmentStatus = this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value
-        this.BookingTime = this.$dateFormat(new Date(this.listData[0].bookingDate.value),'yyyy-mm-dd');
-        this.LoadingTime = this.$dateFormat(new Date(this.listData[0].actContainerStuffingDate.value),'yyyy-mm-dd');
-        this.cleanceTime = this.$dateFormat(new Date(this.listData[0].actCustomsCleanceDate.value),'yyyy-mm-dd');
+        let _shipmentStatus = this.basicInfoArr.length ? this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value : 0;
+        this.BookingTime = this.listData[0].bookingDate.value&&this.$dateFormat(new Date(this.listData[0].bookingDate.value),'yyyy-mm-dd');
+        this.LoadingTime = this.listData[0].actContainerStuffingDate.value&&this.$dateFormat(new Date(this.listData[0].actContainerStuffingDate.value),'yyyy-mm-dd');
+        this.cleanceTime = this.listData[0].actCustomsCleanceDate.value&&this.$dateFormat(new Date(this.listData[0].actCustomsCleanceDate.value),'yyyy-mm-dd');
         let currTime = this.$dateFormat(new Date(),'yyyy-mm-dd');
         let status = 0;
         if(_shipmentStatus!=6){
@@ -129,8 +129,8 @@
             status=5;
           }
           this.changeShipmentStatusOption(status);
-          this.$emit('modifyTime',{BookingTime:this.BookingTime,LoadingTime:this.LoadingTime,cleanceTime:this.cleanceTime});
         }
+        this.$emit('modifyTime',{BookingTime:this.BookingTime,LoadingTime:this.LoadingTime,cleanceTime:this.cleanceTime});
       },
       changeShipmentStatusOption(status){
         this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = true;

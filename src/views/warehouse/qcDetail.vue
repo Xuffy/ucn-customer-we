@@ -707,6 +707,7 @@
                     payToCompanyName: this.qcDetail.serviceName,
                     currency: 0,
                     currencyCode: '',
+                    moduleCode: 'WAREHOUSE'
                 };
                 this.currencyOption.forEach(v=>{
                     if(v.code===this.qcDetail.exchangeCurrencyDictCode){
@@ -765,7 +766,8 @@
                     this.loadingPaymentTable=true;
                     this.$ajax.post(this.$apis.abandon_qcPayment,{
                         id:e.id,
-                        version:e.version
+                        version:e.version,
+                        moduleCode: 'WAREHOUSE'
                     }).then(res=>{
                         this.$message({
                             type: 'success',
@@ -790,7 +792,8 @@
                     this.loadingPaymentTable=true;
                     this.$ajax.post(this.$apis.recover_qcPayment,{
                         id:e.id,
-                        version:e.version
+                        version:e.version,
+                        moduleCode: 'WAREHOUSE'
                     }).then(res=>{
                         this.$message({
                             type: 'success',
@@ -814,7 +817,8 @@
                     name: e.name,
                     planPayAmount: e.planPayAmount,
                     planPayDt: e.planPayDt,
-                    version:e.version
+                    version:e.version,
+                    moduleCode: 'WAREHOUSE'
                 };
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.update_qcPayment,param).then(res=>{
