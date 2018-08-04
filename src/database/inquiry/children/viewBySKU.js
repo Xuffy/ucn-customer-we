@@ -34,7 +34,7 @@ export default {
     transForm: 'CY_UNIT'
   },
   qty: {
-    key: 'qty',
+    key: 'skuQty',
     type: 'Number'
   },
   skuFobCurrency: { // FOB币种

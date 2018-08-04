@@ -49,6 +49,7 @@
         />
         <v-pagination
             :page-data.sync="params"
+            :pageSizes="[50, 100, 200]"
             @change="handleSizeChange"
             @size-change="pageSizeChange"
         />
@@ -68,7 +69,6 @@ export default {
   data() {
     return {
       checkedData: [],
-      pazeSize: [50, 100, 200],
       searchLoad: false,
       options: [{
         id: 'supplierName',
