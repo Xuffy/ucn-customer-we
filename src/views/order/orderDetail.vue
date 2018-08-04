@@ -1523,16 +1523,7 @@
                 country = this.$ajax.get(this.$apis.COUNTRY_ALL, {}, { cache: true });
                 exchangeRate = this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY, {}, { cache: true });
                 unit = this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "ORDER_STATUS", "SKU_SALE_STATUS", "SKU_STATUS", "PAYMENT_ITEM_NAME"], { cache: true });
-                this.skuStatusOption = [
-                    {
-                        code: "PROCESS",
-                        name: "PROCESS"
-                    },
-                    {
-                        code: "CANCELED",
-                        name: "CANCELED"
-                    }
-                ];
+                this.skuStatusOption=[];
                 this.$ajax.all([currency, country, exchangeRate, unit]).then(res => {
                     this.currencyOption = res[0];
                     this.countryOption = res[1];
@@ -1570,6 +1561,11 @@
                             this.skuSaleStatusOption = v.codes;
                         } else if (v.code === "SKU_STATUS") {
                             this.skuStatusTotalOption = v.codes;
+                            _.map(this.skuStatusTotalOption,(v,k)=>{
+                                if(k===1 || k===3){
+                                    this.skuStatusOption.push(v);
+                                }
+                            });
                         } else if (v.code === "PAYMENT_ITEM_NAME") {
                             this.paymentItemOption = v.codes;
                         }
@@ -1768,6 +1764,7 @@
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
+                return console.log(this.$depthClone(params.skuList),'params.skuList')
 
                 /**
                  * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
