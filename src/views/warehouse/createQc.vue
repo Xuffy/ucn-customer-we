@@ -129,7 +129,7 @@
                                         v-model="qcOrderConfig[v.key]">
                                 </el-input>
                             </div>
-                            <div v-else-if="v.type==='attachment'">
+                            <div v-else-if="v.type==='attachment'" class="uploadview">
                                 <v-upload :limit="20" ref="upload"></v-upload>
                             </div>
                         </el-form-item>
@@ -919,5 +919,8 @@
         float: right;
         margin-right: 5px;
         margin-bottom: 5px;
+    }
+    .uploadview /deep/ .upload-files /deep/ li{
+        padding-right: 20px;
     }
 </style>
