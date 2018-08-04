@@ -1,4 +1,0 @@
-[QC detail]验货照片功能说明-前端 
-QC order中的product info的字段展示的先后顺序-前端 
-QC detail-add product-前端 
-小数位统一/warehouse小数位统一-前端
