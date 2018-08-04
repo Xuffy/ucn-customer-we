@@ -155,10 +155,6 @@ export default {
     type: 'Number',
     _toFixed: 1
   },
-  qty: {
-    key: 'qty',
-    type: 'Number'
-  },
   restrictedSellingCountry: {
     key: 'skuNoneSellCountry',
     _disabled: true,
@@ -460,7 +456,7 @@ export default {
     key: 'skuInnerCartonVolume',
     type: 'Number',
     _total: true,
-    _toFixed: 6
+    _toFixed: 3
   },
   descriptionOfInnerCarton: {
     key: 'skuInnerCartonDesc',
@@ -531,7 +527,7 @@ export default {
     key: 'skuOuterCartonVolume',
     type: 'Number',
     _total: true,
-    _toFixed: 6
+    _toFixed: 3
   },
   packingMethodOfOuterCartonCn: {
     key: 'skuOuterCartonMethodCn',

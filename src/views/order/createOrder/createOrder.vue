@@ -175,107 +175,6 @@
                 </el-col>
             </el-row>
         </el-form>
-        <!--<div class="title">-->
-            <!--{{$i.order.exchangeRate}}-->
-        <!--</div>-->
-        <!--<el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">-->
-            <!--<el-row>-->
-                <!--<el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order[v.currency]">-->
-                        <!--<v-input-number-->
-                                <!--:disabled="true"-->
-                                <!--:placeholder="$i.order.pleaseInput"-->
-                                <!--class="speInput speNumber"-->
-                                <!--v-model="v.exchangeRate"-->
-                                <!--:controls="false">-->
-                        <!--</v-input-number>-->
-                    <!--</el-form-item>-->
-                <!--</el-col>-->
-            <!--</el-row>-->
-        <!--</el-form>-->
-
-        <!--<div class="title">-->
-            <!--{{$i.order.responsibility}}-->
-        <!--</div>-->
-        <!--<div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">-->
-            <!--<el-table-->
-                    <!--:data="orderForm.responsibilityList"-->
-                    <!--style="width: 100%">-->
-                <!--<el-table-column-->
-                        <!--prop="type"-->
-                        <!--label="Type">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<span v-if="scope.row.type==='0' || scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>-->
-                        <!--<span v-if="scope.row.type==='1' || scope.row.type===1">{{$i.order.labelDesignDate}}</span>-->
-                        <!--<span v-if="scope.row.type==='2' || scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>-->
-                        <!--<span v-if="scope.row.type==='3' || scope.row.type===3">{{$i.order.receiveSampleDate}}</span>-->
-                        <!--<span v-if="scope.row.type==='4' || scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>-->
-                        <!--<span v-if="scope.row.type==='5' || scope.row.type===5">{{$i.order.otherResponsibility}}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column-->
-                        <!--prop="customer"-->
-                        <!--align="center"-->
-                        <!--:label="$i.order.customerBig">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-date-picker-->
-                                <!--v-model="scope.row.customer"-->
-                                <!--:editable="false"-->
-                                <!--align="right"-->
-                                <!--type="date"-->
-                                <!--:disabled="true"-->
-                                <!--:placeholder="$i.order.pleaseChoose"-->
-                                <!--:picker-options="pickerOptions1">-->
-                        <!--</el-date-picker>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column-->
-                        <!--prop="supplier"-->
-                        <!--align="center"-->
-                        <!--:label="$i.order.supplierBig">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-date-picker-->
-                                <!--v-model="scope.row.supplier"-->
-                                <!--align="right"-->
-                                <!--:editable="false"-->
-                                <!--type="date"-->
-                                <!--:disabled="true"-->
-                                <!--:placeholder="$i.order.pleaseChoose"-->
-                                <!--:picker-options="pickerOptions1">-->
-                        <!--</el-date-picker>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column-->
-                        <!--prop="Remark"-->
-                        <!--align="center"-->
-                        <!--:label="$i.order.remarkBig">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-input-->
-                                <!--:disabled="true"-->
-                                <!--:placeholder="$i.order.pleaseInput"-->
-                                <!--v-model="scope.row.remark"-->
-                                <!--clearable>-->
-                        <!--</el-input>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column-->
-                        <!--prop="actualDate"-->
-                        <!--align="center"-->
-                        <!--:label="$i.order.actualDate">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-date-picker-->
-                                <!--v-model="scope.row.actualDt"-->
-                                <!--align="right"-->
-                                <!--type="date"-->
-                                <!--:editable="false"-->
-                                <!--:disabled="true"-->
-                                <!--:placeholder="$i.order.pleaseChoose"-->
-                                <!--:picker-options="pickerOptions1">-->
-                        <!--</el-date-picker>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-            <!--</el-table>-->
-        <!--</div>-->
 
         <div class="title">
             {{$i.order.productInfoBig}}
@@ -544,42 +443,37 @@
 
             <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
+                    :accuracy="1"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuQty"
                     @blur="handlePriceBlur(data)"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuPrice"
                     :disabled="true"
                     slot-scope="{data}"
@@ -588,7 +482,6 @@
                     :min="0"
                     :max="1"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuRateValueAddedTax"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -596,7 +489,6 @@
                     :min="0"
                     :max="1"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuTaxRefundRate"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -610,35 +502,30 @@
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuWidth"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuHeight"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuNetWeight"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuVolume"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonQty"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -652,28 +539,24 @@
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonWidth"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonHeight"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonWeightNet"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonRoughWeight"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -687,91 +570,78 @@
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonOuterNum"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonQty"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonLength"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonWidth"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonHeight"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonNetWeight"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonRoughWeight"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonVolume"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuApplicableAge"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuExpireDates"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuSampleQty"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuSamplePrice"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -781,7 +651,15 @@
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,overviewPage,VProduct,VInputNumber} from '@/components/index'
+    import {
+        VTable,
+        VPagination,
+        selectSearch,
+        VUpload,
+        VHistoryModify,
+        overviewPage,
+        VProduct,
+        VInputNumber} from '@/components/index'
     import { mapActions } from 'vuex'
 
     export default {
@@ -991,9 +869,9 @@
         methods:{
             ...mapActions(['setMenuLink']),
             send(){
-                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
-                    return;
-                }
+                // if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
+                //     return;
+                // }
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
@@ -1004,6 +882,26 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
+                console.log(this.$depthClone(params.skuList),'params.skuList')
+                /**
+                 * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
+                 * */
+                let hasCode=true;
+                _.map(params.skuList,v=>{
+                    if(!v.skuDescCustomer || !v.skuNameCustomer || !v.skuCustomerSkuCode){
+                        hasCode=false;
+                    }
+                });
+                if(!hasCode){
+                    return this.$message({
+                        message: '字段必填哦',
+                        type: 'warning'
+                    });
+                }
+
+
+
+                return console.log(this.$depthClone(params.skuList),'params.skuList')
                 let rightCode=true;
                 _.map(params.skuList,v=>{
                     if(v.skuSupplierCode!==params.supplierCode){
@@ -1038,9 +936,6 @@
                 });
             },
             saveAsDraft(){
-                // if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
-                //     return;
-                // }
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
