@@ -744,6 +744,7 @@
                 code="uorder_sku_list"
                 @closed="$refs.table.update()"
                 @save="saveNegotiate"
+                :beforeSave="beforeSave"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
             <!--<v-upload :limit="20" readonly></v-upload>-->
@@ -1770,6 +1771,16 @@
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
+
+                /**
+                 * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
+                 * */
+                for(let val in params.skuList){
+                    if(this.$validateForm(params.skuList[val], this.$db.order.productInfoTable)){
+                        return;
+                    }
+                }
+
                 let rightCode = true;
                 _.map(params.skuList, v => {
                     if (v.skuSupplierCode !== params.supplierCode) {
@@ -2119,6 +2130,15 @@
             },
             handleCancel() {
                 this.productTableDialogVisible = false;
+            },
+            beforeSave(data){
+                let obj={};
+                _.map(data[0],(val,key)=>{
+                    obj[key]=val.value;
+                });
+                if(this.$validateForm(obj, this.$db.order.productInfoTable)){
+                    return false;
+                }
             },
             saveNegotiate(e) {
                 _.map(this.productTableData, (v, k) => {
