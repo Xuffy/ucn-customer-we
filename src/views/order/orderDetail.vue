@@ -1764,7 +1764,7 @@
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
-                return console.log(this.$depthClone(params.skuList),'params.skuList')
+                // return console.log(this.$depthClone(params.skuList),'params.skuList')
 
                 /**
                  * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
