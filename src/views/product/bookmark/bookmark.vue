@@ -159,8 +159,15 @@
              * 表格事件
              * */
             getData(query){
-                if(query && !query.categoryId){
-                    query.categoryId=null;
+                if (query) {
+                    if(!query.categoryId){
+                        query.categoryId = null;
+                    }
+                    if(query.readilyAvailable==='1'){
+                        query.readilyAvailable=true;
+                    }else if(query.readilyAvailable==='0'){
+                        query.readilyAvailable=false;
+                    }
                 }
                 Object.assign(this.queryConfig,query);
                 let params=this.$depthClone(this.queryConfig);
