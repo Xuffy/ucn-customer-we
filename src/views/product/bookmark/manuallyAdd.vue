@@ -1079,8 +1079,8 @@
                     _.map(key,v=>{
                         res[v]=String(res[v]);
                     });
-                    res.noneSellCountry=res.noneSellCountry.split(',');
-                    res.mainSaleCountry=res.mainSaleCountry.split(',');
+                    res.noneSellCountry=res.noneSellCountry?res.noneSellCountry.split(','):[];
+                    res.mainSaleCountry=res.mainSaleCountry?res.mainSaleCountry.split(','):[];
                     res.price=[];
                     res.price.push({
                         cifArea: res.cifArea,

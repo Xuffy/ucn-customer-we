@@ -877,7 +877,7 @@
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
                         params.supplierName=v.name;
-                        params.supplierCode=v.code;
+                        // params.supplierCode=v.code;
                         params.supplierId=v.id;
                         params.supplierCompanyId=v.companyId;
                     }
