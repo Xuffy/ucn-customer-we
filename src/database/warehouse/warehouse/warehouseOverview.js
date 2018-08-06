@@ -13,7 +13,7 @@ export default {
     inboundDate:{},
     customerNo:{},
     warehouseNo:{},
-    warehouseName:{},
+    // warehouseName:{},
     orderNo:{},
     orderSkuQty:{},
     skuInventoryStatusDictCode:{},
@@ -49,6 +49,6 @@ export default {
     innerCartonGrossWeight:{},
     innerCartonVolume:{},
     skuBrand:{},
-    skuNameCn:{},
+    // skuNameCn:{},
     skuCode:{}
 }
