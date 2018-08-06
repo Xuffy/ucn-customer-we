@@ -7,8 +7,14 @@
       :close-on-click-modal="false"
       :visible.sync="showDialog">
 
-      <div style="width: 100%;text-align: right">
+      <div class="table-header">
+        <div>
+          <el-checkbox v-if="!isModify" v-model="hideSameChecked" @change="changeTbaleData">{{$i.common.hideTheSame}}
+          </el-checkbox>
+        </div>
+
         <v-filter-column v-if="code" ref="filterColumn" :code="code"
+                         :table-ref="() => $refs.tableBox"
                          @change="val => {dataList = $refs.filterColumn.getFilterData(dataList, val)}"></v-filter-column>
       </div>
 
@@ -16,15 +22,18 @@
         :data="dataList"
         height="400"
         style="display:flex;flex-direction:column;"
+        ref="tableBox"
+        stripe
         :cell-style="setCellStyle"
         border>
         <el-table-column v-for="(item,columnIndex) in dataColumn" :key="item.id"
                          v-if="(!item._hide && !item._hidden) || item._title"
                          min-width="200px"
-                         :fixed="!!item._title"
+                         :fixed="!!item._title || item._fixed"
                          :prop="item.key"
+                         :label-class-name="'location-' + item.key"
                          :label="item.label">
-          <template slot-scope="{ row }" v-if="row[item.key] && !row[item.key]._hide">
+          <template slot-scope="{ row }" v-if="(row[item.key] && !row[item.key]._hide) || item._title">
             <div v-if="!row[item.key]._edit || row[item.key]._title">
               {{row[item.key]._value || row[item.key].value}}
               <!--<p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>-->
@@ -32,8 +41,10 @@
 
             <div v-else>
               <span
-                v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload) || (!isModify && row._remark)"
-                v-text="row[item.key]._value || row[item.key].value">
+                v-if="(row[item.key]._disabled && !row._remark)
+                || (!isModify && !row[item.key]._upload)
+                || (!isModify && row._remark)"
+                v-text="setDataFilter(row[item.key])">
               </span>
 
               <!--附件上传-->
@@ -88,6 +99,7 @@
                 <el-select
                   v-else-if="row[item.key].type === 'Select' && row[item.key]._option"
                   clearable
+                  filterable
                   v-model="row[item.key].value"
                   @change="val => {changeSelect(val,row[item.key],row)}"
                   :placeholder="$i.order.pleaseChoose">
@@ -119,6 +131,8 @@
   import VFilterColumn from '../table/filterColumn';
   import VInputNumber from '../inputNumber/index';
 
+  let defaultData = [];
+
   export default {
     name: 'VHistoryModify',
     components: {VUpload, VImage, VFilterColumn, VInputNumber},
@@ -145,6 +159,7 @@
         dataColumn: [],
         isModify: false,
         modified: false,
+        hideSameChecked: false,
       }
     },
     watch: {
@@ -195,6 +210,7 @@
         if (isModify && (_.isEmpty(editData) || !_.isArray(editData))) {
           return false
         }
+        this.hideSameChecked = false;
         this.dataList = [];
         this.defaultData = [];
         this.dataColumn = [];
@@ -290,9 +306,29 @@
           return item._style;
         }
       },
-      changeOperate(item,row) {
+      changeOperate(item, row) {
         item._isModified = true;
+        if (item._toFixed) {
+          item.value = this.$toFixed(item.value, item._toFixed, item.label);
+        }
         this.$emit('change', item, row);
+      },
+      changeTbaleData(type) {
+        this.dataList = type
+          ? this.$table.setHideSame(this.dataList, '_remark')
+          : this.$table.revertHideSame(this.dataList);
+      },
+      setDataFilter(item) {
+        let value = '';
+        value = item._value || item.value;
+        if (item._toFixed) {
+          value = this.$toFixed(value, item._toFixed);
+        }
+
+        if (value !== 0 && !value) {
+          value = '--';
+        }
+        return value;
       }
     },
   }
@@ -303,5 +339,13 @@
 <style scoped>
   .ucn-history-modify /deep/ .el-table .cell {
     min-height: 23px;
+  }
+
+  .table-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    align-items: center
   }
 </style>

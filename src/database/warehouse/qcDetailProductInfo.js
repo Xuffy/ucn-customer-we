@@ -16,7 +16,8 @@ export default{
     },
     skuQcResultDictCode: {
         key: 'skuQcResultDictCode',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     skuInventoryStatusDictCode:{
         key: 'skuInventoryStatusDictCode',
@@ -103,7 +104,8 @@ export default{
     },
     skuLength: {
         key: 'skuLength',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     skuWidth: {
         key: 'skuWidth',
@@ -123,7 +125,8 @@ export default{
     },
     actOuterCartonSkuQty:{
         key: 'actOuterCartonSkuQty',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     outerCartonInnerBoxQty:{
         key: 'outerCartonInnerBoxQty',
@@ -131,7 +134,8 @@ export default{
     },
     actQuantityOfInnerBoxOuterCarton:{
         key: 'actOuterCartonInnerBoxQty',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonSkuQty:{
         key: 'innerCartonSkuQty',
@@ -139,31 +143,38 @@ export default{
     },
     actualQuantityInnerCarton:{
         key: 'actInnerCartonSkuQty',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonLength:{
         key: 'innerCartonLength',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonWidth:{
         key: 'innerCartonWidth',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonHeight:{
         key: 'innerCartonHeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonNetWeight:{
         key: 'innerCartonNetWeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonGrossWeight:{
         key: 'innerCartonGrossWeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     innerCartonVolume:{
         key: 'innerCartonVolume',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     outerCartonLength:{
         key: 'outerCartonLength',
@@ -171,15 +182,18 @@ export default{
     },
     outerCartonWidth:{
         key: 'outerCartonWidth',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     outerCartonHeight:{
         key: 'outerCartonHeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     netWeightOfOuterCarton:{
         key: 'outerCartonNetWeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     volumeOfOuterCarton:{
         key: 'outerCartonVolume',
@@ -187,7 +201,8 @@ export default{
     },
     grossWeightofOuterCarton:{
         key: 'outerCartonGrossWeight',
-        type: 'Number'
+        type: 'Number',
+        isFWS: true
     },
     actualProductTotalCTNS:{
         key: 'actSkuCartonTotalQty',
@@ -197,12 +212,14 @@ export default{
     qualifiedProductsTotalCTNS:{
         key: 'qualifiedSkuCartonTotalQty',
         type: 'Number',
-        _calculate:true
+        _calculate:true,
+        isFWS: true
     },
     unqualifiedProductTotalCTNS:{
         key: 'unqualifiedSkuCartonTotalQty',
         type: 'Number',
-        _calculate:true
+        _calculate:true,
+        isFWS: true
     },
     actProductQuantity:{
         key: 'actSkuQty',
@@ -251,10 +268,12 @@ export default{
     unqualifiedType:{
         key: 'unqualifiedType',
         type: 'String',
+        isFWS: true
     },
     skuBarCode:{
         key: 'skuBarCode',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     productBarCodeResults:{
         key: 'skuBarCodeResultDictCode',
@@ -262,7 +281,8 @@ export default{
     },
     skuLabel:{
         key: 'skuLabel',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     productLabelResults:{
         key: 'skuLabelResultDictCode',
@@ -274,7 +294,8 @@ export default{
     },
     innerPackingBarCodeResults:{
         key: 'innerPackingBarCodeResultDictCode',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     outerCartonBarCode:{
         key: 'outerCartonBarCode',
@@ -282,11 +303,13 @@ export default{
     },
     outerCartonBarCodeResults:{
         key: 'outerCartonBarCodeResultDictCode',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     shippingMark:{
         key: 'shippingMark',
-        type: 'String'
+        type: 'String',
+        isFWS: true
     },
     outerCartonMarksResults:{
         key: 'shippingMarkResultDictCode',
@@ -296,15 +319,18 @@ export default{
         key: 'qcPics',
         type: 'String',
         _image:true,
-        _sort:false
+        _sort:false,
+        isFWS: true
     },
     checkOuterCartons:{
         key: 'checkOuterCartonQty',
         type: 'Number',
-        _calculate:true
+        _calculate:true,
+        isFWS: true
     },
     remark:{
         key: 'remark',
         type: 'String',
+        isFWS: true
     },
 }

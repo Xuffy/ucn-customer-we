@@ -44,13 +44,19 @@ export default {
         _disabled:true
     },
     skuDescCustomer:{
-        _disabled:true
+        _rules:{
+            required:true
+        }
     },
     skuNameCustomer:{
-        _disabled:true
+        _rules:{
+            required:true
+        }
     },
     skuCustomerSkuCode:{
-        _disabled:true
+        _rules:{
+            required:true
+        }
     },
     skuCode:{
         _disabled:true
@@ -263,11 +269,10 @@ export default {
     skuShippingMarks:{},
     skuOuterCartonBarCode:{},
     skuOuterCartonCode:{},
-    skuLabelPic:{
+    skuLabelPics:{
         _slot:'skuLabelPic',
-        _image:true,
         _upload: {
-            limit:1
+            limit:20
         }
     },
     skuLabelDesc:{},

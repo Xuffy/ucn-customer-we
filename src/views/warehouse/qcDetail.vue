@@ -190,11 +190,19 @@
                                 </el-date-picker>
                             </div>
                             <div v-else-if="v.type==='number'">
-                                <el-input-number
+                                <!-- <el-input-number
                                         class="speNumber"
                                         v-model="scope.row[v.realKey]"
                                         :min="0"
-                                        :controls="false"></el-input-number>
+                                        :controls="false"></el-input-number> -->
+                                <v-input-number
+                                    v-model="scope.row[v.realKey]"
+                                    :min="0"
+                                    class="speNumber"
+                                    :controls="false"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy ? v.accuracy : null"
+                                    label="please input"></v-input-number>
                             </div>
                             <div v-else-if="v.type==='select'">
                                 <el-select :disabled="true" v-model="scope.row[v.realKey]" :placeholder="$i.warehouse.pleaseChoose">
@@ -444,7 +452,7 @@
 </template>
 <script>
 
-    import {VTable,VUpload,VMessageBoard} from '@/components/index';
+    import {VTable,VUpload,VMessageBoard,VInputNumber} from '@/components/index';
     import { mapActions } from 'vuex'
 
     export default {
@@ -452,7 +460,8 @@
         components:{
             VTable,
             VUpload,
-            VMessageBoard
+            VMessageBoard,
+            VInputNumber
         },
         data(){
             return{
@@ -582,20 +591,28 @@
                             e._disabled=true;
                         }
                         e.deliveryDate._value=this.$dateFormat(e.deliveryDate.value,'yyyy-mm-dd');
-                        e.skuUnitDictCode._value=(_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name;
-                        e.volumeUnitDictCode._value=(_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name;
-                        e.weightUnitDictCode._value=(_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name;
-                        e.lengthUnitDictCode._value=(_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name;
-                        e.skuBarCodeResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.skuBarCodeResultDictCode.value}) || {}).name;
-                        e.innerPackingBarCodeResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.innerPackingBarCodeResultDictCode.value}) || {}).name;
-                        e.skuLabelResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.skuLabelResultDictCode.value}) || {}).name;
-                        e.outerCartonBarCodeResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.outerCartonBarCodeResultDictCode.value}) || {}).name;
-                        e.shippingMarkResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.shippingMarkResultDictCode.value}) || {}).name;
+                        e.skuUnitDictCode._value=e.skuUnitDictCode._value?(_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name:'';
+                        e.volumeUnitDictCode._value=e.volumeUnitDictCode._value?(_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name:'';
+                        e.weightUnitDictCode._value=e.weightUnitDictCode._value?(_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name:'';
+                        e.lengthUnitDictCode._value=e.lengthUnitDictCode._value?(_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name:'';
+                        e.skuBarCodeResultDictCode._value=e.skuBarCodeResultDictCode._value?(_.findWhere(this.pbCodeOption,{code:e.skuBarCodeResultDictCode.value}) || {}).name:'';
+                        e.innerPackingBarCodeResultDictCode._value=e.innerPackingBarCodeResultDictCode._value?(_.findWhere(this.pbCodeOption,{code:e.innerPackingBarCodeResultDictCode.value}) || {}).name:'';
+                        e.skuLabelResultDictCode._value=e.skuLabelResultDictCode._value?(_.findWhere(this.pbCodeOption,{code:e.skuLabelResultDictCode.value}) || {}).name:'';
+                        e.outerCartonBarCodeResultDictCode._value=e.outerCartonBarCodeResultDictCode._value?(_.findWhere(this.pbCodeOption,{code:e.outerCartonBarCodeResultDictCode.value}) || {}).name:'';
+                        e.shippingMarkResultDictCode._value=e.shippingMarkResultDictCode._value?(_.findWhere(this.pbCodeOption,{code:e.shippingMarkResultDictCode.value}) || {}).name:'';
                         return e;
                     });
                     let diffData=[];
+                    let qcStatusDictCode = this.qcDetail.qcStatusDictCode
                     this.productInfoData.forEach(v=>{
                         diffData.push(v.skuId.value+v.orderNo.value);
+                        if (qcStatusDictCode === 'COMPLETED_QC') {
+                            _.mapObject(v, (item, k) => {
+                                if (item.isFWS) {
+                                    item._mustChecked = true
+                                }
+                            })
+                        }
                     });
                     this.summaryData.skuQuantity=_.uniq(diffData).length;
 
@@ -628,7 +645,8 @@
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.get_qcPaymentData,{
                     orderNo:this.qcDetail.qcOrderNo,
-                    orderType:20
+                    orderType:20,
+                    moduleCode: 'WAREHOUSE'
                 }).then(res=>{
                     this.loadingPaymentTable=false;
                     this.paymentTableData=res.datas;
@@ -640,7 +658,7 @@
                     }else{
                         this.disableAdd=false;
                     }
-                    console.log(this.disableAdd,'this.disableAdd')
+                    // console.log(this.disableAdd,'this.disableAdd')
                 }).catch(err=>{
                     this.loadingPaymentTable=false;
 
@@ -689,6 +707,7 @@
                     payToCompanyName: this.qcDetail.serviceName,
                     currency: 0,
                     currencyCode: '',
+                    moduleCode: 'WAREHOUSE'
                 };
                 this.currencyOption.forEach(v=>{
                     if(v.code===this.qcDetail.exchangeCurrencyDictCode){
@@ -747,7 +766,8 @@
                     this.loadingPaymentTable=true;
                     this.$ajax.post(this.$apis.abandon_qcPayment,{
                         id:e.id,
-                        version:e.version
+                        version:e.version,
+                        moduleCode: 'WAREHOUSE'
                     }).then(res=>{
                         this.$message({
                             type: 'success',
@@ -772,7 +792,8 @@
                     this.loadingPaymentTable=true;
                     this.$ajax.post(this.$apis.recover_qcPayment,{
                         id:e.id,
-                        version:e.version
+                        version:e.version,
+                        moduleCode: 'WAREHOUSE'
                     }).then(res=>{
                         this.$message({
                             type: 'success',
@@ -796,7 +817,8 @@
                     name: e.name,
                     planPayAmount: e.planPayAmount,
                     planPayDt: e.planPayDt,
-                    version:e.version
+                    version:e.version,
+                    moduleCode: 'WAREHOUSE'
                 };
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.update_qcPayment,param).then(res=>{
@@ -1062,7 +1084,7 @@
         mounted(){
             this.setMenuLink({
                 path: '/logs/index',
-                query: {code: 'WAREHOUSE'},
+                query: {code: 'QC'},
                 type: 10,
                 auth:'QC:LOG',
                 label: this.$i.common.log

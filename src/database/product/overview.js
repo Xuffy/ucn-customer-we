@@ -33,6 +33,7 @@ export default {
     materialEnLike:{},
     country:{
         type:'select',
+        multipleSelect:true,
         selectCode:'country',
         _filterable:true,
         _multiple:true,

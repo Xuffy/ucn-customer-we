@@ -35,13 +35,16 @@
                        :props="{label: 'deptName'}"
                        node-key="deptId"
                        default-expand-all
+                       draggable
+                       :allow-drop="(draggingNode, dropNode, type) => type === 'prev' && !dropNode.childNodes.length"
+                       @node-drop="departmentDrop"
                        :expand-on-click-node="false"
                        :filter-node-method="filterDepartment"
-                       @node-click="departmentClick">
+                       @node-click="data => departmentClick(data)">
                 <div class="custom-tree-node" slot-scope="{ node, data }"
                      :class="{isAction:node.data.deptId === userData.deptId}">
                   <div v-if="!data.children">
-                    <span v-text="node.label + '(' + node.data.deptUserCount + ')'"></span>
+                    <span class="name-title" v-text="node.label + '(' + node.data.deptUserCount + ')'"></span>
                     <div class="action">
                       <el-button
                         class="treeBtn"
@@ -94,12 +97,15 @@
                 show-checkbox
                 node-key="roleId"
                 default-expand-all
+                draggable
+                :allow-drop="(draggingNode, dropNode, type) => type === 'prev' && !dropNode.childNodes.length"
+                @node-drop="roleDrop"
                 :expand-on-click-node="false"
                 :filter-node-method="filterRole"
                 @check="roleCheckClick">
                 <div class="custom-tree-node" slot-scope="{ node, data }">
                   <div v-if="!data.children">
-                    <span v-text="node.label + '(' + data.roleUserCount + ')'"></span>
+                    <span class="name-title" v-text="node.label + '(' + data.roleUserCount + ')'"></span>
                     <div class="action">
                       <el-button
                         class="treeBtn"
@@ -283,7 +289,6 @@
                 :editable="false"
                 v-model="addUser.birthday"
                 type="date"
-                format="yyyy-MM-dd"
                 @change="() => addUser.birthday = $dateFormat(addUser.birthday, 'yyyy-mm-dd')"
                 :placeholder="$i.setting.pleaseChoose">
               </el-date-picker>
@@ -380,15 +385,11 @@
         checkedRole: [],
         selectList: [],
         languageOption: [],
-        genderOption: [
-          {code: 0, name: $i.setting.man},
-          {code: 1, name: $i.setting.woman},
-          {code: 2, name: $i.setting.unknown},
-        ],
+        genderOption: [],
         roleOption: [],
         departmentData: [],
         departmentUserTotal: 0,          //department总人数
-        roleData: [{roleName: $i.setting.all, children: []}],
+        roleData: [],
         privilegeData: [
           {name: $i.setting.privilegePage, children: [], code: 'pageAll'},
           {name: $i.setting.privilegeData, children: [], code: 'dataAll'}
@@ -415,7 +416,7 @@
           userName: '',
           lang: '',
           tel: '',
-          gender: 0,
+          gender: '2',
           birthday: '',
           remark: ''
         },
@@ -423,10 +424,16 @@
       }
     },
     created() {
+      this.getPart();
       this.getDepartmentData();
       this.getUnit();
     },
     mounted() {
+      this.setMenuLink({
+        type: 100,
+        query: {code: 'DEPARTMENT_SETTING', bizCode: 'BIZ_USER'},
+        label: this.$i.common.log
+      });
     },
     watch: {
       searchDepartment(val) {
@@ -440,6 +447,7 @@
       },
     },
     methods: {
+      ...mapActions(['setMenuLink']),
       pageSizeChange(val) {
         this.userListPage.ps = val;
         this.getDepartmentUser();
@@ -492,6 +500,7 @@
               item._disabledCheckbox = true;
             }
             item.birthday.value = this.$dateFormat(item.birthday.value, 'yyyy-mm-dd');
+            item.gender.value = item.gender.value.toString();
             gender = _.findWhere(this.genderOption, {code: item.gender.value}) || {};
             status = _.findWhere(this.actionOption, {code: item.status.value}) || {};
             lang = _.findWhere(this.languageOption, {code: item.lang.value}) || {};
@@ -516,13 +525,13 @@
         this.roleOption = _.isEmpty(deps) ? [] : deps.deptRoles;
         this.addUser.roleId = '';
       },
-      departmentClick(data) {
+      departmentClick(data, checked) {
         this.userData = this.$options.data().userData;
         this.userData.deptId = data.deptId;
-        this.roleData[0].children = this.$depthClone(data.deptRoles || []);
+        this.roleData = this.$depthClone(data.deptRoles || []);
         this.searchRole = '';
         this.$nextTick(() => {
-          this.$refs.roleTree.setCheckedNodes(this.roleData[0].children);
+          this.$refs.roleTree.setCheckedNodes(checked || this.roleData);
           this.roleCheckClick();
         });
       },
@@ -589,7 +598,7 @@
                 return this.$i.setting.pleaseInput;
               }
 
-              roleItem = _.findWhere(this.roleData[0].children, {roleName: value.trim()});
+              roleItem = _.findWhere(this.roleData, {roleName: value.trim()});
 
               if (roleItem && (!item || roleItem.roleId !== item.roleId)) {
                 return this.$i.setting.roleExisted;
@@ -682,7 +691,7 @@
       },
       btnClick(item, type) {
         if (type === 1) {
-          this.roleOption = this.$copyArr(this.roleData[0].children);
+          this.roleOption = this.$copyArr(this.roleData);
           this.addUser = _.mapObject(item, val => val.value);
           this.editUserdialog.type = 1;
           this.editUserdialog.show = true;
@@ -692,7 +701,7 @@
       },
       addUsers() {
         //设置基本信息
-        this.roleOption = this.$copyArr(this.roleData[0].children);
+        this.roleOption = this.$copyArr(this.roleData);
 
         this.addUser = this.$options.data().addUser;
 
@@ -721,20 +730,19 @@
 
         this.$ajax.post(this.$apis.add_departmentUser, params)
           .then(res => {
-            this.getDepartmentData().then(depRes => {
-              let roles = _.findWhere(depRes, {deptId: this.userData.deptId});
+            !params.id && this.getDepartmentData().then(depRes => {
+              let roles = _.findWhere(depRes, {deptId: this.userData.deptId})
+                , userData = this.$depthClone(this.userData);
 
-              this.roleData[0].children = roles ? roles.deptRoles : [];
+              userData.deptRoles = roles ? roles.deptRoles : [];
+              this.departmentClick(userData, this.$refs.roleTree.getCheckedNodes(true));
+              this.getPrivilege();
             });
             this.getDepartmentUser();
             this.editUserdialog.show = false;
             this.addUser = this.$options.data().addUser;
             this.$message.success(this.$i.setting.successfulOperation);
-          }).finally(err => {
-            this.addUserLoading = false;
-          }
-        )
-
+          }).finally(err => this.addUserLoading = false);
       },
       disabledUser(userId, type = true) {
         this.$confirm(type ? this.$i.setting.disabledUser : this.$i.setting.enabledUser, this.$i.hintMessage.systemHints, {
@@ -813,7 +821,10 @@
             this.getPrivilegeData()
           ]).then(() => {
             let checked = []
-              , resourceCodeStr = res.selectedResourceCodes.join(',');
+              , resourceCodeStr;
+            res.selectedResourceCodes = res.selectedResourceCodes || [];
+
+            resourceCodeStr = res.selectedResourceCodes.join(',');
 
             !_.isEmpty(res.selectedDomainUserIds)
             && _.mapObject(res.selectedDomainUserIds, (val, key) => _.map(val, v => checked.push(`${key}_${v}`)));
@@ -846,6 +857,34 @@
           });
 
           this.privilegeData[1].children = list;
+        });
+      },
+      departmentDrop() {
+        let sorts = []
+          , data = this.$depthClone(this.departmentData);
+
+        _.map(data.reverse(), (val, index) => sorts.push({deptId: val.deptId, sort: index + 1}));
+
+        this.$ajax.post(this.$apis.DEPARTMENT_UPDATESORT, {sorts});
+      },
+      roleDrop(node) {
+        let checked = this.$refs.roleTree.getCheckedNodes(true)
+          , sorts = []
+          , data = this.$depthClone(this.roleData);
+
+        if (node.checked) {
+          checked.push(node.data);
+          this.$refs.roleTree.setCheckedNodes(checked);
+        }
+
+        _.map(data.reverse(), (val, index) => sorts.push({roleId: val.roleId, sort: index + 1}));
+
+
+        this.$ajax.post(this.$apis.ROLE_UPDATESORT, {deptId: this.userData.deptId, sorts});
+      },
+      getPart() {
+        this.$ajax.post(this.$apis.CODE_PART, ['SEX'], {cache: true}).then(res => {
+          this.genderOption = res[0].codes;
         });
       }
     },
@@ -964,5 +1003,9 @@
 
   .speInput {
     width: 80%;
+  }
+
+  .name-title {
+    cursor: move;
   }
 </style>

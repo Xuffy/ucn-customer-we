@@ -13,77 +13,24 @@ export const basicInfoObj = {
     defaultVal: 2,
     disabled:true 
   },
+  shipmentStatus: {
+    type: 'selector',
+    value: null
+  },
+  createDate: {
+    type: 'date',
+    value: null,
+    disabled:true 
+  },
   customerName: {
     type: 'input',
     value: null,
     disabled:true 
   },
-  bookingDate: {
-    type: 'date',
-    value: null
-  },
-  estContainerStuffingDate: {
-    type: 'date',
-    value: null
-  },
-  actContainerStuffingDate: {
-    type: 'date',
-    value: null
-  },
-  estCustomsCleanceDate: {
-    type: 'date',
-    value: null
-  },
-  actCustomsCleanceDate: {
-    type: 'date',
-    value: null
-  },
-  estDepartureDate: {
-    type: 'date',
-    value: null
-  },
-  actDepartureDate: {
-    type: 'date',
-    value: null
-  },
-  estArrivalDate: {
-    type: 'date',
-    value: null
-  },
-  actArrivalDate: {
-    type: 'date',
-    value: null
-  },
-  estReleaseDate: {
-    type: 'date',
-    value: null
-  },
-  actReleaseDate: {
-    type: 'date',
-    value: null
-  },
-  estDeliveryDate: {
-    key:'estDelivaryDate',
-    type: 'date',
-    value: null
-  },
-  actDeliveryDate: {
-    type: 'date',
-    value: null
-  },
-  createDate: {
-    type: 'date',
-    value: null
-  },
-  declareDate: {
-    type: 'date',
-    value: null
-  },
   shipServiceProvider: {
     type: 'input',
     value: null
   },
-  // customerName: {     type: 'selector',     value: null   },
   receiptCompany: {
     type: 'input',
     value: null,
@@ -156,6 +103,103 @@ export const basicInfoObj = {
   }
 }
 
+
+export const CreatPlanBasicInfoObj = {
+  logisticsNo: {
+    type: 'input',
+    value: null,
+    disabled:true 
+  },
+  logisticsStatus: {
+    type: 'selector',
+    value: 2,
+    defaultVal: 2,
+    disabled:true 
+  },
+  shipmentStatus: {
+    type: 'selector',
+    value: null
+  },
+  customerName: {
+    type: 'input',
+    value: null,
+    disabled:true 
+  },
+  shipServiceProvider: {
+    type: 'input',
+    value: null
+  },
+  receiptCompany: {
+    type: 'input',
+    value: null,
+  },
+  shippingAgent: {
+    type: 'input',
+    value: null
+  },
+  exchangeCurrency: {
+    type: 'selector',
+    value: null,
+    _rules:{
+      required:true
+    }
+  },
+  payment: {
+    type: 'selector',
+    value: null,
+    _rules:{
+      required:true
+    }
+  },
+  paymentTerm: {
+    type: 'input',
+    value: null
+  },
+  transportationWay: {
+    type: 'input',
+    value: '海运',
+    defaultVal:'海运',
+    disabled:true 
+  },
+  loadingType: {
+    type: 'input',
+    value: '集装箱',
+    defaultVal:'集装箱',
+    disabled:true 
+  },
+  permitedForTransportation: {
+    type: 'selector',
+    value: null
+  },
+  blType: {
+    type: 'selector',
+    value: null
+  },
+  blQty: {
+    type: 'input',
+    value: '',
+    _rules:{
+      required:true,
+      type:'Number'
+    }
+  },
+  blNo: {
+    type: 'input',
+    value: null
+  },
+  shipper: {
+    type: 'input',
+    value: null
+  },
+  consignee: {
+    type: 'input',
+    value: null
+  },
+  notify: {
+    type: 'input',
+    value: null
+  }
+}
 
 export const dbBasicInfoObj ={
   "id": {
@@ -240,6 +284,11 @@ export const dbBasicInfoObj ={
     type: 'String',
     typeSlef: 'text',
     _important: true
+  },
+  "skuOuterCartonQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
   },
   "skuCode": {
     type: 'String',
@@ -380,11 +429,6 @@ export const dbBasicInfoObj ={
     typeSlef: 'text',
     _important: true
   },
-  "skuOuterCartonQty": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
   "skuOuterCartonLength": {
     type: 'String',
     _disabled: true,
@@ -443,7 +487,7 @@ export const dbBasicInfoObj ={
     _hide: true
   },
   "shipmentStatus": {
-    type: 'String',
+    type: 'selector',
     typeSlef: 'text',
     _disabled: true
   }
@@ -568,11 +612,6 @@ export const dbProductInfo = {
       type:'Number'
     }
   },
-  // "shipmentStatus":{
-  //   _rules:{
-  //     required:true
-  //   }
-  // },
   "toShipQty": {
     _rules:{
       type:'Number'

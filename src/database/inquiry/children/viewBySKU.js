@@ -27,36 +27,48 @@ export default {
     key: 'skuNameEn'
   },
   price: { // 系统带入：inquiry中的sku 的价格（按照该inquiry所选的价格条款的价格） 产品单价
-    key: 'skuPrice'
+    key: 'skuPrice',
+    _toFixed: 4
   },
   currency: { // 币种 系统带入：当前inquiry选的币种
     transForm: 'CY_UNIT'
+  },
+  qty: {
+    key: 'skuQty',
+    type: 'Number'
   },
   skuFobCurrency: { // FOB币种
     transForm: 'CY_UNIT'
   },
   skuFobPrice: { // FOB价格
+    _toFixed: 4
   },
   skuExwCurrency: { // EXW币种
     transForm: 'CY_UNIT'
   },
   skuExwPrice: { // EXW价格
+    _toFixed: 4
   },
   skuCifCurrency: { // CIF币种
     transForm: 'CY_UNIT'
   },
   skuCifPrice: { // CIF价格
+    _toFixed: 4
   },
   skuDduCurrency: { // DDU币种
     transForm: 'CY_UNIT'
   },
   skuDduPrice: { // DDU价格
+    _toFixed: 4
   },
   skuRefFobPrice: { // Fob参考价格
+    _toFixed: 4
   },
   skuRefCifPrice: { // Cif参考价格
+    _toFixed: 4
   },
   skuRefDduPrice: { // DDU参考价格
+    _toFixed: 4
   },
   incoterm: { // 付款条款 系统带入，当前inquiry所选的付款条款
     transForm: 'ITM'

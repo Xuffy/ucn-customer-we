@@ -129,7 +129,7 @@
                                         v-model="qcOrderConfig[v.key]">
                                 </el-input>
                             </div>
-                            <div v-else-if="v.type==='attachment'">
+                            <div v-else-if="v.type==='attachment'" class="uploadview">
                                 <v-upload :limit="20" ref="upload"></v-upload>
                             </div>
                         </el-form-item>
@@ -157,6 +157,7 @@
                 <v-filter-column
                     ref="filterColumn"
                     code="uwarehouse_qc_order_detail"
+                    :table-ref="() => $refs.tableBox"
                     @change="changeColumn">
                 </v-filter-column>
             </div>
@@ -166,6 +167,7 @@
                     :data="productTableData"
                     border
                     show-summary
+                    ref="tableBox"
                     :summary-method="getSummaries"
                     @selection-change="handleProductTableChange"
                     style="width: 100%">
@@ -183,6 +185,7 @@
                         v-if="!v._hidden && !v._hide"
                         :label="$i.warehouse[v.key]"
                         align="center"
+                        :label-class-name="'location-' + v.key"
                         :class-name="v.key === 'expectQcQty' ? 'ucn-table-required' : ''"
                         width="240">
                     <template slot-scope="scope" v-if="scope.row[v.key]">
@@ -190,11 +193,14 @@
                         </div>
                         <div v-else-if="v.fromService"></div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     v-model="scope.row[v.key].value"
                                     :min="0"
                                     :controls="false"
-                                    label="please input"></el-input-number>
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy ? v.accuracy : null"
+                                    label="please input"></v-input-number>
+                            <!-- <el-input :min="0" style="width:150px"  @change="val => changeInput(val, scope.row[v.key], scope.$index)" v-model="scope.row[v.key].value" type="number"></el-input> -->
                         </div>
                         <div v-else-if="v.showType==='input'">
                             <el-input
@@ -306,7 +312,7 @@
 </template>
 <script>
 
-    import { VTimeZone, VPagination, VUpload, VTable, VFilterColumn } from "@/components/index";
+    import { VTimeZone, VPagination, VUpload, VTable, VFilterColumn, VInputNumber } from "@/components/index";
 
     export default {
         name: "createQc",
@@ -315,7 +321,8 @@
             VTimeZone,
             page: VPagination,
             VUpload,
-            VFilterColumn
+            VFilterColumn,
+            VInputNumber
         },
         data() {
             return {
@@ -437,11 +444,61 @@
                         this.productConfig.ids = this.$route.query.ids.split(",");
                         this.loadingProductTable = true;
                         this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
-                            res.forEach(v => {
-                                if (v.id !== 0) {
-                                    this.productTableData.push(v);
-                                }
-                            });
+                            this.loadingProductTable = false;
+                        this.productTableData = []
+                        _.map(res, v => {
+                            if (v.id !== 0) {
+                                // let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
+                                //     , vo = _.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}
+                                //     , wo = _.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}
+                                //     , lo = _.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {};
+                                v.skuUnitDictCode = v.skuUnitDictCode ? (_.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}).name : "";
+                                v.volumeUnitDictCode = v.volumeUnitDictCode ? (_.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}).name : '';
+                                v.weightUnitDictCode = v.weightUnitDictCode ? (_.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}).name : '';
+                                v.lengthUnitDictCode =  v.lengthUnitDictCode ? (_.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {}).name : '';
+                                v.skuQcResultDictCode = '';
+                                v.checkOuterCartonQty = '';
+                                v.qcPic = '';
+                                v.remark = '';
+                                v.shippingMarkResultDictCode = '';
+                                v.outerCartonBarCodeResultDictCode = '';
+                                v.innerPackingBarCodeResultDictCode = '';
+                                v.skuLabelResultDictCode = '';
+                                v.skuBarCodeResultDictCode = '';
+                                v.unqualifiedSkuGrossWeight = '';
+                                v.qualifiedSkuGrossWeight = '';
+                                v.unqualifiedSkuVolume = '';
+                                v.qualifiedSkuVolume = '';
+                                v.unqualifiedSkuNetWeight = '';
+                                v.qualifiedSkuNetWeight = '';
+                                v.unqualifiedSkuQty = '';
+                                v.qualifiedSkuQty = '';
+                                v.actSkuQty = '';
+                                v.unqualifiedSkuCartonTotalQty = '';
+                                v.qualifiedSkuCartonTotalQty = '';
+                                v.actSkuCartonTotalQty = '';
+                                v.outerCartonGrossWeight = '';
+                                v.actInnerCartonSkuQty = '';
+                                v.innerCartonSkuQty = '';// 来自Order
+                                v.actOuterCartonInnerBoxQty = '';
+                                v.outerCartonInnerBoxQty = '';// 来自Order
+                                v.actOuterCartonSkuQty = '';
+                                v.unqualifiedProcessingMode = '';
+                                v.samplingRate = '';
+                                this.productTableData.push(v);
+                            }
+                        });
+                        let arr = this.$copyArr(this.productTableData)
+                        arr = this.$getDB(this.$db.warehouse.createQcProductTable, arr);
+                        this.$refs.filterColumn.update(false, arr).then(data => {
+                            this.productTableData = this.$refs.filterColumn.getFilterData(arr, data);
+                            this.columnConfig = this.productTableData[0];
+                        });
+                            // res.forEach(v => {
+                            //     if (v.id !== 0) {
+                            //         this.productTableData.push(v);
+                            //     }
+                            // });
                         }).finally(err => {
                             this.loadingProductTable = false;
                         });
@@ -605,27 +662,26 @@
             },
             postProduct() {
                 this.productConfig.ids = [];
-
                 _.map(this.selectProductList, v => {
                     this.productConfig.ids.push(v.id.value);
                 });
-
                 this.productDialogVisible = false;
                 if (this.productConfig.ids.length !== 0) {
                     this.productConfig.orderNo = '';
                     this.loadingProductTable = true;
                     this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
                         this.loadingProductTable = false;
+                        this.productTableData = []
                         _.map(res, v => {
                             if (v.id !== 0) {
-                                let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
-                                    , vo = _.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}
-                                    , wo = _.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}
-                                    , lo = _.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {};
-                                v.skuUnitDictCode = suo.name || "";
-                                v.volumeUnitDictCode = vo.name || "";
-                                v.weightUnitDictCode = wo.name || "";
-                                v.lengthUnitDictCode = lo.name || "";
+                                // let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
+                                //     , vo = _.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}
+                                //     , wo = _.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}
+                                //     , lo = _.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {};
+                                v.skuUnitDictCode = v.skuUnitDictCode ? (_.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}).name : "";
+                                v.volumeUnitDictCode = v.volumeUnitDictCode ? (_.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}).name : '';
+                                v.weightUnitDictCode = v.weightUnitDictCode ? (_.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}).name : '';
+                                v.lengthUnitDictCode =  v.lengthUnitDictCode ? (_.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {}).name : '';
                                 v.skuQcResultDictCode = '';
                                 v.checkOuterCartonQty = '';
                                 v.qcPic = '';
@@ -661,7 +717,7 @@
                         let arr = this.$copyArr(this.productTableData)
                         arr = this.$getDB(this.$db.warehouse.createQcProductTable, arr);
                         this.$refs.filterColumn.update(false, arr).then(data => {
-                            console.log(data)
+                            // console.log(data)
                             this.productTableData = this.$refs.filterColumn.getFilterData(arr, data);
                             this.columnConfig = this.productTableData[0];
                         });
@@ -784,6 +840,9 @@
                     this.loadingData = false;
                 });
 
+            },
+            changeInput (val, e, index) {
+                e.value = this.$toFixed(Math.abs(val), 2, e.label)
             }
         },
         created() {
@@ -792,7 +851,6 @@
         mounted() {
             this.loadingData = true;
             this.columnConfig = this.$db.warehouse.createQcProductTable;
-            console.log(this.columnConfig)
         },
         watch: {
             selectProductTableData(n) {
@@ -911,5 +969,8 @@
         float: right;
         margin-right: 5px;
         margin-bottom: 5px;
+    }
+    .uploadview /deep/ .upload-files /deep/ li{
+        padding-right: 20px;
     }
 </style>

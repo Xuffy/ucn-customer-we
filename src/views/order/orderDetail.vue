@@ -176,7 +176,7 @@
                             </div>
                         </div>
                         <div v-else-if="v.type==='number'">
-                            <el-input-number
+                            <v-input-number
                                     @change="handleChange(v.key)"
                                     :placeholder="isModify?$i.order.pleaseInput:''"
                                     :disabled="v.disabled || !isModify"
@@ -184,7 +184,7 @@
                                     v-model="orderForm[v.key]"
                                     :controls="false">
 
-                            </el-input-number>
+                            </v-input-number>
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
@@ -209,48 +209,36 @@
                 </el-col>
             </el-row>
         </el-form>
-        <div class="title">
-            {{$i.order.exchangeRate}}
-        </div>
-        <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
-            <el-row>
-                <el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12"
-                        :md="12" :lg="8" :xl="8">
-                    <el-form-item :label="$i.order[v.currency]">
-                        <el-input-number
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseInput"
-                                class="speInput speNumber"
-                                v-model="v.exchangeRate"
-                                :controls="false">
-                        </el-input-number>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
-        <div class="title">
-            {{$i.order.responsibility}}
-        </div>
         <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
+            <div class="title">
+                {{$i.order.responsibility}}
+            </div>
+            <el-button
+                    class="addBtn"
+                    :disabled="!isModify"
+                    @click="addResponsibility">
+                {{$i.order.addResponsibility}}
+            </el-button>
             <el-table
                     :data="orderForm.responsibilityList"
-                    style="width: 100%">
+                    style="width: 100%;border-top:1px solid #ebeef5;">
                 <el-table-column
                         prop="type"
-                        label="Type">
+                        align="center"
+                        :label="$i.order.type">
                     <template slot-scope="scope">
-                        <span v-if="scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
-                        <span v-if="scope.row.type===1">{{$i.order.labelDesignDate}}</span>
-                        <span v-if="scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
-                        <span v-if="scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
-                        <span v-if="scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
-                        <span v-if="scope.row.type===5">{{$i.order.otherResponsibility}}</span>
+                        <el-input
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseInput:''"
+                                v-model="scope.row.type"
+                                clearable>
+                        </el-input>
                     </template>
                 </el-table-column>
                 <el-table-column
                         prop="customer"
                         align="center"
-                        label="Me">
+                        :label="$i.order.customer">
                     <template slot-scope="scope">
                         <el-date-picker
                                 :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.customer===''}"
@@ -259,15 +247,15 @@
                                 :editable="false"
                                 align="right"
                                 type="date"
-                                :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                                :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseChoose:''">
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseChoose:''">
                         </el-date-picker>
                     </template>
                 </el-table-column>
                 <el-table-column
                         prop="supplier"
                         align="center"
-                        label="Supplier">
+                        :label="$i.order.supplier">
                     <template slot-scope="scope">
                         <el-date-picker
                                 :class="{'high-light':scope.row && scope.row.fieldUpdates &&  scope.row.fieldUpdates.supplier===''}"
@@ -276,20 +264,21 @@
                                 align="right"
                                 :editable="false"
                                 type="date"
-                                :disabled="true">
+                                :placeholder="isModify?$i.order.pleaseChoose:''"
+                                :disabled="!isModify">
                         </el-date-picker>
                     </template>
                 </el-table-column>
                 <el-table-column
                         prop="Remark"
                         align="center"
-                        label="Remark">
+                        :label="$i.order.remarkBig">
                     <template slot-scope="scope">
                         <el-input
                                 :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.remark===''}"
                                 @change="handleResponsibilityChange(scope.row,'remark')"
-                                :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                                :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseInput:''"
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseInput:''"
                                 v-model="scope.row.remark"
                                 clearable>
                         </el-input>
@@ -298,7 +287,7 @@
                 <el-table-column
                         prop="actualDate"
                         align="center"
-                        label="Actual Date">
+                        :label="$i.order.actualDate">
                     <template slot-scope="scope">
                         <el-date-picker
                                 :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.actualDt===''}"
@@ -307,243 +296,265 @@
                                 align="right"
                                 type="date"
                                 :editable="false"
-                                :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                                :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseChoose:''">
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseChoose:''">
                         </el-date-picker>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-        <div class="title">
-            {{$i.order.payment}}
-        </div>
-        <div class="payment-table" v-authorize="'ORDER:DETAIL:PAYMENT'">
-            <el-button
-                    v-authorize="'ORDER:DETAIL:PAYMENT_APPLY'"
-                    :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable"
-                    :loading="disableClickApplyPay"
-                    @click="applyPay"
-                    type="primary">{{$i.order.applyPay}}
-            </el-button>
-            <el-button
-                    v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
-                    :loading="disableClickDunning"
-                    :disabled="!allowHandlePay || loadingPaymentTable"
-                    @click="dunningPay">{{$i.order.remindSupplierRefund}}
-            </el-button>
-            <el-table
-                    v-loading="loadingPaymentTable"
-                    class="payTable"
-                    :data="paymentData"
-                    border
-                    max-height="300px"
-                    :summary-method="getSummaries"
-                    show-summary
-                    :row-class-name="tableRowClassName"
-                    style="width: 100%">
-                <el-table-column
-                        fixed="left"
-                        label="#"
-                        align="center"
-                        width="55">
-                    <template slot-scope="scope">
-                        {{scope.$index+1}}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="no"
-                        :label="$i.order.payNo"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="name"
-                        :label="$i.order.payName"
-                        width="180">
-                    <template slot-scope="scope">
-                        <el-input
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                :placeholder="$i.order.pleaseInput"
-                                v-model="scope.row.name"
-                                clearable>
-                        </el-input>
-                        <span v-else>{{scope.row.name}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        :label="$i.order.planPayDt"
-                        width="200">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speDate"
-                                v-model="scope.row.planPayDt"
-                                type="date"
-                                :picker-options="datePickOption"
-                                :placeholder="$i.order.pleaseChoose">
-                        </el-date-picker>
-                        <span v-else>{{scope.row.planPayDt?$dateFormat(scope.row.planPayDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="planPayAmount"
-                        :label="$i.order.planPayAmount"
-                        width="160">
-                    <template slot-scope="scope">
-                        <el-input-number
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speNumber"
-                                v-model="scope.row.planPayAmount"
-                                :controls="false"
-                                :min="0"></el-input-number>
-                        <span v-else>{{scope.row.planPayAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualPayDt"
-                        :label="$i.order.actualPayDt"
-                        width="200">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                class="speDate"
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                v-model="scope.row.actualPayDt"
-                                type="date"
-                                :picker-options="datePickOption1"
-                                :placeholder="$i.order.pleaseChoose">
-                        </el-date-picker>
-                        <span v-else>{{scope.row.actualPayDt?$dateFormat(scope.row.actualPayDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualPayAmount"
-                        :label="$i.order.actualPayAmount"
-                        width="160">
-                    <template slot-scope="scope">
-                        <el-input-number
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speNumber"
-                                v-model="scope.row.actualPayAmount"
-                                :controls="false"
-                                :min="0"></el-input-number>
-                        <span v-else>{{scope.row.actualPayAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        :label="$i.order.planRefundDt"
-                        width="180">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="planRefundAmount"
-                        :label="$i.order.planRefundAmount"
-                        width="180">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.planRefundAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        :label="$i.order.actualRefundDt"
-                        width="180">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualRefundAmount"
-                        :label="$i.order.actualRefundAmount"
-                        width="180">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.actualRefundAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="currencyCode"
-                        :label="$i.order.payCurrency"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        fixed="right"
-                        align="center"
-                        :label="$i.order.available"
-                        width="180">
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.status===-1">{{$i.order.abandon}}</span>
-                        <span v-if="scope.row.status===10">{{$i.order.waitCustomerConfirm}}</span>
-                        <span v-if="scope.row.status===20">{{$i.order.waitSupplierConfirm}}</span>
-                        <span v-if="scope.row.status===30">{{$i.order.waitServiceConfirm}}</span>
-                        <span v-if="scope.row.status===40">{{$i.order.confirm}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        fixed="right"
-                        :label="$i.order.action"
-                        align="center"
-                        width="125">
-                    <template slot-scope="scope">
-                        <div v-if="scope.row.status===10">
-                            <el-button
-                                    v-authorize="'ORDER:DETAIL:CONFIRM_REFUNDS'"
-                                    @click="confirmPay(scope.row)"
-                                    type="text">{{$i.order.confirm}}
-                            </el-button>
-                        </div>
-                        <div v-else-if="scope.row.status===40 && scope.row.planRefundDt">
-
-                        </div>
-                        <div v-else>
-                            <div v-if="scope.row.isNew">
-                                <el-button :disabled="!allowHandlePay" @click="saveNewPay(scope.row)" type="text"
-                                           size="small">{{$i.order.save}}
-                                </el-button>
-                                <el-button :disabled="!allowHandlePay" @click="cancelNewPay(scope.row)" type="text"
-                                           size="small">{{$i.order.cancel}}
+        <div v-authorize="'ORDER:DETAIL:PAYMENT'">
+            <div class="title">
+                {{$i.order.payment}}
+            </div>
+            <div class="payment-table">
+                <el-button
+                        v-authorize="'ORDER:DETAIL:PAYMENT_APPLY'"
+                        :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable"
+                        :loading="disableClickApplyPay"
+                        @click="applyPay"
+                        type="primary">{{$i.order.applyPay}}
+                </el-button>
+                <el-button
+                        v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
+                        :loading="disableClickDunning"
+                        :disabled="!allowHandlePay || loadingPaymentTable"
+                        @click="dunningPay">{{$i.order.remindSupplierRefund}}
+                </el-button>
+                <el-table
+                        v-loading="loadingPaymentTable"
+                        class="payTable"
+                        :data="paymentData"
+                        border
+                        :summary-method="getSummaries"
+                        show-summary
+                        :row-class-name="tableRowClassName"
+                        style="width: 100%">
+                    <el-table-column
+                            fixed="left"
+                            label="#"
+                            align="center"
+                            width="55">
+                        <template slot-scope="scope">
+                            {{scope.$index+1}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="no"
+                            :label="$i.order.payNo"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            :label="$i.order.payName"
+                            width="180">
+                        <template slot-scope="scope">
+                            <el-select
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    v-model="scope.row.name"
+                                    clearable
+                                    :placeholder="$i.order.pleaseChoose">
+                                <el-option
+                                        v-for="item in paymentItemOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
+                            <span v-else>{{scope.row.name}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            :label="$i.order.planPayDt"
+                            width="200">
+                        <template slot-scope="scope">
+                            <el-date-picker
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    class="speDate"
+                                    v-model="scope.row.planPayDt"
+                                    type="date"
+                                    :picker-options="datePickOption"
+                                    :placeholder="$i.order.pleaseChoose">
+                            </el-date-picker>
+                            <span v-else>{{scope.row.planPayDt?$dateFormat(scope.row.planPayDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="planPayAmount"
+                            :label="$i.order.planPayAmount"
+                            width="160">
+                        <template slot-scope="scope">
+                            <v-input-number
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    class="speNumber"
+                                    v-model="scope.row.planPayAmount"
+                                    :controls="false"
+                                    :min="0"></v-input-number>
+                            <span v-else>{{scope.row.planPayAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="actualPayDt"
+                            :label="$i.order.actualPayDt"
+                            width="200">
+                        <template slot-scope="scope">
+                            <el-date-picker
+                                    class="speDate"
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    v-model="scope.row.actualPayDt"
+                                    type="date"
+                                    :picker-options="datePickOption1"
+                                    :placeholder="$i.order.pleaseChoose">
+                            </el-date-picker>
+                            <span v-else>{{scope.row.actualPayDt?$dateFormat(scope.row.actualPayDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="actualPayAmount"
+                            :label="$i.order.actualPayAmount"
+                            width="160">
+                        <template slot-scope="scope">
+                            <v-input-number
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    class="speNumber"
+                                    v-model="scope.row.actualPayAmount"
+                                    :controls="false"
+                                    :min="0"></v-input-number>
+                            <span v-else>{{scope.row.actualPayAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            :label="$i.order.planRefundDt"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="planRefundAmount"
+                            :label="$i.order.planRefundAmount"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.planRefundAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            :label="$i.order.actualRefundDt"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="actualRefundAmount"
+                            :label="$i.order.actualRefundAmount"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.actualRefundAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="remark"
+                            :label="$i.order.remarkBig"
+                            width="200">
+                        <template slot-scope="scope">
+                            <el-input
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    :placeholder="$i.order.pleaseInput"
+                                    v-model="scope.row.remark"
+                                    clearable>
+                            </el-input>
+                            <span v-else>{{scope.row.remark}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="currencyCode"
+                            :label="$i.order.payCurrency"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.order.available"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.status===-1">{{$i.order.abandon}}</span>
+                            <span v-if="scope.row.status===10">{{$i.order.waitCustomerConfirm}}</span>
+                            <span v-if="scope.row.status===20">{{$i.order.waitSupplierConfirm}}</span>
+                            <span v-if="scope.row.status===30">{{$i.order.waitServiceConfirm}}</span>
+                            <span v-if="scope.row.status===40">{{$i.order.confirm}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            :label="$i.order.action"
+                            align="center"
+                            width="160">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.status===10">
+                                <el-button
+                                        v-authorize="'ORDER:DETAIL:CONFIRM_REFUNDS'"
+                                        @click="confirmPay(scope.row)"
+                                        type="text">{{$i.order.confirm}}
                                 </el-button>
                             </div>
+                            <div v-else-if="scope.row.status===40 && scope.row.planRefundDt">
+
+                            </div>
                             <div v-else>
-                                <div v-if="scope.row.status===-1">
-                                    <el-button
-                                            v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
-                                            v-if="scope.row.planPayDt"
-                                            :disabled="!allowHandlePay"
-                                            @click="restorePay(scope.row)"
-                                            type="text">{{$i.order.restore}}
+                                <div v-if="scope.row.isNew">
+                                    <el-button :disabled="!allowHandlePay" @click="saveNewPay(scope.row)" type="text"
+                                               size="small">{{$i.order.save}}
                                     </el-button>
-                                </div>
-                                <div v-else-if="scope.row.isModify">
-                                    <el-button
-                                            :disabled="!allowHandlePay"
-                                            @click="saveModifyPay(scope.row)"
-                                            type="text"
-                                            size="small">{{$i.order.save}}
-                                    </el-button>
-                                    <el-button :disabled="!allowHandlePay" @click="cancelModifyPay(scope.row)"
-                                               type="text" size="small">{{$i.order.cancel}}
+                                    <el-button :disabled="!allowHandlePay" @click="cancelNewPay(scope.row)" type="text"
+                                               size="small">{{$i.order.cancel}}
                                     </el-button>
                                 </div>
                                 <div v-else>
-                                    <el-button
-                                            v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
-                                            @click="modifyPay(scope.row)"
-                                            :disabled="!allowHandlePay"
-                                            type="text">
-                                        {{$i.order.modify}}
-                                    </el-button>
-                                    <el-button
-                                            v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
-                                            @click="abandonPay(scope.row)"
-                                            :disabled="!allowHandlePay"
-                                            type="text">
-                                        {{$i.order.abandon}}
-                                    </el-button>
+                                    <div v-if="scope.row.status===-1">
+                                        <el-button
+                                                v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                                v-if="scope.row.planPayDt"
+                                                :disabled="!allowHandlePay"
+                                                @click="restorePay(scope.row)"
+                                                type="text">{{$i.order.restore}}
+                                        </el-button>
+                                    </div>
+                                    <div v-else-if="scope.row.isModify">
+                                        <el-button
+                                                :disabled="!allowHandlePay"
+                                                @click="saveModifyPay(scope.row)"
+                                                type="text"
+                                                size="small">{{$i.order.save}}
+                                        </el-button>
+                                        <el-button :disabled="!allowHandlePay" @click="cancelModifyPay(scope.row)"
+                                                   type="text" size="small">{{$i.order.cancel}}
+                                        </el-button>
+                                    </div>
+                                    <div v-else>
+                                        <el-button
+                                                v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                                @click="modifyPay(scope.row)"
+                                                :disabled="!allowHandlePay"
+                                                type="text">
+                                            {{$i.order.modify}}
+                                        </el-button>
+                                        <el-button
+                                                v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                                @click="abandonPay(scope.row)"
+                                                :disabled="!allowHandlePay"
+                                                type="text">
+                                            {{$i.order.abandon}}
+                                        </el-button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </template>
-                </el-table-column>
-            </el-table>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
         </div>
+
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -622,6 +633,36 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.orderTotalNetWeight">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalNetWeight"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.orderTotalGrossWeight">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalGrossWeight"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.orderTotalVolume">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalVolume"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
         </div>
@@ -675,32 +716,6 @@
         </div>
         <el-dialog
                 custom-class="ucn-dialog-center"
-                title=""
-                :visible.sync="quickCreateDialogVisible"
-                width="70%">
-            <v-table
-                    :height="400"
-                    :loading="loadingTable"
-                    :data="tableDataList"
-                    :buttons="[{label: this.$i.order.createOrder, type: 1}]"
-                    @change-checked="changeChecked"
-                    @action="btnClick">
-                <template slot="header">
-                    <select-search
-                            class="search"
-                            @inputEnter="searchInquiry"
-                            v-model="searchId"
-                            :options="searchOptions"></select-search>
-                </template>
-            </v-table>
-            <page
-                    @size-change="changeSize"
-                    @change="changePage"
-                    :pageSizes="[50,100,200]"
-                    :page-data="pageData"></page>
-        </el-dialog>
-        <el-dialog
-                custom-class="ucn-dialog-center"
                 :title="$i.order.addProduct"
                 :visible.sync="productTableDialogVisible"
                 width="70%">
@@ -729,10 +744,8 @@
                 code="uorder_sku_list"
                 @closed="$refs.table.update()"
                 @save="saveNegotiate"
+                :beforeSave="beforeSave"
                 ref="HM">
-            <!--<div slot="skuPic" slot-scope="{data}">-->
-            <!--<v-upload :limit="20" readonly></v-upload>-->
-            <!--</div>-->
             <el-select
                     slot="skuFobCurrency"
                     v-model="data.value"
@@ -906,272 +919,272 @@
                 </el-option>
             </el-select>
 
-            <el-input-number
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="4"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="4"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="4"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="4"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuQty"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur(data)"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="1"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuPrice"
                     slot-scope="{data}"
                     :disabled="true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="4"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     :max="1"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuRateValueAddedTax"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     :max="1"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuTaxRefundRate"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuLength"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuWidth"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuHeight"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuNetWeight"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuVolume"
                     slot-scope="{data}"
+                    :accuracy="6"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonQty"
                     slot-scope="{data}"
+                    :accuracy="1"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuInnerCartonLength"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuInnerCartonWidth"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuInnerCartonHeight"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuInnerCartonWeightNet"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuInnerCartonRoughWeight"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonVolume"
+                    :accuracy="3"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonOuterNum"
+                    :accuracy="1"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonQty"
+                    :accuracy="1"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonLength"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonWidth"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonHeight"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonNetWeight"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonRoughWeight"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonVolume"
+                    :accuracy="3"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuApplicableAge"
+                    :accuracy="0"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuExpireDates"
+                    :accuracy="0"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuSampleQty"
+                    :accuracy="1"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuSamplePrice"
+                    :accuracy="4"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuDeliveryDates"
+                    :accuracy="0"
                     :precision="0"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
+                    v-model="data.value"></v-input-number>
         </v-history-modify>
         <v-message-board
                 @send="afterSend"
@@ -1190,7 +1203,8 @@
         VUpload,
         VHistoryModify,
         VMessageBoard,
-        VProduct
+        VProduct,
+        VInputNumber
     } from "@/components/index";
     import { mapActions } from "vuex";
 
@@ -1203,12 +1217,13 @@
             VUpload,
             VProduct,
             VHistoryModify,
-            VMessageBoard
+            VMessageBoard,
+            VInputNumber
         },
         data() {
             return {
                 options: [],
-                test: 1,
+
                 /**
                  * 字典配置
                  * */
@@ -1230,6 +1245,7 @@
                 skuStatusOption: [],
                 skuStatusTotalOption: [],
                 skuSaleStatusOption: [],
+                paymentItemOption: [],
 
                 /**
                  * Negotiate 插槽变量
@@ -1263,30 +1279,29 @@
                         return time.getTime() > Date.now();
                     }
                 },
-                quickCreateDialogVisible: false,
                 tableData: [],
                 selectSearch: "",
                 productInfoBtn: [
                     {
-                        label: "Negotiate",
+                        label: this.$i.order.modify,
                         type: "negotiate"
                     },
                     {
-                        label: "History",
+                        label: this.$i.order.history,
                         type: "history"
                     },
                     {
-                        label: "Detail",
+                        label: this.$i.order.detail,
                         type: "detail"
                     }
                 ],
                 productNotModifyBtn: [
                     {
-                        label: "History",
+                        label: this.$i.order.history,
                         type: "history"
                     },
                     {
-                        label: "Detail",
+                        label: this.$i.order.detail,
                         type: "detail"
                     }
                 ],
@@ -1331,7 +1346,7 @@
                 tableDataList: [],
                 searchOptions: [
                     {
-                        label: "inquiryNo",
+                        label: this.$i.order.inquiryNo,
                         id: 1
                     }
                 ],
@@ -1503,22 +1518,13 @@
              * 获取页面数据
              * */
             getUnit() {
-                let currency,country,exchangeRate,unit;
-                currency=this.$ajax.get(this.$apis.CURRENCY_ALL, {}, { cache: true });
-                country=this.$ajax.get(this.$apis.COUNTRY_ALL, {}, { cache: true });
-                exchangeRate=this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY, {}, { cache: true });
-                unit=this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "ORDER_STATUS", "SKU_SALE_STATUS", "SKU_STATUS"], { cache: true });
-                this.skuStatusOption = [
-                    {
-                        code: "PROCESS",
-                        name: "PROCESS"
-                    },
-                    {
-                        code: "CANCLED",
-                        name: "CANCLED"
-                    }
-                ];
-                this.$ajax.all([currency,country,exchangeRate,unit]).then(res=>{
+                let currency, country, exchangeRate, unit;
+                currency = this.$ajax.get(this.$apis.CURRENCY_ALL, {}, { cache: true });
+                country = this.$ajax.get(this.$apis.COUNTRY_ALL, {}, { cache: true });
+                exchangeRate = this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY, {}, { cache: true });
+                unit = this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "ORDER_STATUS", "SKU_SALE_STATUS", "SKU_STATUS", "PAYMENT_ITEM_NAME"], { cache: true });
+                this.skuStatusOption=[];
+                this.$ajax.all([currency, country, exchangeRate, unit]).then(res => {
                     this.currencyOption = res[0];
                     this.countryOption = res[1];
                     _.map(this.orderForm.exchangeRateList, v => {
@@ -1555,12 +1561,19 @@
                             this.skuSaleStatusOption = v.codes;
                         } else if (v.code === "SKU_STATUS") {
                             this.skuStatusTotalOption = v.codes;
+                            _.map(this.skuStatusTotalOption,(v,k)=>{
+                                if(k===1 || k===3){
+                                    this.skuStatusOption.push(v);
+                                }
+                            });
+                        } else if (v.code === "PAYMENT_ITEM_NAME") {
+                            this.paymentItemOption = v.codes;
                         }
                     });
                     this.getDetail();
                 });
             },
-            getDetail(e,isTrue) {
+            getDetail(e, isTrue) {
                 this.loadingPage = true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL, {
                     orderId: this.$route.query.orderId,
@@ -1573,10 +1586,10 @@
                     _.map(this.$db.order.orderDetail, v => {
                         v._isModified = false;
                     });
-                    if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
+                    if (this.orderForm.status === "1" || this.orderForm.status === "2" && !isTrue) {
                         _.map(this.orderForm.fieldUpdate, (v, k) => {
-                            if(k==='attachments'){
-                                k='attachment';
+                            if (k === "attachments") {
+                                k = "attachment";
                             }
                             this.$db.order.orderDetail[k]._isModified = true;
                         });
@@ -1598,43 +1611,27 @@
                     let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res.skuList, "skuSysCode"), item => {
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
-                            if (item.skuPictures) {
-                                item.skuPictures._image = false;
-                            }
-                            item.skuLabelPic._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
-                            item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
-                            item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
-                            item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
-                            item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
-                            item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
-                            item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
-                            item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
-
-                            if (item.skuCategoryId.value) {
-                                item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
-                            }
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
                         }
                     });
                     this.productTableData = [];
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
-                    if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
-                        console.log(this.$depthClone(this.productTableData),'this.productTableData')
+                    if (this.orderForm.status === "1" || this.orderForm.status === "2" && !isTrue) {
                         _.map(this.productTableData, v => {
                             if (v.fieldUpdate.value) {
                                 _.map(v.fieldUpdate.value, (value, key) => {
@@ -1644,8 +1641,8 @@
                                 });
                                 v.fieldUpdate.value = {};
                             }
-                            if(v._remark){
-                                console.log(this.$depthClone(v.fieldRemarkUpdate),'fieldRemarkUpdate')
+                            if (v._remark) {
+                                // console.log(this.$depthClone(v.fieldRemarkUpdate),'fieldRemarkUpdate')
                             }
                         });
                     }
@@ -1683,7 +1680,7 @@
                      * 获取payment数据
                      * */
                     this.getPaymentData();
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingPage = false;
                     this.disableClickCancelModify = false;
                     if (e) {
@@ -1695,8 +1692,12 @@
                 this.loadingPaymentTable = true;
                 this.$ajax.post(this.$apis.PAYMENT_LIST, {
                     orderNo: this.orderForm.orderNo,
-                    orderType: 10
+                    orderType: 10,
+                    moduleCode: "ORDER"
                 }).then(res => {
+                    _.map(res.datas, v => {
+                        v.name = (_.findWhere(this.paymentItemOption, { code: v.name }) || {}).name;
+                    });
                     this.paymentData = res.datas;
                 }).finally(err => {
                     this.loadingPaymentTable = false;
@@ -1713,7 +1714,6 @@
                     }
                 });
                 let orderSkuUpdateList = [];
-
                 _.map(this.productTableData, item => {
                     let isModify = false, isModifyStatus = false;
                     _.map(item, (val, index) => {
@@ -1743,7 +1743,7 @@
                     }
                     if (!item._remark) {
                         _.map(item, (v, k) => {
-                            if (v._isModified) {
+                            if (v._isModified || v._isModifyStatus) {
                                 if (!item.fieldUpdate.value) {
                                     item.fieldUpdate.value = {};
                                 }
@@ -1751,13 +1751,12 @@
                             }
                         });
                     }
-                    else{
-                        console.log(item,'item')
-                        if(!item.fieldRemarkUpdate || !item.fieldRemarkUpdate.value){
-                            item.fieldRemarkUpdate={value:{}}
+                    else {
+                        if (!item.fieldRemarkUpdate || !item.fieldRemarkUpdate.value) {
+                            item.fieldRemarkUpdate = { value: {} };
                         }
                         _.map(item, (v, k) => {
-                            if (v._isModified) {
+                            if (v._isModified || v._isModifyStatus) {
                                 item.fieldRemarkUpdate.value[k] = "";
                             }
                         });
@@ -1765,15 +1764,25 @@
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
-                // return console.log(this.$depthClone(params.skuList), "params.skuList");
+                return console.log(this.$depthClone(params.skuList),'params.skuList')
+
+                /**
+                 * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
+                 * */
+                for (let val in params.skuList) {
+                    if (this.$validateForm(params.skuList[val], this.$db.order.productInfoTable)) {
+                        return;
+                    }
+                }
+
                 let rightCode = true;
                 _.map(params.skuList, v => {
                     if (v.skuSupplierCode !== params.supplierCode) {
                         rightCode = false;
                     }
                     v.skuSample = v.skuSample === "1" ? true : false;
-                    v.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory ? _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code : "";
-                    let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
+                    v.skuInspectQuarantineCategory = (_.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }) || {}).code;
+                    let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
                             v[item] = (v[item][0] ? v[item][0] : null);
@@ -1790,6 +1799,7 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
+                // return console.log(this.$depthClone(params.skuList),'params')
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -1808,11 +1818,6 @@
                     }
                 });
                 params.skuList = this.dataFilter(this.productTableData);
-                _.map(params.skuList, v => {
-                    if (_.isArray(v.skuLabelPic)) {
-                        v.skuLabelPic = (v.skuLabelPic[0] ? v.skuLabelPic[0] : null);
-                    }
-                });
                 params.attachments = this.$refs.upload[0].getFiles();
                 params.draftCustomer = true;
                 this.disableClickSaveDraft = true;
@@ -1843,16 +1848,12 @@
                     // this.loadingPage=false;
                 });
             },
-            quickCreate() {
-                this.quickCreateDialogVisible = true;
-                this.getInquiryData();
-            },
             getInquiryData() {
                 this.loadingTable = true;
                 this.$ajax.post(this.$apis.INQUIERY_LIST, this.inquiryConfig).then(res => {
                     this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas);
                     this.pageData = res;
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingTable = false;
                 });
             },
@@ -1883,43 +1884,62 @@
                     this.orderForm.fieldUpdate = {};
                 }
                 this.orderForm.fieldUpdate[key] = "";
-                if(key==='incoterm'){
-                    _.map(this.productTableData,item=>{
-                        if(!item._remark){
-                            if(this.orderForm[key] === '1'){
+                if (key === "incoterm") {
+                    _.map(this.productTableData, item => {
+                        if (!item._remark) {
+                            if (this.orderForm[key] === "1") {
                                 //fob
-                                item.skuPrice.value=item.skuFobPrice.value*(item.skuQty.value?item.skuQty.value:0);
-                            }else if(this.orderForm[key] === '2'){
+                                item.skuPrice.value = item.skuFobPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            } else if (this.orderForm[key] === "2") {
                                 //exw
-                                item.skuPrice.value=item.skuExwPrice.value*(item.skuQty.value?item.skuQty.value:0);
-                            }else if(this.orderForm[key] === '3'){
+                                item.skuPrice.value = item.skuExwPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            } else if (this.orderForm[key] === "3") {
                                 //cif
-                                item.skuPrice.value=item.skuCifPrice.value*(item.skuQty.value?item.skuQty.value:0);
-                            }else if(this.orderForm[key] === '4'){
+                                item.skuPrice.value = item.skuCifPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            } else if (this.orderForm[key] === "4") {
                                 //ddu
-                                item.skuPrice.value=item.skuDduPrice.value*(item.skuQty.value?item.skuQty.value:0);
+                                item.skuPrice.value = item.skuDduPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
                             }
                         }
-                    })
+                    });
                 }
             },
-            changeAttachment(a,b){
-                if(b){return}
+            changeAttachment(a, b) {
+                if (b) {
+                    return;
+                }
                 if (!this.orderForm.fieldUpdate) {
                     this.orderForm.fieldUpdate = {};
                 }
-                this.orderForm.fieldUpdate['attachments'] = "";
+                this.orderForm.fieldUpdate["attachments"] = "";
             },
 
             /**
              * responsibility事件
              * */
             handleResponsibilityChange(data, key) {
-                this.orderForm.responsibilityFlag=true;
+                this.orderForm.responsibilityFlag = true;
                 if (!data.fieldUpdate) {
                     data.fieldUpdate = {};
                 }
                 data.fieldUpdate[key] = "";
+            },
+            addResponsibility() {
+                this.orderForm.responsibilityList.push({
+                    type: "",
+                    customer: "",
+                    supplier: "",
+                    remark: "",
+                    actualDt: "",
+                    fieldUpdate: {
+                        type: "",
+                        customer: "",
+                        supplier: "",
+                        remark: "",
+                        actualDt: ""
+                    },
+                    orderNo: this.orderForm.orderNo
+                });
             },
 
             /**
@@ -1948,13 +1968,12 @@
                     let arr = [];
                     _.map(this.productTableData, v => {
                         if (Number(v.skuSysCode.value) === Number(e.skuSysCode.value)) {
-                            // if (!v._remark) {
-                            //     this.handlePriceBlur({}, v);
-                            // }
                             arr.push(v);
                         }
                     });
-                    this.chooseProduct = this.$refs.HM.init(arr, []);
+                    this.getHistory(e, arr, true).then(data => {
+                        this.chooseProduct = data;
+                    });
                 }
                 else if (type === "detail") {
                     this.$windowOpen({
@@ -1965,63 +1984,52 @@
                     });
                 }
                 else if (type === "history") {
-                    let param = {
-                        operatorFilters: [],
-                        orderId: this.$route.query.orderId,
-                        pn: 1,
-                        ps: 50,
-                        skuId: e.skuId.value,
-                    };
                     let data = _.filter(this.productTableData, (m) =>
                         m.skuSysCode.value === e.skuSysCode.value
                     );
-                    this.$ajax.post(this.$apis.ORDER_HISTORY, param).then(res => {
-                        let arr = [];
-                        _.map(res.datas, v => {
-                            arr.push(JSON.parse(v.history));
-                        });
-
-                        let history=this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(arr, "skuSysCode"),item=>{
-                            if (item._remark) {
-                                item.label.value = this.$i.order.remarks;
-                                if (item.skuPictures) {
-                                    item.skuPictures._image = false;
-                                }
-                                item.skuLabelPic._image = false;
-                                item.skuPkgMethodPic._image = false;
-                                item.skuInnerCartonPic._image = false;
-                                item.skuOuterCartonPic._image = false;
-                                item.skuAdditionalOne._image = false;
-                                item.skuAdditionalTwo._image = false;
-                                item.skuAdditionalThree._image = false;
-                                item.skuAdditionalFour._image = false;
-                            }
-                            else {
-                                item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
-                                item.skuSample._value = item.skuSample.value ? "YES" : "NO";
-                                item.skuSample.value = item.skuSample.value ? "1" : "0";
-                                item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
-                                item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
-                                item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
-                                item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
-                                item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
-                                item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
-                                item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
-
-                                if (item.skuCategoryId.value) {
-                                    item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
-                                }
-                                item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
-                                item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
-                            }
-                        });
-                        console.log(history,'history')
-
-                        this.$refs.HM.init(data, history, false);
-                    }).finally(() => {
-
-                    });
+                    this.getHistory(e, []);
                 }
+            },
+            getHistory(e, data, isTrue) {
+                let param = {
+                    operatorFilters: [],
+                    orderId: this.$route.query.orderId,
+                    pn: 1,
+                    ps: 50,
+                    skuId: e.skuId.value
+                };
+
+                return this.$ajax.post(this.$apis.ORDER_HISTORY, param).then(res => {
+                    let array = [], obj = {};
+                    _.map(res.datas, v => {
+                        obj = JSON.parse(v.history);
+                        obj.fieldRemark = JSON.parse(v.fieldsRemark);
+                        array.push(obj);
+                    });
+
+                    let history = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode", true), item => {
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
+                        }
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                            item.skuSample.value = item.skuSample.value ? "1" : "0";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
+                        }
+                    });
+                    return this.$refs.HM.init(data, history, isTrue ? true : false);
+                }).finally(() => {
+
+                });
             },
             changeProductChecked(e) {
                 this.selectProductInfoTable = e;
@@ -2091,17 +2099,6 @@
                         item._isNew = true;
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
-                            if (item.skuPictures) {
-                                item.skuPictures._image = false;
-                            }
-                            item.skuLabelPic._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
@@ -2114,7 +2111,8 @@
                             item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
                             item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
-                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
                         }
                     });
                     _.map(data, v => {
@@ -2126,6 +2124,15 @@
             },
             handleCancel() {
                 this.productTableDialogVisible = false;
+            },
+            beforeSave(data) {
+                let obj = {};
+                _.map(data[0], (val, key) => {
+                    obj[key] = val.value;
+                });
+                if (this.$validateForm(obj, this.$db.order.productInfoTable)) {
+                    return false;
+                }
             },
             saveNegotiate(e) {
                 _.map(this.productTableData, (v, k) => {
@@ -2144,9 +2151,9 @@
                     jsons = {};
                     if (item._remark) { //拼装remark 数据
                         for (let k in item) {
-                            if(k==='fieldRemarkUpdate'){
-                                json[k]=item[k].value;
-                            }else{
+                            if (k === "fieldRemarkUpdate") {
+                                json[k] = item[k].value;
+                            } else {
                                 jsons[k] = item[k].value;
                             }
                         }
@@ -2159,28 +2166,28 @@
                             } else {
                                 if (item[k]._value) {
                                     if (item[k].key === "skuUnit") {
-                                        json[k] = _.findWhere(this.skuUnitOption, { name: item[k]._value }).code;
+                                        json[k] = (_.findWhere(this.skuUnitOption, { name: item[k]._value }) || {}).code;
                                     }
                                     else if (item[k].key === "skuUnitWeight") {
-                                        json[k] = _.findWhere(this.weightOption, { name: item[k]._value }).code;
+                                        json[k] = (_.findWhere(this.weightOption, { name: item[k]._value }) || {}).code;
                                     }
                                     else if (item[k].key === "skuUnitLength") {
-                                        json[k] = _.findWhere(this.lengthOption, { name: item[k]._value }).code;
+                                        json[k] = (_.findWhere(this.lengthOption, { name: item[k]._value }) || {}).code;
                                     }
                                     else if (item[k].key === "skuUnitVolume") {
-                                        json[k] = _.findWhere(this.volumeOption, { name: item[k]._value }).code;
+                                        json[k] = (_.findWhere(this.volumeOption, { name: item[k]._value }) || {}).code;
                                     }
                                     else if (item[k].key === "skuExpireUnit") {
                                         json[k] = _.findWhere(this.expirationDateOption, { name: item[k]._value }).code;
                                     }
                                     else if (item[k].key === "skuStatus") {
-                                        json[k] = _.findWhere(this.skuStatusTotalOption, { name: item[k]._value }).code;
+                                        json[k] = (_.findWhere(this.skuStatusTotalOption, { name: item[k]._value }) || {}).code;
                                     }
                                     else if (item[k].key === "skuSample") {
-                                        json[k] = _.findWhere(this.isNeedSampleOption, { code: item[k].value }).code;
+                                        json[k] = (_.findWhere(this.isNeedSampleOption, { code: item[k].value }) || {}).code;
                                     }
                                     else if (item[k].key === "skuInspectQuarantineCategory") {
-                                        json[k] = _.findWhere(this.quarantineTypeOption, { name: item[k]._value }).code;
+                                        json[k] = (_.findWhere(this.quarantineTypeOption, { name: item[k]._value }) || {}).code;
                                     }
                                     else {
                                         json[k] = item[k].value;
@@ -2213,10 +2220,10 @@
                         actualPayAmount: "",
                         currencyCode: this.initialData.currency,
                         status: 20,
+                        remark: "",
                         isNew: true
                     });
-                    // this.disableApplyPay=true;
-                }).finally(err => {
+                }).finally(() => {
                     this.disableClickApplyPay = false;
                 });
             },
@@ -2237,7 +2244,7 @@
                     });
                 }
                 this.disableClickDunning = true;
-                this.$ajax.post(this.$apis.PAYMENT_DUNNING, params).then(res => {
+                this.$ajax.post(`${this.$apis.PAYMENT_DUNNING}?moduleCode=ORDER`, params).then(res => {
                     this.getPaymentData();
                     this.$message({
                         message: this.$i.order.dunSuccess,
@@ -2261,7 +2268,9 @@
                     payToCompanyName: this.orderForm.supplierName,
                     planPayAmount: data.planPayAmount,
                     planPayDt: data.planPayDt,
-                    type: 10
+                    remark: data.remark,
+                    type: 10,
+                    moduleCode: "ORDER"
                 };
                 _.map(this.currencyOption, v => {
                     if (v.code === data.currencyCode) {
@@ -2275,6 +2284,7 @@
                         message: this.$i.order.saveSuccess,
                         type: "success"
                     });
+                    this.$set(data, "name", (_.findWhere(this.paymentItemOption, { code: res.name } || {}).name));
                     this.$set(data, "isNew", false);
                     this.$set(data, "version", res.version);
                     this.$set(data, "id", res.id);
@@ -2291,6 +2301,7 @@
                 });
             },
             modifyPay(data) {
+                data.name = (_.findWhere(this.paymentItemOption, { name: data.name }) || {}).code;
                 this.$set(data, "isModify", true);
                 let has = false;
                 this.copyList.forEach(v => {
@@ -2310,7 +2321,9 @@
                     name: data.name,
                     planPayAmount: data.planPayAmount,
                     planPayDt: data.planPayDt,
-                    version: data.version
+                    version: data.version,
+                    remark: data.remark,
+                    moduleCode: "ORDER"
                 };
                 this.loadingPaymentTable = true;
                 this.$ajax.post(this.$apis.PAYMENT_UPDATE, param).then(res => {
@@ -2327,8 +2340,10 @@
                             this.$set(v, "planPayAmount", obj.planPayAmount);
                             this.$set(v, "actualPayDt", obj.actualPayDt);
                             this.$set(v, "actualPayAmount", obj.actualPayAmount);
+                            this.$set(v, "remark", obj.remark);
                         }
                     });
+                    this.$set(data, "name", (_.findWhere(this.paymentItemOption, { code: res.name }) || {}).name);
                     this.$set(data, "isModify", false);
                     this.$set(data, "version", res.version);
                     this.$set(data, "status", res.status);
@@ -2340,11 +2355,12 @@
                 this.copyList.forEach(v => {
                     if (v.no === data.no) {
                         let obj = Object.assign({}, v);
-                        this.$set(data, "name", obj.name);
+                        this.$set(data, "name", (_.findWhere(this.paymentItemOption, { code: obj.name }) || {}).name);
                         this.$set(data, "planPayDt", obj.planPayDt);
                         this.$set(data, "planPayAmount", obj.planPayAmount);
                         this.$set(data, "actualPayDt", obj.actualPayDt);
                         this.$set(data, "actualPayAmount", obj.actualPayAmount);
+                        this.$set(data, "remark", obj.remark);
                     }
                 });
                 this.$set(data, "isModify", false);
@@ -2358,7 +2374,8 @@
                     this.loadingPaymentTable = true;
                     this.$ajax.post(this.$apis.PAYMENT_ABANDON, {
                         id: data.id,
-                        version: data.version
+                        version: data.version,
+                        moduleCode: "ORDER"
                     }).then(res => {
                         this.$message({
                             type: "success",
@@ -2382,7 +2399,8 @@
                     this.loadingPaymentTable = true;
                     this.$ajax.post(this.$apis.PAYMENT_RESTORE, {
                         id: data.id,
-                        version: data.version
+                        version: data.version,
+                        moduleCode: "ORDER"
                     }).then(res => {
                         this.$message({
                             type: "success",
@@ -2401,7 +2419,10 @@
                 if (row.status === -1) {
                     return "warning-row";
                 } else if (row.status === 10 || row.status === 20 || row.status === 30) {
-                    return "waiting-row";
+                    if (!row.isNew) {
+                        return "waiting-row";
+                    }
+
                 }
                 return "";
             },
@@ -2417,7 +2438,11 @@
                             sums[index] = "-";
                         }
                         else {
-                            const values = data.map(item => Number(item[column.property]));
+                            const values = data.map(item => {
+                                if (item.status === 40) {
+                                    return Number(item[column.property]);
+                                }
+                            });
                             if (!values.every(value => isNaN(value))) {
                                 sums[index] = values.reduce((prev, curr) => {
                                     const value = Number(curr);
@@ -2444,7 +2469,8 @@
                     this.loadingPaymentTable = true;
                     this.$ajax.post(this.$apis.PAYMENT_ACCEPT, {
                         id: data.id,
-                        version: data.version
+                        version: data.version,
+                        moduleCode: "ORDER"
                     }).then(res => {
                         this.$message({
                             type: "success",
@@ -2467,8 +2493,6 @@
              * history部分事件
              * */
             handleBlurSkuQty(data) {
-                console.log(data.value);     //skuQty
-                console.log(this.copyObj, "copyObj");
                 if (this.orderForm.incoterm === "1") {
                     //FOB
                 } else if (this.orderForm.incoterm === "2") {
@@ -2486,28 +2510,28 @@
                 if (this.savedIncoterm === "1") {
                     //fob
                     if (obj.skuFobPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = Number((obj.skuFobPrice.value * obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuFobPrice.value,obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.savedIncoterm === "2") {
                     //exw
                     if (obj.skuExwPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = Number((obj.skuExwPrice.value * obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuExwPrice.value,obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.savedIncoterm === "3") {
                     //cif
                     if (obj.skuCifPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = Number((obj.skuCifPrice.value * obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuCifPrice.value,obj.skuQty.value),4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.savedIncoterm === "4") {
                     //ddu
                     if (obj.skuDduPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = Number((obj.skuDduPrice.value * obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuDduPrice.value,obj.skuQty.value),4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
@@ -2544,7 +2568,7 @@
                     ids: [this.orderForm.id],
                     orderNos: [this.orderForm.orderNo]
                 }).then(res => {
-                    this.getDetail(false,true);
+                    this.getDetail(false, true);
                 }).finally(err => {
                     this.disableClickConfirm = false;
                 });
@@ -2567,12 +2591,12 @@
                             message: this.$i.order.handleSuccess,
                             type: "success"
                         });
+                        this.disableCancelOrder = false;
                         this.$router.push("/order/overview");
-                    }).finally(err => {
+                    }).catch(() => {
+                        this.getDetail();
                         this.disableCancelOrder = false;
                     });
-                }).catch(() => {
-
                 });
             },
 
@@ -2592,326 +2616,6 @@
             changeChecked() {
 
             },
-            btnClick(e) {
-                this.quickCreateDialogVisible = false;
-                this.loadingProductTable = true;
-                this.$ajax.get(this.$apis.INQUIRY_ID, {
-                    id: e.id.value
-                }).then(res => {
-                    this.orderForm.quotationNo = res.quotationNo;
-                    this.productTableData = [];
-                    let arr = [];
-                    _.map(res.details, v => {
-                        let obj = {
-                            bookmarkId: "",
-                            companyId: null,
-                            entryDt: "",
-                            entryId: null,
-                            entryName: "",
-                            fieldRemark: {},
-                            fieldUpdate: {},
-                            fieldsRemark: "",
-                            fieldsUpdate: "",
-                            id: null,
-                            orderId: null,
-                            orderNo: "",
-                            ownerId: null,
-                            skuAdditionalFour: "",
-                            skuAdditionalOne: "",
-                            skuAdditionalThree: "",
-                            skuAdditionalTwo: "",
-                            skuAdjustPackage: true,
-                            skuApplicableAge: null,
-                            skuAvailableQty: null,
-                            skuBarCode: "",
-                            skuBrand: "",
-                            skuBrandRelated: "",
-                            skuBrandRemark: "",
-                            skuCategoryFour: "",
-                            skuCategoryId: null,
-                            skuCategoryOne: "",
-                            skuCategoryThree: "",
-                            skuCategoryTwo: "",
-                            skuCertificat: "",
-                            skuCifCurrency: "",
-                            skuCifPort: "",
-                            skuCifPrice: null,
-                            skuCode: "",
-                            skuColourCn: "",
-                            skuColourEn: "",
-                            skuComments: "",
-                            skuCommodityInspectionCn: "",
-                            skuCommodityInspectionEn: "",
-                            skuCustomerCreate: true,
-                            skuCustomerSkuCode: "",
-                            skuCustomsCode: "",
-                            skuCustomsNameCn: "",
-                            skuCustomsNameEn: "",
-                            skuDduCurrency: "",
-                            skuDduPort: "",
-                            skuDduPrice: null,
-                            skuDeclareElement: "",
-                            skuDeliveredQty: null,
-                            skuDeliveryDates: null,
-                            skuDepartureDt: null,
-                            skuDescCn: "",
-                            skuDescCustomer: "",
-                            skuDescEn: "",
-                            skuDesign: "",
-                            skuDisplayBoxQty: null,
-                            skuExpireDates: null,
-                            skuExpireUnit: null,
-                            skuExwCurrency: "",
-                            skuExwPrice: null,
-                            skuFobCurrency: "",
-                            skuFobPort: "",
-                            skuFobPrice: null,
-                            skuFormation: "",
-                            skuGp20SkuQty: null,
-                            skuGp40SkuQty: null,
-                            skuGrossWeight: null,
-                            skuHeight: null,
-                            skuHq40SkuQty: null,
-                            skuId: null,
-                            skuInboundQty: null,
-                            skuIncoterm: "",
-                            skuIncotermArea: "",
-                            skuInnerCartonDesc: "",
-                            skuInnerCartonHeight: null,
-                            skuInnerCartonLength: null,
-                            skuInnerCartonMethodCn: "",
-                            skuInnerCartonMethodEn: "",
-                            skuInnerCartonOuterNum: null,
-                            skuInnerCartonPic: "",
-                            skuInnerCartonQty: null,
-                            skuInnerCartonRoughWeight: null,
-                            skuInnerCartonUnit: "",
-                            skuInnerCartonVolume: null,
-                            skuInnerCartonWeightNet: null,
-                            skuInnerCartonWidth: null,
-                            skuInnerPackBarCode: "",
-                            skuInnerPackCode: "",
-                            skuInnerPackLabel: "",
-                            skuInspectQuarantineCategory: "",
-                            skuInventory: null,
-                            skuInventoryCostMethod: "",
-                            skuLabel: "",
-                            skuLabelDesc: "",
-                            skuLabelPic: "",
-                            skuLength: null,
-                            skuLengthWidthHeight: "",
-                            skuMainSaleArea: "",
-                            skuMainSaleCountry: "",
-                            skuMaterialCn: "",
-                            skuMaterialEn: "",
-                            skuMethodPkgCn: "",
-                            skuMethodPkgEn: "",
-                            skuMinInventory: null,
-                            skuMinOrderQty: null,
-                            skuModifyStatus: null,
-                            skuNameCn: "",
-                            skuNameCustomer: "",
-                            skuNameEn: "",
-                            skuNetWeight: null,
-                            skuNoneSellCountry: "",
-                            skuOem: true,
-                            skuOrigin: "",
-                            skuOtherPackInfoCn: "",
-                            skuOtherPackInfoEn: "",
-                            skuOuterCartonBarCode: "",
-                            skuOuterCartonCode: "",
-                            skuOuterCartonDesc: "",
-                            skuOuterCartonHeight: null,
-                            skuOuterCartonLength: null,
-                            skuOuterCartonMethodCn: "",
-                            skuOuterCartonMethodEn: "",
-                            skuOuterCartonNetWeight: null,
-                            skuOuterCartonPic: "",
-                            skuOuterCartonQty: null,
-                            skuOuterCartonRoughWeight: null,
-                            skuOuterCartonUnit: "",
-                            skuOuterCartonVolume: null,
-                            skuOuterCartonWidth: null,
-                            skuPic: "",
-                            skuPkgMethodPic: "",
-                            skuPrice: null,
-                            skuProductionDates: null,
-                            skuQty: null,
-                            skuQtyPerTray: null,
-                            skuQualifiedQty: null,
-                            skuQualityStander: "",
-                            skuQuotationNo: "",
-                            skuRateValueAddedTax: null,
-                            skuReadilyAvailable: true,
-                            skuRecycle: true,
-                            skuRefunQty: null,
-                            skuRemarkOne: "",
-                            skuRemarkThree: "",
-                            skuRemarkTwo: "",
-                            skuSafeInventory: null,
-                            skuSaleStatus: null,
-                            skuSample: true,
-                            skuSamplePrice: null,
-                            skuSampleQty: null,
-                            skuShippingMarks: "",
-                            skuSpecialTransportRequire: "",
-                            skuStatus: "",
-                            skuSupplierCode: "",
-                            skuSupplierCompanyId: null,
-                            skuSupplierId: null,
-                            skuSupplierName: "",
-                            skuSupplierTenantId: null,
-                            skuSysCode: "",
-                            skuTaxRefundRate: null,
-                            skuTradeMarkCn: "",
-                            skuTradeMarkEn: "",
-                            skuTryDimension: null,
-                            skuUndeliveredQty: null,
-                            skuUnit: null,
-                            skuUnitLength: null,
-                            skuUnitVolume: null,
-                            skuUnitWeight: null,
-                            skuUntestedQty: null,
-                            skuUseDisplayBox: true,
-                            skuVolume: null,
-                            skuWarehourceDefault: "",
-                            skuWidth: null,
-                            skuYearListed: "",
-                            tenantId: null,
-                            timeZone: "",
-                            updateDt: "",
-                            updateId: null,
-                            updateName: "",
-                            version: null
-                        };
-                        obj.skuId = v.skuId;
-                        obj.skuPic = v.skuPic;
-                        obj.skuNameEn = v.skuNameEn;
-                        obj.skuNameCn = v.skuNameCn;
-                        obj.skuDescCn = v.skuDescCn;
-                        obj.skuDescEn = v.skuDescEn;
-                        obj.skuDescCustomer = v.skuDescCustomer;
-                        obj.skuNameCustomer = v.skuNameCustomer;
-                        obj.skuCustomerSkuCode = v.skuCustomerSkuCode;
-                        obj.skuCode = v.skuCode;
-                        obj.skuSupplierName = v.skuSupplierName;
-                        obj.skuSupplierCode = v.skuSupplierCode;
-                        obj.skuFobCurrency = v.skuFobCurrency;
-                        obj.skuFobPrice = v.skuFobPrice;
-                        obj.skuFobPort = v.skuFobPort;
-                        obj.skuExwCurrency = v.skuExwCurrency;
-                        obj.skuExwPrice = v.skuExwPrice;
-                        obj.skuCifCurrency = v.skuCifCurrency;
-                        obj.skuCifPrice = v.skuCifPrice;
-                        obj.skuCifPort = v.skuCifArea;
-                        obj.skuDduCurrency = v.skuDduCurrency;
-                        obj.skuDduPrice = v.skuDduPrice;
-                        obj.skuDduPort = v.skuDduArea;
-                        obj.skuUnit = v.skuUnit;
-                        obj.skuMaterialCn = v.skuMaterialCn;
-                        obj.skuMaterialEn = v.skuMaterialEn;
-                        obj.skuRateValueAddedTax = v.skuRateValueAddedTax;
-                        obj.skuTaxRefundRate = v.skuTaxRefundRate;
-                        obj.skuColourCn = v.skuColourCn;
-                        obj.skuColourEn = v.skuColourEn;
-                        obj.skuMinOrderQty = v.skuMinOrderQty;
-                        obj.skuDeliveryDates = v.skuDeliveryDates;
-                        obj.skuDesign = v.skuDesign;
-                        obj.skuCategoryId = v.skuCategoryId;
-                        obj.skuCustomsCode = v.skuCustomsCode;
-                        obj.skuCustomsNameCn = v.skuCustomsNameCn;
-                        obj.skuCustomsNameEn = v.skuCustomsNameEn;
-                        obj.skuTradeMarkCn = v.skuTradeMarkCn;
-                        obj.skuTradeMarkEn = v.skuTradeMarkEn;
-                        obj.skuCommodityInspectionCn = v.skuCommodityInspectionCn;
-                        obj.skuCommodityInspectionEn = v.skuCommodityInspectionEn;
-                        obj.skuDeclareElement = v.skuDeclareElement;
-                        obj.skuOrigin = v.skuOrigin;
-                        obj.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory;
-                        obj.skuUnitLength = v.skuUnitLength;
-                        obj.skuUnitWidth = v.skuUnitWidth;
-                        obj.skuUnitVolumn = v.skuUnitVolumn;
-                        obj.skuLength = v.skuLength;
-                        obj.skuWidth = v.skuWidth;
-                        obj.skuHeight = v.skuHeight;
-                        obj.skuNetWeight = v.skuNetWeight;
-                        obj.skuGrossWeight = v.skuGrossWeight;
-                        obj.skuVolume = v.skuVolume;
-                        obj.skuMethodPkgCn = v.skuMethodPkgCn;
-                        obj.skuMethodPkgEn = v.skuMethodPkgEn;
-                        obj.skuInnerCartonUnit = v.skuInnerCartonUnit;
-                        obj.skuInnerCartonQty = v.skuInnerCartonQty;
-                        obj.skuInnerCartonLength = v.skuInnerCartonLength;
-                        obj.skuInnerCartonWidth = v.skuInnerCartonWidth;
-                        obj.skuInnerCartonHeight = v.skuInnerCartonHeight;
-                        obj.skuInnerCartonWeightNet = v.skuInnerCartonWeightNet;
-                        obj.skuInnerCartonRoughWeight = v.skuInnerCartonRoughWeight;
-                        obj.skuInnerCartonVolume = v.skuInnerCartonVolume;
-                        obj.skuInnerCartonDesc = v.skuInnerCartonDesc;
-                        obj.skuInnerCartonMethodCn = v.skuInnerCartonMethodCn;
-                        obj.skuInnerCartonMethodEn = v.skuInnerCartonMethodEn;
-                        obj.skuOuterCartonUnit = v.skuOuterCartonUnit;
-                        obj.skuOuterCartonDesc = v.skuOuterCartonDesc;
-                        obj.skuOuterCartonQty = v.skuOuterCartonQty;
-                        obj.skuOuterCartonLength = v.skuOuterCartonLength;
-                        obj.skuOuterCartonWidth = v.skuOuterCartonWidth;
-                        obj.skuOuterCartonHeight = v.skuOuterCartonHeight;
-                        obj.skuInnerCartonOuterNum = v.skuInnerCartonOuterNum;
-                        obj.skuOuterCartonNetWeight = v.skuOuterCartonNetWeight;
-                        obj.skuOuterCartonRoughWeight = v.skuOuterCartonRoughWeight;
-                        obj.skuOuterCartonVolume = v.skuOuterCartonVolume;
-                        obj.skuOuterCartonMethodCn = v.skuOuterCartonMethodCn;
-                        obj.skuOuterCartonMethodEn = v.skuOuterCartonMethodEn;
-                        obj.skuBrand = v.skuBrand;
-                        obj.skuApplicableAge = v.skuApplicableAge;
-                        obj.skuExpireDates = v.skuExpireDates;
-                        obj.skuExpireUnit = v.skuExpireUnit;
-                        obj.skuComments = v.skuComments;
-                        obj.skuBarCode = v.skuBarcode;
-                        obj.skuSaleStatus = v.skuStatus;
-                        obj.skuQuotationNo = v.quotationNo;
-                        obj.skuSysCode = v.skuSysCode;
-                        arr.push(obj);
-                    });
-                    let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(arr, "skuSysCode"), item => {
-                        if (item._remark) {
-                            item.label.value = this.$i.order.remarks;
-                            item.skuPictures._image = false;
-                            item.skuLabelPic._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
-                        }
-                        else {
-                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
-                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
-                            item.skuSample.value = item.skuSample.value ? "1" : "0";
-                            item.skuUnit._value = item.skuUnit.value ? _.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }).name : "";
-                            item.skuUnitWeight._value = item.skuUnitWeight.value ? _.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }).name : "";
-                            item.skuUnitLength._value = item.skuUnitLength.value ? _.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }).name : "";
-                            item.skuExpireUnit._value = item.skuExpireUnit.value ? _.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }).name : "";
-                            item.skuStatus._value = item.skuStatus.value ? _.findWhere(this.skuStatusTotalOption, { code: String(item.skuStatus.value) }).name : "";
-                            item.skuUnitVolume._value = item.skuUnitVolume.value ? _.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }).name : "";
-                            item.skuSaleStatus._value = item.skuSaleStatus.value ? _.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }).name : "";
-                            /**
-                             * 后续处理
-                             * */
-                            // item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
-                            console.log(8);
-                        }
-                    });
-                    _.map(data, v => {
-                        this.productTableData.push(v);
-                    });
-                }).finally(err => {
-                    this.loadingProductTable = false;
-                });
-            },
 
             /**
              * message board事件
@@ -2926,100 +2630,117 @@
                         params.supplierCompanyId = v.companyId;
                     }
                 });
+                let orderSkuUpdateList = [];
+                _.map(this.productTableData, item => {
+                    let isModify = false, isModifyStatus = false;
+                    _.map(item, (val, index) => {
+                        if (val._isModified) {
+                            isModify = true;
+                        }
+                        if (val._isModifyStatus) {
+                            isModifyStatus = true;
+                        }
+                    });
+                    if (isModify || isModifyStatus) {
+                        let isIn = false;
+                        _.map(orderSkuUpdateList, data => {
+                            if (data.skuId === item.skuId.value) {
+                                data.skuInfo = isModify;
+                                data.skuStatus = isModifyStatus;
+                                isIn = true;
+                            }
+                        });
+                        if (!isIn) {
+                            orderSkuUpdateList.push({
+                                skuId: item.skuId.value,
+                                skuInfo: isModify,
+                                skuStatus: isModifyStatus
+                            });
+                        }
+                    }
+                    if (!item._remark) {
+                        _.map(item, (v, k) => {
+                            if (v._isModified || v._isModifyStatus) {
+                                if (!item.fieldUpdate.value) {
+                                    item.fieldUpdate.value = {};
+                                }
+                                item.fieldUpdate.value[k] = "";
+                            }
+                        });
+                    }
+                    else {
+                        if (!item.fieldRemarkUpdate || !item.fieldRemarkUpdate.value) {
+                            item.fieldRemarkUpdate = { value: {} };
+                        }
+                        _.map(item, (v, k) => {
+                            if (v._isModified || v._isModifyStatus) {
+                                item.fieldRemarkUpdate.value[k] = "";
+                            }
+                        });
+                    }
+                });
+                params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
+                let rightCode = true;
                 _.map(params.skuList, v => {
-                    if (_.isArray(v.skuLabelPic)) {
-                        v.skuLabelPic = (v.skuLabelPic[0] ? v.skuLabelPic[0] : null);
+                    if (v.skuSupplierCode !== params.supplierCode) {
+                        rightCode = false;
                     }
                     v.skuSample = v.skuSample === "1" ? true : false;
-                    if (v.skuInspectQuarantineCategory) {
-                        v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
-                    }
-                    let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
+                    v.skuInspectQuarantineCategory = (_.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }) || {}).code;
+                    let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
                             v[item] = (v[item][0] ? v[item][0] : null);
+                        } else if (_.isString(v[item])) {
+                            let key = this.$getOssKey(v[item], true);
+                            v[item] = key[0];
                         }
                     });
                 });
+                if (!rightCode) {
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: "warning"
+                    });
+                }
                 params.attachments = this.$refs.upload[0].getFiles();
 
                 this.$ajax.post(this.$apis.ORDER_MESSAGE_TALK, params).then(res => {
 
                 });
-            },
-
-            /**
-             * 搜索框事件
-             * */
-            inputEnter(e) {
-                console.log(e);
-            },
-
-            /**
-             * 分页操作
-             * */
-            changePage(e) {
-                this.inquiryConfig.pn = e;
-                this.getInquiryData();
-            },
-            changeSize(e) {
-                this.inquiryConfig.ps = e;
-                this.getInquiryData();
             }
         },
         created() {
-            let category = [];
-            this.category = [];
-            this.loadingPage = true;
-            this.$ajax.get(this.$apis.get_buyer_sys_category, {}).then(res => {
-                _.map(res, v => {
-                    category.push(v);
-                });
-                this.$ajax.get(this.$apis.get_buyer_my_category, {}).then(data => {
-                    _.map(data, v => {
-                        category.push(v);
-                    });
-                    _.map(category, data => {
-                        _.map(data.children, ele => {
-                            this.category.push(ele);
-                        });
-                    });
-                    this.getOrderNo();
-                }).catch(err => {
-                    this.loadingPage = false;
-                });
-            }).catch(err => {
-                this.loadingPage = false;
-            });
+            this.getOrderNo();
         },
         mounted() {
             this.setMenuLink({
                 path: "/order/draft",
                 type: 10,
-                auth:'ORDER:DRAFT_OVERVIEW',
+                auth: "ORDER:DRAFT_OVERVIEW",
                 label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: "/logs/index",
                 query: { code: "ORDER" },
                 type: 20,
-                auth:'ORDER:LOG',
+                auth: "ORDER:LOG",
                 label: this.$i.common.log
             });
             this.setMenuLink({
                 path: "/order/archiveOrder",
                 type: 30,
-                auth:'ORDER:OVERVIEW:ARCHIVE_LINK',
+                auth: "ORDER:OVERVIEW:ARCHIVE_LINK",
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: "/order/archiveDraft",
                 type: 40,
-                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK',
+                auth: "ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK",
                 label: this.$i.order.archiveDraft
             });
-        },
+        }
     };
 </script>
 
@@ -3033,19 +2754,23 @@
         margin-top: 10px;
     }
 
-    .isModify >>> input{
+    .isModify >>> input {
         background-color: yellow !important;
     }
-    .high-light >>> input{
+
+    .high-light >>> input {
         background-color: yellow !important;
     }
-    .isModify >>> textarea{
+
+    .isModify >>> textarea {
         background-color: yellow !important;
     }
-    .isModify >>> li{
+
+    .isModify >>> li {
         background-color: yellow !important;
     }
-    .high-light >>> textarea{
+
+    .high-light >>> textarea {
         background-color: yellow !important;
     }
 
@@ -3100,6 +2825,10 @@
 
     .el-table >>> .waiting-row {
         background: yellow;
+    }
+
+    .addBtn {
+        margin: 5px 0;
     }
 
     .summaryInput {

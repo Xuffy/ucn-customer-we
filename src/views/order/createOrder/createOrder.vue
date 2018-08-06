@@ -54,7 +54,7 @@
                                 <el-select
                                         class="speInput"
                                         v-model="orderForm[v.key]"
-                                        @change="handleChangeIncoterm"
+                                        @change="handleChangeIncoterm(v.key)"
                                         filterable
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
@@ -139,14 +139,14 @@
                             </div>
                         </div>
                         <div v-else-if="v.type==='number'">
-                            <el-input-number
+                            <v-input-number
                                     :placeholder="$i.order.pleaseInput"
                                     :disabled="v.disabled"
                                     class="speInput speNumber"
                                     v-model="orderForm[v.key]"
                                     :controls="false">
 
-                            </el-input-number>
+                            </v-input-number>
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
@@ -175,107 +175,6 @@
                 </el-col>
             </el-row>
         </el-form>
-        <div class="title">
-            {{$i.order.exchangeRate}}
-        </div>
-        <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
-            <el-row>
-                <el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                    <el-form-item :label="$i.order[v.currency]">
-                        <el-input-number
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseInput"
-                                class="speInput speNumber"
-                                v-model="v.exchangeRate"
-                                :controls="false">
-                        </el-input-number>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
-
-        <div class="title">
-            {{$i.order.responsibility}}
-        </div>
-        <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
-            <el-table
-                    :data="orderForm.responsibilityList"
-                    style="width: 100%">
-                <el-table-column
-                        prop="type"
-                        label="Type">
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.type==='0' || scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
-                        <span v-if="scope.row.type==='1' || scope.row.type===1">{{$i.order.labelDesignDate}}</span>
-                        <span v-if="scope.row.type==='2' || scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
-                        <span v-if="scope.row.type==='3' || scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
-                        <span v-if="scope.row.type==='4' || scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
-                        <span v-if="scope.row.type==='5' || scope.row.type===5">{{$i.order.otherResponsibility}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="customer"
-                        align="center"
-                        label="Me">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-model="scope.row.customer"
-                                :editable="false"
-                                align="right"
-                                type="date"
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseChoose"
-                                :picker-options="pickerOptions1">
-                        </el-date-picker>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="supplier"
-                        align="center"
-                        label="Supplier">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-model="scope.row.supplier"
-                                align="right"
-                                :editable="false"
-                                type="date"
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseChoose"
-                                :picker-options="pickerOptions1">
-                        </el-date-picker>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="Remark"
-                        align="center"
-                        label="Remark">
-                    <template slot-scope="scope">
-                        <el-input
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseInput"
-                                v-model="scope.row.remark"
-                                clearable>
-                        </el-input>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualDate"
-                        align="center"
-                        label="Actual Date">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-model="scope.row.actualDt"
-                                align="right"
-                                type="date"
-                                :editable="false"
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseChoose"
-                                :picker-options="pickerOptions1">
-                        </el-date-picker>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
 
         <div class="title">
             {{$i.order.productInfoBig}}
@@ -297,10 +196,8 @@
             <template slot="header">
                 <div class="btns">
                     <el-button
-                            v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'"
                             @click="addProduct">{{$i.order.addProduct}}</el-button>
                     <el-button
-                            v-authorize="'ORDER:DETAIL:PRODUCT_INFO_DELETE'"
                             @click="removeProduct"
                             :disabled="selectProductInfoTable.length===0"
                             type="danger">{{$i.order.remove}}</el-button>
@@ -314,7 +211,6 @@
                     @click="send"
                     type="primary">{{$i.order.send}}</el-button>
             <el-button
-                    v-authorize="'ORDER:DETAIL:DRAFT'"
                     :disabled="loadingPage"
                     :loading="disableClickSaveDraft"
                     @click="saveAsDraft"
@@ -381,6 +277,7 @@
                 code="uorder_sku_list"
                 @closed="$refs.table.update()"
                 @save="saveNegotiate"
+                :beforeSave="beforeSave"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
             <!--<v-upload :limit="20" readonly></v-upload>-->
@@ -545,246 +442,225 @@
                 <!--</el-option>-->
             <!--</el-select>-->
 
-            <el-input-number
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="1"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuQty"
                     @blur="handlePriceBlur(data)"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuPrice"
                     :disabled="true"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     :max="1"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuRateValueAddedTax"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     :max="1"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuTaxRefundRate"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuWidth"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuHeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuNetWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuVolume"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonQty"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonWidth"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonHeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonWeightNet"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonRoughWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonVolume"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonOuterNum"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonQty"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonWidth"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonHeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonNetWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonRoughWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonVolume"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuApplicableAge"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuExpireDates"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuSampleQty"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuSamplePrice"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
+                    v-model="data.value"></v-input-number>
         </v-history-modify>
     </div>
 </template>
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,overviewPage,VProduct} from '@/components/index'
+    import {
+        VTable,
+        VPagination,
+        selectSearch,
+        VUpload,
+        VHistoryModify,
+        overviewPage,
+        VProduct,
+        VInputNumber} from '@/components/index'
     import { mapActions } from 'vuex'
 
     export default {
@@ -796,7 +672,8 @@
             VUpload,
             VHistoryModify,
             overviewPage,
-            VProduct
+            VProduct,
+            VInputNumber
         },
         data(){
             return{
@@ -844,11 +721,11 @@
                 selectSearch:'',
                 productInfoBtn:[
                     {
-                        label: 'Negotiate',
+                        label: this.$i.order.modify,
                         type: 'negotiate'
                     },
                     {
-                        label: 'Detail',
+                        label: this.$i.order.detail,
                         type: 'detail'
                     }
                 ],
@@ -871,7 +748,7 @@
                 tableDataList:[],
                 searchOptions:[
                     {
-                        label:'inquiryNo',
+                        label:this.$i.order.inquiryNo,
                         id:1
                     },
                 ],
@@ -947,61 +824,12 @@
                     lcNo: "",
                     orderNo: "",
                     payment: "",
-                    paymentDays: 0,
+                    paymentDays: null,
                     productFlag:false,
                     quotationNo: "",
                     remark: "",
                     responsibilityFlag:false,
-                    responsibilityList: [
-                        {
-                            type: '0',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '1',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '2',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '3',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '4',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '5',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                    ],
+                    responsibilityList: [],
                     skuList: [],
                     supplierCode: "",
                     supplierId: 0,
@@ -1054,8 +882,16 @@
                         params.supplierCompanyId=v.companyId;
                     }
                 });
+
                 params.skuList=this.dataFilter(this.productTableData);
-                // return console.log(params.skuList,'params.skuList')
+                /**
+                 * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
+                 * */
+                for(let val in params.skuList){
+                    if(this.$validateForm(params.skuList[val], this.$db.order.productInfoTableCreate)){
+                        return;
+                    }
+                }
                 let rightCode=true;
                 _.map(params.skuList,v=>{
                     if(v.skuSupplierCode!==params.supplierCode){
@@ -1063,7 +899,7 @@
                     }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     v.skuInspectQuarantineCategory=v.skuInspectQuarantineCategory?_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code:'';
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
@@ -1081,6 +917,7 @@
                     });
                 }
                 params.attachments=this.$refs.upload[0].getFiles();
+                // return console.log(this.$depthClone(params.skuList),'data')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     this.$router.push('/order/overview');
@@ -1089,9 +926,6 @@
                 });
             },
             saveAsDraft(){
-                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
-                    return;
-                }
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
@@ -1117,7 +951,7 @@
                     if(v.skuInspectQuarantineCategory){
                         v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
                     }
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
@@ -1129,12 +963,12 @@
                 });
 
                 //如果选的产品和上面选的供应商不一致，要给出提示
-                if(!rightCode){
-                    return this.$message({
-                        message: this.$i.order.supplierNotTheSame,
-                        type: 'warning'
-                    });
-                }
+                // if(!rightCode){
+                //     return this.$message({
+                //         message: this.$i.order.supplierNotTheSame,
+                //         type: 'warning'
+                //     });
+                // }
                 this.disableClickSaveDraft=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE_DRAFT,params).then(res=>{
                     this.$router.push('/order/draft');
@@ -1155,34 +989,22 @@
                     });
                     this.changePayment(res.payment);
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
-                        if(item._remark){
-                            item.label.value=this.$i.order.remarks;
-                            item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
-                            item.skuPkgMethodPic._image=false;
-                            item.skuInnerCartonPic._image=false;
-                            item.skuOuterCartonPic._image=false;
-                            item.skuAdditionalOne._image=false;
-                            item.skuAdditionalTwo._image=false;
-                            item.skuAdditionalThree._image=false;
-                            item.skuAdditionalFour._image=false;
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
                         }
-                        else{
-                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
-                            item.skuSample._value=item.skuSample.value?'YES':'NO';
-                            item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=item.skuUnit.value?_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}).name:'';
-                            item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
-                            item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
-                            item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-                            item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
-                            item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
-                            item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
-                            /**
-                             * 后续处理
-                             * */
-                            item.skuCategoryId._value=item.skuCategoryName.value;
-                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                            item.skuSample.value = item.skuSample.value ? "1" : "0";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
                         }
                     });
                     this.productTableData=[];
@@ -1267,8 +1089,9 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.INQUIERY_LIST,this.inquiryConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas,item=>{
-                        item.incoterm.value=this.$change(this.incotermOption,'incoterm',item).name;
-                        item.status.value=this.$change(this.inquiryStatusOption,'status',item,true).name;
+
+                        item.incoterm._value=(_.findWhere(this.incotermOption,{code:item.incoterm.value}) || {}).name;
+                        item.status._value=(_.findWhere(this.inquiryStatusOption,{code:String(item.status.value)}) || {}).name;
                         if(item.id.value===this.inquiryId){
                             this.$set(item,'_disabled',true)
                         }
@@ -1284,7 +1107,7 @@
             handleChangeSupplier(data){
                 this.supplierNo=_.findWhere(this.supplierOption,{id:data}).code;
             },
-            handleChangeIncoterm(){
+            handleChangeIncoterm(key){
                 _.map(this.productTableData,item=>{
                     if(!item._remark){
                         if(this.orderForm[key] === '1'){
@@ -1312,30 +1135,22 @@
                     this.loadingProductTable=true;
                     this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
                         let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                            if(item._remark){
-                                item.label.value=this.$i.order.remarks;
-                                item.skuPictures._image=false;
-                                item.skuLabelPic._image=false;
-                                item.skuPkgMethodPic._image=false;
-                                item.skuInnerCartonPic._image=false;
-                                item.skuOuterCartonPic._image=false;
-                                item.skuAdditionalOne._image=false;
-                                item.skuAdditionalTwo._image=false;
-                                item.skuAdditionalThree._image=false;
-                                item.skuAdditionalFour._image=false;
+                            if (item._remark) {
+                                item.label.value = this.$i.order.remarks;
                             }
-                            else{
-                                item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
-                                item.skuSample._value=item.skuSample.value?'YES':'NO';
-                                item.skuSample.value=item.skuSample.value?'1':'0';
-                                item.skuUnit._value=(_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}) || {}).name;
-                                item.skuUnitWeight._value=(_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}) || {}).name;
-                                item.skuUnitLength._value=(_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}) || {}).name;
-                                item.skuExpireUnit._value=(_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}) || {}).name;
-                                item.skuStatus._value=(_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}) || {}).name;
-                                item.skuUnitVolume._value=(_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}) || {}).name;
-                                item.skuSaleStatus._value=(_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}) || {}).name;
-                                item.skuInspectQuarantineCategory._value=(_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}) || {}).name;
+                            else {
+                                item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                                item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                                item.skuSample.value = item.skuSample.value ? "1" : "0";
+                                item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                                item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                                item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                                item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                                item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                                item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                                item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                                item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                                item.skuCategoryId._value = item.skuCategoryName.value;
                             }
                         });
                         _.map(data,v=>{
@@ -1365,31 +1180,6 @@
                             arr.push(v);
                         }
                     });
-                    if(this.$refs.uploadSkuLabelPic){
-                        this.$refs.uploadSkuLabelPic.reset();
-                    }
-                    if(this.$refs.uploadSkuPkgMethodPic){
-                        this.$refs.uploadSkuPkgMethodPic.reset();
-                    }
-                    if(this.$refs.uploadSkuInnerCartonPic){
-                        this.$refs.uploadSkuInnerCartonPic.reset();
-                    }
-                    if(this.$refs.uploadSkuOuterCartonPic){
-                        this.$refs.uploadSkuOuterCartonPic.reset();
-                    }
-                    if(this.$refs.skuAdditionalOne){
-                        this.$refs.skuAdditionalOne.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalTwo){
-                        this.$refs.uploadSkuAdditionalTwo.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalThree){
-                        this.$refs.uploadSkuAdditionalThree.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalFour){
-                        this.$refs.uploadSkuAdditionalFour.reset();
-                    }
-                    console.log(arr,'arr')
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
@@ -1461,29 +1251,22 @@
                 let ids=_.pluck(_.pluck(e,type==='product'?'id':'skuId'),'value');
                 this.$ajax.post(this.$apis.ORDER_SKUS,ids).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                        if(item._remark){
-                            item.label.value=this.$i.order.remarks;
-                            item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
-                            item.skuPkgMethodPic._image=false;
-                            item.skuInnerCartonPic._image=false;
-                            item.skuOuterCartonPic._image=false;
-                            item.skuAdditionalOne._image=false;
-                            item.skuAdditionalTwo._image=false;
-                            item.skuAdditionalThree._image=false;
-                            item.skuAdditionalFour._image=false;
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
                         }
-                        else{
-                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
-                            item.skuSample._value=item.skuSample.value?'YES':'NO';
-                            item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=(_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}) || {}).name;
-                            item.skuUnitWeight._value=(_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}) || {}).name;
-                            item.skuUnitLength._value=(_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}) || {}).name;
-                            item.skuExpireUnit._value=(_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}) || {}).name;
-                            item.skuUnitVolume._value=(_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}) || {}).name;
-                            item.skuSaleStatus._value=(_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}) || {}).name;
-                            item.skuInspectQuarantineCategory._value=(_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}) || {}).name;
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                            item.skuSample.value = item.skuSample.value ? "1" : "0";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
                         }
                     });
                     _.map(data,v=>{
@@ -1495,6 +1278,15 @@
             },
             handleCancel(){
                 this.productTableDialogVisible=false;
+            },
+            beforeSave(data){
+                let obj={};
+                _.map(data[0],(val,key)=>{
+                    obj[key]=val.value;
+                });
+                if(this.$validateForm(obj, this.$db.order.productInfoTableCreate)){
+                    return false;
+                }
             },
             saveNegotiate(e){
                 _.map(this.productTableData,(v,k)=>{
@@ -1600,10 +1392,11 @@
                     this.orderForm.currency=res.currency;
                     this.orderForm.destCountry=res.destinationCountry;
                     this.orderForm.destPort=res.destinationPort;
-                    this.supplierNo=_.findWhere(this.supplierOption,{id:res.supplierId}).code;
+                    this.supplierNo=(_.findWhere(this.supplierOption,{id:res.supplierId}) || {}).code;
                     this.productTableData=[];
                     let arr=[];
                     _.map(res.details,v=>{
+                        console.log(v,'v')
                         let obj={
                             bookmarkId: '',
                             companyId: null,
@@ -1831,8 +1624,8 @@
                         obj.skuOrigin=v.skuOrigin;
                         obj.skuInspectQuarantineCategory=v.skuInspectQuarantineCategory;
                         obj.skuUnitLength=v.skuUnitLength;
-                        obj.skuUnitWidth=v.skuUnitWidth;
-                        obj.skuUnitVolumn=v.skuUnitVolumn;
+                        obj.skuUnitWeight=v.skuUnitWeight;
+                        obj.skuUnitVolume=v.skuUnitVolume;
                         obj.skuLength=v.skuLength;
                         obj.skuWidth=v.skuWidth;
                         obj.skuHeight=v.skuHeight;
@@ -1877,32 +1670,22 @@
                         arr.push(obj);
                     });
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(arr, 'skuSysCode'),item=>{
-                        if(item._remark){
-                            item.label.value=this.$i.order.remarks;
-                            item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
-                            item.skuPkgMethodPic._image=false;
-                            item.skuInnerCartonPic._image=false;
-                            item.skuOuterCartonPic._image=false;
-                            item.skuAdditionalOne._image=false;
-                            item.skuAdditionalTwo._image=false;
-                            item.skuAdditionalThree._image=false;
-                            item.skuAdditionalFour._image=false;
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
                         }
-                        else{
-                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
-                            item.skuSample._value=item.skuSample.value?'YES':'NO';
-                            item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=item.skuUnit.value?_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}).name:'';
-                            item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
-                            item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
-                            item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-                            item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
-                            item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
-                            // item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
-                            item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
-                            item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
-                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                            item.skuSample.value = item.skuSample.value ? "1" : "0";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            // item.skuCategoryId.value = item.skuCategoryName.value;
                         }
                     });
                     _.map(data,v=>{
@@ -1921,7 +1704,7 @@
                     },
                     {
                         code:'5',
-                        name:'CANCLED'
+                        name:'CANCELED'
                     },
                 ];
                 const currency=this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true});
@@ -1983,7 +1766,7 @@
                 if(this.orderForm.incoterm==='1'){
                     //fob
                     if(obj.skuFobPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=Number((obj.skuFobPrice.value*obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuFobPrice.value,obj.skuQty.value), 4);
                     }else{
                         obj.skuPrice.value=0;
                     }
@@ -1991,7 +1774,7 @@
                 else if(this.orderForm.incoterm==='2'){
                     //exw
                     if(obj.skuExwPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=Number((obj.skuExwPrice.value*obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuExwPrice.value,obj.skuQty.value), 4);
                     }else{
                         obj.skuPrice.value=0;
                     }
@@ -1999,7 +1782,7 @@
                 else if(this.orderForm.incoterm==='3'){
                     //cif
                     if(obj.skuCifPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=Number((obj.skuCifPrice.value*obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuCifPrice.value,obj.skuQty.value),4);
                     }else{
                         obj.skuPrice.value=0;
                     }
@@ -2007,7 +1790,7 @@
                 else if(this.orderForm.incoterm==='4'){
                     //ddu
                     if(obj.skuDduPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=Number((obj.skuDduPrice.value*obj.skuQty.value).toFixed(8));
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuDduPrice.value,obj.skuQty.value),4);
                     }else{
                         obj.skuPrice.value=0;
                     }

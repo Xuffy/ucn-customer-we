@@ -127,6 +127,7 @@
       :buttons="productInfoBtn"
       :loading="tableLoad"
       :height="450"
+      :totalRow="productTotalRow"
       @action="producInfoAction"
       @change-checked="changeChecked"
       :parId="'skuId'"
@@ -197,8 +198,9 @@ export default {
       tabColumn: '', // tab top
       tabData: [], // tab Data
       textarea: '',
-      initDetailIds: []
-    }
+      initDetailIds: [],
+      sdbo: null
+    };
   },
   components: {
     'select-search': selectSearch,
@@ -208,10 +210,58 @@ export default {
     VHistoryModify,
     VInputNumber
   },
+  computed: {
+    productTotalRow() {
+      let obj = {};
+      if (this.tabData.length <= 0) {
+        return false;
+      }
+      let totalUnitKeys = {};
+      Object.values(this.$db.inquiry.productInfo).filter(i => i._total && i._total.unitKey).forEach(i => totalUnitKeys[i._total.unitKey] = new Set());
+
+      this.tabData.filter(i => !i._remark).forEach(v => {
+        _.mapObject(v, (item, key) => {
+          if (item._hide) return;
+          if (item._total) {
+            let unitKey = item._total.unitKey;
+            if (unitKey && v[unitKey] && totalUnitKeys[unitKey]) {
+              totalUnitKeys[unitKey].add(v[unitKey].value || null);
+              if (totalUnitKeys[unitKey].size > 1) {
+                obj[key].value = null;
+                return;
+              }
+            }
+            if (!isNaN(item.value)) {
+              let value = Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0);
+              obj[key] = {
+                value: item._toFixed ? Number(value.toFixed(item._toFixed)) : value
+              };
+            }
+          } else {
+            obj[key] = {
+              value: ''
+            };
+          }
+        });
+      });
+
+      return [obj];
+    }
+  },
   created() {
     this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
     this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+
+    this.sdbo = this.$db.inquiry.productInfo;
+
+    for (let field in this.sdbo) {
+      let note = this.sdbo[field]._i_note;
+      if (note) {
+        this.sdbo[field]._note = this.$i.inquiry[note];
+      }
+    }
+    console.log(this.sdbo);
 
     Promise.all([codeUtils.getInquiryDicCodes(this), codeUtils.getCotegories(this), this.getSuppliers('')]).then(res => {
       let data = res[0];
@@ -322,7 +372,7 @@ export default {
           }
         }
         this.fromArg = res;
-        this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), item => {
+        this.tabData = this.$getDB(this.sdbo, this.$refs.HM.getFilterData(res.details, 'skuId'), item => {
           this.$filterDic(item);
           _.map(item, val => {
             val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
@@ -370,6 +420,9 @@ export default {
       });
       this.tabData = _.map(this.tabData, oldItem => {
         let tmp = _.filter(items, item => _.findWhere(oldItem, {'key': 'skuId'}).value === _.findWhere(item, {'key': 'skuId'}).value && !!oldItem._remark === !!item._remark);
+        if (tmp[0] && tmp[0].skuPictures && tmp[0].skuPictures._image) {
+          tmp[0].skuPictures.value = tmp[0].skuPictures._value;
+        }
         return tmp[0] || oldItem;
       });
     },
@@ -490,7 +543,7 @@ export default {
       }
       this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids)
         .then(res => {
-          let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
+          let arr = this.$getDB(this.sdbo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
             this.$filterDic(item);
           });
           this.tabData = arr.concat(this.tabData);
@@ -507,7 +560,7 @@ export default {
       });
       if (this.fromArg.quotationNo) {
         this.$ajax.get(this.$apis.GET_INQUIRY_SKU_HISTORY + `?quotationNo=${this.fromArg.quotationNo}&skuCode=${item.skuCode.value}`).then(res => {
-          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuCode')), type === 'modify');
+          this.$refs.HM.init(arr, this.$getDB(this.sdbo, this.$refs.HM.getFilterData(res, 'skuCode')), type === 'modify');
         });
       } else if (type === 'modify') {
         this.$refs.HM.init(arr, [], true);

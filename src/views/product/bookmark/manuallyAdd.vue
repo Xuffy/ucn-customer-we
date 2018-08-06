@@ -3,17 +3,29 @@
         <div class="title">
             {{$i.product.basicInformation}}
         </div>
-        <el-form :modal="productForm" ref="basicInfo" class="speForm" label-width="290px" :label-position="labelPosition">
+        <el-form class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
                 <el-col cass="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                     <el-form-item label="Pic:">
                         <v-upload :list="productForm.pictures" :onlyImage="true" :limit="20" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
-                <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
-                    <el-form-item :required="v._rules?v._rules.required:false" :prop="v.key" :label="v.label+':'">
+                <el-col
+                        class="speCol"
+                        v-for="v in $db.product.detailTab"
+                        v-if="v.belongTab==='basicInfo'"
+                        :key="v.key"
+                        :xs="24"
+                        :sm="v.fullLine?24:12"
+                        :md="v.fullLine?24:12"
+                        :lg="v.fullLine?24:12"
+                        :xl="v.fullLine?24:12">
+                    <el-form-item :required="v._rules?v._rules.required:false" :label="v.label+':'">
                         <div v-if="v.showType==='input'">
-                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
+                            <el-input
+                                    class="speInput"
+                                    v-model="productForm[v.key]"
+                                    :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
                             <div v-if="v.isCurrency">
@@ -127,11 +139,13 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
-                                    :controls="false"></el-input-number>
+                                    :mark="v.label"
+                                    :placeholder="$i.product.pleaseInput"
+                                    :accuracy="v.accuracy"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -238,13 +252,16 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
-                                    label="please input"></el-input-number>
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
+                                    label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -349,13 +366,16 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm.price[0][v.key]"
                                     :controls="false"
                                     :min="0"
-                                    label="please input"></el-input-number>
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
+                                    label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -470,13 +490,16 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
-                                    label="please input"></el-input-number>
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
+                                    label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -581,13 +604,16 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :controls="false"
                                     :min="0"
-                                    label="please input"></el-input-number>
+                                    :placeholder="$i.product.pleaseInput"
+                                    :mark="v.label"
+                                    :accuracy="v.accuracy"
+                                    label="please input"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -713,41 +739,40 @@
                         </div>
                         <div v-else-if="v.showType==='number'">
                             <div v-if="v.key==='lengthWidthHeight'">
-                                <el-input-number
+                                <v-input-number
                                         class="speNum"
                                         size="mini"
-                                        :controls="false"
                                         v-model="boxSize.length"
-                                        :min="0"
-                                        label="描述文字">
-                                </el-input-number>
+                                        :accuracy="2"
+                                        :min="0">
+                                </v-input-number>
                                 <div class="speIcon">*</div>
-                                <el-input-number
+                                <v-input-number
                                         class="speNum"
                                         size="mini"
-                                        :controls="false"
+                                        :accuracy="2"
                                         v-model="boxSize.width"
-                                        :min="0"
-                                        label="描述文字">
-                                </el-input-number>
+                                        :min="0">
+                                </v-input-number>
                                 <div class="speIcon">*</div>
-                                <el-input-number
+                                <v-input-number
                                         class="speNum"
                                         size="mini"
-                                        :controls="false"
+                                        :accuracy="2"
                                         v-model="boxSize.height"
-                                        :min="0"
-                                        label="描述文字">
-                                </el-input-number>
+                                        :min="0">
+                                </v-input-number>
                             </div>
                             <div v-else>
-                                <el-input-number
+                                <v-input-number
                                         class="speInput speNumber"
                                         size="mini"
                                         v-model="productForm[v.key]"
                                         :controls="false"
                                         :min="0"
-                                        label="please input"></el-input-number>
+                                        :placeholder="$i.product.pleaseInput"
+                                        :mark="v.label"
+                                        :accuracy="v.accuracy"></v-input-number>
                             </div>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
@@ -785,14 +810,15 @@
 </template>
 
 <script>
-    import {dropDownSingle,VUpload} from '@/components/index'
+    import {dropDownSingle,VUpload,VInputNumber} from '@/components/index'
     import {mapActions} from 'vuex'
 
     export default {
         name: "manually-add",
         components:{
             dropDown:dropDownSingle,
-            VUpload
+            VUpload,
+            VInputNumber
         },
         data(){
             return{
@@ -813,18 +839,7 @@
                 },
                 loadingPage:false,
                 //categoryID配置
-                categoryList:[
-                    {
-                        id:5125,
-                        name:"自己的分类",
-                        children:[]
-                    },
-                    {
-                        id:123,
-                        name:"系统分类",
-                        children:[]
-                    },
-                ],
+                categoryList:[],
                 boxSize:{
                     length:'',
                     width:'',
@@ -940,6 +955,13 @@
         },
         methods:{
             ...mapActions(['setMenuLink']),
+
+            handleChangeNumber(key){
+                this.$nextTick(()=>{
+                    this.$set(this.productForm,key,this.$toFixed(this.productForm[key],1,'SKU'));
+                });
+            },
+
             //完成新增
             finish(){
                 if(this.$validateForm(this.productForm, this.$db.product.detailTab)){
@@ -1020,8 +1042,21 @@
                             this.packageAdjustOption=v.codes;
                         }
                     });
-                    this.categoryList[1].children=res[3];
-                    this.categoryList[0].children=res[4];
+                    let categoryList=[
+                        {
+                            id:5125,
+                            name:this.$i.product.myCategory,
+                            children:[]
+                        },
+                        {
+                            id:123,
+                            name:this.$i.product.sysCategory,
+                            children:[]
+                        },
+                    ];
+                    categoryList[1].children=res[3];
+                    categoryList[0].children=res[4];
+                    this.categoryList=categoryList;
                 }).finally(()=>{
                     this.loadingPage=false;
                 });
@@ -1031,7 +1066,7 @@
             if(this.$route.query.id){
                 this.loadingPage=true;
                 this.$ajax.get(this.$apis.get_buyerProductDetail,{
-                    id:Number(this.$route.query.id)
+                    id:this.$route.query.id
                 }).then(res=>{
                     this.loadingPage=false;
 

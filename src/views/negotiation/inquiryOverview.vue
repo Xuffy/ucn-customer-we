@@ -23,8 +23,8 @@
             <div class="btn-wrap">
                 <el-button @click="toCompare" :class="{'is-disabled':checkedIds.length < 2}" v-authorize="'INQUIRY:OVERVIEW:COMPARE'">{{ $i.common.compare }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'" :disabled="!checkedData.length||params.status+'' === '1'||params.status+'' === '99'||params.status === null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!checkedData.length||params.status+'' === '21'||params.status+'' === '22'||params.status === null">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button @click="cancelInquiry" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'" :disabled="!cancelAble">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!deleteAble">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="exportDatas" :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{ `${$i.common.download}(${checkedIds.length >= 1 ? checkedIds.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
@@ -49,6 +49,7 @@
         />
         <v-pagination
             :page-data.sync="params"
+            :pageSizes="[50, 100, 200]"
             @change="handleSizeChange"
             @size-change="pageSizeChange"
         />
@@ -68,7 +69,6 @@ export default {
   data() {
     return {
       checkedData: [],
-      pazeSize: [50, 100, 200],
       searchLoad: false,
       options: [{
         id: 'supplierName',
@@ -106,6 +106,12 @@ export default {
   computed: {
     checkedIds() {
       return Array.from(new Set(this.checkedData.map(i => i[i.inquiryId ? 'inquiryId' : 'id'].value)));
+    },
+    cancelAble() {
+      return new Set(this.checkedData.map(i => i.status.value).filter(i => ![21, 22].includes(i))).size === 0;
+    },
+    deleteAble() {
+      return new Set(this.checkedData.map(i => i.status.value).filter(i => ![1, 11, 99].includes(i))).size === 0;
     }
   },
   created() {

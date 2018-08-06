@@ -10,16 +10,6 @@ export default {
         showType:'select',
         belongTab:'basicInfo',
         isSaleStatus:true,
-        options:[
-            {
-                label:'下架',
-                value:0
-            },
-            {
-                label:'上架',
-                value:1
-            }
-        ]
     },
     code:{
         key:'code',
@@ -96,16 +86,6 @@ export default {
         showType:'select',
         belongTab:'basicInfo',
         isSkuUnit:true,
-        options:[
-            {
-                label:'kg',
-                value:1
-            },
-            {
-                label:'g',
-                value:2
-            }
-        ]
     },
     formation:{
         key:'formation',
@@ -142,12 +122,14 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:1
     },
     deliveryDates:{
         key:'deliveryDates',
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:0
     },
     design:{
         key:'design',
@@ -173,28 +155,20 @@ export default {
         showType:'select',
         belongTab:'basicInfo',
         isReadilyAvailable:true,
-        options:[
-            {
-                label:'有货',
-                value:true
-            },
-            {
-                label:'无货',
-                value:false
-            }
-        ],
     },
     availableQty:{
         key:'availableQty',
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:1
     },
     noneSellCountry:{
         key:'noneSellCountry',
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
+        fullLine:true,
         isCountry:true,
     },
     applicableAge:{
@@ -202,12 +176,14 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:0
     },
     expireDates:{
         key:'expireDates',
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:0
     },
     expireUnit:{
         key:'expireUnit',
@@ -232,12 +208,14 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'customerInfo',
+        accuracy:2
     },
     taxRefundRate:{
         key:'taxRefundRate',
         type: 'String',
         showType:'number',
         belongTab:'customerInfo',
+        accuracy:2
     },
     customsCode:{
         key:'customsCode',
@@ -339,12 +317,14 @@ export default {
         key:'fobPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:4
     },
-    refFobPrice:{
-        key:'refFobPrice',
-        showType:'number',
-        belongTab:'priceInfo',
-    },
+    // refFobPrice:{
+    //     key:'refFobPrice',
+    //     showType:'number',
+    //     belongTab:'priceInfo',
+    //     accuracy:4
+    // },
     fobPort:{
         key:'fobPort',
         showType:'input',
@@ -354,6 +334,7 @@ export default {
         key:'exwPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:4
     },
     exwCurrency:{
         key:'exwCurrency',
@@ -365,12 +346,14 @@ export default {
         key:'cifPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:4
     },
-    refCifPrice:{
-        key:'refCifPrice',
-        showType:'number',
-        belongTab:'priceInfo',
-    },
+    // refCifPrice:{
+    //     key:'refCifPrice',
+    //     showType:'number',
+    //     belongTab:'priceInfo',
+    //     accuracy:4
+    // },
     cifCurrency:{
         key:'cifCurrency',
         showType:'select',
@@ -386,12 +369,14 @@ export default {
         key:'dduPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:4
     },
-    refDduPrice:{
-        key:'refDduPrice',
-        showType:'number',
-        belongTab:'priceInfo',
-    },
+    // refDduPrice:{
+    //     key:'refDduPrice',
+    //     showType:'number',
+    //     belongTab:'priceInfo',
+    //     accuracy:4
+    // },
     dduCurrency:{
         key:'dduCurrency',
         showType:'select',
@@ -438,30 +423,35 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     width:{
         key:'width',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     height:{
         key:'height',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     netWeight:{
         key:'netWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     volume:{
         key:'volume',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:6
     },
     methodPkgCn:{
         key:'methodPkgCn',
@@ -486,42 +476,49 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonLength:{
         key:'innerCartonLength',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonWidth:{
         key:'innerCartonWidth',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonHeight:{
         key:'innerCartonHeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonWeightNet:{
         key:'innerCartonWeightNet',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonRoughWeight:{
         key:'innerCartonRoughWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonVolume:{
         key:'innerCartonVolume',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:3
     },
     innerCartonDesc:{
         key:'innerCartonDesc',
@@ -560,48 +557,56 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonQty:{
         key:'outerCartonQty',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:1
     },
     outerCartonLength:{
         key:'outerCartonLength',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonWidth:{
         key:'outerCartonWidth',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonHeight:{
         key:'outerCartonHeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonNetWeight:{
         key:'outerCartonNetWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonRoughWeight:{
         key:'outerCartonRoughWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonVolume:{
         key:'outerCartonVolume',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:3
     },
     outerCartonMethodCn:{
         key:'outerCartonMethodCn',
@@ -621,16 +626,6 @@ export default {
         showType:'select',
         belongTab:'packingInfo',
         isOem:true,
-        options:[
-            {
-                label:'yes',
-                value:true
-            },
-            {
-                label:'no',
-                value:false
-            }
-        ]
     },
 
     /**
@@ -641,18 +636,21 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     gp40SkuQty:{
         key:'gp40SkuQty',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     hq40SkuQty:{
         key:'hq40SkuQty',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     tryDimension:{
         key:'tryDimension',
@@ -665,6 +663,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     specialTransportRequire:{
         key:'specialTransportRequire',
@@ -689,18 +688,21 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     safeInventory:{
         key:'safeInventory',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     minInventory:{
         key:'minInventory',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
 
     /**
@@ -724,6 +726,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'otherInfo',
+        accuracy:0
     },
     qualityStander:{
         key:'qualityStander',
@@ -743,16 +746,6 @@ export default {
         showType:'select',
         belongTab:'otherInfo',
         isUseDisplayBox:true,
-        options:[
-            {
-                label:'yes',
-                value:true,
-            },
-            {
-                label:'no',
-                value:false,
-            },
-        ]
     },
     displayBoxQty:{
         key:'displayBoxQty',
@@ -784,16 +777,6 @@ export default {
         showType:'select',
         belongTab:'otherInfo',
         isAdjustPackage:true,
-        options:[
-            {
-                label:'yes',
-                value:true,
-            },
-            {
-                label:'no',
-                value:false,
-            },
-        ]
     },
 
 

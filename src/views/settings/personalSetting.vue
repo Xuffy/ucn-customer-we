@@ -111,6 +111,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   export default {
     data() {
       var validatePass = (rule, value, callback) => {
@@ -166,6 +167,7 @@
       };
     },
     methods: {
+      ...mapActions(['setMenuLink']),
       getUserPrivilege(){
         this.$ajax.get(this.$apis.get_user_privilege)
           .then(res => {
@@ -299,6 +301,14 @@
       this.getUserPrivilege();
       this.getUserProfile();
       this.postLanguage();
+    },
+    mounted(){
+      this.setMenuLink({
+        path: '/logs',
+        query: {code: 'PERSONAL_SETTING',bizCode: 'BIZ_USER'},
+        type: 100,
+        label: this.$i.common.log,
+      });
     },
   }
 </script>

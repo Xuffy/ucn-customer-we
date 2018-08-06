@@ -64,10 +64,10 @@
         <div class="body">
             <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
-                    <el-form class="speForm" label-width="300px" :label-position="labelPosition">
+                    <el-form class="speForm" label-width="320px" :label-position="labelPosition">
                         <el-row>
                             <el-row>
-                                <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                                <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="24" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                     <el-form-item :label="v.label+' :'">
                                         <span v-if="v.key==='status'">
                                            {{productForm[v.key]}}
@@ -139,7 +139,10 @@
                     </v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
-                    <v-upload readonly :list="productForm.attachments" ref="uploadAttachment"></v-upload>
+                    <div class="bigFont" v-if="!productForm.attachments || productForm.attachments.length===0">
+                        {{$i.product.noAttachments}}
+                    </div>
+                    <v-upload v-else readonly :list="productForm.attachments" ref="uploadAttachment"></v-upload>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.remark" name="Remark">
                     <div>
@@ -201,7 +204,6 @@
                             <el-button @click="addRemarkFormVisible = false">{{$i.product.cancel}}</el-button>
                         </div>
                     </el-dialog>
-
 
                     <el-dialog :title="$i.product.changeRemark" :visible.sync="editRemarkFormVisible" center width="600px">
                         <el-form :model="editRemarkData">
@@ -410,19 +412,14 @@
                  * compareList配置
                  * */
                 showCompareList:false,      //是否显示比较列表
-                compareData:[
-
-                ],
-                // compareConfig:{
-                //
-                // },
+                compareData:[],
 
                 /**
                  * remark data
                  * */
                 remarkConfig:{
                     pn: 1,
-                    ps: 10,
+                    ps: 100,
                     sorts: [],
                     id:this.$route.query.id,
                 },
@@ -472,7 +469,6 @@
                     id:this.$route.query.id
                 }).then(res=>{
                     this.productForm=res;
-
                     //处理国家显示
                     if(this.productForm.noneSellCountry){
                         let noneSellCountry=this.productForm.noneSellCountry.split(',');
@@ -490,25 +486,22 @@
                         });
                         this.productForm.mainSaleCountry=this.productForm.mainSaleCountry.slice(0,this.productForm.mainSaleCountry.length-1);
                     }
-
-
                     /**
                      * 字典转换
                      * */
-                    this.productForm.status=_.findWhere(this.skuSaleStatusOption,{code:String(this.productForm.status)}).name;
-                    this.productForm.unit=this.productForm.unit?_.findWhere(this.skuUnitOption,{code:String(this.productForm.unit)}).name:'';
-                    this.productForm.expireUnit=this.productForm.expireUnit?_.findWhere(this.expirationOption,{code:String(this.productForm.expireUnit)}).name:'';
-                    this.productForm.inspectQuarantineCategory=this.productForm.inspectQuarantineCategory?_.findWhere(this.quarantineTypeOption,{code:this.productForm.inspectQuarantineCategory}).name:'';
-                    this.productForm.unitLength=this.productForm.unitLength?_.findWhere(this.lengthOption,{code:String(this.productForm.unitLength)}).name:'';
-                    this.productForm.unitVolume=this.productForm.unitVolume?_.findWhere(this.volumeOption,{code:String(this.productForm.unitVolume)}).name:'';
-                    this.productForm.unitWeight=this.productForm.unitWeight?_.findWhere(this.weightOption,{code:String(this.productForm.unitWeight)}).name:'';
-                    this.productForm.oem=_.findWhere(this.oemOption,{code:String(Number(this.productForm.oem))}).name;
+                    this.productForm.status=(_.findWhere(this.skuSaleStatusOption,{code:String(this.productForm.status)}) || {}).name;
+                    this.productForm.unit=(_.findWhere(this.skuUnitOption,{code:String(this.productForm.unit)}) || {}).name;
+                    this.productForm.expireUnit=(_.findWhere(this.expirationOption,{code:String(this.productForm.expireUnit)}) || {}).name;
+                    this.productForm.inspectQuarantineCategory=(_.findWhere(this.quarantineTypeOption,{code:this.productForm.inspectQuarantineCategory}) || {}).name;
+                    this.productForm.unitLength=(_.findWhere(this.lengthOption,{code:String(this.productForm.unitLength)}) || {}).name;
+                    this.productForm.unitVolume=(_.findWhere(this.volumeOption,{code:String(this.productForm.unitVolume)}) || {}).name;
+                    this.productForm.unitWeight=(_.findWhere(this.weightOption,{code:String(this.productForm.unitWeight)}) || {}).name;
+                    this.productForm.oem=(_.findWhere(this.oemOption,{code:String(Number(this.productForm.oem))}) || {}).name;
                     this.productForm.yearListed=this.$dateFormat(this.productForm.yearListed,'yyyy-mm');
-                    this.productForm.useDisplayBox=_.findWhere(this.udbOption,{code:String(Number(this.productForm.useDisplayBox))}).name;
-                    this.productForm.adjustPackage=_.findWhere(this.skuPkgOption,{code:String(Number(this.productForm.adjustPackage))}).name;
-
+                    this.productForm.useDisplayBox=(_.findWhere(this.udbOption,{code:String(Number(this.productForm.useDisplayBox))}) || {}).name;
+                    this.productForm.adjustPackage=(_.findWhere(this.skuPkgOption,{code:String(Number(this.productForm.adjustPackage))}) || {}).name;
                     this.notLoadingDone=true;
-                    this.tradeHistory.skuCode=this.productForm.sysCode;
+                    this.tradeHistory.skuCode=this.productForm.code;
                     this.fobPort=this.productForm.fobPort;
                     this.fobPrice=this.productForm.fobPrice;
                     let priceData=[{
@@ -527,12 +520,16 @@
                         dduCurrency:this.productForm.dduCurrency,
                         dduArea:this.productForm.dduArea,
                     }];
-                    this.priceData = this.$getDB(this.$db.product.detailTab, priceData);
+                    this.priceData = this.$getDB(this.$db.product.detailTab, priceData,item=>{
+                        item.refFobPrice._note=this.$i.product.fobFormula;
+                        item.refCifPrice._note=this.$i.product.cifFormula;
+                        item.refDduPrice._note=this.$i.product.dduFormula;
+                    });
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory).then(res=>{
                         if(!res || !res.datas || res.datas.length===0){return}
                         this.historyData=this.$getDB(this.$db.product.tradeHistory,res.datas,e=>{
-                            e.incoterm._value=_.findWhere(this.incotermOption,{code:e.incoterm.value}).name;
+                            e.incoterm._value=(_.findWhere(this.incotermOption,{code:e.incoterm.value}) || {}).name;
                             e.actDeliveryDt._value=this.$dateFormat(e.actDeliveryDt.value,'yyyy-mm-dd');
                             e.confirmQcDt._value=this.$dateFormat(e.confirmQcDt.value,'yyyy-mm-dd');
                             e.actDepartureDt._value=this.$dateFormat(e.actDepartureDt.value,'yyyy-mm-dd');
@@ -895,6 +892,11 @@
     }
     .Details .body .list >>> label{
         /*text-align: right;*/
+    }
+    .bigFont{
+        font-weight: 600;
+        font-size: 14px;
+        color:#777777;
     }
 
     .speForm .el-form-item--small.el-form-item{
