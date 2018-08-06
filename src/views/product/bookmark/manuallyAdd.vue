@@ -875,6 +875,7 @@
                     expireUnit: '3',
                     formation: "",
                     id: null,
+                    visibility:true,
                     innerCartonDesc: "",
                     innerCartonMethodCn: "",
                     innerCartonMethodEn: "",
@@ -984,6 +985,8 @@
                 params.mainSaleCountry=mainSaleCountry;
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 params.lengthWidthHeight=size;
+                params.visibility=true;
+                // return console.log(this.$depthClone(params),'params')
 
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,params).then(res=>{
