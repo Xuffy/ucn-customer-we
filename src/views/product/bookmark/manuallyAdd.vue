@@ -875,6 +875,7 @@
                     expireUnit: '3',
                     formation: "",
                     id: null,
+                    visibility:true,
                     innerCartonDesc: "",
                     innerCartonMethodCn: "",
                     innerCartonMethodEn: "",
@@ -955,13 +956,6 @@
         },
         methods:{
             ...mapActions(['setMenuLink']),
-
-            handleChangeNumber(key){
-                this.$nextTick(()=>{
-                    this.$set(this.productForm,key,this.$toFixed(this.productForm[key],1,'SKU'));
-                });
-            },
-
             //完成新增
             finish(){
                 if(this.$validateForm(this.productForm, this.$db.product.detailTab)){
@@ -991,6 +985,8 @@
                 params.mainSaleCountry=mainSaleCountry;
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 params.lengthWidthHeight=size;
+                params.visibility=true;
+                // return console.log(this.$depthClone(params),'params')
 
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,params).then(res=>{
@@ -1044,12 +1040,12 @@
                     });
                     let categoryList=[
                         {
-                            id:5125,
+                            id:512512,
                             name:this.$i.product.myCategory,
                             children:[]
                         },
                         {
-                            id:123,
+                            id:123153315,
                             name:this.$i.product.sysCategory,
                             children:[]
                         },
@@ -1079,8 +1075,8 @@
                     _.map(key,v=>{
                         res[v]=String(res[v]);
                     });
-                    res.noneSellCountry=res.noneSellCountry.split(',');
-                    res.mainSaleCountry=res.mainSaleCountry.split(',');
+                    res.noneSellCountry=res.noneSellCountry?res.noneSellCountry.split(','):[];
+                    res.mainSaleCountry=res.mainSaleCountry?res.mainSaleCountry.split(','):[];
                     res.price=[];
                     res.price.push({
                         cifArea: res.cifArea,
