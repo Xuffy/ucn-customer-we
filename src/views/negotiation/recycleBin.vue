@@ -110,7 +110,7 @@ export default {
         let data = res.datas;
         this.tabLoad = false;
         data.forEach(item => {
-          item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') || '';
+          item.updateDt = item.updateDt ? this.$dateFormat(item.updateDt, 'yyyy-mm-dd') : '';
         });
         this.pageTotal = res.tc;
         this.tabData = this.$getDB(this.$db.inquiry.compare, data);
