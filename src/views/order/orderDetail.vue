@@ -1382,7 +1382,6 @@
                     customerAgreementDt: "",
                     customerAgreementNo: "",
                     // customerName: "string",
-                    // customerNo: "string",
                     customerOrderNo: "",
                     deliveredQty: 0,
                     deliveryDt: "",
