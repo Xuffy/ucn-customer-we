@@ -991,6 +991,7 @@
                 params.mainSaleCountry=mainSaleCountry;
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 params.lengthWidthHeight=size;
+                params.visibility=true;
 
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,params).then(res=>{

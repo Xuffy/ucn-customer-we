@@ -877,7 +877,7 @@
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
                         params.supplierName=v.name;
-                        // params.supplierCode=v.code;
+                        params.supplierCode=v.code;
                         params.supplierId=v.id;
                         params.supplierCompanyId=v.companyId;
                     }
@@ -1502,7 +1502,7 @@
                             skuMethodPkgCn: '',
                             skuMethodPkgEn: '',
                             skuMinInventory: null,
-                            skuMinOrderQty: null,
+                            // skuMinOrderQty: null,
                             skuModifyStatus: null,
                             skuNameCn: '',
                             skuNameCustomer: '',
@@ -1609,7 +1609,7 @@
                         obj.skuTaxRefundRate=v.skuTaxRefundRate;
                         obj.skuColourCn=v.skuColourCn;
                         obj.skuColourEn=v.skuColourEn;
-                        obj.skuMinOrderQty=v.skuMinOrderQty;
+                        // obj.skuMinOrderQty=v.skuMinOrderQty;
                         obj.skuDeliveryDates=v.skuDeliveryDates;
                         obj.skuDesign=v.skuDesign;
                         obj.skuCategoryId=v.skuCategoryId;

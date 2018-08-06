@@ -130,9 +130,9 @@ export default {
     },
     skuColourEn:{},
     skuColourCn:{},
-    skuMinOrderQty:{
-        _disabled:true
-    },
+    // skuMinOrderQty:{
+    //     _disabled:true
+    // },
     skuDeliveryDates:{
         _slot:'skuDeliveryDates',
     },
@@ -262,7 +262,7 @@ export default {
         _disabled:true
     },
     skuLabel:{},
-    skuBarCode:{},
+    // skuBarCode:{},
     skuInnerPackBarCode:{},
     skuInnerPackLabel:{},
     skuInnerPackCode:{},
