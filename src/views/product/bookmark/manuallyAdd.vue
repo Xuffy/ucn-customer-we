@@ -171,73 +171,16 @@
                             <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
-                            <div v-if="v.isCurrency">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
+                            <div v-if="v.isInspectQuarantineCategory">
+                                <el-select
+                                        class="speInput"
+                                        v-model="productForm[v.key]"
+                                        :placeholder="$i.product.pleaseChoose">
                                     <el-option
-                                            v-for="item in currencyOption"
-                                            :key="item.id"
-                                            :label="item.code"
-                                            :value="item.code">
-                                    </el-option>
-                                </el-select>
-                            </div>
-                            <div v-else-if="v.isCountry">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" filterable :placeholder="$i.product.pleaseChoose">
-                                    <el-option
-                                            v-for="item in countryOption"
+                                            v-for="item in quarantineTypeOption"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.code">
-                                    </el-option>
-                                </el-select>
-                            </div>
-                            <div v-else-if="v.isDateUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
-                                    <el-option
-                                            v-for="item in dateOption"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.code">
-                                    </el-option>
-                                </el-select>
-                            </div>
-                            <div v-else-if="v.isWeightUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
-                                    <el-option
-                                            v-for="item in weightOption"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.code">
-                                    </el-option>
-                                </el-select>
-                            </div>
-                            <div v-else-if="v.isVolumeUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
-                                    <el-option
-                                            v-for="item in volumeOption"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.code">
-                                    </el-option>
-                                </el-select>
-                            </div>
-                            <div v-else-if="v.isLengthUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
-                                    <el-option
-                                            v-for="item in lengthOption"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.code">
-                                    </el-option>
-                                </el-select>
-                            </div>
-                            <div v-else>
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
-                                    <el-option
-                                            v-for="item in v.options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
                                     </el-option>
                                 </el-select>
                             </div>
@@ -875,6 +818,7 @@
                     expireUnit: '3',
                     formation: "",
                     id: null,
+                    visibility:true,
                     innerCartonDesc: "",
                     innerCartonMethodCn: "",
                     innerCartonMethodEn: "",
@@ -950,18 +894,12 @@
                 oemOption:[],       //是否可以贴牌
                 showDisplayBoxOption:[],    //是否展示包装盒
                 packageAdjustOption:[],     //产品包装调整
+                quarantineTypeOption:[],    //检疫类别
 
             }
         },
         methods:{
             ...mapActions(['setMenuLink']),
-
-            handleChangeNumber(key){
-                this.$nextTick(()=>{
-                    this.$set(this.productForm,key,this.$toFixed(this.productForm[key],1,'SKU'));
-                });
-            },
-
             //完成新增
             finish(){
                 if(this.$validateForm(this.productForm, this.$db.product.detailTab)){
@@ -992,7 +930,6 @@
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 params.lengthWidthHeight=size;
                 params.visibility=true;
-
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,params).then(res=>{
                     this.$router.push({
@@ -1013,7 +950,7 @@
             getUnitCode(){
                 const currencyAjax=this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true});
                 const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
-                const partUnit=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{cache:true});
+                const partUnit=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','QUARANTINE_TYPE'],{cache:true});
                 const sysCategory=this.$ajax.get(this.$apis.get_buyer_sys_category,{});
                 const myCategory=this.$ajax.get(this.$apis.get_buyer_my_category,{});
                 this.loadingPage=true;
@@ -1041,16 +978,18 @@
                             this.showDisplayBoxOption=v.codes;
                         }else if(v.code==='SKU_PG_IS'){
                             this.packageAdjustOption=v.codes;
+                        }else if (v.code === "QUARANTINE_TYPE") {
+                            this.quarantineTypeOption = v.codes;
                         }
                     });
                     let categoryList=[
                         {
-                            id:5125,
+                            id:512512,
                             name:this.$i.product.myCategory,
                             children:[]
                         },
                         {
-                            id:123,
+                            id:123153315,
                             name:this.$i.product.sysCategory,
                             children:[]
                         },
