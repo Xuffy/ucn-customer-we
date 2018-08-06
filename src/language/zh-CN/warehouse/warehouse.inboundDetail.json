@@ -56,7 +56,7 @@
   "supplierName": "供应商名称",
   "supplierNo": "供应商编号",
   "supplierOrderNo": "供应商订单号",
-  "cartonOfProducts": "产品箱数总数",
+  "cartonOfProducts": "入库单总箱数",
   "grossWeightOfProducts": "产品毛重总数(kg)",
   "volumeOfProducts": "产品体积总数(m³)",
   "netWeightOfProducts": "产品净重总数(kg)",
