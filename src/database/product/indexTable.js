@@ -68,9 +68,6 @@ export default {
     deliveryDates:{
 
     },
-    design:{
-        _sort:false
-    },
     categoryName:{
         key:"categoryName",
         _sort:false
@@ -96,8 +93,15 @@ export default {
     expireUnit:{
 
     },
-    comments:{
-        _sort:false
+    designs:{
+        _upload:{
+            readonly:true
+        }
+    },
+    notes:{
+        _upload:{
+            readonly:true
+        }
     },
     fobCurrency:{
 

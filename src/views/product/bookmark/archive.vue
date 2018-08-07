@@ -127,6 +127,7 @@
                 volumeOption:[],
                 lengthOption:[],
                 skuUnitOption:[],
+                formationOption: []
 
             }
         },
@@ -154,23 +155,24 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_buyerBookmarkList, params).then(res => {
                     this.productData=this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
-                        let noneSellCountry = '';
-                        e.noneSellCountry.value.split(',').forEach(v => {
-                            this.countryOption.forEach(m => {
-                                if (m.code === v) {
-                                    noneSellCountry += (m.name + ',');
-                                }
-                            })
-                        });
-                        noneSellCountry = noneSellCountry.slice(0, noneSellCountry.length - 1);
-                        e.noneSellCountry.value = noneSellCountry;
+                        if(e.noneSellCountry.value){
+                            e.noneSellCountry._value=_.map(e.noneSellCountry.value.split(","),item=>{
+                                return (_.findWhere(this.countryOption,{code:item}) || {}).name;
+                            }).join(',');
+                        }
+                        if(e.mainSaleCountry.value){
+                            e.mainSaleCountry._value=_.map(e.mainSaleCountry.value.split(","),item=>{
+                                return (_.findWhere(this.countryOption,{code:item}) || {}).name;
+                            }).join(',');
+                        }
 
-                        e.status.value = this.$change(this.statusOption, 'status', e, true).name;
-                        e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
-                        e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
-                        e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
-                        e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
-                        e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
+                        e.status._value=(_.findWhere(this.statusOption,{code:String(e.status.value)}) || {}).name;
+                        e.expireUnit._value=(_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}) || {}).name;
+                        e.unit._value=(_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}) || {}).name;
+                        e.unitLength._value=(_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}) || {}).name;
+                        e.unitVolume._value=(_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}) || {}).name;
+                        e.unitWeight._value=(_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}) || {}).name;
+                        e.formation._value=(_.findWhere(this.formationOption,{code:e.formation.value}) || {}).name;
                         e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
 
                         if(this.disableBookmarkChoose && e.bookmarkId.value){
@@ -259,7 +261,7 @@
                 });
             },
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit, ['SKU_SALE_STATUS', 'WT_UNIT', 'ED_UNIT', 'VE_UNIT', 'LH_UNIT', 'SKU_UNIT'], {cache: true}).then(res => {
+                this.$ajax.post(this.$apis.get_partUnit, ['SKU_SALE_STATUS', 'WT_UNIT', 'ED_UNIT', 'VE_UNIT', 'LH_UNIT', 'SKU_UNIT','SKU_FORMATION'], {cache: true}).then(res => {
                     res.forEach(v => {
                         if (v.code === 'SKU_SALE_STATUS') {
                             this.statusOption = v.codes;
@@ -273,6 +275,8 @@
                             this.lengthOption = v.codes;
                         } else if (v.code === 'SKU_UNIT') {
                             this.skuUnitOption = v.codes;
+                        } else if (v.code === "SKU_FORMATION") {
+                            this.formationOption = v.codes;
                         }
                     });
                     if (this.$route.params.supplierName) {

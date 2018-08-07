@@ -84,8 +84,9 @@ export default {
     formation:{
         key:'formation',
         type: 'String',
-        showType:'input',
+        showType:'select',
         belongTab:'basicInfo',
+        isFormation:true
     },
     materialEn:{
         key:'materialEn',
@@ -112,12 +113,6 @@ export default {
         showType:'number',
         belongTab:'basicInfo',
         accuracy:0
-    },
-    design:{
-        key:'design',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
     },
     categoryName:{            //分类名称
         key:'categoryName',
@@ -174,11 +169,16 @@ export default {
         belongTab:'basicInfo',
         isDateUnit:true
     },
-    comments:{
-        key:'comments',
-        type: 'String',
-        showType:'textarea',
+    designs:{
+        key:'designs',
         belongTab:'basicInfo',
+        showType:'attachment',
+        fullLine:true
+    },
+    notes:{
+        key:'notes',
+        belongTab:'basicInfo',
+        showType:'attachment',
         fullLine:true
     },
 
