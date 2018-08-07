@@ -1,10 +1,10 @@
 export default {
     //.......................表格
-  supplierNO: {
-        key: 'code'
-    },
    supplierName: {
         key: 'name'
+    },
+    supplierAbbr: {
+       key:''
     },
    supplierType: {
         key: 'type',
@@ -27,10 +27,6 @@ export default {
    exportLicense: {
         key: 'exportLicense'
     },
-    // description: {
-    //     key: 'description'
-    // },
-
     id: {
         _hide: true,
         key: 'id',
