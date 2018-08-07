@@ -520,7 +520,7 @@
                         dduCurrency:this.productForm.dduCurrency,
                         dduArea:this.productForm.dduArea,
                     }];
-                    this.priceData = this.$getDB(this.$db.product.detailTab, priceData,item=>{
+                    this.priceData = this.$getDB(this.$db.product.detailPriceTable, priceData,item=>{
                         item.refFobPrice._note=this.$i.product.fobFormula;
                         item.refCifPrice._note=this.$i.product.cifFormula;
                         item.refDduPrice._note=this.$i.product.dduFormula;

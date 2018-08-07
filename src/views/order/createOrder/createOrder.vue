@@ -696,7 +696,6 @@
                 countryOption:[],
                 quarantineTypeOption:[],
                 skuStatusOption:[],
-                skuSaleStatusOption:[],
                 inquiryStatusOption:[],
                 skuStatusTotalOption:[],
 
@@ -1002,7 +1001,6 @@
                             item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
                             item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
-                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
                             item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
                             item.skuCategoryId._value = item.skuCategoryName.value;
                         }
@@ -1148,7 +1146,6 @@
                                 item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
                                 item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
                                 item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
-                                item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
                                 item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
                                 item.skuCategoryId._value = item.skuCategoryName.value;
                             }
@@ -1264,7 +1261,6 @@
                             item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
                             item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
-                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
                             item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
                             item.skuCategoryId._value = item.skuCategoryName.value;
                         }
@@ -1418,7 +1414,6 @@
                             skuAdjustPackage: true,
                             skuApplicableAge: null,
                             skuAvailableQty: null,
-                            skuBarCode: '',
                             skuBrand: '',
                             skuBrandRelated: '',
                             skuBrandRemark: '',
@@ -1480,12 +1475,10 @@
                             skuInnerCartonPic: '',
                             skuInnerCartonQty: null,
                             skuInnerCartonRoughWeight: null,
-                            skuInnerCartonUnit: '',
                             skuInnerCartonVolume: null,
                             skuInnerCartonWeightNet: null,
                             skuInnerCartonWidth: null,
                             skuInnerPackBarCode: '',
-                            skuInnerPackCode: '',
                             skuInnerPackLabel: '',
                             skuInspectQuarantineCategory: '',
                             skuInventory: null,
@@ -1502,7 +1495,6 @@
                             skuMethodPkgCn: '',
                             skuMethodPkgEn: '',
                             skuMinInventory: null,
-                            skuMinOrderQty: null,
                             skuModifyStatus: null,
                             skuNameCn: '',
                             skuNameCustomer: '',
@@ -1514,7 +1506,6 @@
                             skuOtherPackInfoCn: '',
                             skuOtherPackInfoEn: '',
                             skuOuterCartonBarCode: '',
-                            skuOuterCartonCode: '',
                             skuOuterCartonDesc: '',
                             skuOuterCartonHeight: null,
                             skuOuterCartonLength: null,
@@ -1524,7 +1515,6 @@
                             skuOuterCartonPic: '',
                             skuOuterCartonQty: null,
                             skuOuterCartonRoughWeight: null,
-                            skuOuterCartonUnit: '',
                             skuOuterCartonVolume: null,
                             skuOuterCartonWidth: null,
                             skuPictures: '',
@@ -1544,7 +1534,6 @@
                             skuRemarkThree: '',
                             skuRemarkTwo: '',
                             skuSafeInventory: null,
-                            skuSaleStatus: null,
                             skuSample: true,
                             skuSamplePrice: null,
                             skuSampleQty: null,
@@ -1609,7 +1598,6 @@
                         obj.skuTaxRefundRate=v.skuTaxRefundRate;
                         obj.skuColourCn=v.skuColourCn;
                         obj.skuColourEn=v.skuColourEn;
-                        obj.skuMinOrderQty=v.skuMinOrderQty;
                         obj.skuDeliveryDates=v.skuDeliveryDates;
                         obj.skuDesign=v.skuDesign;
                         obj.skuCategoryId=v.skuCategoryId;
@@ -1634,7 +1622,6 @@
                         obj.skuVolume=v.skuVolume;
                         obj.skuMethodPkgCn=v.skuMethodPkgCn;
                         obj.skuMethodPkgEn=v.skuMethodPkgEn;
-                        obj.skuInnerCartonUnit=v.skuInnerCartonUnit;
                         obj.skuInnerCartonQty=v.skuInnerCartonQty;
                         obj.skuInnerCartonLength=v.skuInnerCartonLength;
                         obj.skuInnerCartonWidth=v.skuInnerCartonWidth;
@@ -1645,7 +1632,6 @@
                         obj.skuInnerCartonDesc=v.skuInnerCartonDesc;
                         obj.skuInnerCartonMethodCn=v.skuInnerCartonMethodCn;
                         obj.skuInnerCartonMethodEn=v.skuInnerCartonMethodEn;
-                        obj.skuOuterCartonUnit=v.skuOuterCartonUnit;
                         obj.skuOuterCartonDesc=v.skuOuterCartonDesc;
                         obj.skuOuterCartonQty=v.skuOuterCartonQty;
                         obj.skuOuterCartonLength=v.skuOuterCartonLength;
@@ -1662,8 +1648,6 @@
                         obj.skuExpireDates=v.skuExpireDates;
                         obj.skuExpireUnit=v.skuExpireUnit;
                         obj.skuComments=v.skuComments;
-                        obj.skuBarCode=v.skuBarcode;
-                        obj.skuSaleStatus=v.skuStatus;
                         obj.skuStatus='TBC';
                         obj.skuQuotationNo=v.quotationNo;
                         obj.skuSysCode=v.skuSysCode;
@@ -1683,7 +1667,6 @@
                             item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
                             item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
-                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
                             item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
                             // item.skuCategoryId.value = item.skuCategoryName.value;
                         }
@@ -1742,8 +1725,6 @@
                             this.isNeedSampleOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
-                        }else if(v.code==='SKU_SALE_STATUS'){
-                            this.skuSaleStatusOption=v.codes;
                         }else if(v.code==='INQUIRY_STATUS'){
                             this.inquiryStatusOption=v.codes;
                         }else if(v.code==='SKU_STATUS'){
