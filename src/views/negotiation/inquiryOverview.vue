@@ -119,7 +119,7 @@ export default {
     let menuLink = {
       'INQUIRY:OVERVIEW:DRAFT': {path: '/negotiation/draft/inquiry', label: this.$i.common.draft},
       'INQUIRY:OVERVIEW:DELETE': {path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive},
-      'INQUIRY:LOG': {path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log}
+      'INQUIRY:LOG': {path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log}
     };
     Object.keys(menuLink).forEach(auth => {
       if (this.$auth(auth)) {

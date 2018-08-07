@@ -83,8 +83,9 @@ export default {
         // recycleSupplier
         break;
     }
-    this.setMenuLink({path: '/negotiation/recycleBin/' + type, label: this.$i.common.archive});
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+    if (this.$auth('INQUIRY:LOG')) {
+      this.setMenuLink({path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log});
+    }
 
     this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
       .then(data => this.setDic(codeUtils.convertDicValueType(data)))
