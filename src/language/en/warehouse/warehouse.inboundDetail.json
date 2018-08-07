@@ -81,5 +81,6 @@
   "supplierCode":"Supplier Code",
   "skuUnitLength":"unit of length",
   "skuUnitVolume":"unit of volume",
-  "skuUnitWeight":"unit of weight"
+  "skuUnitWeight":"unit of weight",
+  "skuQtyNum": "SKU QTY"
 }
