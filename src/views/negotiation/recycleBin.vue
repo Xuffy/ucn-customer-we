@@ -3,7 +3,7 @@
         <h3 class="hd">{{ title }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.recover}(${checkedArg.length})` }}</el-button>
+                <el-button type="primary" v-authorize="$route.params.type === 'inquiry' ? 'INQUIRY:ARCHIVE:RECOVER' : 'INQUIRY:COMPARE_ARCHIVE:RECOVER'" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.recover}(${checkedArg.length})` }}</el-button>
                 <!-- <el-button type="primary">{{ `${$i.common.download}(${checkedArg.length ? checkedArg.length : 'all'})`}}</el-button> -->
             </div>
             <select-search :options="options" @inputEnter="searchEnter" />

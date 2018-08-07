@@ -139,9 +139,6 @@ export default {
     },
     skuColourEn:{},
     skuColourCn:{},
-    skuMinOrderQty:{
-        _disabled:true
-    },
     skuDeliveryDates:{
         _slot:'skuDeliveryDates',
     },
@@ -197,7 +194,6 @@ export default {
     },
     skuMethodPkgEn:{},
     skuMethodPkgCn:{},
-    skuInnerCartonUnit:{},
     skuInnerCartonQty:{
         _slot:'skuInnerCartonQty',
         _calculate:true
@@ -223,7 +219,6 @@ export default {
     skuInnerCartonDesc:{},
     skuInnerCartonMethodEn:{},
     skuInnerCartonMethodCn:{},
-    skuOuterCartonUnit:{},
     skuOuterCartonDesc:{},
     skuInnerCartonOuterNum:{
         _slot:'skuInnerCartonOuterNum',
@@ -268,13 +263,10 @@ export default {
         _disabled:true
     },
     skuLabel:{},
-    skuBarCode:{},
     skuInnerPackBarCode:{},
     skuInnerPackLabel:{},
-    skuInnerPackCode:{},
     skuShippingMarks:{},
     skuOuterCartonBarCode:{},
-    skuOuterCartonCode:{},
     // skuPic:{
     //     _slot:'skuPictures',
     //     type:'pic',

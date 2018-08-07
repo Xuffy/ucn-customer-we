@@ -2,10 +2,6 @@ export default {
     id:{
         _hide:true
     },
-    importantCustomer:{},
-    attachment:{},
-    remind:{},      //是否有提醒
-    archive:{},
     orderNo:{},
     entryDt:{},
     status:{},      //订单状态
@@ -26,7 +22,6 @@ export default {
     totalSkuPrice:{},
     // paidAmount:{},
     // unpaidAmount:{},
-    inboundQty:{},
     deliveredQty:{},
     updateDt:{},
     quotationNo:{},
