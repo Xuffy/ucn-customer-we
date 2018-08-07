@@ -1,12 +1,8 @@
 <template>
     <div class="compare-overview">
         <div class="title">
-            <span>{{$i.product.compareOverview}}</span>
+            <span>{{$i.product.compareArchive}}</span>
         </div>
-        <!--<div class="status">-->
-        <!--<el-button>{{$i.button.download}}</el-button>-->
-        <!--<el-button v-authorize="'PRODUCT:COMPARE_OVERVIEW:RECYCLE_BIN'" type="danger" @click="deleteCompare">{{$i.button.remove}}</el-button>-->
-        <!--</div>-->
         <v-table
                 :height="500"
                 v-loading="loadingTable"

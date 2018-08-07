@@ -228,6 +228,8 @@
                         :label="$i.order.type">
                     <template slot-scope="scope">
                         <el-input
+                                :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.type===''}"
+                                @change="handleResponsibilityChange(scope.row,'type')"
                                 :disabled="!isModify"
                                 :placeholder="isModify?$i.order.pleaseInput:''"
                                 v-model="scope.row.type"
@@ -1182,7 +1184,6 @@
                     @change="val => data._isModified=true"
                     slot="skuDeliveryDates"
                     :accuracy="0"
-                    :precision="0"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
         </v-history-modify>
@@ -2593,22 +2594,6 @@
                 });
             },
 
-            /**
-             * quick create弹出框事件
-             * */
-            searchInquiry(e) {
-                if (!e.id) {
-                    return this.$message({
-                        message: this.$i.order.pleaseChooseType,
-                        type: "warning"
-                    });
-                }
-                this.inquiryConfig.inquiryNo = e.value;
-                this.getInquiryData();
-            },
-            changeChecked() {
-
-            },
 
             /**
              * message board事件
