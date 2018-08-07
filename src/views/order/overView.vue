@@ -331,19 +331,6 @@
                             if (e.payment) {
                                 e.payment.value = this.$change(this.paymentOption, "payment", e).name;
                             }
-                            if (e.importantCustomer) {
-                                e.importantCustomer.value = (e.importantCustomer.value ? "YES" : "NO");
-                            }
-                            if (e.attachment) {
-                                e.attachment.value = (e.attachment.value ? "YES" : "NO");
-                            }
-                            if (e.remind) {
-                                e.remind.value = (e.remind.value ? "YES" : "NO");
-                            }
-                            if (e.archive) {
-                                e.archive.value = (e.archive.value ? "YES" : "NO");
-                            }
-
                         });
                         this.pageData = res;
                         this.disableFinish = true;

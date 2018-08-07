@@ -59,6 +59,7 @@ export default {
     attachment:{
         type:'attachment',
         key:'attachments',
-        disabled:true
+        disabled:true,
+        fullLine:true
     },
 }
