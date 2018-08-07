@@ -228,7 +228,7 @@ export default {
     key: 'logisticsNo'
   },
   category: {
-    key: 'category',
+    key: 'skuCategoryName',
     // _important:true,
   },
   categoryLevel1: {
