@@ -64,7 +64,7 @@ export default {
       this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.archive});
     }
     if (this.$auth('INQUIRY:LOG')) {
-      this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+      this.setMenuLink({path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log});
     }
     if (this.$auth('INQUIRY:COMPARE_OVERVIEW:MODIFY')) {
       this.actionBtns.push({label: this.$i.common.modify, type: 'modify'});

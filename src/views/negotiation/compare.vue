@@ -112,8 +112,15 @@ export default {
     }
     this.compareType = this.$route.params.type ? this.$route.params.type : '';
     this.getDirData().then(this.getData, this.getData);
-    this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.archive});
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+    let menuLink = {
+      'INQUIRY:COMPARE_OVERVIEW:DELETE': {path: '/negotiation/recycleBin/compare', label: this.$i.common.archive},
+      'INQUIRY:LOG': {path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log}
+    };
+    Object.keys(menuLink).forEach(auth => {
+      if (this.$auth(auth)) {
+        this.setMenuLink(menuLink[auth]);
+      }
+    });
   },
   methods: {
     ...mapActions(['setMenuLink', 'setDic']),

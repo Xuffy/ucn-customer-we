@@ -89,10 +89,6 @@ export const basicInfoObj = {
     type: 'input',
     value: null
   },
-  shipper: {
-    type: 'input',
-    value: null
-  },
   consignee: {
     type: 'input',
     value: null
@@ -184,10 +180,6 @@ export const CreatPlanBasicInfoObj = {
     }
   },
   blNo: {
-    type: 'input',
-    value: null
-  },
-  shipper: {
     type: 'input',
     value: null
   },
@@ -629,5 +621,13 @@ export const addProductFromOrderFilter = {
   },
   "skuNameEn": {
     _isDefaultShow:true
+  }
+}
+//验证shipper必填
+export const validateShipperObj = {
+  "name":{
+    _rules:{
+      required:true
+    }
   }
 }
