@@ -133,8 +133,8 @@
       :parId="'skuId'"
       :rowspan="2"/>
     <div class="bom-btn-wrap">
-      <el-button @click="submitForm()">{{ $i.common.submit }}</el-button>
-      <el-button @click="submitForm('draft')">{{ $i.common.saveAsDraft }}</el-button>
+      <el-button @click="submitForm()" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.submit }}</el-button>
+      <el-button @click="submitForm('draft')" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.saveAsDraft }}</el-button>
     </div>
     <div class="bom-btn-wrap-station"></div>
     <el-dialog

@@ -3,8 +3,8 @@
         <h3 class="hd">{{ title }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.submit}(${checkedArg.length})` }}</el-button>
-                <el-button type="danger" @click="deleteList" :disabled="checkedArg.length <= 0">{{ `${$i.common.archive}(${checkedArg.length})`}}</el-button>
+                <el-button type="primary" v-authorize="'INQUIRY:DRAFT_OVERVIEW:SEND'" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.submit}(${checkedArg.length})` }}</el-button>
+                <el-button type="danger" v-authorize="'INQUIRY:DRAFT_OVERVIEW:ARCHIVE'" @click="deleteList" :disabled="checkedArg.length <= 0">{{ `${$i.common.archive}(${checkedArg.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputEnter="searchEnter" />
         </div>

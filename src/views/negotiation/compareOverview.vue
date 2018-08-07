@@ -3,7 +3,7 @@
         <h3 class="hd">{{ $i.common.compareOverview }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button @click="exportDatas" :disabled="tabData.length<=0">{{ `${$i.common.download}(${checkedIds.length>0?checkedIds.length:'all'})` }}</el-button>
+                <el-button v-authorize="'INQUIRY:COMPARE_OVERVIEW:DOWNLOAD'" @click="exportDatas" :disabled="tabData.length<=0">{{ `${$i.common.download}(${checkedIds.length>0?checkedIds.length:'all'})` }}</el-button>
                 <el-button type="danger" @click="compareDelete" :disabled="checkedIds.length <= 0" v-authorize="'INQUIRY:COMPARE_OVERVIEW:DELETE'">{{ `${$i.common.archive}(${checkedIds.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputEnter="inputEnter"/>
@@ -13,7 +13,7 @@
             hide-filter-value
             :data="tabData"
             :loading="tabLoad"
-            :buttons="[{label: $i.common.modify, type: 'modify'}, {label: $i.common.detail, type: 'detail'}]"
+            :buttons="actionBtns"
             @action="action"
             @change-sort="onListSortChange"
             @change-checked="changeChecked"
@@ -50,7 +50,8 @@ export default {
         recycle: 0,
         operatorFilters: []
       },
-      tabLoad: false
+      tabLoad: false,
+      actionBtns: []
     };
   },
   components: {
@@ -59,9 +60,19 @@ export default {
     'v-pagination': VPagination
   },
   created() {
+    if (this.$auth('INQUIRY:COMPARE_ARCHIVE')) {
+      this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.archive});
+    }
+    if (this.$auth('INQUIRY:LOG')) {
+      this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+    }
+    if (this.$auth('INQUIRY:COMPARE_OVERVIEW:MODIFY')) {
+      this.actionBtns.push({label: this.$i.common.modify, type: 'modify'});
+    }
+    if (this.$auth('INQUIRY:COMPARE_DETAIL')) {
+      this.actionBtns.push({label: this.$i.common.detail, type: 'detail'});
+    }
     this.getList();
-    this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.archive});
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
   },
   methods: {
     ...mapActions(['setMenuLink']),
