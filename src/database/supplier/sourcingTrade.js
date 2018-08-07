@@ -15,12 +15,12 @@ export default {
   purchasingPerson: {
     key: 'entryId'
   },
-  skuCode: {
-    key: 'skuCode'
-  },
-  orderPrice: {
-    key: 'totalSkuPrice'
-  },
+  // skuCode: {
+  //   key: 'skuCode'
+  // },
+  // orderPrice: {
+  //   key: 'totalSkuPrice'
+  // },
   orderQuantity: {
     key: 'skuQty'
   },

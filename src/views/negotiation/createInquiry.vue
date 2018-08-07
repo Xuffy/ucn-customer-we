@@ -133,8 +133,8 @@
       :parId="'skuId'"
       :rowspan="2"/>
     <div class="bom-btn-wrap">
-      <el-button @click="submitForm()">{{ $i.common.submit }}</el-button>
-      <el-button @click="submitForm('draft')">{{ $i.common.saveAsDraft }}</el-button>
+      <el-button @click="submitForm()" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.submit }}</el-button>
+      <el-button @click="submitForm('draft')" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.saveAsDraft }}</el-button>
     </div>
     <div class="bom-btn-wrap-station"></div>
     <el-dialog
@@ -249,9 +249,16 @@ export default {
     }
   },
   created() {
-    this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
-    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+    let menuLink = {
+      'INQUIRY:OVERVIEW:DRAFT': {path: '/negotiation/draft/inquiry', label: this.$i.common.draft},
+      'INQUIRY:OVERVIEW:DELETE': {path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive},
+      'INQUIRY:LOG': {path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log}
+    };
+    Object.keys(menuLink).forEach(auth => {
+      if (this.$auth(auth)) {
+        this.setMenuLink(menuLink[auth]);
+      }
+    });
 
     this.sdbo = this.$db.inquiry.productInfo;
 

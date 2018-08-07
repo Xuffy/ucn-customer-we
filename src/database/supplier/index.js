@@ -8,6 +8,7 @@ import compareView from './compareView';
 import compareDetail from './compareDetail';
 import sourcingTrade from './sourcingTrade';
 import sourcingInquiry from './sourcingInquiry';
+import accountInfo from './accountInfo';
 export default {
     overview,
     overviewtable,
@@ -18,5 +19,6 @@ export default {
     compareView,
     compareDetail,
     sourcingTrade,
-    sourcingInquiry
+    sourcingInquiry,
+    accountInfo
 }

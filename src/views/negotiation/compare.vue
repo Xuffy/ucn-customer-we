@@ -47,6 +47,7 @@
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.archive }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i.common.cancel }}</el-button>
+        <el-button v-authorize="'INQUIRY:COMPARE_DETAIL:DOWNLOAD'" v-if="$route.query.id" @click="exportDatas">{{ $i.common.download }}</el-button>
         <add-new-inqury
             v-model="showAddListDialog"
             @addInquiry="addCopare"
@@ -111,8 +112,15 @@ export default {
     }
     this.compareType = this.$route.params.type ? this.$route.params.type : '';
     this.getDirData().then(this.getData, this.getData);
-    this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.archive});
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+    let menuLink = {
+      'INQUIRY:COMPARE_OVERVIEW:DELETE': {path: '/negotiation/recycleBin/compare', label: this.$i.common.archive},
+      'INQUIRY:LOG': {path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log}
+    };
+    Object.keys(menuLink).forEach(auth => {
+      if (this.$auth(auth)) {
+        this.setMenuLink(menuLink[auth]);
+      }
+    });
   },
   methods: {
     ...mapActions(['setMenuLink', 'setDic']),
@@ -126,6 +134,16 @@ export default {
       }, () => {
         this.tabLoad = false;
       });
+    },
+    exportDatas() {
+      if (!this.$route.query.id) return;
+      let params = {
+        ps: 100,
+        pn: 1,
+        recycleCustomer: 0,
+        ids: [this.$route.query.id]
+      };
+      this.$fetch.export_task('INQUIRY_COMPARE', params);
     },
     showModify() {
       this.compareType = 'modify';

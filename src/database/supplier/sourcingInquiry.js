@@ -19,4 +19,29 @@ export default {
   quantity: {
     key: 'skuQty'
   },
+  status: {
+    key: ''
+  },
+  incoterm: {
+    key: ''
+  },
+  totalAmount: {
+    key:''
+  },
+  skuQty: {
+    key:''
+  },
+  totalCtn: {
+    key:''
+  },
+  totalVolum: {
+    key:''
+  },
+  totalNW: {
+    key:''
+  },
+  totalGW: {
+    key:''
+  }
+
 }

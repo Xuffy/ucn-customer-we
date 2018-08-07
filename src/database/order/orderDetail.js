@@ -23,12 +23,6 @@ export default {
         createHide:true,
         disableDetail:true
     },
-    customerNo:{
-        type:'input',
-        belong:'basicInfo',
-        createHide:true,
-        disableDetail:true
-    },
     supplierOrderNo:{
         type:'input',
         belong:'basicInfo',
@@ -42,11 +36,11 @@ export default {
             required:true
         }
     },
-    supplierCode:{  //供应商编号
-        type:'supplierNo',
-        belong:'basicInfo',
-        isCreate:true
-    },
+    // supplierCode:{  //供应商编号
+    //     type:'supplierNo',
+    //     belong:'basicInfo',
+    //     isCreate:true
+    // },
     quotationNo:{
         type:'input',
         belong:'basicInfo',

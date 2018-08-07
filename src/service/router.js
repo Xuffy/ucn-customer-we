@@ -252,15 +252,14 @@ export const routerMap = [
     component: Layout,
     redirect: '/negotiation/inquiry',
     name: 'negotiation',
-    meta: {name: $i.router.negotiation},
+    meta: {name: $i.router.negotiation, auth: 'INQUIRY'},
     children: [
       {
         path: 'inquiry',
         name: 'negotiationInquiry',
         meta: {
           name: $i.router.negotiationInquiryOverview,
-          draft: 'INQUIRY:OVERVIEW:DRAFT',
-          recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
+          auth: 'INQUIRY:OVERVIEW'
         },
         component: () => import('../views/negotiation/inquiryOverview')
       },
@@ -271,8 +270,7 @@ export const routerMap = [
         meta: {
           name: $i.router.negotiationInquiryDetail,
           messageBoard: 'code',
-          draft: 'INQUIRY:DETAIL:DRAFT',
-          recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN'
+          auth: 'INQUIRY:DETAIL'
         },
         component: () => import('../views/negotiation/inquiryDetail')
       },
@@ -281,7 +279,8 @@ export const routerMap = [
         name: 'negotiationCreateInquiry',
         hidden: true,
         meta: {
-          name: $i.router.negotiationCreateInquiry
+          name: $i.router.negotiationCreateInquiry,
+          auth: 'INQUIRY:OVERVIEW:CREATE_INQUIRY'
         },
         component: () => import('../views/negotiation/createInquiry')
       },
@@ -290,7 +289,7 @@ export const routerMap = [
         name: 'negotiationCompare',
         meta: {
           name: $i.router.negotiationCompareOverview,
-          recycleBin: 'INQUIRY:COMPARE_OVERVIEW:RECYCLE_BIN'
+          auth: 'INQUIRY:OVERVIEW:COMPARE'
         },
         component: () => import('../views/negotiation/compareOverview')
       },
@@ -299,7 +298,8 @@ export const routerMap = [
         name: 'negotiationCompareDetail',
         hidden: true,
         meta: {
-          name: $i.router.negotiationCompareDetail
+          name: $i.router.negotiationCompareDetail,
+          auth: 'INQUIRY:COMPARE_DETAIL'
         },
         component: () => import('../views/negotiation/compare')
       },
@@ -308,7 +308,8 @@ export const routerMap = [
         name: 'negotiationDraft',
         hidden: true,
         meta: {
-          name: $i.router.negotiationDraft
+          name: $i.router.negotiationDraft,
+          auth: 'INQUIRY:DRAFT_OVERVIEW'
         },
         component: () => import('../views/negotiation/draft')
       },
@@ -317,7 +318,8 @@ export const routerMap = [
         name: 'negotiationRecycleBin',
         hidden: true,
         meta: {
-          name: $i.router.negotiationRecycleBin
+          name: $i.router.negotiationRecycleBin,
+          auth: 'INQUIRY:ARCHIVE'
         },
         component: () => import('../views/negotiation/recycleBin')
       }
