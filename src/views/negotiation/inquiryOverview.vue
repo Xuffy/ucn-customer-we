@@ -63,6 +63,7 @@
 import { selectSearch, VTable, VPagination } from '@/components/index';
 import { mapActions } from 'vuex';
 import codeUtils from '@/lib/code-utils';
+import thisTool from './index';
 
 export default {
   name: '',
@@ -116,16 +117,8 @@ export default {
     }
   },
   created() {
-    let menuLink = {
-      'INQUIRY:OVERVIEW:DRAFT': {path: '/negotiation/draft/inquiry', label: this.$i.common.draft},
-      'INQUIRY:OVERVIEW:DELETE': {path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive},
-      'INQUIRY:LOG': {path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log}
-    };
-    Object.keys(menuLink).forEach(auth => {
-      if (this.$auth(auth)) {
-        this.setMenuLink(menuLink[auth]);
-      }
-    });
+    thisTool.setMenuLinks(this, ['INQUIRY:OVERVIEW:DRAFT', 'INQUIRY:OVERVIEW:DELETE', 'INQUIRY:LOG']);
+
     if (this.$auth('INQUIRY:DETAIL')) {
       this.actionBtns.push({label: this.$i.common.detail, type: 'detail'});
     }
