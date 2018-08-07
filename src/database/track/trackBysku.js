@@ -22,17 +22,11 @@ export default {
   supplier: {
     key: 'supplierName'
   },
-  skuNameCn: {
-    key: 'skuNameCn'
-  },
   skuNameEn: {
     key: 'skuNameEn'
   },
   skuDescriptionEn: {
     key: 'skuDescEn'
-  },
-  skuDescriptionCn: {
-    key: 'skuDescCn'
   },
   unit: {
     key: 'skuUnit'
@@ -64,29 +58,11 @@ export default {
   packingMethodEn: {
     key: 'skuMethodPkgEn'
   },
-  packingMethodCn: {
-    key: 'skuMethodPkgCn'
-  },
   packingMethodOfInnerCartonEn: {
     key: 'skuInnerCartonMethodEn'
   },
-  packingMethodOfInnerCartonCn: {
-    key: 'skuInnerCartonMethodCn'
-  },
-  packingMethodOfOuterCartonCn: {
-    key: 'skuOuterCartonMethodCn'
-  },
   packingMethodOfOuterCartonEn: {
     key: 'skuOuterCartonMethodEn'
-  },
-  unitOfWeight: {
-    key: 'skuUnitWeight'
-  },
-  unitOfLength: {
-    key: 'skuUnitLength'
-  },
-  unitOfVolume: {
-    key: 'skuUnitVolume'
   },
   outerCartonLength: {
     key: 'skuOuterCartonLength'
@@ -109,9 +85,6 @@ export default {
   skuNetWeight: {
     key: 'skuNetWeight'
   },
-  // skuGrossWeight: {
-  //   key: 'skuGrossWeight'
-  // },
   skuVolume: {
     key: 'skuVolume'
   },
@@ -142,26 +115,6 @@ export default {
   skuStatus: {
     key: 'skuStatus'
   },
-  sampleProvideDate: {
-    key: 'sampleReceiveDt',
-    type: 'textDate'
-  },
-  sampleNeedConfirmDate: {
-    key: 'sampleComfirmDt',
-    type: 'textDate'
-  },
-  needLabel: {
-    key: 'needLableDt',
-    type: 'textDate'
-  },
-  lableOrDesignDate: {
-    key: 'lableDt',
-    type: 'textDate'
-  },
-  designNeedConfirmDate: {
-    key: 'designConfirmDt',
-    type: 'textDate'
-  },
   qCDateA: {
     key: 'firstQcDt',
     type: 'textDate'
@@ -176,22 +129,6 @@ export default {
   },
   confirmQcDate: {
     key: 'confirmQcDt',
-    type: 'textDate'
-  },
-  estDeliveryDate: {
-    key: 'estDeliveryDt',
-    type: 'textDate'
-  },
-  actDeliveryDate: {
-    key: 'actDeliveryDt',
-    type: 'textDate'
-  },
-  estDepartureDate: {
-    key: 'estDeliveryDt' ,        //预计发运日期
-    type: 'textDate'
-  },
-  actDepartureDate: {
-    key: 'actDepartureDt',
     type: 'textDate'
   },
   bookingDate: {
@@ -228,10 +165,6 @@ export default {
   },
   actArrivalDate: {
     key: 'actArrivalDt',
-    type: 'textDate'
-  },
-  estReleaseDate: {
-    key: 'estReleaseDt',
     type: 'textDate'
   },
   actReleaseDate: {
@@ -323,12 +256,6 @@ export default {
   FLCorLCL: {
     key: 'isFullContainerLoad'
   },
-  truck: {
-    key: 'truck'
-  },
-  pallet: {
-    key: 'pallet'
-  },
   commercialInvoiceNumber: {
     key: 'commercialInvoiceNo'
   },
@@ -344,20 +271,8 @@ export default {
     key: 'orderAcceptedDt',
     type: 'textDate'
   },
-  freightToCountryUah: {
-    key: 'freightToCountryUah'
-  },
-  freightInlandUah: {
-    key: 'freightInlandUah'
-  },
-  insuranseUah: {
-    key: 'insuranseUah'
-  },
   container: {
     key: 'containerNo'
-  },
-  truckNumber: {
-    key: 'truckNo'
   },
   shipServiceProvider: {
     key: 'shipServiceProvider'
@@ -376,5 +291,8 @@ export default {
     key: 'qcId',
     _important:true,
     _hide:true
+  },
+  supplierAbbr: {
+    key: ''
   }
 }
