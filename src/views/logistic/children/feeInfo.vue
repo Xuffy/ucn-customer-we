@@ -102,12 +102,6 @@
         <span>{{ scope.row.otherChargesRemark2 }}</span>
       </template>
     </el-table-column>
-    <el-table-column :label="$i.logistic.commissionCharges" align="center" width="180" prop="commissionCharges">
-      <template slot-scope="scope">
-        <!-- <el-input placeholder="请输入内容" v-model="scope.row.commissionCharges" v-if="edit"></el-input> -->
-        <span>{{ scope.row.commissionCharges }}</span>
-      </template>
-    </el-table-column>
   </el-table>
 </template>
 <script>

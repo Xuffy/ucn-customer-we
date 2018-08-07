@@ -1,7 +1,7 @@
 export default {
-  orderNumber: {
-    key: 'orderNo',
-  },
+  // orderNumber: {
+  //   key: 'orderNo',
+  // },
   country: {
     key: 'country',
     _rules:{

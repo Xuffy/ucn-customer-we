@@ -46,17 +46,15 @@
               :hideFilterColumn="statusModify"/>
           <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]">
             <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 22" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
-            <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i.common.createOrder }}</el-button> -->
             <el-button @click="addToCompare" v-authorize="'INQUIRY:DETAIL:ADD_COMPARE'">{{ $i.common.addToCompare }}</el-button>
             <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id, 'from': 'copy'}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
-            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.archive }}</el-button> -->
             <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 22" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-            <el-button @click="exportDatas">{{ $i.common.download }}</el-button>
+            <el-button @click="exportDatas" v-authorize="'INQUIRY:DETAIL:DOWNLOAD'">{{ $i.common.download }}</el-button>
             <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
-            <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="![1, 99].includes(tabData[0].status.originValue)">{{ $i.common.archive }}</el-button>
+            <el-button type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" @click="ajaxInqueryAction('delete')" :disabled="![1, 99].includes(tabData[0].status.originValue)">{{ $i.common.archive }}</el-button>
           </div>
           <div class="bom-btn-wrap" v-show="statusModify">
-            <el-button @click="modify">{{ $i.common.send }}</el-button>
+            <el-button v-authorize="'INQUIRY:DETAIL:MODIFY'" @click="modify">{{ $i.common.send }}</el-button>
             <el-button type="info" @click="modifyCancel">{{ $i.common.exit }}</el-button>
           </div>
           <div class="bom-btn-wrap-box"></div>
@@ -85,7 +83,7 @@
       </v-product>
     </el-dialog>
     <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" @change="computePrice" ref="HM"></v-history-modify>
-    <v-message-board v-if="chatParams" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
+    <v-message-board v-if="chatParams" v-authorize="'INQUIRY:DETAIL:MESSAGE_BOARD'" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>
 <script>
@@ -135,7 +133,8 @@ export default {
         sorts: []
       },
       chatParams: null,
-      custom: null
+      custom: null,
+      exchangeRates: []
     };
   },
   components: {
@@ -197,16 +196,20 @@ export default {
     }
   },
   created() {
-    this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
-    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+    let menuLink = {
+      'INQUIRY:OVERVIEW:DRAFT': {path: '/negotiation/draft/inquiry', label: this.$i.common.draft},
+      'INQUIRY:OVERVIEW:DELETE': {path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive},
+      'INQUIRY:LOG': {path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log}
+    };
+    Object.keys(menuLink).forEach(auth => {
+      if (this.$auth(auth)) {
+        this.setMenuLink(menuLink[auth]);
+      }
+    });
 
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
     }
-    this.$ajax.post(this.$apis.POST_MY_CUSTOM).then(res => {
-      this.custom = res;
-    });
     Promise.all([codeUtils.getInquiryDicCodes(this), codeUtils.getCotegories(this)]).then(res => {
       let data = res[0];
       if (res[1]) {
@@ -328,6 +331,11 @@ export default {
           }]
         };
         this.tableLoad = false;
+
+        this.$ajax.post(this.$apis.GET_CUSTOMER_EXCHANGE_RATE_FEE, {tenantId: res.tenantId, companyId: res.companyId}).then(res2 => {
+          this.custom = res2.custom;
+          this.exchangeRates = res2.exchangeRates;
+        });
         // Basic Info
         this.tabData = this.newTabData = this.$getDB(
           this.$db.inquiry.basicInfo,
@@ -500,35 +508,44 @@ export default {
         this.onSwitch = true;
       }
     },
+    // 计算指定货币到美元的价格
+    toUSDCurrency(price, fromCurrency) {
+      if (fromCurrency === 'USD') return price;
+      if (isNaN(price) || !Array.isArray(this.exchangeRates) || !this.exchangeRates.length) return null;
+      let symbol = fromCurrency + 'USD';
+      let rate = this.exchangeRates.filter(i => i.symbol === symbol)[0] || null;
+      return rate && rate * price;
+    },
     computePrice(col, item) {
       let field = col.key;
       if (item._remark || !this.custom || !['skuExwPrice', 'skuFobPrice', 'skuCifPrice', 'skuOuterCartonQty', 'skuOuterCartonVolume'].includes(field)) {
         return;
       }
+
       let outerCartonQty = item.skuOuterCartonQty.value; // 外箱产品数量
       let outerCartonVolume = item.skuOuterCartonVolume.value; // 外箱体积
       if (field === 'skuExwPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
-        let exwPrice = item.skuExwPrice.value;
+        let exwPrice = this.toUSDCurrency(item.skuExwPrice.value, item.skuExwCurrency.value);
         if (codeUtils.isNumber(exwPrice, outerCartonVolume, outerCartonQty)) {
-          let fob = (exwPrice + 6500 / 68 * outerCartonVolume / outerCartonQty) * 1.05;
-          item.skuRefFobPrice.value = Number(fob.toFixed(item.skuRefFobPrice._toFixed || 8));
+          let fob = (exwPrice + 985 / 68 * outerCartonVolume / outerCartonQty) * 1.05;
+          item.skuRefFobPrice.value = Number(fob.toFixed(item.skuRefFobPrice._toFixed || 4));
         }
       }
       if (field === 'skuFobPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
-        let fobPrice = item.skuFobPrice.value;
         let oceanFreight = this.custom.oceanFreightUSD40HC; // 海运费
         let insuranceExpenses = this.custom.insuranceExpensesUSD40HC; // 保险费
+        let fobPrice = this.toUSDCurrency(item.skuFobPrice.value, item.skuFobCurrency) || item.skuRefFobPrice.value;
         if (codeUtils.isNumber(fobPrice, outerCartonQty, outerCartonVolume, oceanFreight, insuranceExpenses)) {
           let cif = fobPrice + (oceanFreight + insuranceExpenses) / 68 * outerCartonVolume / outerCartonQty;
-          item.skuRefCifPrice.value = Number(cif.toFixed(item.skuRefCifPrice._toFixed || 8));
+          item.skuRefCifPrice.value = Number(cif.toFixed(item.skuRefCifPrice._toFixed || 4));
         }
       }
       if (field === 'skuCifPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
-        let cifPrice = item.skuCifPrice.value;
         let portWarehouse = this.custom.portWarehousePrice40HC; // 港口到仓库运费
+        let cifPrice = this.toUSDCurrency(item.skuCifPrice.value, item.skuCifCurrency.value) || item.skuRefCifPrice;
         if (codeUtils.isNumber(cifPrice, outerCartonQty, outerCartonVolume, portWarehouse)) {
           let ddu = cifPrice + portWarehouse / 68 * outerCartonVolume / outerCartonQty;
-          item.skuRefDduPrice.value = Number(ddu.toFixed(item.skuRefDduPrice._toFixed || 8));
+          item.skuRefDduPrice.value = Number(ddu.toFixed(item.skuRefDduPrice._toFixed || 4));
         }
       }
     },

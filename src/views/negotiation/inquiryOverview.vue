@@ -21,7 +21,7 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="toCompare" :class="{'is-disabled':checkedIds.length < 2}" v-authorize="'INQUIRY:OVERVIEW:COMPARE'">{{ $i.common.compare }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button @click="toCompare" :disabled="checkedIds.length < 2" v-authorize="'INQUIRY:COMPARE_DETAIL:ADD_NEW'">{{ $i.common.compare }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.createNewInquiry }}</el-button>
                 <el-button @click="cancelInquiry" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'" :disabled="!cancelAble">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!deleteAble">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span></el-button>
@@ -39,7 +39,7 @@
             :code="viewByStatus ? 'inquiry': 'inquiry_list'"
             hide-filter-value
             :data="tabData"
-            :buttons="[{label: $i.common.detail, type: 'detail'}]"
+            :buttons="actionBtns"
             :height="450"
             @action="action"
             @change-checked="changeChecked"
@@ -95,7 +95,8 @@ export default {
         operatorFilters: []
         // recycleSupplier
       },
-      tabLoad: false
+      tabLoad: false,
+      actionBtns: []
     };
   },
   components: {
@@ -115,9 +116,20 @@ export default {
     }
   },
   created() {
-    this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
-    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+    let menuLink = {
+      'INQUIRY:OVERVIEW:DRAFT': {path: '/negotiation/draft/inquiry', label: this.$i.common.draft},
+      'INQUIRY:OVERVIEW:DELETE': {path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive},
+      'INQUIRY:LOG': {path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log}
+    };
+    Object.keys(menuLink).forEach(auth => {
+      if (this.$auth(auth)) {
+        this.setMenuLink(menuLink[auth]);
+      }
+    });
+    if (this.$auth('INQUIRY:DETAIL')) {
+      this.actionBtns.push({label: this.$i.common.detail, type: 'detail'});
+    }
+
     this.getBaseData().then(this.gettabData, this.gettabData);
   },
   methods: {
@@ -220,14 +232,14 @@ export default {
       });
     },
     toCompare() {
-      if(this.checkedData.length>=100){
+      if (this.checkedData.length >= 100) {
         this.$message({
           message: 'No more than a hundred!',
           type: 'warning'
-        })
+        });
         return;
       }
-      if (this.checkedIds.length>=2) {
+      if (this.checkedIds.length >= 2) {
         this.$windowOpen({
           url: '/negotiation/compareDetail/new',
           params: {
@@ -235,11 +247,6 @@ export default {
             ids: this.checkedIds.join(',')
           }
         });
-      }else{
-         this.$message({
-          message: 'please choose at least two inquiries!',
-          type: 'warning'
-        })
       }
     },
     handleSizeChange(val) {
