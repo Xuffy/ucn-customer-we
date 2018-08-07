@@ -1,7 +1,6 @@
 export default {
     quotationNo:{},
     orderNo:{},
-    entryDt:{},
     incoterm:{},
     incotermArea:{},
     currency:{},
@@ -9,8 +8,16 @@ export default {
     skuPrice:{},
     totalQty:{},
     actDeliveryDt:{},
-    confirmQcDt:{},
-    actDepartureDt:{},
     totalContainerQty:{},
-    skuQty:{},
+    salesOrderNo:{
+        key:'customerOrderNo'
+    },
+    purchaseOrderNo:{
+        key:'supplierOrderNo'
+    },
+    totalCTN:{
+        key:'totalOuterCartonQty'
+    },
+    orderCreateDt:{},
+    qualifiedSkuQty:{},
 }

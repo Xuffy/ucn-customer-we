@@ -752,24 +752,7 @@
                         item.refCifPrice._note=this.$i.product.cifFormula;
                         item.refDduPrice._note=this.$i.product.dduFormula;
                     });
-                    this.notLoadingDone = false;
-                    // this.tradeHistory.skuCode = this.productForm.code;
-                    // this.loadingTable = true;
-                    // this.$ajax.post(this.$apis.get_buyerProductTradeList, this.tradeHistory)
-                    //     .then(res => {
-                    //         this.historyData = this.$getDB(this.$db.product.tradeHistory, res.datas, e => {
-                    //             e.incoterm._value = _.findWhere(this.incotermOption, { code: e.incoterm.value }).name;
-                    //             e.actDeliveryDt._value = this.$dateFormat(e.actDeliveryDt.value, "yyyy-mm-dd");
-                    //             e.confirmQcDt._value = this.$dateFormat(e.confirmQcDt.value, "yyyy-mm-dd");
-                    //             e.actDepartureDt._value = this.$dateFormat(e.actDepartureDt.value, "yyyy-mm-dd");
-                    //         });
-                    //     }).finally(() => {
-                    //         this.notLoadingDone = false;
-                    //         this.loadingTable = false;
-                    //     }
-                    // );
-
-                }).catch(() => {
+                }).finally(() => {
                     this.notLoadingDone = false;
                 });
             },

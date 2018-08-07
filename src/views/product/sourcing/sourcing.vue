@@ -85,7 +85,6 @@
                 disabledDownload: true,
                 loadingAddBookmark: false,
 
-
                 /**
                  * 字典配置
                  * */

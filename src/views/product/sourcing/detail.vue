@@ -289,7 +289,6 @@
                     availableQty: 1,
                     mainSaleCountry: 1,
                     mainSaleArea: "",
-                    productionDates: 1,             //开发时间
                     qualityStander: "",
                     yearListed: "2018-02-23",
                     useDisplayBox: 1,
@@ -322,11 +321,6 @@
                     tryDimension: 1,                    //托盘尺寸？？？
                     skuQtyPerTray: 0,
                     specialTransportRequire: "",
-                    inventoryCostMethod: "",
-                    warehourceDefault: "",
-                    inventory: 0,
-                    safeInventory: 0,
-                    minInventory: 0,
                     unitWeight: 1,                      //重量单位,暂时传1
                     unitLength: 1,                      //长度单位,暂时传1
                     unitVolume: 1,                      //提及单位，暂时传1
@@ -337,7 +331,6 @@
                     volume: 0,
                     methodPkgCn: "",
                     methodPkgEn: "",
-                    innerCartonUnit: "",                //中包单位
                     innerCartonQty: 0,
                     innerCartonLength: 0,
                     innerCartonWidth: 0,
@@ -348,7 +341,6 @@
                     innerCartonDesc: "",
                     innerCartonMethodCn: "",
                     innerCartonMethodEn: "",
-                    outerCartonUnit: "",                //外箱单位
                     outerCartonDesc: "",
                     innerCartonOuterNum: 0,
                     outerCartonQty: 0,
@@ -531,8 +523,7 @@
                         this.historyData=this.$getDB(this.$db.product.tradeHistory,res.datas,e=>{
                             e.incoterm._value=(_.findWhere(this.incotermOption,{code:e.incoterm.value}) || {}).name;
                             e.actDeliveryDt._value=this.$dateFormat(e.actDeliveryDt.value,'yyyy-mm-dd');
-                            e.confirmQcDt._value=this.$dateFormat(e.confirmQcDt.value,'yyyy-mm-dd');
-                            e.actDepartureDt._value=this.$dateFormat(e.actDepartureDt.value,'yyyy-mm-dd');
+                            // e.orderCreateDt._value=this.$dateFormat(e.orderCreateDt.value,'yyyy-mm-dd');
                         });
                     }).finally(()=>{
                         this.loadingTable=false;
