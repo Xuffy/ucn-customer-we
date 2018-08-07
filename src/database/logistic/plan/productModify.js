@@ -7,6 +7,12 @@ export default {
     type: 'text',
     _hide: true
   },
+  "skuSupplierName": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
   "fieldDisplay": {
     type: 'text',
     _hide: true
@@ -55,14 +61,6 @@ export default {
     type: 'text',
     _hide: true
   },
-  "toShipCartonQty": {
-    type: 'text',
-    _important:true
-  },
-  "toShipQty": {
-    type: 'text',
-    _important:true
-  },
   "skuCode": {
     type: 'text'
   },
@@ -90,16 +88,10 @@ export default {
   "reportElement": {
     type: 'text'
   },
-  "skuSupplierName": {
-    type: 'text'
-  },
   "skuSupplierCode": {
     type: 'text'
   },
   "skuCustomerSkuCode": {
-    type: 'text'
-  },
-  "factorySkuCode": {
     type: 'text'
   },
   "skuUnit": {
