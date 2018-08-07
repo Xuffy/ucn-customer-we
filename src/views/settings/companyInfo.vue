@@ -194,11 +194,11 @@
         <el-dialog width="70%" :title="$i.setting.address" :visible.sync="addressDialogVisible">
             <el-form label-width="200px" :model="addressData">
                 <el-row>
-                  <el-col :span="8">
-                    <el-form-item class="speWidth" :label="$i.setting.orderNumber +'：'">
-                      <el-input size="mini" v-model="addressData.orderNo" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-                    </el-form-item>
-                  </el-col>
+                  <!--<el-col :span="8">-->
+                    <!--<el-form-item class="speWidth" :label="$i.setting.orderNumber +'：'">-->
+                      <!--<el-input size="mini" v-model="addressData.orderNo" :placeholder="$i.common.inputkeyWordToSearch"></el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
                   <el-col :span="8">
                     <el-form-item  :label="$i.setting.country+'：'" required>
                       <el-select  v-model="addressData.country" :placeholder="$i.common.inputSearch" style="width:100%">
@@ -255,7 +255,7 @@
                       <el-input size="mini" v-model="addressData.receiveAddress" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                     <el-form-item>
                       <el-checkbox-group v-model="addressData.def" size="medium">
                         <el-checkbox :label="$i.setting.setDefaultAddress"  @change="setAddress"></el-checkbox>

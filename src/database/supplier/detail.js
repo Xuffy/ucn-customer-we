@@ -27,10 +27,10 @@ export default {
       key: 'exportLicense',
       fullLine:false,
     },
-   businessScope: {
-      key: 'businessScope',
-      fullLine:false,
-    },
+   // businessScope: {
+   //    key: 'businessScope',
+   //    fullLine:false,
+   //  },
    currency: {
       key: 'currency',
       fullLine:false,

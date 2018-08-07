@@ -371,7 +371,7 @@
                         this.basicDate.payment = payment.name || '';
                         this.basicDate.currency = currency.name || '';
 
-                        this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts,e => {
+                        this.accounts = this.$getDB(this.$db.supplier.accountInfo, res.accounts,e => {
                           let currency;
                           currency = _.findWhere(this.currency, {code: e.currency.value}) || {};
                           e.currency._value = currency.name || '';
