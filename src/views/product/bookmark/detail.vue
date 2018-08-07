@@ -376,9 +376,7 @@
                     status: null,                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
-                    nameCn: "",
                     descEn: "",
-                    descCn: "",
                     descCustomer: "",
                     nameCustomer: "",
                     customerSkuCode: "",
@@ -388,9 +386,7 @@
                     unit: "2",
                     formation: "",
                     materialEn: "",
-                    materialCn: "",
                     colourEn: "",
-                    colourCn: "",
                     minOrderQty: 1,
                     deliveryDates: 1,               //交期(做完需要多少天)
                     design: "",
@@ -408,24 +404,17 @@
                     yearListed: "2018-02-23",
                     useDisplayBox: 1,
                     displayBoxQty: 0,
-                    otherPackInfoCn: "",
                     otherPackInfoEn: "",
                     adjustPackage: 2,
                     lengthWidthHeight: "",
                     recycle: 2,
                     categoryId: "",                      //类型id
-                    rateValueAddedTax: 1,               //增值税率
                     taxRefundRate: 1,
                     customsCode: "",
-                    customsNameCn: "",
                     customsNameEn: "",
-                    tradeMarkCn: "",
                     tradeMarkEn: "",
-                    commodityInspectionCn: "",
                     commodityInspectionEn: "",
-                    declareElement: "",
                     origin: "",
-                    inspectQuarantineCategory: "",      //检疫类别
                     brand: "",
                     brandRemark: "",
                     brandRelated: "",
@@ -433,7 +422,7 @@
                     gp20SkuQty: 0,
                     gp40SkuQty: 0,
                     hq40SkuQty: 0,
-                    tryDimension: 1,                    //托盘尺寸？？？
+                    tryDimension: '',                    //托盘尺寸？？？
                     skuQtyPerTray: 0,
                     specialTransportRequire: "",
                     inventoryCostMethod: "",
@@ -449,7 +438,6 @@
                     height: 0,
                     netWeight: 0,
                     volume: 0,
-                    methodPkgCn: "",
                     methodPkgEn: "",
                     innerCartonUnit: "",                //中包单位
                     innerCartonQty: 0,
@@ -460,7 +448,6 @@
                     innerCartonRoughWeight: 0,
                     innerCartonVolume: 0,
                     innerCartonDesc: "",
-                    innerCartonMethodCn: "",
                     innerCartonMethodEn: "",
                     outerCartonUnit: "",                //外箱单位
                     outerCartonDesc: "",
@@ -472,7 +459,6 @@
                     outerCartonNetWeight: 0,
                     outerCartonRoughWeight: 0,
                     outerCartonVolume: 0,
-                    outerCartonMethodCn: "",
                     outerCartonMethodEn: "",
                     oem: 1,
                     logisticId: 1,
@@ -720,7 +706,6 @@
                     this.productForm.status = (_.findWhere(this.skuSaleStatusOption, { code: String(this.productForm.status) }) || {}).name;
                     this.productForm.unit = ( _.findWhere(this.skuUnitOption, { code: String(this.productForm.unit) }) || {}).name;
                     this.productForm.expireUnit = (_.findWhere(this.expirationOption, { code: String(this.productForm.expireUnit) }) || {}).name;
-                    this.productForm.inspectQuarantineCategory =  (_.findWhere(this.quarantineTypeOption, { code: this.productForm.inspectQuarantineCategory }) || {}).name;
                     this.productForm.unitLength = ( _.findWhere(this.lengthOption, { code: String(this.productForm.unitLength) }) || {}).name;
                     this.productForm.unitVolume = ( _.findWhere(this.volumeOption, { code: String(this.productForm.unitVolume) }) || {}).name;
                     this.productForm.unitWeight = ( _.findWhere(this.weightOption, { code: String(this.productForm.unitWeight) }) || {}).name;

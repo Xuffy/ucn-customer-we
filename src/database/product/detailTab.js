@@ -18,12 +18,6 @@ export default {
         // disabledInput:true,             //是否禁止输入
         belongTab:'basicInfo'
     },
-    nameCn:{
-        key: 'nameCn',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
-    },
     descCn:{
         key: 'descCn',
         type: 'String',
@@ -99,20 +93,8 @@ export default {
         showType:'input',
         belongTab:'basicInfo',
     },
-    materialCn:{
-        key:'materialCn',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
-    },
     colourEn:{
         key:'colourEn',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
-    },
-    colourCn:{
-        key:'colourCn',
         type: 'String',
         showType:'input',
         belongTab:'basicInfo',
@@ -203,13 +185,6 @@ export default {
     /**
      * Customer Info
      * */
-    rateValueAddedTax:{
-        key:'rateValueAddedTax',
-        type: 'String',
-        showType:'number',
-        belongTab:'customerInfo',
-        accuracy:2
-    },
     taxRefundRate:{
         key:'taxRefundRate',
         type: 'String',
@@ -223,20 +198,8 @@ export default {
         showType:'input',
         belongTab:'customerInfo',
     },
-    customsNameCn:{
-        key:'customsNameCn',
-        type: 'String',
-        showType:'input',
-        belongTab:'customerInfo',
-    },
     customsNameEn:{
         key:'customsNameEn',
-        type: 'String',
-        showType:'input',
-        belongTab:'customerInfo',
-    },
-    tradeMarkCn:{
-        key:'tradeMarkCn',
         type: 'String',
         showType:'input',
         belongTab:'customerInfo',
@@ -247,20 +210,8 @@ export default {
         showType:'input',
         belongTab:'customerInfo',
     },
-    commodityInspectionCn:{
-        key:'commodityInspectionCn',
-        type: 'String',
-        showType:'input',
-        belongTab:'customerInfo',
-    },
     commodityInspectionEn:{
         key:'commodityInspectionEn',
-        type: 'String',
-        showType:'input',
-        belongTab:'customerInfo',
-    },
-    declareElement:{
-        key:'declareElement',
         type: 'String',
         showType:'input',
         belongTab:'customerInfo',
@@ -270,13 +221,6 @@ export default {
         type: 'String',
         showType:'input',
         belongTab:'customerInfo',
-    },
-    inspectQuarantineCategory:{
-        key:'inspectQuarantineCategory',
-        type: 'String',
-        showType:'select',
-        belongTab:'customerInfo',
-        isInspectQuarantineCategory:true
     },
     brand:{
         key:'brand',
@@ -454,12 +398,6 @@ export default {
         belongTab:'packingInfo',
         accuracy:6
     },
-    methodPkgCn:{
-        key:'methodPkgCn',
-        type: 'String',
-        showType:'input',
-        belongTab:'packingInfo',
-    },
     methodPkgEn:{
         key:'methodPkgEn',
         type: 'String',
@@ -521,12 +459,6 @@ export default {
         showType:'textarea',
         belongTab:'packingInfo',
         fullLine:true
-    },
-    innerCartonMethodCn:{
-        key:'innerCartonMethodCn',
-        type: 'String',
-        showType:'input',
-        belongTab:'packingInfo',
     },
     innerCartonMethodEn:{
         key:'innerCartonMethodEn',
@@ -597,12 +529,6 @@ export default {
         belongTab:'packingInfo',
         accuracy:3
     },
-    outerCartonMethodCn:{
-        key:'outerCartonMethodCn',
-        type: 'String',
-        showType:'input',
-        belongTab:'packingInfo',
-    },
     outerCartonMethodEn:{
         key:'outerCartonMethodEn',
         type: 'String',
@@ -644,7 +570,7 @@ export default {
     tryDimension:{
         key:'tryDimension',
         type: 'String',
-        showType:'number',
+        showType:'input',
         belongTab:'logisticInfo',
     },
     skuQtyPerTray:{
@@ -712,12 +638,6 @@ export default {
         key:'lengthWidthHeight',
         type: 'String',
         showType:'number',
-        belongTab:'otherInfo',
-    },
-    otherPackInfoCn:{
-        key:'otherPackInfoCn',
-        type: 'String',
-        showType:'input',
         belongTab:'otherInfo',
     },
     otherPackInfoEn:{

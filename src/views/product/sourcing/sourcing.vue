@@ -143,7 +143,6 @@
                         e.unitVolume.value = this.$change(this.volumeOption, "unitVolume", e, true).name;
                         e.unitWeight.value = this.$change(this.weightOption, "unitWeight", e, true).name;
                         e.yearListed.value = this.$dateFormat(e.yearListed.value, "yyyy-mm");
-                        e.inspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: e.inspectQuarantineCategory.value }) || {}).name;
 
                         if (this.disableBookmarkChoose && e.bookmarkId.value) {
                             this.$set(e, "_disabled", true);

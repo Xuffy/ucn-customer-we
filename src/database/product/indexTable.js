@@ -26,9 +26,6 @@ export default {
     skuSaleStatus: {
         key:'status'
     },
-    nameCn:{
-
-    },
     descCn:{
         _sort:false
     },
@@ -62,13 +59,7 @@ export default {
     materialEn:{
 
     },
-    materialCn:{
-
-    },
     colourEn:{
-
-    },
-    colourCn:{
 
     },
     minOrderQty:{
@@ -142,40 +133,22 @@ export default {
     dduArea:{
         _sort:false
     },
-    rateValueAddedTax:{
-      _toFixed:2
-    },
     taxRefundRate:{
 
     },
     customsCode:{
 
     },
-    customsNameCn:{
-
-    },
     customsNameEn:{
-
-    },
-    tradeMarkCn:{
 
     },
     tradeMarkEn:{
 
     },
-    commodityInspectionCn:{
-
-    },
     commodityInspectionEn:{
 
     },
-    declareElement:{
-        _sort:false
-    },
     origin:{
-
-    },
-    inspectQuarantineCategory:{
 
     },
     brand:{
@@ -214,9 +187,6 @@ export default {
     volume:{
 
     },
-    methodPkgCn:{
-        _sort:false
-    },
     methodPkgEn:{
         _sort:false
     },
@@ -242,9 +212,6 @@ export default {
 
     },
     innerCartonDesc:{
-        _sort:false
-    },
-    innerCartonMethodCn:{
         _sort:false
     },
     innerCartonMethodEn:{
@@ -276,9 +243,6 @@ export default {
     },
     outerCartonVolume:{
 
-    },
-    outerCartonMethodCn:{
-        _sort:false
     },
     outerCartonMethodEn:{
         _sort:false
@@ -324,9 +288,6 @@ export default {
     },
     lengthWidthHeight:{
 
-    },
-    otherPackInfoCn:{
-        _sort:false
     },
     otherPackInfoEn:{
         _sort:false
