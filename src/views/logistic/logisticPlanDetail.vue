@@ -840,17 +840,18 @@
       },
       closeAddProduct() {
         let CheckedIdArr =  this.ProductFromOrderChecked ? this.ProductFromOrderChecked.map(el => {
-          return el.id.value;
-        }) : []
-        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
-          return _.findWhere(this.ProductFromOrderRes,{id:el})
+          return {id:el.id.value,_disabled:el._disabled};
         }) : [];
+        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
+          let obj = _.findWhere(this.ProductFromOrderRes,{id:el.id});
+          obj._disabled = el._disabled;
+          return obj;
+        }) : [];
+
         this.showAddProductDialog = false
-        this.ProductFromOrderChecked.forEach((el,index) => {
-          if(el._disabled) {
-            arr.splice(index,1);
-          }
-        });
+        arr = _.filter(arr,el=>{
+          return !el._disabled
+        })
         const selectArrData = this.$depthClone(arr);
         if (!arr.length || !selectArrData.length) return
         selectArrData.forEach((a,i) => {
