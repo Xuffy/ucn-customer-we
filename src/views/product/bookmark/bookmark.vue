@@ -17,37 +17,45 @@
                 <el-button
                         @click="createInquiry"
                         v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:CREATE_INQUIRY'">
-                    {{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                    {{$i.product.createInquiry}}({{selectList.length}})
+                </el-button>
                 <el-button
                         @click="createOrder"
                         v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:CREATE_ORDER'">
-                    {{$i.product.createOrder}}({{selectList.length}})</el-button>
+                    {{$i.product.createOrder}}({{selectList.length}})
+                </el-button>
                 <el-button
                         @click="compareProducts"
                         :disabled="selectList.length<2"
                         v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:COMPARE'">
-                    {{$i.product.compare}}({{selectList.length}})</el-button>
+                    {{$i.product.compare}}({{selectList.length}})
+                </el-button>
                 <el-button
                         @click="addProduct"
                         v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:ADD_PRODUCT'">
-                    {{$i.product.addNewProductEn}}</el-button>
+                    {{$i.product.addNewProductEn}}
+                </el-button>
                 <el-button @click="manuallyAddProduct"
                            v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:MANUALLY_ADD'">
-                    {{$i.product.manuallyAdd}}</el-button>
+                    {{$i.product.manuallyAdd}}
+                </el-button>
                 <el-button
                         @click="()=>$refs.importCategory.show()"
                         v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:UPLOAD'">
-                    {{$i.button.upload}}</el-button>
+                    {{$i.button.upload}}
+                </el-button>
                 <el-button
                         @click="download"
                         :disabled="productData.length===0"
                         v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DOWNLOAD'">
-                    {{$i.button.download}}({{selectList.length===0?$i.product.all:selectList.length}})</el-button>
+                    {{$i.button.download}}({{selectList.length===0?$i.product.all:selectList.length}})
+                </el-button>
                 <el-button
                         type="danger"
                         :disabled="selectList.length<1"
                         v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DELETE'" @click="deleteBookmark">
-                    {{$i.button.remove}}</el-button>
+                    {{$i.button.remove}}
+                </el-button>
             </template>
             <v-pagination slot="pagination"
                           @change="val=>{getData({pn:val})}"
@@ -98,273 +106,277 @@
             </div>
         </el-dialog>
 
-        <v-import-template ref="importCategory" code="BIZ_SKU_PURCHASE_IMPORT" biz-code="BIZ_SKU_PURCHASE_IMPORT"></v-import-template>
+        <v-import-template ref="importCategory" code="BIZ_SKU_PURCHASE_IMPORT"
+                           biz-code="BIZ_SKU_PURCHASE_IMPORT"></v-import-template>
     </div>
 </template>
 <script>
-    import {overviewPage,VPagination,VProduct,VImportTemplate} from '@/components/index'
-    import {mapActions} from 'vuex'
+    import { overviewPage, VPagination, VProduct, VImportTemplate } from "@/components/index";
+    import { mapActions } from "vuex";
 
     export default {
-        name:"bookmark",
-        components:{
+        name: "bookmark",
+        components: {
             overviewPage,
             VPagination,
             VProduct,
             VImportTemplate
         },
-        data(){
-            return{
-                title:this.$i.product.title,
-                type:'product',
-                formDatabase:this.$db.product.overview,
-                labelWidth:220,
-                productData:[],
-                pageData:{},            //分页配置
-                selectList:[],
-                loadingTable:false,
-                queryConfig:{
-                    pn:1,
-                    ps:50,
-                    recycle: false,
+        data() {
+            return {
+                title: this.$i.product.title,
+                type: "product",
+                formDatabase: this.$db.product.overview,
+                labelWidth: 220,
+                productData: [],
+                pageData: {},            //分页配置
+                selectList: [],
+                loadingTable: false,
+                queryConfig: {
+                    pn: 1,
+                    ps: 50,
+                    recycle: false
                 },
-                disabledCompare:true,
-                disabledOrderList:[],
-                dialogFormVisible:false,
-                addProductDialogVisible:false,
-                disableProductLine:[],
+                disabledCompare: true,
+                disabledOrderList: [],
+                dialogFormVisible: false,
+                addProductDialogVisible: false,
+                disableProductLine: [],
 
                 /**
                  * 按钮状态
                  * */
-                disabledDownload:true,
-                loadingAddBookmark:false,
+                disabledDownload: true,
+                loadingAddBookmark: false,
 
 
                 /**
                  * 字典配置
                  * */
-                statusOption:[],
-                weightOption:[],
-                dateOption:[],
-                volumeOption:[],
-                lengthOption:[],
-                skuUnitOption:[],
-
-            }
+                statusOption: [],
+                weightOption: [],
+                dateOption: [],
+                volumeOption: [],
+                lengthOption: [],
+                skuUnitOption: [],
+                formationOption: []
+            };
         },
-        methods:{
-            ...mapActions(['setMenuLink']),
+        methods: {
+            ...mapActions(["setMenuLink"]),
             /**
              * 表格事件
              * */
-            getData(query){
+            getData(query) {
                 if (query) {
-                    if(!query.categoryId){
+                    if (!query.categoryId) {
                         query.categoryId = null;
                     }
-                    if(query.readilyAvailable==='1'){
-                        query.readilyAvailable=true;
-                    }else if(query.readilyAvailable==='0'){
-                        query.readilyAvailable=false;
+                    if (query.readilyAvailable === "1") {
+                        query.readilyAvailable = true;
+                    } else if (query.readilyAvailable === "0") {
+                        query.readilyAvailable = false;
                     }
                 }
-                Object.assign(this.queryConfig,query);
-                let params=this.$depthClone(this.queryConfig);
-                if(_.isArray(params.country)){
-                    params.country=params.country.join(',');
+                Object.assign(this.queryConfig, query);
+                let params = this.$depthClone(this.queryConfig);
+                if (_.isArray(params.country)) {
+                    params.country = params.country.join(",");
                 }
-                this.loadingTable=true;
+                this.loadingTable = true;
                 this.$ajax.post(this.$apis.get_buyerBookmarkList, params).then(res => {
-                    this.productData=this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
-                        let noneSellCountry = '';
-                        e.noneSellCountry.value.split(',').forEach(v => {
-                            this.countryOption.forEach(m => {
-                                if (m.code === v) {
-                                    noneSellCountry += (m.name + ',');
-                                }
-                            })
-                        });
-                        noneSellCountry = noneSellCountry.slice(0, noneSellCountry.length - 1);
-                        e.noneSellCountry.value = noneSellCountry;
+                    this.productData = this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
+                        if (e.noneSellCountry.value) {
+                            e.noneSellCountry._value = _.map(e.noneSellCountry.value.split(","), item => {
+                                return (_.findWhere(this.countryOption, { code: item }) || {}).name;
+                            }).join(",");
+                        }
+                        if (e.mainSaleCountry.value) {
+                            e.mainSaleCountry._value = _.map(e.mainSaleCountry.value.split(","), item => {
+                                return (_.findWhere(this.countryOption, { code: item }) || {}).name;
+                            }).join(",");
+                        }
 
-                        e.status.value = this.$change(this.statusOption, 'status', e, true).name;
-                        e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
-                        e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
-                        e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
-                        e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
-                        e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
-                        e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
+                        e.status._value = (_.findWhere(this.statusOption, { code: String(e.status.value) }) || {}).name;
+                        e.expireUnit._value = (_.findWhere(this.dateOption, { code: String(e.expireUnit.value) }) || {}).name;
+                        e.unit._value = (_.findWhere(this.skuUnitOption, { code: String(e.unit.value) }) || {}).name;
+                        e.unitLength._value = (_.findWhere(this.lengthOption, { code: String(e.unitLength.value) }) || {}).name;
+                        e.unitVolume._value = (_.findWhere(this.volumeOption, { code: String(e.unitVolume.value) }) || {}).name;
+                        e.unitWeight._value = (_.findWhere(this.weightOption, { code: String(e.unitWeight.value) }) || {}).name;
+                        e.yearListed.value = this.$dateFormat(e.yearListed.value, "yyyy-mm");
+                        e.formation._value=(_.findWhere(this.formationOption,{code:e.formation.value}) || {}).name;
 
-                        if(this.disableBookmarkChoose && e.bookmarkId.value){
-                            this.$set(e,'_disabled',true);
+                        if (this.disableBookmarkChoose && e.bookmarkId.value) {
+                            this.$set(e, "_disabled", true);
                         }
                         return e;
                     });
-                    this.pageData=res;
-                    this.selectList=[];
+                    this.pageData = res;
+                    this.selectList = [];
                 }).finally(err => {
-                    this.loadingTable=false;
+                    this.loadingTable = false;
                 });
             },
-            btnClick(e){
-                if(!e._disabled){
+            btnClick(e) {
+                if (!e._disabled) {
                     this.$windowOpen({
-                        url:'/product/bookmarkDetail',
-                        params:{
-                            id:e.skuId.value,
-                            bookmarkId:e.id.value
+                        url: "/product/bookmarkDetail",
+                        params: {
+                            id: e.skuId.value,
+                            bookmarkId: e.id.value
                         }
-                    })
+                    });
                 }
             },
-            changeSort(e){
-                console.log(e,'val')
+            changeSort(e) {
+                console.log(e, "val");
             },
-            changeChecked(e){
-                this.selectList=e;
+            changeChecked(e) {
+                this.selectList = e;
             },
 
             /**
              * 按钮事件
              * */
-            createInquiry(){
+            createInquiry() {
                 if (this.selectList.length === 0) {
                     this.$windowOpen({
-                        url: '/negotiation/createInquiry',
-                    })
+                        url: "/negotiation/createInquiry"
+                    });
                 } else {
-                    let skus=_.pluck(_.pluck(this.selectList, "skuId"), "value").join(',');
-                    let supplierCodes=_.pluck(_.pluck(this.selectList, "supplierCode"), "value").join(',');
+                    let skus = _.pluck(_.pluck(this.selectList, "skuId"), "value").join(",");
+                    let supplierCodes = _.pluck(_.pluck(this.selectList, "supplierCode"), "value").join(",");
                     this.$windowOpen({
-                        url: '/negotiation/createInquiry',
+                        url: "/negotiation/createInquiry",
                         params: {
                             skus: skus,
                             supplierCodes: supplierCodes
                         }
-                    })
+                    });
                 }
             },
-            createOrder(){
+            createOrder() {
                 if (this.selectList.length === 0) {
                     this.$windowOpen({
-                        url: '/order/create',
-                    })
+                        url: "/order/create"
+                    });
                 } else {
-                    this.disabledOrderList=[];
-                    _.map(this.selectList,v=>{
-                        if(v.customerCreate.value){
+                    this.disabledOrderList = [];
+                    _.map(this.selectList, v => {
+                        if (v.customerCreate.value) {
                             this.disabledOrderList.push(v);
                         }
                     });
-                    if(this.disabledOrderList.length>0){
-                        return this.dialogFormVisible=true;
+                    if (this.disabledOrderList.length > 0) {
+                        return this.dialogFormVisible = true;
                     }
 
-                    let supplierList =_.uniq( _.pluck(_.pluck(this.selectList,'supplierCode'),'value'));
+                    let supplierList = _.uniq(_.pluck(_.pluck(this.selectList, "supplierCode"), "value"));
                     if (supplierList.length > 1) {
                         return this.$message({
                             message: this.$i.product.notAddDifferentSupplierProduct,
-                            type: 'warning'
+                            type: "warning"
                         });
                     }
-                    let ids = _.pluck(_.pluck(this.selectList,'skuId'),'value').join(',');
+                    let ids = _.pluck(_.pluck(this.selectList, "skuId"), "value").join(",");
                     this.$windowOpen({
-                        url: '/order/create',
+                        url: "/order/create",
                         params: {
-                            type: 'product',
+                            type: "product",
                             ids: ids,
                             supplierCode: supplierList[0]
-                        },
-                    })
-                }
-            },
-            compareProducts(){
-                if(this.selectList.length>100){
-                    return this.$message({
-                        message: this.$i.product.compareRecordMustLessThan100,
-                        type: 'success'
+                        }
                     });
                 }
-                let id = _.pluck(_.pluck(this.selectList,'skuId'),'value').join(',');
+            },
+            compareProducts() {
+                if (this.selectList.length > 100) {
+                    return this.$message({
+                        message: this.$i.product.compareRecordMustLessThan100,
+                        type: "success"
+                    });
+                }
+                let id = _.pluck(_.pluck(this.selectList, "skuId"), "value").join(",");
                 this.$windowOpen({
-                    url: '/product/compareDetail/new',
+                    url: "/product/compareDetail/new",
                     params: {
-                        id: id,
+                        id: id
                     }
                 });
             },
-            addProduct(){
-                this.disableProductLine = _.pluck(_.pluck(this.productData,'skuId'),'value');
-                this.addProductDialogVisible=true;
-                if(this.$refs.addProduct){
+            addProduct() {
+                this.disableProductLine = _.pluck(_.pluck(this.productData, "skuId"), "value");
+                this.addProductDialogVisible = true;
+                if (this.$refs.addProduct) {
                     this.$refs.addProduct.getData();
                 }
             },
-            manuallyAddProduct(){
+            manuallyAddProduct() {
                 this.$windowOpen({
-                    url:'/product/bookmarkManuallyAdd'
+                    url: "/product/bookmarkManuallyAdd"
                 });
             },
-            download(){
-                let ids=_.pluck(_.pluck(this.selectList,"skuId"),'value');
-                if(ids.length>0){
-                    this.$fetch.export_task('SKU_PURCHASE_EXPORT_IDS',{ids:ids});
-                }else{
-                    let params=this.$depthClone(this.queryConfig);
-                    if(_.isArray(params.country)){
-                        params.country=params.country.join(',');
+            download() {
+                let ids = _.pluck(_.pluck(this.selectList, "skuId"), "value");
+                if (ids.length > 0) {
+                    this.$fetch.export_task("SKU_PURCHASE_EXPORT_IDS", { ids: ids });
+                } else {
+                    let params = this.$depthClone(this.queryConfig);
+                    if (_.isArray(params.country)) {
+                        params.country = params.country.join(",");
                     }
-                    this.$fetch.export_task('SKU_PURCHASE_EXPORT_BOOKMARK_PARAMS',params);
+                    this.$fetch.export_task("SKU_PURCHASE_EXPORT_BOOKMARK_PARAMS", params);
                 }
             },
-            deleteBookmark(){
+            deleteBookmark() {
                 this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
                     confirmButtonText: this.$i.product.sure,
                     cancelButtonText: this.$i.product.cancel,
-                    type: 'warning'
+                    type: "warning"
                 }).then(() => {
-                    let params=[];
-                    _.map(this.selectList,v=>{
+                    let params = [];
+                    _.map(this.selectList, v => {
                         params.push({
-                            id:v.id.value,
-                            name:v.nameEn.value
-                        })
+                            id: v.id.value,
+                            name: v.nameEn.value
+                        });
                     });
-                    this.loadingTable=true;
-                    this.$ajax.post(this.$apis.delete_buyerProductBookmark,params).then(res=>{
-                        this.selectList=[];
+                    this.loadingTable = true;
+                    this.$ajax.post(this.$apis.delete_buyerProductBookmark, params).then(res => {
+                        this.selectList = [];
                         this.$message({
-                            type: 'success',
+                            type: "success",
                             message: this.$i.product.deleteSuccess
                         });
                         this.getData();
-                    }).finally(()=>{
-                        this.loadingTable=false;
+                    }).finally(() => {
+                        this.loadingTable = false;
                     });
                 }).finally(() => {
 
                 });
             },
-            getUnit(){
-                let unit,country;
-                unit=this.$ajax.post(this.$apis.get_partUnit, ['SKU_SALE_STATUS', 'WT_UNIT', 'ED_UNIT', 'VE_UNIT', 'LH_UNIT', 'SKU_UNIT'], {cache: true});
-                country=this.$ajax.get(this.$apis.get_country, {}, {cache: true});
+            getUnit() {
+                let unit, country;
+                unit = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "WT_UNIT", "ED_UNIT", "VE_UNIT", "LH_UNIT", "SKU_UNIT","SKU_FORMATION"], { cache: true });
+                country = this.$ajax.get(this.$apis.get_country, {}, { cache: true });
 
-                this.$ajax.all([unit,country]).then(res=>{
+                this.$ajax.all([unit, country]).then(res => {
                     res[0].forEach(v => {
-                        if (v.code === 'SKU_SALE_STATUS') {
+                        if (v.code === "SKU_SALE_STATUS") {
                             this.statusOption = v.codes;
-                        } else if (v.code === 'WT_UNIT') {
+                        } else if (v.code === "WT_UNIT") {
                             this.weightOption = v.codes;
-                        } else if (v.code === 'ED_UNIT') {
+                        } else if (v.code === "ED_UNIT") {
                             this.dateOption = v.codes;
-                        } else if (v.code === 'VE_UNIT') {
+                        } else if (v.code === "VE_UNIT") {
                             this.volumeOption = v.codes;
-                        } else if (v.code === 'LH_UNIT') {
+                        } else if (v.code === "LH_UNIT") {
                             this.lengthOption = v.codes;
-                        } else if (v.code === 'SKU_UNIT') {
+                        } else if (v.code === "SKU_UNIT") {
                             this.skuUnitOption = v.codes;
+                        } else if (v.code === "SKU_FORMATION") {
+                            this.formationOption = v.codes;
                         }
                     });
                     if (this.$route.params.supplierName) {
@@ -372,7 +384,7 @@
                     }
                     this.countryOption = res[1];
                     this.getData();
-                }).finally(()=>{
+                }).finally(() => {
                     this.loadingTable = false;
                 });
             },
@@ -380,43 +392,43 @@
             /**
              * add Product弹出框事件
              * */
-            handleSure(e){
-                this.addProductDialogVisible=false;
-                this.loadingTable=true;
-                let id = _.pluck(_.pluck(e,'id'),'value');
+            handleSure(e) {
+                this.addProductDialogVisible = false;
+                this.loadingTable = true;
+                let id = _.pluck(_.pluck(e, "id"), "value");
                 this.$ajax.post(this.$apis.add_buyerBookmark, id).then(res => {
                     this.$message({
                         message: this.$i.product.successfullyAdd,
-                        type: 'success'
+                        type: "success"
                     });
                     this.getData();
                 }).finally(() => {
 
                 });
             },
-            handleCancel(){
-                this.addProductDialogVisible=false;
-            },
+            handleCancel() {
+                this.addProductDialogVisible = false;
+            }
         },
-        created(){
+        created() {
             this.getUnit();
         },
-        mounted(){
+        mounted() {
             this.setMenuLink({
-                path: '/logs/index',
-                query: {code: 'PRODUCT'},
+                path: "/logs/index",
+                query: { code: "PRODUCT" },
                 type: 10,
-                auth:'PRODUCT:LOG',
+                auth: "PRODUCT:LOG",
                 label: this.$i.common.log
             });
             this.setMenuLink({
-                path: '/product/bookmarkArchive',
+                path: "/product/bookmarkArchive",
                 type: 20,
-                auth:'PRODUCT:ARCHIVE',
+                auth: "PRODUCT:ARCHIVE",
                 label: this.$i.common.archive
             });
-        },
-    }
+        }
+    };
 </script>
 <style scoped>
 

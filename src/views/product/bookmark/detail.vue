@@ -80,12 +80,13 @@
                     </el-button>
                     <el-button
                             @click="upload"
-                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:UPLOAD'">{{$i.product.uploadProduct}}</el-button>
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:UPLOAD'">{{$i.product.uploadProduct}}
+                    </el-button>
                     <el-button
                             type="danger"
                             :loading="disableClickDelete"
                             @click="deleteBookmark"
-                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:DELETE'">{{$i.product.remove}}
+                            v-authorize="'PRODUCT:BOOKMARK_DETAIL:DELETE'">{{$i.product.deleteProduct}}
                     </el-button>
                 </div>
                 <div class="btns" v-else>
@@ -114,6 +115,12 @@
                                     <el-form-item :prop="v.key" :label="v.label+' :'">
                                         <div v-if="v.key==='status'">
                                             {{productForm[v.key]}}
+                                        </div>
+                                        <div v-else-if="v.showType==='attachment'">
+                                            <v-upload
+                                                    readonly
+                                                    :list="productForm[v.key]"
+                                                    :limit="20"></v-upload>
                                         </div>
                                         <div v-else>
                                             <div v-if="productForm.customerCreate">
@@ -389,12 +396,10 @@
                     colourEn: "",
                     minOrderQty: 1,
                     deliveryDates: 1,               //交期(做完需要多少天)
-                    design: "",
                     noneSellCountry: 1,             //禁售国家，暂时传1
                     applicableAge: 1,
                     expireDates: 1,
                     expireUnit: 1,                  //保质期单位，暂时传1
-                    comments: "",
                     readilyAvailable: 1,
                     availableQty: 1,
                     mainSaleCountry: 1,
@@ -422,7 +427,7 @@
                     gp20SkuQty: 0,
                     gp40SkuQty: 0,
                     hq40SkuQty: 0,
-                    tryDimension: '',                    //托盘尺寸？？？
+                    tryDimension: "",                    //托盘尺寸？？？
                     skuQtyPerTray: 0,
                     specialTransportRequire: "",
                     inventoryCostMethod: "",
@@ -552,7 +557,9 @@
                 oemOption: [],
                 udbOption: [],
                 skuPkgOption: [],
-                countryOption: []
+                countryOption: [],
+                formationOption: []
+
             };
         },
         methods: {
@@ -614,8 +621,8 @@
                     this.disableClickDelete = true;
                     this.$ajax.post(this.$apis.delete_buyerProductBookmark, [
                         {
-                            id:this.$route.query.bookmarkId,
-                            name:this.productForm.nameEn
+                            id: this.$route.query.bookmarkId,
+                            name: this.productForm.nameEn
                         }
                     ]).then(res => {
                         this.$message({
@@ -634,7 +641,7 @@
                 });
 
             },
-            upload(){
+            upload() {
 
             },
             //新增product
@@ -683,36 +690,32 @@
                     this.productForm = res;
 
                     //处理国家显示
+                    //处理国家显示
                     if (this.productForm.noneSellCountry) {
-                        let noneSellCountry = this.productForm.noneSellCountry.split(",");
-                        this.productForm.noneSellCountry = "";
-                        _.map(noneSellCountry, v => {
-                            this.productForm.noneSellCountry += (_.findWhere(this.countryOption, { code: v }).name + ",");
-                        });
-                        this.productForm.noneSellCountry = this.productForm.noneSellCountry.slice(0, this.productForm.noneSellCountry.length - 1);
+                        this.productForm.noneSellCountry = _.map(this.productForm.noneSellCountry.split(","), item => {
+                            return (_.findWhere(this.countryOption, { code: item }) || {}).name;
+                        }).join(",");
                     }
                     if (this.productForm.mainSaleCountry) {
-                        let mainSaleCountry = this.productForm.mainSaleCountry.split(",");
-                        this.productForm.mainSaleCountry = "";
-                        _.map(mainSaleCountry, v => {
-                            this.productForm.mainSaleCountry += (_.findWhere(this.countryOption, { code: v }).name + ",");
-                        });
-                        this.productForm.mainSaleCountry = this.productForm.mainSaleCountry.slice(0, this.productForm.mainSaleCountry.length - 1);
+                        this.productForm.mainSaleCountry = _.map(this.productForm.mainSaleCountry.split(","), item => {
+                            return (_.findWhere(this.countryOption, { code: item }) || {}).name;
+                        }).join(",");
                     }
 
                     /**
                      * 字典转换
                      * */
                     this.productForm.status = (_.findWhere(this.skuSaleStatusOption, { code: String(this.productForm.status) }) || {}).name;
-                    this.productForm.unit = ( _.findWhere(this.skuUnitOption, { code: String(this.productForm.unit) }) || {}).name;
+                    this.productForm.unit = (_.findWhere(this.skuUnitOption, { code: String(this.productForm.unit) }) || {}).name;
                     this.productForm.expireUnit = (_.findWhere(this.expirationOption, { code: String(this.productForm.expireUnit) }) || {}).name;
-                    this.productForm.unitLength = ( _.findWhere(this.lengthOption, { code: String(this.productForm.unitLength) }) || {}).name;
-                    this.productForm.unitVolume = ( _.findWhere(this.volumeOption, { code: String(this.productForm.unitVolume) }) || {}).name;
-                    this.productForm.unitWeight = ( _.findWhere(this.weightOption, { code: String(this.productForm.unitWeight) }) || {}).name;
+                    this.productForm.unitLength = (_.findWhere(this.lengthOption, { code: String(this.productForm.unitLength) }) || {}).name;
+                    this.productForm.unitVolume = (_.findWhere(this.volumeOption, { code: String(this.productForm.unitVolume) }) || {}).name;
+                    this.productForm.unitWeight = (_.findWhere(this.weightOption, { code: String(this.productForm.unitWeight) }) || {}).name;
                     this.productForm.oem = (_.findWhere(this.oemOption, { code: String(Number(this.productForm.oem)) }) || {}).name;
                     this.productForm.yearListed = this.$dateFormat(this.productForm.yearListed, "yyyy-mm");
                     this.productForm.useDisplayBox = (_.findWhere(this.udbOption, { code: String(Number(this.productForm.useDisplayBox)) }) || {}).name;
                     this.productForm.adjustPackage = (_.findWhere(this.skuPkgOption, { code: String(Number(this.productForm.adjustPackage)) }) || {}).name;
+                    this.productForm.formation=(_.findWhere(this.formationOption, { code: String(this.productForm.formation) }) || {}).name;
 
                     this.notLoadingDone = false;
                     this.hideBtns = true;
@@ -732,10 +735,10 @@
                         dduCurrency: this.productForm.dduCurrency,
                         dduArea: this.productForm.dduArea
                     }];
-                    this.priceTable = this.$getDB(this.$db.product.detailPriceTable, priceData,item=>{
-                        item.refFobPrice._note=this.$i.product.fobFormula;
-                        item.refCifPrice._note=this.$i.product.cifFormula;
-                        item.refDduPrice._note=this.$i.product.dduFormula;
+                    this.priceTable = this.$getDB(this.$db.product.detailPriceTable, priceData, item => {
+                        item.refFobPrice._note = this.$i.product.fobFormula;
+                        item.refCifPrice._note = this.$i.product.cifFormula;
+                        item.refDduPrice._note = this.$i.product.dduFormula;
                     });
                 }).finally(() => {
                     this.notLoadingDone = false;
@@ -939,9 +942,9 @@
             //获取字典
             getUnit() {
                 this.notLoadingDone = true;
-                const unit=this.$ajax.post(this.$apis.get_partUnit, ["ITM", "SKU_SALE_STATUS", "SKU_UNIT", "ED_UNIT", "QUARANTINE_TYPE", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS"], { cache: true });
-                const country=this.$ajax.get(this.$apis.get_country, {}, { cache: true });
-                this.$ajax.all([unit,country]).then(res=>{
+                const unit = this.$ajax.post(this.$apis.get_partUnit, ["ITM", "SKU_SALE_STATUS", "SKU_UNIT", "ED_UNIT", "QUARANTINE_TYPE", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS","SKU_FORMATION"], { cache: true });
+                const country = this.$ajax.get(this.$apis.get_country, {}, { cache: true });
+                this.$ajax.all([unit, country]).then(res => {
                     res[0].forEach(v => {
                         if (v.code === "ITM") {
                             this.incotermOption = v.codes;
@@ -965,13 +968,15 @@
                             this.udbOption = v.codes;
                         } else if (v.code === "SKU_PG_IS") {
                             this.skuPkgOption = v.codes;
+                        } else if (v.code === "SKU_FORMATION") {
+                            this.formationOption = v.codes;
                         }
                     });
                     this.countryOption = res[1];
                     this.getTableData();
                     this.getRemarkData();
                     this.getCompareList();
-                }).finally(()=>{
+                }).finally(() => {
                     this.notLoadingDone = true;
                 });
             }
@@ -984,13 +989,13 @@
                 path: "/logs/index",
                 query: { code: "PRODUCT" },
                 type: 10,
-                auth:'PRODUCT:LOG',
+                auth: "PRODUCT:LOG",
                 label: this.$i.common.log
             });
             this.setMenuLink({
                 path: "/product/bookmarkArchive",
                 type: 20,
-                auth:'PRODUCT:ARCHIVE',
+                auth: "PRODUCT:ARCHIVE",
                 label: this.$i.common.archive
             });
         }
@@ -1075,10 +1080,11 @@
     .Details .body .list >>> label {
         /*text-align: right;*/
     }
-    .bigFont{
+
+    .bigFont {
         font-weight: 600;
         font-size: 14px;
-        color:#777777;
+        color: #777777;
     }
 
     .speForm .el-form-item--small.el-form-item {
