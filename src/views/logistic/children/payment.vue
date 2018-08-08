@@ -64,7 +64,14 @@
         <template slot-scope="scope">
           <div v-if="scope.row.edit" style="display:flex;">
             <label class="reqiuredStar"></label>
-            <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
+            <v-input-number
+              v-model="scope.row.planPayAmount"
+              :min="0"
+              :controls="false"
+              :accuracy="2"
+              :mark="$i.logistic.estAmount"
+              :placeholder="$i.logistic.placeholder"
+              v-if="scope.row.edit"></v-input-number>
           </div>
           <span v-else>{{ scope.row.planPayAmount }}</span>
         </template>
@@ -78,7 +85,14 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.actAmount" prop="actualPayAmount" align="center" width="180">
         <template slot-scope="scope">
-          <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.actualPayAmount" v-if="scope.row.edit"></el-input>
+          <v-input-number
+            v-model="scope.row.actualPayAmount"
+            :min="0"
+            :controls="false"
+            :accuracy="2"
+            :mark="$i.logistic.actAmount"
+            :placeholder="$i.logistic.placeholder"
+            v-if="scope.row.edit"></v-input-number>
           <span v-else>{{ scope.row.actualPayAmount }}</span>
         </template>
       </el-table-column>
@@ -119,7 +133,11 @@
   </div>
 </template>
 <script>
+import {VInputNumber} from '@/components/index';
 export default {
+  components:{
+    VInputNumber
+  },
   props: {
     tableData: {
       type: Array,
