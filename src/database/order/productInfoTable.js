@@ -157,7 +157,6 @@ export default {
         _disabled:true
     },
     skuCustomsNameCn:{},
-    skuCustomsNameEn:{},
     skuTradeMarkEn:{},
     skuTradeMarkCn:{},
     skuCommodityInspectionCn:{},

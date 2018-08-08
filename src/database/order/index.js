@@ -1,5 +1,4 @@
 import overviewBysku from './overviewBysku';
-import basicInfo from './basicInfo';
 import responsibility from './responsibility';
 import productInfo from './productInfo';
 
@@ -15,7 +14,6 @@ import productInfoTable from './productInfoTable';
 import productInfoTableCreate from './productInfoTableCreate';
 
 export default {
-    basicInfo,
     responsibility,
     overviewBysku,
     productInfo,

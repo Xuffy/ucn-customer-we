@@ -1437,7 +1437,6 @@
                             skuCustomerSkuCode: '',
                             skuCustomsCode: '',
                             skuCustomsNameCn: '',
-                            skuCustomsNameEn: '',
                             skuDduCurrency: '',
                             skuDduPort: '',
                             skuDduPrice: null,
@@ -1604,7 +1603,6 @@
                         obj.skuCategoryId=v.skuCategoryId;
                         obj.skuCustomsCode=v.skuCustomsCode;
                         obj.skuCustomsNameCn=v.skuCustomsNameCn;
-                        obj.skuCustomsNameEn=v.skuCustomsNameEn;
                         obj.skuTradeMarkCn=v.skuTradeMarkCn;
                         obj.skuTradeMarkEn=v.skuTradeMarkEn;
                         obj.skuCommodityInspectionCn=v.skuCommodityInspectionCn;
