@@ -58,6 +58,15 @@ export default {
     key: '',
     _important:true,
   },
+  destinationPort:{
+    key:'destPort'
+  },
+  consignee:{
+    key:'consignee'
+  },
+  notify:{
+    key:'notify'
+  },
   defaultAddress: {
     key: 'def'
   }
