@@ -26,8 +26,10 @@ export default {
     skuNameCn:{},
     skuBrand:{},
     skuDesign:{},
-    packingMethodCn:{},
-    innerCartonPackingMethodCn:{},
+    skuMethodPkgEn:{},
+    skuInnerCartonMethodEn:{},
+    // packingMethodCn:{},
+    // innerCartonPackingMethodCn:{},
     deliveryDate:{
         showType:'date'
     },
