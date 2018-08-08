@@ -37,6 +37,7 @@ export default {
     outerCartonNetWeight:{},
     outerCartonGrossWeight:{},
     outerCartonVolume:{},
+    supplierAbbr:{},
     // skuLabel:{},
     // skuLength:{},
     // skuWidth:{},
