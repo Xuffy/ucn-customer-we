@@ -23,6 +23,7 @@
 import { VTable, selectSearch } from '@/components/index';
 import { mapActions } from 'vuex';
 import codeUtils from '@/lib/code-utils';
+import thisTool from './index';
 
 export default {
   name: '',
@@ -83,9 +84,7 @@ export default {
         // recycleSupplier
         break;
     }
-    if (this.$auth('INQUIRY:LOG')) {
-      this.setMenuLink({path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log});
-    }
+    thisTool.setMenuLinks(this, ['INQUIRY:LOG']);
 
     this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
       .then(data => this.setDic(codeUtils.convertDicValueType(data)))

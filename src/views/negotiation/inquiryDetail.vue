@@ -102,6 +102,7 @@ import { getData } from '@/service/base';
 import product from '@/views/product/addProduct';
 import { mapActions, mapState } from 'vuex';
 import codeUtils from '@/lib/code-utils';
+import thisTool from './index';
 
 export default {
   name: 'inquiryDetail',
@@ -196,11 +197,8 @@ export default {
     }
   },
   created() {
-    let menuLink = {
-      'INQUIRY:OVERVIEW:DRAFT': {path: '/negotiation/draft/inquiry', label: this.$i.common.draft},
-      'INQUIRY:OVERVIEW:DELETE': {path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive},
-      'INQUIRY:LOG': {path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log}
-    };
+    thisTool.setMenuLinks(this, ['INQUIRY:OVERVIEW:DRAFT', 'INQUIRY:OVERVIEW:DELETE', 'INQUIRY:LOG']);
+
     Object.keys(menuLink).forEach(auth => {
       if (this.$auth(auth)) {
         this.setMenuLink(menuLink[auth]);
