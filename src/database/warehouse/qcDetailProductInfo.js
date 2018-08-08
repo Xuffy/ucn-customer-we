@@ -32,14 +32,14 @@ export default{
         key: 'customerSkuCode',
         type: 'String'
     },
-    factorySkuCode: {
-        key: 'factorySkuCode',
-        type: 'String'
-    },
-    skuNameCn: {
-        key: 'skuNameCn',
-        type: 'String'
-    },
+    // factorySkuCode: {
+    //     key: 'factorySkuCode',
+    //     type: 'String'
+    // },
+    // skuNameCn: {
+    //     key: 'skuNameCn',
+    //     type: 'String'
+    // },
     skuBrand: {
         key: 'skuBrand',
         type: 'String'
@@ -48,14 +48,14 @@ export default{
         key: 'skuDesign',
         type: 'String'
     },
-    packingMethodCn: {
-        key: 'packingMethodCn',
-        type: 'String'
-    },
-    innerCartonPackingMethodCn: {
-        key: 'innerCartonPackingMethodCn',
-        type: 'String'
-    },
+    // packingMethodCn: {
+    //     key: 'packingMethodCn',
+    //     type: 'String'
+    // },
+    // innerCartonPackingMethodCn: {
+    //     key: 'innerCartonPackingMethodCn',
+    //     type: 'String'
+    // },
     deliveryDate: {
         key: 'deliveryDate',
         type: 'String'
