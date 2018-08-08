@@ -20,16 +20,11 @@ export default {
     customerAgreementDt:{},
     remark:{},
     totalSkuPrice:{},
-    // paidAmount:{},
-    // unpaidAmount:{},
     deliveredQty:{},
     updateDt:{},
     quotationNo:{},
     totalQty:{},
     totalOuterCartonQty:{},
-    // totalGrossWeight:{},
-    // totalNetWeight:{},
-    // totalVolume:{},
     skuQuantity:{
         key:'skuQty'
     },

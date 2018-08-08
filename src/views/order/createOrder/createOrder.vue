@@ -1067,6 +1067,7 @@
                     name:''
                 }).then(res=>{
                     this.supplierOption=res;
+                    console.log(this.$depthClone(this.supplierOption),'this.supplierOption')
                     if(this.$route.query.supplierCode){
                         _.map(this.supplierOption,v=>{
                             if(v.code===this.$route.query.supplierCode){

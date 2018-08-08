@@ -80,12 +80,6 @@
     </div>
 </template>
 <script>
-    /**
-     * @param selectChange 下拉框 值发生变更触发
-     * @param keyWord search框 值
-     * @param options 下拉框 原始数据
-     * @param value 下拉框 选中值
-     */
     import { mapActions } from "vuex";
     import {
         dropDown,
@@ -442,7 +436,6 @@
     >>> .el-input-group__append {
         padding: 0 !important;
     }
-
 </style>
 <style lang="less" scoped>
     .orderOverview {
@@ -533,7 +526,5 @@
                 }
             }
         }
-
     }
-
 </style>
