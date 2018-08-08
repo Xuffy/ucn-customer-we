@@ -61,6 +61,8 @@
 import { VTable, dropDownSingle, addNewInqury, VPagination } from '@/components/index';
 import { mapActions } from 'vuex';
 import codeUtils from '@/lib/code-utils';
+import thisTool from './index';
+
 export default {
   name: 'compareOverview',
   data() {
@@ -112,15 +114,8 @@ export default {
     }
     this.compareType = this.$route.params.type ? this.$route.params.type : '';
     this.getDirData().then(this.getData, this.getData);
-    let menuLink = {
-      'INQUIRY:COMPARE_OVERVIEW:DELETE': {path: '/negotiation/recycleBin/compare', label: this.$i.common.archive},
-      'INQUIRY:LOG': {path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log}
-    };
-    Object.keys(menuLink).forEach(auth => {
-      if (this.$auth(auth)) {
-        this.setMenuLink(menuLink[auth]);
-      }
-    });
+
+    thisTool.setMenuLinks(this, ['INQUIRY:COMPARE_OVERVIEW:DELETE', 'INQUIRY:LOG']);
   },
   methods: {
     ...mapActions(['setMenuLink', 'setDic']),
