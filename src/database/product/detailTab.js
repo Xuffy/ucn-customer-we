@@ -169,6 +169,9 @@ export default {
         belongTab:'basicInfo',
         isDateUnit:true
     },
+    supplierAbbr:{
+        belongTab:'basicInfo',
+    },
     designs:{
         key:'designs',
         belongTab:'basicInfo',
