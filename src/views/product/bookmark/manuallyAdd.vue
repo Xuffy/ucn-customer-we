@@ -13,7 +13,7 @@
                 <el-col
                         class="speCol"
                         v-for="v in $db.product.detailTab"
-                        v-if="v.belongTab==='basicInfo'"
+                        v-if="v.belongTab==='basicInfo' && !v.isHide"
                         :key="v.key"
                         :xs="24"
                         :sm="v.fullLine?24:12"
@@ -463,14 +463,11 @@
                         <div v-else-if="v.showType==='number'">
                             <v-input-number
                                     class="speInput speNumber"
-                                    size="mini"
                                     v-model="productForm[v.key]"
-                                    :controls="false"
                                     :min="0"
                                     :placeholder="$i.product.pleaseInput"
                                     :mark="v.label"
-                                    :accuracy="v.accuracy"
-                                    label="please input"></v-input-number>
+                                    :accuracy="v.accuracy"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down

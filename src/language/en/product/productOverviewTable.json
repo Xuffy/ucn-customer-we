@@ -119,5 +119,6 @@
   "pictures": "Picture",
   "designs":"Product design",
   "notes":"Instruction note",
-  "supplierAbbr":"Supplier Abbr"
+  "supplierAbbr":"Supplier Abbr",
+  "oemQty":"OEM MOQ"
 }

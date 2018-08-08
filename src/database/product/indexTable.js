@@ -57,6 +57,7 @@ export default {
     formation:{
         _sort:false
     },
+    oemQty:{},
     materialEn:{
 
     },

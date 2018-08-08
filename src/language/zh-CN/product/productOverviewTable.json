@@ -119,5 +119,6 @@
   "pictures": "图片",
   "designs":"产品设计",
   "notes":"产品说明书",
-  "supplierAbbr":"供应商简称"
+  "supplierAbbr":"供应商简称",
+  "oemQty":"贴牌起订量"
 }
