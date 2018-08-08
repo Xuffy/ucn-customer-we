@@ -79,7 +79,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                    <!-- <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" :label="$i.warehouse.surveyor">
                             <el-input
                                     :placeholder="$i.warehouse.serviceChoose"
@@ -87,7 +87,7 @@
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
-                    </el-col>
+                    </el-col> -->
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" :label="$i.warehouse.serviceFee">
                             <el-input
