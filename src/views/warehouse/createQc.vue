@@ -711,6 +711,7 @@
                                 v.actOuterCartonSkuQty = '';
                                 v.unqualifiedProcessingMode = '';
                                 v.samplingRate = '';
+                                v.expectQcQty = 0
                                 this.productTableData.push(v);
                             }
                         });
