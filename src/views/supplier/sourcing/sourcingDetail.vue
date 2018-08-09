@@ -20,7 +20,7 @@
                                 :key='index'
                                 :xs="24" :sm="item.fullLine?24:24" :md="item.fullLine?24:12" :lg="item.fullLine?24:12" :xl="item.fullLine?24:8"
                               >
-                                <el-form-item label-width="190px" :prop="item.key" :label="item.label+' :'">
+                                <el-form-item label-width="210px" :prop="item.key" :label="item.label+' :'">
                                   {{basicDate[item.key]}}
                                 </el-form-item>
                               </el-col>
@@ -372,7 +372,22 @@
                           e.currency._value = currency.name || '';
                           return e;
                         });
-                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
+                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address, e => {
+                          let country,recvCountry;
+                          country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
+                          recvCountry = _.findWhere(this.countryOption, {code: e.recvCountry.value}) || {};
+                          e.country._value = country.name || '';
+                          e.recvCountry._value = recvCountry.name || '';
+                          const province = e.province.value || '';
+                          const city = e.city.value || '';
+                          const address = e.address.value || ''
+                          const recvProvince = e.recvProvince.value || '';
+                          const recvCity = e.recvCity.value || '';
+                          const recvAddr = e.recvAddr.value || '';
+                          e.factoryAddress.value = e.country._value +' '+province+' '+city+' '+address;
+                          e.expressAddress.value = e.recvCountry._value +' '+recvProvince+' '+recvCity+' '+recvAddr
+                          return e;
+                        } );
                         this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
                           let gender;
                           gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};

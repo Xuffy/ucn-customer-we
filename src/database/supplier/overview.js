@@ -16,5 +16,9 @@ export default {
         key: '',
         type: 'input'
     },
+  supplierNO:{
+     key: '',
+    type: 'input'
+  }
 
 }

@@ -4,7 +4,7 @@
   "customerShortName": "客户简称",
   "customerType": "客户类型",
   "provideIncoterm": "可提供价格条款",
-  "exportLicense": "是否有进出口权",
+  "exportLicense": "出口资质",
   "currency": "货币",
   "paymentTerm": "付款方式",
   "shipAgent": "船代公司",

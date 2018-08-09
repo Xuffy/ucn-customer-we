@@ -68,6 +68,9 @@ export default {
   post_purchase_customer_updateIsSetting:['/purchase/customer/updateIsSetting/{id}', 'BASE_CS', 'BASE_URL'],
   get_purchase_customer_document: ['/purchase/customer/document', 'BASE_CS', 'BASE_URL'],
   post_purchase_customer_exist: ['/purchase/customer/sname/exist/{id}?shortName={shortName}', 'BASE_CS', 'BASE_URL'],
+  post_purchase_customer_account: ['/purchase/customer/account', 'BASE_CS', 'BASE_URL'],
+  post_purchase_customer_account_delete: ['/purchase/customer/account/delete/{id}', 'BASE_CS', 'BASE_URL'],
+  post_purchase_customer_account_id: ['/purchase/customer/account', 'BASE_CS', 'BASE_URL'],
 
 //自定义币种汇率
   get_customcurrencyexchangerate_query: ['/customcurrencyexchangerate/query', 'UMETA_URL', 'UMETA_URL'],

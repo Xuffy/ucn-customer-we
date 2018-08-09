@@ -37,5 +37,9 @@ export default {
   version:{
     key:'version',
     _hide:true
+  },
+  customerId:{
+    key:'customerId',
+    _hide:true
   }
 }

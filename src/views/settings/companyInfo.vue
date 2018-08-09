@@ -306,8 +306,8 @@
             </div>
         </el-dialog>
 
-        <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="contactDialogVisible">
-            <el-form label-width="200px" :model="accountData">
+        <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="accountDialogVisible">
+            <el-form label-width="230px" :model="accountData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item  :label="$i.setting.beneficiaryName +'：'" required>
@@ -325,13 +325,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item  :label="$i.setting.beneficiaryBankName +'：'">
+                        <el-form-item  :label="$i.setting.beneficiaryBankName +'：'" required>
                             <el-input size="mini" v-model="accountData.beneficiaryBankName" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item  :label="$i.setting.beneficiaryBankSWIFT +'：'">
-                            <el-input size="mini" v-model="accountData.beneficiaryBankSWIFT" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                            <el-input size="mini" v-model="accountData.beneficiaryBankSwift" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                         </el-form-item>
                     </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -343,7 +343,7 @@
                     <el-form-item  :label="$i.setting.currency +'：'">
                       <el-select  v-model="accountData.currency" :placeholder="$i.common.inputSearch" style="width:100%">
                         <el-option
-                          v-for="item in options.country"
+                          v-for="item in options.currency"
                           :key="item.id"
                           :label="item.name"
                           :value="item.code"
@@ -996,7 +996,7 @@
             }
           },
           sureAddAccount(){
-            if (this.$validateForm(this.accountData, this.$db.setting.companyContact)) {
+            if (this.$validateForm(this.accountData, this.$db.setting.companyAccountInfo)) {
               return false;
             }
             this.allowAddAccount=true;
@@ -1004,7 +1004,8 @@
 
             if(this.isModifyAccount){
               //表示是在修改account
-              this.$ajax.post(`${this.$apis.post_purchase_customer_concat_id}/${this.contactData.id}`,this.contactData).then(res=>{
+              this.$ajax.post(`${this.$apis.post_purchase_customer_account_id}/${this.accountData.id}`,this.accountData)
+                .then(res=>{
                 this.allowAddAccount=false;
                 this.$message({
                   message: this.$i.common.modifySuccess,
@@ -1019,7 +1020,7 @@
             }
             else{
               //表示是在新增account
-              this.$ajax.post(this.$apis.post_purchase_customer_concat,this.accountData).then(res=>{
+              this.$ajax.post(this.$apis.post_purchase_customer_account,this.accountData).then(res=>{
                 if (!this.companyInfo.setting){
                   this.postUpdateIsSetting();
                 }
@@ -1032,10 +1033,6 @@
                 this.accountDialogVisible=false;
               }).catch(err=>{
                 this.allowAddAccount=false;
-                this.$message({
-                  message: err,
-                  type: 'success'
-                });
                 this.accountDialogVisible=false;
               });
             }
@@ -1045,17 +1042,18 @@
             for(const i in e){
               result[e[i].key]= e[i].value
             }
-            this.isModifyContact=true;      //标识正在修改contact
-            this.contactData=Object.assign({}, result);
-            this.contactDialogVisible=true;
+            this.isModifyAccount=true;      //标识正在修改contact
+            this.accountData=Object.assign({}, result);
+            this.accountDialogVisible=true;
           },
+          //79886349729017856
           deleteAccount(e){
-            this.$confirm(this.$i.common.sureToDeleteContact, this.$i.common.prompt, {
+            this.$confirm(this.$i.common.sureToDeleteAccount, this.$i.common.prompt, {
               confirmButtonText: this.$i.common.confirm,
               cancelButtonText: this.$i.common.cancel,
               type: 'warning'
             }).then(() => {
-              this.$ajax.post(this.$apis.post_purchase_customer_deleteConcat,{id:e.id.value}).then(res=>{
+              this.$ajax.post(this.$apis.post_purchase_customer_account_delete,{id:e.id.value}).then(res=>{
                 this.$message({
                   type: 'success',
                   message: this.$i.common.deleteTheSuccess
@@ -1122,10 +1120,6 @@
                         this.contactDialogVisible=false;
                     }).catch(err=>{
                         this.allowAddContact=false;
-                        this.$message({
-                            message: err,
-                            type: 'success'
-                        });
                         this.contactDialogVisible=false;
                     });
                 }

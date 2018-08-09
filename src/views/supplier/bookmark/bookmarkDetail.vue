@@ -5,7 +5,7 @@
                 <span>{{basicDate.name}}</span>
             </div>
             <div class="detail">
-                 <el-form  label-width="190px">
+                 <el-form  label-width="200px">
                      <el-row>
                        <el-col :span="4"  class="img-box">
                          <v-image :src="basicDate.logo" style="height: 184px;"/>
