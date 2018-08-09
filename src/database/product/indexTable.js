@@ -26,6 +26,7 @@ export default {
     skuSaleStatus: {
         key:'status'
     },
+    supplierAbbr:{},
     descCn:{
         _sort:false
     },
@@ -56,6 +57,7 @@ export default {
     formation:{
         _sort:false
     },
+    oemQty:{},
     materialEn:{
 
     },
@@ -67,9 +69,6 @@ export default {
     },
     deliveryDates:{
 
-    },
-    design:{
-        _sort:false
     },
     categoryName:{
         key:"categoryName",
@@ -96,8 +95,15 @@ export default {
     expireUnit:{
 
     },
-    comments:{
-        _sort:false
+    designs:{
+        _upload:{
+            readonly:true
+        }
+    },
+    notes:{
+        _upload:{
+            readonly:true
+        }
     },
     fobCurrency:{
 

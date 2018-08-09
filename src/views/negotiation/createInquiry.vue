@@ -165,6 +165,7 @@ import {selectSearch, VTable, VUpload, VHistoryModify, VInputNumber} from '@/com
 import product from '@/views/product/addProduct';
 import {mapActions} from 'vuex';
 import codeUtils from '@/lib/code-utils';
+import thisTool from './index';
 
 export default {
   name: 'createInquiry',
@@ -249,9 +250,7 @@ export default {
     }
   },
   created() {
-    this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
-    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+    thisTool.setMenuLinks(this, ['INQUIRY:OVERVIEW:DRAFT', 'INQUIRY:OVERVIEW:DELETE', 'INQUIRY:LOG']);
 
     this.sdbo = this.$db.inquiry.productInfo;
 

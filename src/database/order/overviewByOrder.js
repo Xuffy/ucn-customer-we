@@ -11,7 +11,7 @@ export default {
     supplierOrderNo:{},
     incoterm:{},
     lcNo:{},
-    payment:{},
+    paymentTerm:{},
     currency:{},
     deliveryDt:{},
     departureCountry:{},    //发运国
@@ -20,16 +20,11 @@ export default {
     customerAgreementDt:{},
     remark:{},
     totalSkuPrice:{},
-    // paidAmount:{},
-    // unpaidAmount:{},
     deliveredQty:{},
     updateDt:{},
     quotationNo:{},
     totalQty:{},
     totalOuterCartonQty:{},
-    // totalGrossWeight:{},
-    // totalNetWeight:{},
-    // totalVolume:{},
     skuQuantity:{
         key:'skuQty'
     },

@@ -38,8 +38,9 @@
 </template>
 <script>
 import { VTable, selectSearch, VPagination } from '@/components/index';
-import codeUtils from '@/lib/code-utils';
 import { mapActions } from 'vuex';
+import codeUtils from '@/lib/code-utils';
+import thisTool from './index';
 
 export default {
   name: '',
@@ -79,8 +80,7 @@ export default {
       this.$router.push({name: 'negotiationInquiry'});
       return;
     }
-    this.setMenuLink({path: '/negotiation/recycleBin/' + type, label: this.$i.common.archive});
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+    thisTool.setMenuLinks(this, ['INQUIRY:OVERVIEW:DELETE', 'INQUIRY:LOG']);
 
     switch (this.$route.params.type) {
       case 'inquiry':

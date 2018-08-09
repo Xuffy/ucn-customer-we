@@ -1067,6 +1067,7 @@
                     name:''
                 }).then(res=>{
                     this.supplierOption=res;
+                    console.log(this.$depthClone(this.supplierOption),'this.supplierOption')
                     if(this.$route.query.supplierCode){
                         _.map(this.supplierOption,v=>{
                             if(v.code===this.$route.query.supplierCode){
@@ -1436,7 +1437,6 @@
                             skuCustomerSkuCode: '',
                             skuCustomsCode: '',
                             skuCustomsNameCn: '',
-                            skuCustomsNameEn: '',
                             skuDduCurrency: '',
                             skuDduPort: '',
                             skuDduPrice: null,
@@ -1603,7 +1603,6 @@
                         obj.skuCategoryId=v.skuCategoryId;
                         obj.skuCustomsCode=v.skuCustomsCode;
                         obj.skuCustomsNameCn=v.skuCustomsNameCn;
-                        obj.skuCustomsNameEn=v.skuCustomsNameEn;
                         obj.skuTradeMarkCn=v.skuTradeMarkCn;
                         obj.skuTradeMarkEn=v.skuTradeMarkEn;
                         obj.skuCommodityInspectionCn=v.skuCommodityInspectionCn;

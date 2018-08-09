@@ -8,14 +8,29 @@
           <span>{{ scope.row.no }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.paymentItem" align="center" width="140">
+      <el-table-column :label="$i.logistic.paymentItem" align="center" width="150">
         <template slot-scope="scope">
           <div v-if="scope.row.edit" style="display:flex;">
             <label class="reqiuredStar"></label>
-            {{scope.row.name}}
-            <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
+            <el-select v-model="scope.row.name" :placeholder="$i.logistic.placeholder">
+              <el-option
+                v-for="(item,index) in selectArr.paymentItem"
+                :key="index"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select>
+            <!-- <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.name" v-if="scope.row.edit"></el-input> -->
           </div>
-          <span v-else>{{ scope.row.name }}</span>
+          <span v-else>{{ textFilter(scope.row.name,'paymentItem') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.remark" align="center" width="180">
+        <template slot-scope="scope">
+          <div v-if="scope.row.edit" style="display:flex;">
+            <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.remark" v-if="scope.row.edit"></el-input>
+          </div>
+          <span v-else>{{ scope.row.remark }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
@@ -49,7 +64,14 @@
         <template slot-scope="scope">
           <div v-if="scope.row.edit" style="display:flex;">
             <label class="reqiuredStar"></label>
-            <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
+            <v-input-number
+              v-model="scope.row.planPayAmount"
+              :min="0"
+              :controls="false"
+              :accuracy="2"
+              :mark="$i.logistic.estAmount"
+              :placeholder="$i.logistic.placeholder"
+              v-if="scope.row.edit"></v-input-number>
           </div>
           <span v-else>{{ scope.row.planPayAmount }}</span>
         </template>
@@ -63,7 +85,14 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.actAmount" prop="actualPayAmount" align="center" width="180">
         <template slot-scope="scope">
-          <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.actualPayAmount" v-if="scope.row.edit"></el-input>
+          <v-input-number
+            v-model="scope.row.actualPayAmount"
+            :min="0"
+            :controls="false"
+            :accuracy="2"
+            :mark="$i.logistic.actAmount"
+            :placeholder="$i.logistic.placeholder"
+            v-if="scope.row.edit"></v-input-number>
           <span v-else>{{ scope.row.actualPayAmount }}</span>
         </template>
       </el-table-column>
@@ -104,7 +133,11 @@
   </div>
 </template>
 <script>
+import {VInputNumber} from '@/components/index';
 export default {
+  components:{
+    VInputNumber
+  },
   props: {
     tableData: {
       type: Array,
@@ -291,6 +324,10 @@ export default {
         })
       })
     },
+    textFilter(code,key) {
+      let obj = this.selectArr[key].find(item => item.code == code);
+      return obj ? obj.name : null;
+    } 
   },
 }
 </script>

@@ -81,7 +81,6 @@ export default {
     CUSTOMERCURRENCYEXCHANGERATE_QUERY: ['/customcurrencyexchangerate/query', 'UMETA_URL'],
     COUNTRY_ALL: ['/country/all', 'UMETA_URL'],
 
-
     /**
      * 新格式order接口配置
      * */

@@ -7,6 +7,19 @@
     <form-list :DeliveredEdit="deliveredEdit" name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange"
       @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"
     />
+    <!-- shiper 有点特殊 单独放出来处理 -->
+    <el-form label-width="300px" label-position="right" class="form">
+      <el-form-item :required="edit" :show-message="false" :label="$i.logistic.shipper+'：'">
+        <!-- 绑定对象时 用一个唯一value-key的值 去对应key -->
+        <el-select v-if="edit" value-key="id" v-model="shipperObj" :placeholder="$i.logistic.placeholder">
+          <el-option :label="item.name" :value="item" v-for="item of shipperArr" :key="item.id"/>
+        </el-select>
+        <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('skuSupplierName') ? {
+            'background': 'yellow',
+            'padding':'5px'
+          } : ''">{{ ShipperName }}</p>
+      </el-form-item>
+    </el-form>
     <el-row :gutter="10">
       <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
       <div class="input-item">
@@ -78,7 +91,7 @@
         :title="$i.logistic.addProductFromOrder"
         :tableData="ProductFromOrder"
         :form-column="$db.logistic.addProductFromOrderFilter"
-        :tableButtons="[{label: 'Detail', type: 1}]"
+        :tableButtons="null"
         @change-checked="changeChecked"
         @tableBtnClick="ProductFromOrderDetail"
         @search="getSupplierIds"
@@ -146,6 +159,7 @@
         logisticsStatus: null,
         logisticsNo: '',
         remark: '',
+        ShipperName: '',
         showProductDialog: false,
         showAddProductDialog: false,
         selectionContainer: [],
@@ -170,6 +184,7 @@
         mediatorDate: [],
         containerinfoMatch: [],
         ProductFromOrderChecked: [],
+        shipperObj:{},
         paymentSum: {},
         selectArr: {
           containerType: [],
@@ -190,7 +205,8 @@
           transportationWay: 'MD_TN',
           payment: 'PMT',
           skuIncoterm: 'ITM',
-          shipmentStatus: 'LOGISTICS_SHIP_STATUS'
+          shipmentStatus: 'LOGISTICS_SHIP_STATUS',
+          paymentItem: 'PAYMENT_ITEM_NAME'
         },
         auth:{
           logisticPlanDetail: {
@@ -275,6 +291,32 @@
       VPagination
     },
     computed: {
+      //处理 动态增加 产品时 的下拉取值 skuSupplierName只是暂时取值真的值为supplierAbbr(等发布版本在加)
+      shipperArr(){
+        let arr = [];
+        this.productList.forEach((item,index)=>{
+          arr.push({
+            id : item.skuSupplierCompanyId.value+'-'+item.skuSupplierTenantId.value,
+            name:item.skuSupplierName.value,
+            shipperCompanyId : item.skuSupplierCompanyId.value,
+            shipperTelnetId  : item.skuSupplierTenantId.value,
+          })
+        });
+        //利用对象属性唯一性 去除 相同的供应商 让下拉只会存在唯一的供应商
+        var obj = {};
+        arr = arr.reduce(function(item, next) {
+          obj[next.id] ? '' : obj[next.id] = true && item.push(next);
+          return item;
+        }, []);
+        
+        //处理如果删掉下拉已选中的选项是默认选择第一个
+        this.shipperObj = arr.length ? arr[0] : {
+          name:null,
+          shipperCompanyId:null,
+          shipperTelnetId:null
+        };
+        return arr;
+      },
       productListTotal() {
         let obj = {};
         if (this.productList.length <= 0) {
@@ -315,10 +357,6 @@
             label: this.$i.logistic.Negociate,
             type: 1,
             disabled: !this.edit
-          },
-          {
-            label: this.$i.logistic.Detail,
-            type: 3
           }
         ]
         this.$route.name == 'placeLogisticPlan' ? aArr : aArr.splice(1, 0, {
@@ -576,6 +614,14 @@
         })
         this.exchangeRateList = res.currencyExchangeRate || []
         this.remark = res.remark
+        //处理 shiper
+        this.ShipperName = res.shipper;
+        this.shipperObj = {
+          id : res.shipperCompanyId+'-'+res.shipperTelnetId,
+          name: this.ShipperName,
+          shipperCompanyId : res.shipperCompanyId,
+          shipperTelnetId  : res.shipperTelnetId
+        }
         if (!this.isCopy) {
           this.logisticsNo = res.logisticsNo
         }
@@ -594,7 +640,14 @@
           item.vId = this.$getUUID();
           return item;
         });
-        this.productList = this.$getDB(this.$db.logistic.productInfo, res.product);
+        this.productList = this.$getDB(this.$db.logistic.productInfo, res.product,(item)=>{
+          this.shipperArr.push({
+            id : item.skuSupplierCompanyId.value+'-'+item.skuSupplierTenantId.value,
+            name:item.skuSupplierName.value,
+            shipperCompanyId : item.skuSupplierCompanyId.value,
+            shipperTelnetId  : item.skuSupplierTenantId.value,
+          })
+        });
         this.productList.forEach((item) => {
           if(!this.isCopy){
             if (item.fieldDisplay.value) {
@@ -787,17 +840,18 @@
       },
       closeAddProduct() {
         let CheckedIdArr =  this.ProductFromOrderChecked ? this.ProductFromOrderChecked.map(el => {
-          return el.id.value;
-        }) : []
-        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
-          return _.findWhere(this.ProductFromOrderRes,{id:el})
+          return {id:el.id.value,_disabled:el._disabled};
         }) : [];
+        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
+          let obj = _.findWhere(this.ProductFromOrderRes,{id:el.id});
+          obj._disabled = el._disabled;
+          return obj;
+        }) : [];
+
         this.showAddProductDialog = false
-        this.ProductFromOrderChecked.forEach((el,index) => {
-          if(el._disabled) {
-            arr.splice(index,1);
-          }
-        });
+        arr = _.filter(arr,el=>{
+          return !el._disabled
+        })
         const selectArrData = this.$depthClone(arr);
         if (!arr.length || !selectArrData.length) return
         selectArrData.forEach((a,i) => {
@@ -1073,14 +1127,6 @@
             }
           })
         });
-        let obj = null;
-        if (this.isCopy) {
-          this.oldPlanObject.planNo = this.logisticsNo;
-          obj = this.restIdNull(this.oldPlanObject, ['id', 'unId']);
-          obj.product.forEach(item => {
-            this.$set(item, 'fieldDisplay', null);
-          })
-        }
         if (this.isParams) {
           this.oldPlanObject.fieldDisplay = null;
         }
@@ -1090,11 +1136,27 @@
         if (this.$validateForm(obj || this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
           return;
         }
+        if (this.$validateForm(this.shipperObj, this.$db.logistic.validateShipperObj)) {
+          return;
+        }
 
         if(this.oldPlanObject.containerDetail&&this.oldPlanObject.containerDetail.map(el => {
           return this.$validateForm(el, this.$db.logistic.dbcontainerInfo);
         }).some(el=> el)){
           return
+        }
+        //为了做shiper 的特殊处理
+        this.oldPlanObject.shipper = this.shipperObj.name;
+        this.oldPlanObject.shipperCompanyId = this.shipperObj.shipperCompanyId;
+        this.oldPlanObject.shipperTelnetId = this.shipperObj.shipperTelnetId;
+
+        let obj = null;
+        if (this.isCopy) {
+          this.oldPlanObject.planNo = this.logisticsNo;
+          obj = this.restIdNull(this.oldPlanObject, ['id', 'unId']);
+          obj.product.forEach(item => {
+            this.$set(item, 'fieldDisplay', null);
+          })
         }
         this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
           this.$message({

@@ -38,7 +38,7 @@
             <span v-else>{{ scope.row.containerType }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalContainerGrossWeight" prop='{"key":"totalContainerGrossWeight","total":true}' width="120" align="center">
+        <el-table-column :label="$i.logistic.totalContainerGrossWeight" prop='{"key":"totalContainerGrossWeight","total":true}' width="200" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.totalContainerGrossWeight }}</span>
           </template>
@@ -68,15 +68,22 @@
             <span>{{ scope.row.totalContainerOuterCartonsQty }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalSkuPriceInContainer" width="200" prop='{"key":"totalContainerSkuPrice","total":true}' align="center">
+        <el-table-column :label="$i.logistic.USD" width="100" prop='{"key":"USD","total":true}' align="center">
           <template slot-scope="scope">
             <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
-            <span>{{ scope.row.totalContainerSkuPrice }}</span>
+            <span>{{ scope.row.USD }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.exchangeCurrency" width="180" align="center">
+        <el-table-column :label="$i.logistic.CNY" width="100" prop='{"key":"CNY","total":true}' align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.exchangeCurrency }}</span>
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <span>{{ scope.row.CNY }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$i.logistic.EUR" width="100" prop='{"key":"EUR","total":true}' align="center">
+          <template slot-scope="scope">
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <span>{{ scope.row.EUR }}</span>
           </template>
         </el-table-column>
       </el-table>

@@ -13,7 +13,7 @@
                 <el-col
                         class="speCol"
                         v-for="v in $db.product.detailTab"
-                        v-if="v.belongTab==='basicInfo'"
+                        v-if="v.belongTab==='basicInfo' && !v.isHide"
                         :key="v.key"
                         :xs="24"
                         :sm="v.fullLine?24:12"
@@ -123,6 +123,19 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-else-if="v.isFormation">
+                                <el-select
+                                        class="speInput"
+                                        v-model="productForm[v.key]"
+                                        :placeholder="$i.product.pleaseChoose">
+                                    <el-option
+                                            v-for="item in formationOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
                             <div v-else>
                                 <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
@@ -159,6 +172,12 @@
                                     :defaultProps="defaultProps"
                                     v-model="productForm[v.key]"
                                     ref="dropDown"></drop-down>
+                        </div>
+                        <div v-else-if="v.showType==='attachment'">
+                            <v-upload
+                                    :list="productForm[v.key]"
+                                    :limit="20"
+                                    :ref="v.key"></v-upload>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -444,14 +463,11 @@
                         <div v-else-if="v.showType==='number'">
                             <v-input-number
                                     class="speInput speNumber"
-                                    size="mini"
                                     v-model="productForm[v.key]"
-                                    :controls="false"
                                     :min="0"
                                     :placeholder="$i.product.pleaseInput"
                                     :mark="v.label"
-                                    :accuracy="v.accuracy"
-                                    label="please input"></v-input-number>
+                                    :accuracy="v.accuracy"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -808,6 +824,8 @@
                 //整个页面数据配置
                 productForm:{
                     attachments:[],
+                    designs:[],                 //产品设计
+                    notes:[],                   //产品说明书
                     adjustPackage: '1',
                     barcode: "",
                     brand: "",
@@ -899,6 +917,7 @@
                 showDisplayBoxOption:[],    //是否展示包装盒
                 packageAdjustOption:[],     //产品包装调整
                 quarantineTypeOption:[],    //检疫类别
+                formationOption:[],         //产品组成
 
             }
         },
@@ -912,6 +931,9 @@
                 let params=Object.assign({},this.productForm);
                 params.pictures=this.$refs.upload.getFiles();
                 params.attachments=this.$refs.uploadAttachmemt.getFiles();
+                params.designs=this.$refs.designs[0].getFiles();
+                params.notes=this.$refs.notes[0].getFiles();
+                // return console.log(this.$depthClone(params),'params')
                 let key=['status','unit','readilyAvailable','expireUnit','unitWeight','unitLength','unitVolume','oem','useDisplayBox','adjustPackage']
                 _.map(key,v=>{
                     params[v]=Number(params[v]);
@@ -954,7 +976,7 @@
             getUnitCode(){
                 const currencyAjax=this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true});
                 const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
-                const partUnit=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','QUARANTINE_TYPE'],{cache:true});
+                const partUnit=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','QUARANTINE_TYPE','SKU_FORMATION'],{cache:true});
                 const sysCategory=this.$ajax.get(this.$apis.get_buyer_sys_category,{});
                 const myCategory=this.$ajax.get(this.$apis.get_buyer_my_category,{});
                 this.loadingPage=true;
@@ -984,6 +1006,8 @@
                             this.packageAdjustOption=v.codes;
                         }else if (v.code === "QUARANTINE_TYPE") {
                             this.quarantineTypeOption = v.codes;
+                        } else if (v.code === "SKU_FORMATION") {
+                            this.formationOption = v.codes;
                         }
                     });
                     let categoryList=[

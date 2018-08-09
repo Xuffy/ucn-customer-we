@@ -17,6 +17,12 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
+  "skuSupplierName": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
   "skuSupplierId": {
     type: 'String',
     _disabled: true,
@@ -35,17 +41,22 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "orderNo": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
   "skuPictures":{
     type: 'String',
     _image:true,
     _upload:{
       readonly:true
     },
+    typeSlef: 'text'
+  },
+  "orderNo": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCode": {
+    type: 'String',
+    _disabled: true,
     typeSlef: 'text'
   },
   "orderId": {
@@ -60,35 +71,11 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "toShipCartonQty": {
-    type: 'String',
-    typeSlef: 'text',
-    correlationKey:'toShipQty',
-    computedKey:'skuOuterCartonQty',
-    _important: true,
-  },
   "fieldDisplay": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text',
     _hide: true
-  },
-  "toShipQty": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _important: true
-  },
-  "skuOuterCartonQty": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _important: true
-  },
-  "skuCode": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
   },
   "skuNameEn": {
     type: 'String',
@@ -100,7 +87,7 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuNameCustomer": {
+  "productDescription": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -110,12 +97,12 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuCustomsNameCn": {
+  "customsDeclarationNameCn": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuCustomsNameEn": {
+  "customsDeclarationNameEn": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -130,7 +117,23 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuSupplierName": {
+  "skuOuterCartonQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _important: true
+  },
+  "skuNameCustomer": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCustomsNameCn": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCustomsNameEn": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -141,11 +144,6 @@ export default {
     typeSlef: 'text'
   },
   "skuCustomerSkuCode": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "factorySkuCode": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
