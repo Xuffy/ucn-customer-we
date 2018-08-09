@@ -970,24 +970,6 @@
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
-                    :max="1"
-                    class="speNumber spx"
-                    slot="skuRateValueAddedTax"
-                    slot-scope="{data}"
-                    :accuracy="2"
-                    @change="val => data._isModified=true"
-                    v-model="data.value"></v-input-number>
-            <v-input-number
-                    :min="0"
-                    :max="1"
-                    class="speNumber spx"
-                    slot="skuTaxRefundRate"
-                    slot-scope="{data}"
-                    :accuracy="2"
-                    @change="val => data._isModified=true"
-                    v-model="data.value"></v-input-number>
-            <v-input-number
-                    :min="0"
                     class="speNumber spx"
                     slot="skuLength"
                     slot-scope="{data}"

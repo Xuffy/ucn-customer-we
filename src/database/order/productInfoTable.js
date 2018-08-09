@@ -46,9 +46,6 @@ export default {
         _slot:'skuNameCn',
         _disabled:true
     },
-    skuDescCn:{
-        _disabled:true
-    },
     skuDescEn:{
         _disabled:true
     },
@@ -106,7 +103,6 @@ export default {
         _slot:'skuUnit',
     },
     skuMaterialEn:{},
-    skuMaterialCn:{},
     skuQty:{
         _slot:'skuQty',
         _calculate:true
@@ -131,14 +127,7 @@ export default {
         _disabled:true,
         _calculate:true
     },
-    skuRateValueAddedTax:{
-        _slot:'skuRateValueAddedTax',
-    },
-    skuTaxRefundRate:{
-        _slot:'skuTaxRefundRate',
-    },
     skuColourEn:{},
-    skuColourCn:{},
     skuDeliveryDates:{
         _slot:'skuDeliveryDates',
     },
@@ -149,19 +138,16 @@ export default {
     skuCategoryName:{
         _hide:true
     },
-    // skuCategoryOne:{},
-    // skuCategoryTwo:{},
-    // skuCategoryThree:{},
-    // skuCategoryFour:{},
+    totalCtnCbm:{},     //新增
+    totalCtnGw:{},      //新增
+    totalCtnNw:{},      //新增
+    skuCartonQty:{},    //新增
     skuCustomsCode:{
         _disabled:true
     },
     skuCustomsNameCn:{},
     skuTradeMarkEn:{},
-    skuTradeMarkCn:{},
-    skuCommodityInspectionCn:{},
     skuCommodityInspectionEn:{},
-    skuDeclareElement:{},
     skuOrigin:{},
     skuInspectQuarantineCategory:{
         _slot:'skuInspectQuarantineCategory'
@@ -192,10 +178,8 @@ export default {
         _slot:'skuVolume',
     },
     skuMethodPkgEn:{},
-    skuMethodPkgCn:{},
     skuInnerCartonQty:{
         _slot:'skuInnerCartonQty',
-        _calculate:true
     },
     skuInnerCartonLength:{
         _slot:'skuInnerCartonLength',
@@ -217,15 +201,12 @@ export default {
     },
     skuInnerCartonDesc:{},
     skuInnerCartonMethodEn:{},
-    skuInnerCartonMethodCn:{},
     skuOuterCartonDesc:{},
     skuInnerCartonOuterNum:{
         _slot:'skuInnerCartonOuterNum',
-        _calculate:true
     },
     skuOuterCartonQty:{
         _slot:'skuOuterCartonQty',
-        _calculate:true
     },
     skuOuterCartonLength:{
         _slot:'skuOuterCartonLength',
@@ -246,7 +227,6 @@ export default {
         _slot:'skuOuterCartonVolume',
     },
     skuOuterCartonMethodEn:{},
-    skuOuterCartonMethodCn:{},
     skuBrand:{},
     skuApplicableAge:{
         _slot:'skuApplicableAge',
