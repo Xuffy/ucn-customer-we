@@ -207,7 +207,7 @@ export default {
     key: 'supplierCellphone'
   },
   contactPersonOfSeller: {
-    key: 'supplierCompanyId'
+    key: 'customerCompanyName'
   },
   sealine: {
     key: 'transportCompany'
@@ -293,6 +293,6 @@ export default {
     _hide:true
   },
   supplierAbbr: {
-    key: ''
+    key: 'supplierAbbr'
   }
 }
