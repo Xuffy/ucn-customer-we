@@ -141,7 +141,7 @@
             return {
               noEdit: true,
               companyId: '',
-              id: Number(this.$route.query.id),
+              id: this.$route.query.id,
               tabName: 'address', //默认打开的tab
               basicDate: [],
               accounts: [],
@@ -388,7 +388,7 @@
           //tradeHistory
             getTradeHistoryList(){
               this.loading = true
-              this.orderHistoryData.supplierCompanyId = Number(this.$route.query.companyId);
+              this.orderHistoryData.supplierCompanyId = this.$route.query.companyId;
               this.$ajax.post(this.$apis.post_purchase_supplier_orderHistory, this.orderHistoryData)
                 .then(res => {
                   this.orderData = this.$getDB(this.$db.supplier.sourcingTrade, res.datas, item =>{
@@ -406,7 +406,7 @@
           // getInquiryHistory
             getInquiryHistoryList(){
               this.loading = true
-              this.inquiryHistoryData.supplierCompanyId =  Number(this.$route.query.companyId);
+              this.inquiryHistoryData.supplierCompanyId =  this.$route.query.companyId;
               this.$ajax.post(this.$apis.post_purchase_supplier_getInquiryHistory, this.inquiryHistoryData)
                 .then(res => {
                   this.inquireData = this.$getDB(this.$db.supplier.sourcingInquiry, res.datas, item => {
@@ -466,7 +466,7 @@
           },
           createRemarkSubmit(){
             this.disableCreateRemark = true;
-            this.addRemarkData.supplierId = Number(this.$route.query.id);
+            this.addRemarkData.supplierId = this.$route.query.id;
             if (this.isModifyAddress){
               this.$ajax.post(`${this.$apis.post_purchase_supplier_remark_id}/${this.addRemarkData.id}`,this.addRemarkData)
                 .then(res => {
@@ -522,12 +522,12 @@
             console.log(this.$refs.uploadAttachment.getFiles())
             //ATTACHMENT,文件 PICTURE 图片
             const uploadParams = {
-              id: Number(this.$route.query.id),
+              id: this.$route.query.id,
               type: "ATTACHMENT",
               url: this.$refs.uploadAttachment.getFiles()[0]
             };
             const batchUploadParams = {
-              id: Number(this.$route.query.id),
+              id: this.$route.query.id,
               type: "ATTACHMENT",
               urls: this.$refs.uploadAttachment.getFiles()
             };
@@ -565,7 +565,7 @@
           },
         },
         created() {
-            this.companyId = Number(this.$route.query.companyId);
+            this.companyId = this.$route.query.companyId;
             this.getCompareList();
             this.getCountryAll();
             this.getCurrency();
