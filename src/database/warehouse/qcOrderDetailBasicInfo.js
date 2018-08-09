@@ -32,11 +32,11 @@ export default {
         isQcMethod:true,
         isServiceFill:true
     },
-    surveyor:{
-        type:'select',
-        isSurveyor:true,
-        isServiceFill:true
-    },
+    // surveyor:{
+    //     type:'select',
+    //     isSurveyor:true,
+    //     isServiceFill:true
+    // },
     serviceFee:{
         type:'input',
         isServiceFill:true

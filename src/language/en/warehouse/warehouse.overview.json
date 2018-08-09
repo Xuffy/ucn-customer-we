@@ -70,5 +70,7 @@
   "brand": "Brand",
   "skuNameCN": "SKU Name(CN)",
   "skuPic": "Pic",
-  "skuPics":"Pics"
+  "skuPics":"Pics",
+  "customerAbbr": "Customer Abbr.",
+  "supplierAbbr": "Supplier Abbr."
 }
