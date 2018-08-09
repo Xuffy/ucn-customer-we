@@ -13,13 +13,15 @@ export default {
         isServiceFill:true
     },
     factoryAddress:{
-        type:'input',
+        type:'select',
+        isAddress: true
     },
     factoryContactPhone:{
         type:'input',
-        _rules:{
-            required:true
-        }
+        disabled:true,
+        // _rules:{
+        //     required:true
+        // }
     },
     qcStatusDictCode:{
         type:'select',

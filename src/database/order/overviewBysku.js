@@ -12,8 +12,16 @@ export default {
     skuNameEn:{},
     skuNameCustomer:{},
     skuDescEn:{},
-    skuMaterialCn:{},
+    skuRemarkOne:{},        //??
+    skuRemarkTwo:{},        //??
+    skuRemarkThree:{},      //??
+    skuUnit:{},
+    skuDescCustomer:{},
+    skuOuterCartonQty:{},
+    skuUndeliveredQty:{},
+    skuUntestedQty:{},
     skuMaterialEn:{},
+    skuMethodPkgEn:{},
     skuCartonQty:{},        
     skuFobCurrency:{},
     skuFobPrice:{},
@@ -30,12 +38,12 @@ export default {
         key:'skuIncoterm'
     },
     skuQty:{},
-    skuPrice:{
-        key:'skuAmount'
-    },
+    skuInnerCartonQty:{},
+    skuPrice:{},
     entryDt:{},
     deliveryDt:{},
     skuDeliveredQty:{},
     skuStatus:{},
     updateDt:{},
+    supplierAbbr:{},
 }
