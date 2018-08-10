@@ -556,7 +556,6 @@
                 </el-table>
             </div>
         </div>
-
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -1745,7 +1744,6 @@
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
-                // return console.log(this.$depthClone(params.skuList),'params.skuList')
 
                 /**
                  * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
@@ -1757,6 +1755,7 @@
                 }
 
                 let rightCode = true;
+                console.log(this.$depthClone(params),'params')
                 _.map(params.skuList, v => {
                     if (v.skuSupplierCode !== params.supplierCode) {
                         rightCode = false;
