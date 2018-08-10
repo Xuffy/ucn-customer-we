@@ -192,7 +192,8 @@ export default {
     key: 'shippingAgent'
   },
   contactPersonOfBuyer: {
-    key: 'customerCompanyId'
+    key: 'customerCompanyName', //customerCompanyName
+    mustShowColumn: true
   },
   emailOfBuyer: {
     key: 'customerEmail'
@@ -207,7 +208,8 @@ export default {
     key: 'supplierCellphone'
   },
   contactPersonOfSeller: {
-    key: 'customerCompanyName'
+    key: 'supplierCompanyName',
+    mustShowColumn: true
   },
   sealine: {
     key: 'transportCompany'

@@ -1,9 +1,13 @@
 export default {
-    supplierNO: {
-        key: "code"
-    },
+    // supplierNO: {
+    //     key: "code"
+    // },
     supplierName: {
         key: "name"
+    },
+    supplierAbbr: {
+      key:'shortName',
+      mustShowColumn: true
     },
     supplierType: {
         key: "type"

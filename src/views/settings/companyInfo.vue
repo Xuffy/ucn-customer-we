@@ -345,7 +345,7 @@
                         <el-option
                           v-for="item in options.currency"
                           :key="item.id"
-                          :label="item.name"
+                          :label="item.code"
                           :value="item.code"
                           style="width:100%">
                         </el-option>
@@ -1359,11 +1359,12 @@
                 shortName: this.companyInfo.shortName
               }).then(res=>{
                 if (res){
-                  this.showNameBox = false;
                   this.$message({
                     message: this.$i.setting.abbreviationOnly,
                     type: 'warning'
                   });
+                }else {
+                  this.showNameBox = false;
                 }
               })
             }
