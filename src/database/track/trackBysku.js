@@ -193,7 +193,7 @@ export default {
   },
   contactPersonOfBuyer: {
     key: 'customerCompanyName', //customerCompanyName
-    _important:true
+    mustShowColumn: true
   },
   emailOfBuyer: {
     key: 'customerEmail'
