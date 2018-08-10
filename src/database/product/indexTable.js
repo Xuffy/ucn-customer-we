@@ -77,7 +77,9 @@ export default {
     formation:{
         _sort:false
     },
-    oemQty:{},
+    oemQty:{
+        mustShowColumn:true
+    },
     colourEn:{},
     barcode:{
         _sort:false
@@ -91,6 +93,7 @@ export default {
         }
     },
     notes:{
+        mustShowColumn:true,
         _upload:{
             readonly:true
         }

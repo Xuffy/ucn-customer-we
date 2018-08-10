@@ -31,6 +31,7 @@ export default {
         }
     },
     skuNotes:{
+        mustShowColumn:true,
         _upload:{
             limit:20
         }
@@ -134,10 +135,10 @@ export default {
     skuCategoryName:{
         _hide:true
     },
-    // skuCategoryOne:{},
-    // skuCategoryTwo:{},
-    // skuCategoryThree:{},
-    // skuCategoryFour:{},
+
+    skuCartonQty:{
+        mustShowColumn:true
+    },
     skuCustomsCode:{
         _disabled:true
     },

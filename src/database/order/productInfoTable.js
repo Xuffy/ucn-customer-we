@@ -39,6 +39,12 @@ export default {
             readonly:true,
         }
     },
+    skuNotes:{
+        mustShowColumn:true,
+        _upload:{
+            limit:20
+        }
+    },
     skuNameEn:{
         _disabled:true,
     },
@@ -141,7 +147,9 @@ export default {
     totalCtnCbm:{},     //新增
     totalCtnGw:{},      //新增
     totalCtnNw:{},      //新增
-    skuCartonQty:{},    //新增
+    skuCartonQty:{      //新增
+        mustShowColumn:true
+    },
     skuCustomsCode:{
         _disabled:true
     },
