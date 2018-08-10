@@ -45,6 +45,7 @@ export default {
             limit:20
         }
     },
+    skuBarCode:{},
     skuNameEn:{
         _disabled:true,
     },
@@ -144,11 +145,18 @@ export default {
     skuCategoryName:{
         _hide:true
     },
-    totalCtnCbm:{},     //新增
-    totalCtnGw:{},      //新增
-    totalCtnNw:{},      //新增
-    skuCartonQty:{      //新增
+    totalCtnCbm:{       //新增
         mustShowColumn:true
+    },
+    totalCtnGw:{        //新增
+        mustShowColumn:true
+    },
+    totalCtnNw:{        //新增
+        mustShowColumn:true
+    },
+    skuCartonQty:{      //新增
+        mustShowColumn:true,
+        _slot:'skuCartonQty'
     },
     skuCustomsCode:{
         _disabled:true
@@ -305,9 +313,15 @@ export default {
     skuQuotationNo:{
         _disabled:true
     },
-    skuRemarkOne:{},
-    skuRemarkTwo:{},
-    skuRemarkThree:{},
+    skuRemarkOne:{
+        mustShowColumn:true
+    },
+    skuRemarkTwo:{
+        mustShowColumn:true
+    },
+    skuRemarkThree:{
+        mustShowColumn:true
+    },
     skuAdditionalOne:{
         _slot:'skuAdditionalOne',
         _image:true,
