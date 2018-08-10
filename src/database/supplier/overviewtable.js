@@ -4,7 +4,7 @@ export default {
         key: 'name'
     },
     supplierAbbr: {
-       key:'supplierAbbr',
+       key:'shortName',
        mustShowColumn: true
     },
    supplierType: {
