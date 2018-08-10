@@ -604,6 +604,7 @@
                     });
                     let diffData=[];
                     let qcStatusDictCode = this.qcDetail.qcStatusDictCode
+                    console.log(this.productInfoData)
                     this.productInfoData.forEach(v=>{
                         diffData.push(v.skuId.value+v.orderNo.value);
                         if (qcStatusDictCode === 'COMPLETED_QC') {
@@ -620,7 +621,7 @@
                         let obj=Object.assign({},res.datas[0]);
                         _.map(obj,(v,key)=>{
                             if(key==='orderSkuQty' || key==='expectQcQty' || key==='outerCartonTotalQty' || key==='actSkuCartonTotalQty' || key==='qualifiedSkuCartonTotalQty' || key==='unqualifiedSkuCartonTotalQty' || key==='actSkuQty' || key==='qualifiedSkuQty' || key==='unqualifiedSkuQty' || key==='qualifiedSkuNetWeight' || key==='unqualifiedSkuNetWeight' || key==='qualifiedSkuVolume' || key==='unqualifiedSkuVolume' || key==='qualifiedSkuGrossWeight' || key==='unqualifiedSkuGrossWeight' || key==='checkOuterCartonQty'){
-                                obj[key]=0;
+                                obj[key] = 0;
                             }else{
                                 obj[key]=null;
                             }

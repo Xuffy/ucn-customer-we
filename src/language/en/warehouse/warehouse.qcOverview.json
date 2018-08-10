@@ -17,5 +17,5 @@
   "unqualifiedSkuVolume": "Unqualified Product Total CBM(m³)",
   "unqualifiedSkuGrossWeight": "Unqualified Product Total G.W.(kg)",
   "skuRowNum": "SKU QTY",
-  "checkOuterCartonQty": "Checked Outer Carton QTY"
+  "checkOuterCartonQty": "Check CTNS"
 }
