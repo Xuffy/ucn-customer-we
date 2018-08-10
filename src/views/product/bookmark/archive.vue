@@ -8,7 +8,7 @@
                 :pageData="pageData"
                 :tableButtons="null"
                 :loadingTable="loadingTable"
-                tableCode="udata_purchase_sku_overview"
+                tableCode="udata_purchase_sku_bookmark_overview"
                 @search="getData"
                 @tableBtnClick="btnClick"
                 @change-sort="val=>{getData(val)}"

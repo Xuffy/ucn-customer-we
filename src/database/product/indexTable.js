@@ -24,7 +24,9 @@ export default {
         _fixed:'left'
     },
     customerSkuCode:{},
-    supplierAbbr:{},
+    supplierAbbr:{
+        mustShowColumn:true
+    },
     categoryName:{
         key:"categoryName",
         _sort:false
