@@ -57,6 +57,7 @@
                                             class="speInput"
                                             v-model="qcOrderConfig[v.key]"
                                             clearable
+                                            @change="val => selectChange(v.key, val)"
                                             :disabled="v.isServiceFill"
                                             :placeholder="v.isServiceFill?$i.warehouse.serviceFill:$i.warehouse.pleaseChoose">
                                         <div v-if="v.isQcType">
@@ -65,6 +66,14 @@
                                                     :key="item.id"
                                                     :label="item.name"
                                                     :value="item.code">
+                                            </el-option>
+                                        </div>
+                                        <div v-else-if="v.isAddress">
+                                             <el-option
+                                                v-for="item in qcAddress"
+                                                :key="item.id"
+                                                :label="item.address"
+                                                :value="item.id">
                                             </el-option>
                                         </div>
                                         <!--<div v-else-if="v.isQcStatus">-->
@@ -331,6 +340,7 @@
                 pageData: {},
                 tableDataList: [],
                 loadingTable: false,
+                companyId:'',
                 /**
                  * service provider数据处理
                  * */
@@ -423,6 +433,7 @@
                 lengthOption: [],
                 volumeOption: [],
                 weightOption: [],
+                qcAddress: [],
                 columnConfig: ''
             };
         },
@@ -555,9 +566,14 @@
                 }
 
                 this.qcOrderConfig.attachments = this.$refs.upload[0].getFiles();
-
+                let newQcOrderConfig = _.clone(this.qcOrderConfig)
+                _.each(this.qcAddress, e => {
+                    if (this.qcOrderConfig.factoryAddress === e.id) {
+                        newQcOrderConfig.factoryAddress = e.address
+                    }
+                })
                 this.disableClickSubmit = true;
-                this.$ajax.post(this.$apis.add_buyerQcOrder, this.qcOrderConfig).then(res => {
+                this.$ajax.post(this.$apis.add_buyerQcOrder, newQcOrderConfig).then(res => {
                     this.$message({
                         message: this.$i.warehouse.createSuccess,
                         type: "success"
@@ -670,6 +686,9 @@
                     this.productConfig.orderNo = '';
                     this.loadingProductTable = true;
                     this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
+                        if (!this.companyId) {
+                            this.companyId = res[0].companyId
+                        }
                         this.loadingProductTable = false;
                         this.productTableData = []
                         _.map(res, v => {
@@ -844,6 +863,15 @@
             },
             changeInput (val, e, index) {
                 e.value = this.$toFixed(Math.abs(val), 2, e.label)
+            },
+            selectChange (k, v) {
+                if (k === 'factoryAddress') {
+                    _.each(this.qcAddress, e => {
+                        if (v === e.id) {
+                            this.qcOrderConfig.factoryContactPhone = e.phone
+                        }   
+                    })
+                }
             }
         },
         created() {
@@ -878,6 +906,24 @@
                     });
                     this.summaryData.skuQuantity = _.uniq(diffData).length;
                 }
+            },
+            companyId (val) {
+                this.$ajax.get(this.$apis.GTEADDRESS, {
+                    companyId: val
+                }).then(res => {
+                    _.each(res, e => {
+                        this.qcAddress.push({
+                            address: e.country + e.province + e.city + e.address,
+                            id: e.id,
+                            phone: e.concatPhone1
+                        })
+                    })
+                    if (this.qcAddress.length > 0) {
+                        this.qcOrderConfig.factoryAddress = this.qcAddress[0].id
+                        this.qcOrderConfig.factoryContactPhone = this.qcAddress[0].phone
+                    }
+                }).catch(err => {
+                });
             }
         }
     };

@@ -5,8 +5,9 @@ import tl from './tl';
 import lyx from './lyx';
 import rcy from './rcy';
 import xf from './xf';
+import lc from './lc';
 
-const apis = _.extend(twj, lsx, tl, lyx, rcy, xf);
+const apis = _.extend(twj, lsx, tl, lyx, rcy, xf, lc);
 const version = ['/web/v1', '/v2', '/web/v3'];
 
 

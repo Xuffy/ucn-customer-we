@@ -75,7 +75,7 @@
   "invoice": "invoice",
   "packingList": "packing list",
   "examiningReport": "examining report",
-  "inquiryNo": "inquiry No",
+  "inquiryNo": "Quotation NO.",
   "incoterm": "Incoterm",
   "skuQuantityOfInquiry": "Inquiry SKU QTY",
   "quantityOfCarton": "CTN QTY",
@@ -126,6 +126,9 @@
   "totalGW": "Total G.W.",
   "relatedOrderNO": "Related order NO.",
   "shipAgent": "Ship agent",
-  "amount": "Amount"
+  "amount": "Amount",
+  "expressAddress": "Express address",
+  "consignee": "Consignee",
+  "destinationPort": "Destination port"
 
 }

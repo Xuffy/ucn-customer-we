@@ -20,7 +20,7 @@
                                 :key='index'
                                 :xs="24" :sm="item.fullLine?24:24" :md="item.fullLine?24:12" :lg="item.fullLine?24:12" :xl="item.fullLine?24:8"
                               >
-                                <el-form-item label-width="190px" :prop="item.key" :label="item.label+' :'">
+                                <el-form-item label-width="210px" :prop="item.key" :label="item.label+' :'">
                                   {{basicDate[item.key]}}
                                 </el-form-item>
                               </el-col>
@@ -141,7 +141,7 @@
             return {
               noEdit: true,
               companyId: '',
-              id: Number(this.$route.query.id),
+              id: this.$route.query.id,
               tabName: 'address', //默认打开的tab
               basicDate: [],
               accounts: [],
@@ -372,7 +372,22 @@
                           e.currency._value = currency.name || '';
                           return e;
                         });
-                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
+                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address, e => {
+                          let country,recvCountry;
+                          country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
+                          recvCountry = _.findWhere(this.countryOption, {code: e.recvCountry.value}) || {};
+                          e.country._value = country.name || '';
+                          e.recvCountry._value = recvCountry.name || '';
+                          const province = e.province.value || '';
+                          const city = e.city.value || '';
+                          const address = e.address.value || ''
+                          const recvProvince = e.recvProvince.value || '';
+                          const recvCity = e.recvCity.value || '';
+                          const recvAddr = e.recvAddr.value || '';
+                          e.factoryAddress.value = e.country._value +' '+province+' '+city+' '+address;
+                          e.expressAddress.value = e.recvCountry._value +' '+recvProvince+' '+recvCity+' '+recvAddr
+                          return e;
+                        } );
                         this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
                           let gender;
                           gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};
@@ -388,7 +403,7 @@
           //tradeHistory
             getTradeHistoryList(){
               this.loading = true
-              this.orderHistoryData.supplierCompanyId = Number(this.$route.query.companyId);
+              this.orderHistoryData.supplierCompanyId = this.$route.query.companyId;
               this.$ajax.post(this.$apis.post_purchase_supplier_orderHistory, this.orderHistoryData)
                 .then(res => {
                   this.orderData = this.$getDB(this.$db.supplier.sourcingTrade, res.datas, item =>{
@@ -406,7 +421,7 @@
           // getInquiryHistory
             getInquiryHistoryList(){
               this.loading = true
-              this.inquiryHistoryData.supplierCompanyId =  Number(this.$route.query.companyId);
+              this.inquiryHistoryData.supplierCompanyId =  this.$route.query.companyId;
               this.$ajax.post(this.$apis.post_purchase_supplier_getInquiryHistory, this.inquiryHistoryData)
                 .then(res => {
                   this.inquireData = this.$getDB(this.$db.supplier.sourcingInquiry, res.datas, item => {
@@ -466,7 +481,7 @@
           },
           createRemarkSubmit(){
             this.disableCreateRemark = true;
-            this.addRemarkData.supplierId = Number(this.$route.query.id);
+            this.addRemarkData.supplierId = this.$route.query.id;
             if (this.isModifyAddress){
               this.$ajax.post(`${this.$apis.post_purchase_supplier_remark_id}/${this.addRemarkData.id}`,this.addRemarkData)
                 .then(res => {
@@ -522,12 +537,12 @@
             console.log(this.$refs.uploadAttachment.getFiles())
             //ATTACHMENT,文件 PICTURE 图片
             const uploadParams = {
-              id: Number(this.$route.query.id),
+              id: this.$route.query.id,
               type: "ATTACHMENT",
               url: this.$refs.uploadAttachment.getFiles()[0]
             };
             const batchUploadParams = {
-              id: Number(this.$route.query.id),
+              id: this.$route.query.id,
               type: "ATTACHMENT",
               urls: this.$refs.uploadAttachment.getFiles()
             };
@@ -565,7 +580,7 @@
           },
         },
         created() {
-            this.companyId = Number(this.$route.query.companyId);
+            this.companyId = this.$route.query.companyId;
             this.getCompareList();
             this.getCountryAll();
             this.getCurrency();
