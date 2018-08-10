@@ -23,76 +23,66 @@ export default {
     code:{
         _fixed:'left'
     },
-    skuSaleStatus: {
-        key:'status'
-    },
-    descCn:{
-        _sort:false
-    },
-    nameEn:{
-
-    },
-    descEn:{
-        _sort:false
-    },
-    nameCustomer:{
-
-    },
-    descCustomer:{
-        _sort:false
-    },
-    customerSkuCode:{
-
-    },
-    supplierName:{
-
-    },
-    supplierCode:{
-
-    },
-    unit:{
-
-    },
-    formation:{
-        _sort:false
-    },
-    materialEn:{
-
-    },
-    colourEn:{
-
-    },
-    minOrderQty:{
-
-    },
-    deliveryDates:{
-
-    },
+    customerSkuCode:{},
+    supplierAbbr:{},
     categoryName:{
         key:"categoryName",
         _sort:false
     },
+    nameEn:{},
+    descEn:{
+        _sort:false
+    },
+    fobCurrency:{},
+    fobPrice:{},
+    refFobPrice:{
+        _sort:false
+    },
+    exwCurrency:{},
+    exwPrice:{},
+    materialEn:{},
+    minOrderQty:{},
+    deliveryDates:{},
+    outerCartonQty:{},
+    methodPkgEn:{
+        _sort:false
+    },
+    innerCartonQty:{},
+    innerCartonMethodEn:{
+        _sort:false
+    },
+    availableQty:{},
+    skuSaleStatus: {
+        key:'status'
+    },
+    readilyAvailable:{},
+    noneSellCountry:{},
+    outerCartonNetWeight:{},
+    outerCartonRoughWeight:{},
+    outerCartonVolume:{},
+
+
+    descCn:{
+        _sort:false
+    },
+    unit:{},
+    nameCustomer:{},
+    descCustomer:{
+        _sort:false
+    },
+    supplierName:{},
+    supplierCode:{},
+    formation:{
+        _sort:false
+    },
+    oemQty:{},
+    colourEn:{},
     barcode:{
         _sort:false
     },
-    readilyAvailable:{
-
-    },
-    availableQty:{
-
-    },
-    noneSellCountry:{
-
-    },
-    applicableAge:{
-
-    },
-    expireDates:{
-
-    },
-    expireUnit:{
-
-    },
+    applicableAge:{},
+    expireDates:{},
+    expireUnit:{},
     designs:{
         _upload:{
             readonly:true
@@ -103,23 +93,8 @@ export default {
             readonly:true
         }
     },
-    fobCurrency:{
-
-    },
-    fobPrice:{
-
-    },
-    refFobPrice:{
-        _sort:false
-    },
     fobPort:{
         _sort:false
-    },
-    exwPrice:{
-
-    },
-    exwCurrency:{
-
     },
     cifPrice:{},
     refCifPrice:{
@@ -137,24 +112,12 @@ export default {
     dduArea:{
         _sort:false
     },
-    taxRefundRate:{
-
-    },
-    customsCode:{
-
-    },
-    customsNameEn:{
-
-    },
-    tradeMarkEn:{
-
-    },
-    commodityInspectionEn:{
-
-    },
-    origin:{
-
-    },
+    taxRefundRate:{},
+    customsCode:{},
+    customsNameEn:{},
+    tradeMarkEn:{},
+    commodityInspectionEn:{},
+    origin:{},
     brand:{
         _sort:false
     },
@@ -176,99 +139,36 @@ export default {
     unitVolume:{
         _sort:false
     },
-    length:{
-
-    },
-    width:{
-
-    },
-    height:{
-
-    },
-    netWeight:{
-
-    },
-    volume:{
-
-    },
-    methodPkgEn:{
-        _sort:false
-    },
-    innerCartonQty:{
-
-    },
-    innerCartonLength:{
-
-    },
-    innerCartonWidth:{
-
-    },
-    innerCartonHeight:{
-
-    },
-    innerCartonWeightNet:{
-
-    },
-    innerCartonRoughWeight:{
-
-    },
-    innerCartonVolume:{
-
-    },
+    length:{},
+    width:{},
+    height:{},
+    netWeight:{},
+    volume:{},
+    innerCartonLength:{},
+    innerCartonWidth:{},
+    innerCartonHeight:{},
+    innerCartonWeightNet:{},
+    innerCartonRoughWeight:{},
+    innerCartonVolume:{},
     innerCartonDesc:{
-        _sort:false
-    },
-    innerCartonMethodEn:{
         _sort:false
     },
     outerCartonDesc:{
         _sort:false
     },
-    innerCartonOuterNum:{
-
-    },
-    outerCartonQty:{
-
-    },
-    outerCartonLength:{
-
-    },
-    outerCartonWidth:{
-
-    },
-    outerCartonHeight:{
-
-    },
-    outerCartonNetWeight:{
-
-    },
-    outerCartonRoughWeight:{
-
-    },
-    outerCartonVolume:{
-
-    },
+    innerCartonOuterNum:{},
+    outerCartonLength:{},
+    outerCartonWidth:{},
+    outerCartonHeight:{},
     outerCartonMethodEn:{
         _sort:false
     },
-    oem:{
-
-    },
-    gp20SkuQty:{
-
-    },
-    gp40SkuQty:{
-
-    },
-    hq40SkuQty:{
-
-    },
-    tryDimension:{
-
-    },
-    skuQtyPerTray:{
-
-    },
+    oem:{},
+    gp20SkuQty:{},
+    gp40SkuQty:{},
+    hq40SkuQty:{},
+    tryDimension:{},
+    skuQtyPerTray:{},
     specialTransportRequire:{
         _sort:false
     },
@@ -281,23 +181,12 @@ export default {
     qualityStander:{
         _sort:false
     },
-    yearListed:{
-
-    },
-    useDisplayBox:{
-
-    },
-    displayBoxQty:{
-
-    },
-    lengthWidthHeight:{
-
-    },
+    yearListed:{},
+    useDisplayBox:{},
+    displayBoxQty:{},
+    lengthWidthHeight:{},
     otherPackInfoEn:{
         _sort:false
     },
-    adjustPackage:{
-
-    },
-
+    adjustPackage:{},
 }

@@ -481,20 +481,6 @@
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
-                    :max="1"
-                    class="speNumber spx"
-                    slot="skuRateValueAddedTax"
-                    slot-scope="{data}"
-                    v-model="data.value"></v-input-number>
-            <v-input-number
-                    :min="0"
-                    :max="1"
-                    class="speNumber spx"
-                    slot="skuTaxRefundRate"
-                    slot-scope="{data}"
-                    v-model="data.value"></v-input-number>
-            <v-input-number
-                    :min="0"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuLength"
@@ -1067,6 +1053,7 @@
                     name:''
                 }).then(res=>{
                     this.supplierOption=res;
+                    console.log(this.$depthClone(this.supplierOption),'this.supplierOption')
                     if(this.$route.query.supplierCode){
                         _.map(this.supplierOption,v=>{
                             if(v.code===this.$route.query.supplierCode){
@@ -1427,24 +1414,19 @@
                             skuCifPort: '',
                             skuCifPrice: null,
                             skuCode: '',
-                            skuColourCn: '',
                             skuColourEn: '',
                             skuComments: '',
-                            skuCommodityInspectionCn: '',
                             skuCommodityInspectionEn: '',
                             skuCustomerCreate: true,
                             skuCustomerSkuCode: '',
                             skuCustomsCode: '',
                             skuCustomsNameCn: '',
-                            skuCustomsNameEn: '',
                             skuDduCurrency: '',
                             skuDduPort: '',
                             skuDduPrice: null,
-                            skuDeclareElement: '',
                             skuDeliveredQty: null,
                             skuDeliveryDates: null,
                             skuDepartureDt: null,
-                            skuDescCn: '',
                             skuDescCustomer: '',
                             skuDescEn: '',
                             skuDesign: '',
@@ -1469,7 +1451,6 @@
                             skuInnerCartonDesc: '',
                             skuInnerCartonHeight: null,
                             skuInnerCartonLength: null,
-                            skuInnerCartonMethodCn: '',
                             skuInnerCartonMethodEn: '',
                             skuInnerCartonOuterNum: null,
                             skuInnerCartonPic: '',
@@ -1490,9 +1471,7 @@
                             skuLengthWidthHeight: '',
                             skuMainSaleArea: '',
                             skuMainSaleCountry: '',
-                            skuMaterialCn: '',
                             skuMaterialEn: '',
-                            skuMethodPkgCn: '',
                             skuMethodPkgEn: '',
                             skuMinInventory: null,
                             skuModifyStatus: null,
@@ -1509,7 +1488,6 @@
                             skuOuterCartonDesc: '',
                             skuOuterCartonHeight: null,
                             skuOuterCartonLength: null,
-                            skuOuterCartonMethodCn: '',
                             skuOuterCartonMethodEn: '',
                             skuOuterCartonNetWeight: null,
                             skuOuterCartonPic: '',
@@ -1526,7 +1504,6 @@
                             skuQualifiedQty: null,
                             skuQualityStander: '',
                             skuQuotationNo: '',
-                            skuRateValueAddedTax: null,
                             skuReadilyAvailable: true,
                             skuRecycle: true,
                             skuRefunQty: null,
@@ -1546,8 +1523,6 @@
                             skuSupplierName: '',
                             skuSupplierTenantId: null,
                             skuSysCode: '',
-                            skuTaxRefundRate: null,
-                            skuTradeMarkCn: '',
                             skuTradeMarkEn: '',
                             skuTryDimension: null,
                             skuUndeliveredQty: null,
@@ -1572,7 +1547,6 @@
                         obj.skuPictures=v.skuPictures;
                         obj.skuNameEn=v.skuNameEn;
                         obj.skuNameCn=v.skuNameCn;
-                        obj.skuDescCn =v.skuDescCn;
                         obj.skuDescEn=v.skuDescEn;
                         obj.skuDescCustomer=v.skuDescCustomer;
                         obj.skuNameCustomer=v.skuNameCustomer;
@@ -1592,23 +1566,15 @@
                         obj.skuDduPrice=v.skuDduPrice;
                         obj.skuDduPort=v.skuDduArea;
                         obj.skuUnit=v.skuUnit;
-                        obj.skuMaterialCn=v.skuMaterialCn;
                         obj.skuMaterialEn=v.skuMaterialEn;
-                        obj.skuRateValueAddedTax=v.skuRateValueAddedTax;
-                        obj.skuTaxRefundRate=v.skuTaxRefundRate;
-                        obj.skuColourCn=v.skuColourCn;
                         obj.skuColourEn=v.skuColourEn;
                         obj.skuDeliveryDates=v.skuDeliveryDates;
                         obj.skuDesign=v.skuDesign;
                         obj.skuCategoryId=v.skuCategoryId;
                         obj.skuCustomsCode=v.skuCustomsCode;
                         obj.skuCustomsNameCn=v.skuCustomsNameCn;
-                        obj.skuCustomsNameEn=v.skuCustomsNameEn;
-                        obj.skuTradeMarkCn=v.skuTradeMarkCn;
                         obj.skuTradeMarkEn=v.skuTradeMarkEn;
-                        obj.skuCommodityInspectionCn=v.skuCommodityInspectionCn;
                         obj.skuCommodityInspectionEn=v.skuCommodityInspectionEn;
-                        obj.skuDeclareElement=v.skuDeclareElement;
                         obj.skuOrigin=v.skuOrigin;
                         obj.skuInspectQuarantineCategory=v.skuInspectQuarantineCategory;
                         obj.skuUnitLength=v.skuUnitLength;
@@ -1620,7 +1586,6 @@
                         obj.skuNetWeight=v.skuNetWeight;
                         obj.skuGrossWeight=v.skuGrossWeight;
                         obj.skuVolume=v.skuVolume;
-                        obj.skuMethodPkgCn=v.skuMethodPkgCn;
                         obj.skuMethodPkgEn=v.skuMethodPkgEn;
                         obj.skuInnerCartonQty=v.skuInnerCartonQty;
                         obj.skuInnerCartonLength=v.skuInnerCartonLength;
@@ -1630,7 +1595,6 @@
                         obj.skuInnerCartonRoughWeight=v.skuInnerCartonRoughWeight;
                         obj.skuInnerCartonVolume=v.skuInnerCartonVolume;
                         obj.skuInnerCartonDesc=v.skuInnerCartonDesc;
-                        obj.skuInnerCartonMethodCn=v.skuInnerCartonMethodCn;
                         obj.skuInnerCartonMethodEn=v.skuInnerCartonMethodEn;
                         obj.skuOuterCartonDesc=v.skuOuterCartonDesc;
                         obj.skuOuterCartonQty=v.skuOuterCartonQty;
@@ -1641,7 +1605,6 @@
                         obj.skuOuterCartonNetWeight=v.skuOuterCartonNetWeight;
                         obj.skuOuterCartonRoughWeight=v.skuOuterCartonRoughWeight;
                         obj.skuOuterCartonVolume=v.skuOuterCartonVolume;
-                        obj.skuOuterCartonMethodCn=v.skuOuterCartonMethodCn;
                         obj.skuOuterCartonMethodEn=v.skuOuterCartonMethodEn;
                         obj.skuBrand=v.skuBrand;
                         obj.skuApplicableAge=v.skuApplicableAge;

@@ -30,14 +30,16 @@ export default {
             readonly:true,
         }
     },
+    skuNotes:{
+        _upload:{
+            limit:20
+        }
+    },
     skuNameEn:{
         _disabled:true
     },
     skuNameCn:{
         _slot:'skuNameCn',
-        _disabled:true
-    },
-    skuDescCn:{
         _disabled:true
     },
     skuDescEn:{
@@ -97,7 +99,6 @@ export default {
         _slot:'skuUnit',
     },
     skuMaterialEn:{},
-    skuMaterialCn:{},
     skuQty:{
         _slot:'skuQty',
         _calculate:true
@@ -122,14 +123,7 @@ export default {
         _disabled:true,
         _calculate:true
     },
-    skuRateValueAddedTax:{
-        _slot:'skuRateValueAddedTax',
-    },
-    skuTaxRefundRate:{
-        _slot:'skuTaxRefundRate',
-    },
     skuColourEn:{},
-    skuColourCn:{},
     skuDeliveryDates:{
         _slot:'skuDeliveryDates',
     },
@@ -148,12 +142,8 @@ export default {
         _disabled:true
     },
     skuCustomsNameCn:{},
-    skuCustomsNameEn:{},
     skuTradeMarkEn:{},
-    skuTradeMarkCn:{},
-    skuCommodityInspectionCn:{},
     skuCommodityInspectionEn:{},
-    skuDeclareElement:{},
     skuOrigin:{},
     skuInspectQuarantineCategory:{
         _slot:'skuInspectQuarantineCategory'
@@ -184,10 +174,8 @@ export default {
         _slot:'skuVolume',
     },
     skuMethodPkgEn:{},
-    skuMethodPkgCn:{},
     skuInnerCartonQty:{
         _slot:'skuInnerCartonQty',
-        _calculate:true
     },
     skuInnerCartonLength:{
         _slot:'skuInnerCartonLength',
@@ -209,15 +197,12 @@ export default {
     },
     skuInnerCartonDesc:{},
     skuInnerCartonMethodEn:{},
-    skuInnerCartonMethodCn:{},
     skuOuterCartonDesc:{},
     skuInnerCartonOuterNum:{
         _slot:'skuInnerCartonOuterNum',
-        _calculate:true
     },
     skuOuterCartonQty:{
         _slot:'skuOuterCartonQty',
-        _calculate:true
     },
     skuOuterCartonLength:{
         _slot:'skuOuterCartonLength',
@@ -238,7 +223,6 @@ export default {
         _slot:'skuOuterCartonVolume',
     },
     skuOuterCartonMethodEn:{},
-    skuOuterCartonMethodCn:{},
     skuBrand:{},
     skuApplicableAge:{
         _slot:'skuApplicableAge',

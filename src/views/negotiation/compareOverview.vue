@@ -28,6 +28,8 @@
 <script>
 import { VTable, selectSearch, VPagination } from '@/components/index';
 import { mapActions } from 'vuex';
+import thisTool from './index';
+
 export default {
   name: '',
   data() {
@@ -60,12 +62,8 @@ export default {
     'v-pagination': VPagination
   },
   created() {
-    if (this.$auth('INQUIRY:COMPARE_ARCHIVE')) {
-      this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.archive});
-    }
-    if (this.$auth('INQUIRY:LOG')) {
-      this.setMenuLink({path: '/logs/index', query: {code: 'INQUIRY', bizCode: 'INQUIRY'}, label: this.$i.common.log});
-    }
+    thisTool.setMenuLinks(this, ['INQUIRY:COMPARE_ARCHIVE', 'INQUIRY:LOG']);
+
     if (this.$auth('INQUIRY:COMPARE_OVERVIEW:MODIFY')) {
       this.actionBtns.push({label: this.$i.common.modify, type: 'modify'});
     }

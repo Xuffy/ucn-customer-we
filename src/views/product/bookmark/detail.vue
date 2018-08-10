@@ -103,7 +103,7 @@
                         <el-row>
                             <el-row>
                                 <el-col
-                                        v-if="v.belongTab==='basicInfo'"
+                                        v-if="v.belongTab==='basicInfo' && !v.isCustomerCreate"
                                         v-for="v in $db.product.detailTab"
                                         :key="v.key"
                                         class="list"
@@ -644,7 +644,6 @@
             upload() {
 
             },
-            //新增product
             addProduct() {
                 this.forceNumber = Math.random();
                 this.addProductDialogVisible = true;
@@ -688,6 +687,8 @@
                     id: this.$route.query.id
                 }).then(res => {
                     this.productForm = res;
+                    this.$db.product.detailTab.supplierAbbr.isCustomerCreate=this.productForm.customerCreate;
+
 
                     //处理国家显示
                     //处理国家显示

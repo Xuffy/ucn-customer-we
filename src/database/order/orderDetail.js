@@ -77,10 +77,6 @@ export default {
             required:true
         }
     },
-    // incotermArea:{
-    //     type:'input',
-    //     belong:'basicInfo',
-    // },
     payment:{
         type:'select',
         belong:'basicInfo',

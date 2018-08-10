@@ -169,6 +169,11 @@ export default {
         belongTab:'basicInfo',
         isDateUnit:true
     },
+    supplierAbbr:{
+        belongTab:'basicInfo',
+        isHide:true,
+        isCustomerCreate:false
+    },
     designs:{
         key:'designs',
         belongTab:'basicInfo',
@@ -541,6 +546,11 @@ export default {
         showType:'select',
         belongTab:'packingInfo',
         isOem:true,
+    },
+    oemQty:{
+        showType:'number',
+        belongTab:'packingInfo',
+        accuracy:1
     },
 
     /**

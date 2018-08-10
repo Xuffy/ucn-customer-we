@@ -22,12 +22,14 @@ export default {
     skuInventoryStatusDictCode:{},
     skuCode:{},
     customerSkuCode:{},
-    factorySkuCode:{},
+    // factorySkuCode:{},
     skuNameCn:{},
     skuBrand:{},
     skuDesign:{},
-    packingMethodCn:{},
-    innerCartonPackingMethodCn:{},
+    skuMethodPkgEn:{},
+    skuInnerCartonMethodEn:{},
+    // packingMethodCn:{},
+    // innerCartonPackingMethodCn:{},
     deliveryDate:{
         showType:'date'
     },
