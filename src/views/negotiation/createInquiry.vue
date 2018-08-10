@@ -138,30 +138,37 @@
     </div>
     <div class="bom-btn-wrap-station"></div>
     <el-dialog
-      custom-class="ucn-dialog-center"
-      title="Add Product"
-      :visible.sync="dialogTableVisible"
-      width="80%"
-      lock-scroll>
-      <el-radio-group v-model="radio" @change="fromChange">
-        <el-radio-button label="product">{{$i.common.fromNewSearch}}</el-radio-button>
-        <el-radio-button label="bookmark">{{$i.common.FromMyBookmark}}</el-radio-button>
-      </el-radio-group>
-      <v-product
-        :hideBtns="true"
-        :hideBtn="true"
-        :disabledLine="disabledLine"
-        @handleOK="getList"
-        @handleCancel="handleCancel"
-        :forceUpdateNumber="trig"
-        :type="radio"
-        :isInquiry="true"></v-product>
+            custom-class="ucn-dialog-center"
+            :title="$i.common.addProduct"
+            :close-on-click-modal="false"
+            :visible.sync="dialogTableVisible"
+            width="70%">
+        <el-tabs v-model="activeTab" type="card" @tab-click="handleClick">
+            <el-tab-pane :label="$i.order.fromNewSearch" name="product">
+                <v-product
+                        ref="addProduct"
+                        queryType="product"
+                        :form-column="$db.product.overview"
+                        :disabledLine="disabledLine"
+                        @sure="handleSure"
+                        @cancel="handleCancel"></v-product>
+            </el-tab-pane>
+            <el-tab-pane :label="$i.order.fromBookmark" name="bookmark">
+                <v-product
+                        ref="addBookmark"
+                        queryType="bookmark"
+                        :form-column="$db.product.overview"
+                        :disabledLine="disabledLine"
+                        @sure="handleSure"
+                        @cancel="handleCancel"></v-product>
+            </el-tab-pane>
+        </el-tabs>
     </el-dialog>
     <v-history-modify code="inquiry" @save="save" :beforeSave="beforeSave" ref="HM"/>
   </div>
 </template>
 <script>
-import {selectSearch, VTable, VUpload, VHistoryModify, VInputNumber} from '@/components/index';
+import {selectSearch, VTable, VUpload, VHistoryModify, VInputNumber, VProduct} from '@/components/index';
 import product from '@/views/product/addProduct';
 import {mapActions} from 'vuex';
 import codeUtils from '@/lib/code-utils';
@@ -174,8 +181,8 @@ export default {
       showInquiryNo: false,
       disabledLine: [],
       checkedSkuIds: [],
-      trig: 0,
       tableLoad: false,
+      activeTab: 'product',
       optionData: {
         paymentMethod: [],
         transport: [],
@@ -204,9 +211,9 @@ export default {
     };
   },
   components: {
-    'select-search': selectSearch,
-    'v-table': VTable,
-    'v-product': product,
+    selectSearch,
+    VTable,
+    VProduct,
     VUpload,
     VHistoryModify,
     VInputNumber
@@ -382,12 +389,26 @@ export default {
         });
       });
     },
+    handleClick(tab) {
+      if (tab.index === '0') {
+        this.$refs.addProduct.getData();
+      } else if (tab.index === '1') {
+        this.$refs.addBookmark.getData();
+      }
+    },
+    handleSure(skus) {
+      if (!Array.isArray(skus) || !skus.length) {
+        this.$message.warning(this.$i.inquiry.noItemSelected);
+        return;
+      }
+      let ids = skus.map(i => i.id.value);
+      this.getList(ids);
+    },
     handleCancel() {
       this.dialogTableVisible = false;
     },
     addProduct() {
       this.disabledLine = this.tabData.filter(i => !i._disabled);
-      this.trig = new Date().getTime();
       this.dialogTableVisible = true;
     },
     removeList() {
@@ -424,12 +445,6 @@ export default {
         }
         return tmp[0] || oldItem;
       });
-    },
-    getProduct() {
-
-    },
-    fromChange(val) {
-      this.trig = new Date().getTime();
     },
     submitForm(type) { // 提交
       this.fromArg.draft = type && type === 'draft' ? 1 : 0;
