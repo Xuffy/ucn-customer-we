@@ -20,28 +20,28 @@ export default {
     key: 'skuQty'
   },
   status: {
-    key: ''
+    key: 'status'
   },
   incoterm: {
-    key: ''
+    key: 'incoterm'
   },
   totalAmount: {
-    key:''
+    key:'totalAmount'
   },
   skuQty: {
-    key:''
+    key:'skuQty'
   },
   totalCtn: {
-    key:''
+    key:'totalCtn'
   },
   totalVolum: {
-    key:''
+    key:'totalVolume'
   },
   totalNW: {
-    key:''
+    key:'totalNetWeight'
   },
   totalGW: {
-    key:''
+    key:'totalGrossWeight'
   }
 
 }
