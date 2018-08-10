@@ -17,11 +17,10 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "skuSupplierName": {
+  "skuSupplierAbbr": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text',
-    _hide: true
   },
   "skuSupplierId": {
     type: 'String',
@@ -148,7 +147,7 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuUnit": {
+  "unit": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -204,8 +203,8 @@ export default {
   "totalQuantityInContainer": {
     key: 'totalContainerQty',
     _filed: 'totalContainerQty',
+    _toFixed:1,
     type: 'String',
-    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
