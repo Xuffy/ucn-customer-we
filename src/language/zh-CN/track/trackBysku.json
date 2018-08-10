@@ -114,5 +114,10 @@
   "emailOfBuyer": "采购商联系人邮箱",
   "phoneOfBuyer": "采购商联系人电话",
   "emailOfSeller": "供应商联系人邮箱",
-  "phoneOfSeller": "供应商联系人电话"
+  "phoneOfSeller": "供应商联系人电话",
+  "orderId": "orderId",
+  "logisticsId": "logisticsId",
+  "qcId": "qcId",
+  "supplierAbbr": "供应商简称",
+  "customerAbbr": "采购商简称"
 }
