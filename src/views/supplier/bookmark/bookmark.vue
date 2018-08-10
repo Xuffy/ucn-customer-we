@@ -143,6 +143,8 @@
                   skuCode: "",
                   skuNameEn: "",
                   type: '',
+                  supplierAbbr:'',
+                  supplierCode:'',
                   recycle: false,
                   operatorFilters:[],
                   sorts:[]
