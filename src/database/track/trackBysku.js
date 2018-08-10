@@ -208,7 +208,8 @@ export default {
     key: 'supplierCellphone'
   },
   contactPersonOfSeller: {
-    key: 'supplierCompanyName'
+    key: 'supplierCompanyName',
+    mustShowColumn: true
   },
   sealine: {
     key: 'transportCompany'
