@@ -41,7 +41,9 @@ export default {
   skuDescriptionEN: {
     type: 'text'
   },
-  supplierName: {
+  skuSupplierAbbr: {
+    key:'supplierAbbr',
+    _filed:'skuSupplierAbbr',
     type: 'text'
   },
   supplierSerialNumber: {

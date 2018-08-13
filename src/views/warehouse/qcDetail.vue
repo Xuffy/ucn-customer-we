@@ -604,7 +604,6 @@
                     });
                     let diffData=[];
                     let qcStatusDictCode = this.qcDetail.qcStatusDictCode
-                    console.log(this.productInfoData)
                     this.productInfoData.forEach(v=>{
                         diffData.push(v.skuId.value+v.orderNo.value);
                         if (qcStatusDictCode === 'COMPLETED_QC') {
