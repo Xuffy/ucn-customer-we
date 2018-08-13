@@ -33,7 +33,7 @@
           <span v-else>{{ scope.row.remark }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
+      <el-table-column :label="$i.logistic.skuSupplierName" align="center" width="140">
         <template slot-scope="scope">
           <div v-if="scope.row.edit" style="display:flex;">
             <label class="reqiuredStar"></label>
@@ -68,7 +68,7 @@
               v-model="scope.row.planPayAmount"
               :min="0"
               :controls="false"
-              :accuracy="2"
+              :accuracy="4"
               :mark="$i.logistic.estAmount"
               :placeholder="$i.logistic.placeholder"
               v-if="scope.row.edit"></v-input-number>
@@ -89,7 +89,7 @@
             v-model="scope.row.actualPayAmount"
             :min="0"
             :controls="false"
-            :accuracy="2"
+            :accuracy="4"
             :mark="$i.logistic.actAmount"
             :placeholder="$i.logistic.placeholder"
             v-if="scope.row.edit"></v-input-number>

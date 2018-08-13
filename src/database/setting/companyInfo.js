@@ -20,9 +20,9 @@ export default {
         key: 'name',
         type: 'input',
         belong:'summary',
-        _rules: {
-          required:true,
-        }
+        // _rules: {
+        //   required:true,
+        // }
     },
   customerType:{
         key: 'type',

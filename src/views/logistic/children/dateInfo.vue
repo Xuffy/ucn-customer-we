@@ -24,7 +24,7 @@
         </td>
         <td>
           <span v-if="!edit">{{$dateFormat(listData[0].actContainerStuffingDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker v-else @change="modifyTime(listData[0].actContainerStuffingDate.value,listData[0].actContainerStuffingDate._key)" format="yyyy-MM-dd" v-model="listData[0].actContainerStuffingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker :picker-options="LoadingTimeOptions" v-else @change="modifyTime(listData[0].actContainerStuffingDate.value,listData[0].actContainerStuffingDate._key)" format="yyyy-MM-dd" v-model="listData[0].actContainerStuffingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
       </tr>
       <tr v-if="listData[0].declareDate">
@@ -34,7 +34,7 @@
         </td>
         <td>
           <span v-if="!edit">{{$dateFormat(listData[0].declareDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].declareDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker :picker-options="cleanceTimeOptions" v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].declareDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
       </tr>
       <tr v-if="listData[0].estDepartureDate">
@@ -44,7 +44,7 @@
           <el-date-picker v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].estDepartureDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
         <td>
-          <span v-if="!edit||pageTypeCurr!='loadingListDetail'">{{$dateFormat(listData[0].actDepartureDate.value, 'yyyy-mm-dd')}}</span>
+          <span v-if="!edit||pageTypeCurr!='loadingListDetail'||pageTypeCurr!='placeLogisticPlan'">{{$dateFormat(listData[0].actDepartureDate.value, 'yyyy-mm-dd') || '--' }}</span>
           <el-date-picker v-else format="yyyy-MM-dd" v-model="listData[0].actDepartureDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
       </tr>
@@ -75,8 +75,8 @@
           <el-date-picker v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].estArrivalDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
         <td>
-          <span v-if="!edit||pageTypeCurr!='loadingListDetail'">{{$dateFormat(listData[0].actArrivalDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker v-else format="yyyy-MM-dd" v-model="listData[0].actArrivalDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <span v-if="!edit||pageTypeCurr!='loadingListDetail'||pageTypeCurr!='placeLogisticPlan'">{{$dateFormat(listData[0].actArrivalDate.value, 'yyyy-mm-dd') || '--'}}</span>
+          <el-date-picker v-else format="yyyy-MM-dd" :picker-options="arrivalTimeOptions" v-model="listData[0].actArrivalDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
       </tr>
 		</table>
@@ -89,7 +89,22 @@
       return {
         BookingTime:'',
         LoadingTime:'',
-        cleanceTime:''
+        cleanceTime:'',
+        LoadingTimeOptions: {
+          disabledDate:(time)=> {
+            return time.getTime() <= this.listData[0].bookingDate.value;
+          }
+        },
+        cleanceTimeOptions: {
+          disabledDate:(time)=> {
+            return time.getTime() <= this.listData[0].actContainerStuffingDate.value;
+          }
+        },
+        arrivalTimeOptions: {
+          disabledDate:(time)=> {
+            return time.getTime() <= this.listData[0].actDepartureDate.value;
+          }
+        }
       }
     },
     props: {

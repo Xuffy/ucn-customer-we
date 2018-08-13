@@ -11,7 +11,8 @@ export default {
     type: 'text'
   },
   logisticsNo:{
-    type: 'text'
+    type: 'text',
+    _sort:false
   },
   estContainerStuffingDate: {
     type: 'text'

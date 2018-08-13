@@ -24,7 +24,9 @@ export default {
         _fixed:'left'
     },
     customerSkuCode:{},
-    supplierAbbr:{},
+    supplierAbbr:{
+        mustShowColumn:true
+    },
     categoryName:{
         key:"categoryName",
         _sort:false
@@ -75,7 +77,9 @@ export default {
     formation:{
         _sort:false
     },
-    oemQty:{},
+    oemQty:{
+        mustShowColumn:true
+    },
     colourEn:{},
     barcode:{
         _sort:false
@@ -89,6 +93,7 @@ export default {
         }
     },
     notes:{
+        mustShowColumn:true,
         _upload:{
             readonly:true
         }

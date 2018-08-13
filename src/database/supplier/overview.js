@@ -13,8 +13,12 @@ export default {
         type: 'input'
     },
   supplierAbbr: {
-        key: '',
+        key: 'supplierAbbr',
         type: 'input'
     },
+  supplierNO:{
+     key: 'supplierCode',
+    type: 'input'
+  }
 
 }

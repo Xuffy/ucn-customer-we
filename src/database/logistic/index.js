@@ -4,16 +4,18 @@ import transportationList from './plan/transportationList'
 import containerInfo from './plan/containerInfo'
 import productInfo from './plan/productInfo'
 import productModify from './plan/productModify'
+import addProduct from './plan/addProduct'
 import {
   basicInfoObj,
   CreatPlanBasicInfoObj,
   transportInfoObj,
   ExchangeRateInfo,
   payMentInfo,
-  dbBasicInfoObj,
   addProductFromOrderFilter,
   dbProductInfo,
   dbcontainerInfo,
+  LLBasicInfoObj,
+  draftBasicInfoObj,
   validateShipperObj
 } from './plan/staticData'
 import sku from './plan/sku'
@@ -34,10 +36,12 @@ export default {
   transportInfoObj,
   ExchangeRateInfo,
   payMentInfo,
-  dbBasicInfoObj,
   dbProductInfo,
   dbcontainerInfo,
+  LLBasicInfoObj,
+  draftBasicInfoObj,
   addProductFromOrderFilter,
   dateInfo,
-  validateShipperObj
+  validateShipperObj,
+  addProduct
 }
