@@ -354,22 +354,22 @@
                         this.code = res.code;
                         this.attachments = res.attachments;
                         this.basicDate = res;
-                        let country,type,incoterm,payment,currency;
+                        let type,incoterm,payment,country;
                         country = _.findWhere(this.countryOption, {code: this.basicDate.country}) || {};
                         incoterm = _.findWhere(this.incoterm, {code: (this.basicDate.incoterm)+''}) || {};
                         type = _.findWhere(this.type, {code: (this.basicDate.type)+''}) || {};
                         payment = _.findWhere(this.payment, {code: (this.basicDate.payment)+''}) || {};
-                        currency = _.findWhere(this.currency, {code: this.basicDate.currency}) || {};
                         this.basicDate.country = country.name || '';
                         this.basicDate.incoterm = incoterm.name || '';
                         this.basicDate.type = type.name || '';
                         this.basicDate.payment = payment.name || '';
-                        this.basicDate.currency = currency.name || '';
+                        if (this.basicDate.exportLicense){
+                          this.basicDate.exportLicense = this.$i.supplier.exportLicenseYes
+                        }else{
+                          this.basicDate.exportLicense = this.$i.supplier.exportLicenseNo
+                        }
 
                         this.accounts = this.$getDB(this.$db.supplier.accountInfo, res.accounts,e => {
-                          let currency;
-                          currency = _.findWhere(this.currency, {code: e.currency.value}) || {};
-                          e.currency._value = currency.name || '';
                           return e;
                         });
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address, e => {
