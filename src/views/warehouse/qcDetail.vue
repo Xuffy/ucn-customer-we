@@ -831,7 +831,8 @@
                     planPayAmount: e.planPayAmount,
                     planPayDt: e.planPayDt,
                     version:e.version,
-                    moduleCode: 'WAREHOUSE'
+                    moduleCode: 'WAREHOUSE',
+                    remark: e.remark
                 };
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.update_qcPayment,param).then(res=>{
