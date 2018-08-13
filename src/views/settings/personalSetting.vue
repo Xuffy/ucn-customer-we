@@ -257,6 +257,8 @@
           }).catch(err=>{
           this.allowModifySummary=false;
           this.summaryDisabled=true;
+          this.isModify = true;
+          this.isModifyPass = false;
           this.getUserProfile();
         });
       },
