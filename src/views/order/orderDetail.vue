@@ -2508,7 +2508,7 @@
                 // 处理product info新增的四个字段
                 //处理产品箱数(因为后续三个字段都与此有关，所以还要联动后面三个字段)
                 if(obj.skuOuterCartonQty.value && obj.skuQty.value){
-                    obj.skuCartonQty.value=this.$calc.divide(obj.skuQty.value,obj.skuOuterCartonQty.value);
+                    obj.skuCartonQty.value=this.$toFixed(this.$calc.divide(obj.skuQty.value,obj.skuOuterCartonQty.value),1);
                     //联动totalCtnGw
                     if(obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value){
                         obj.totalCtnGw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonRoughWeight.value),2);
