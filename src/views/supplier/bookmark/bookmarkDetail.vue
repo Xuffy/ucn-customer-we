@@ -181,6 +181,8 @@
                 incoterm:[],
                 payment:[],
                 sex:[],
+                orderStatus:[],
+                inquiryStatus:[]
             }
         },
         methods: {
@@ -333,12 +335,14 @@
             },
             //获取字典
             getCodePart(){
-              this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX"]).then(res=>{
+              this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX","ORDER_STATUS","INQUIRY_STATUS"],{cache:true}).then(res=>{
                 this.payment = _.findWhere(res, {'code': 'PMT'}).codes;
                 this.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
                 this.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
                 this.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
                 this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
+                this.orderStatus = _.findWhere(res, {'code': 'ORDER_STATUS'}).codes;
+                this.inquiryStatus = _.findWhere(res, {'code': 'INQUIRY_STATUS'}).codes;
               }).catch(err=>{
                 console.log(err)
               });
@@ -395,7 +399,15 @@
               this.orderHistoryData.supplierCompanyId = this.$route.query.companyId;
               this.$ajax.post(this.$apis.post_purchase_supplier_orderHistory, this.orderHistoryData)
                 .then(res => {
-                  this.orderData = this.$getDB(this.$db.supplier.sourcingTrade, res.datas);
+                  this.orderData = this.$getDB(this.$db.supplier.sourcingTrade, res.datas,item =>{
+                    let orderStatus;
+                    orderStatus = _.findWhere(this.orderStatus, {code: item.status.value}) || {};
+                    item.status._value = orderStatus.name || '';
+                    _.mapObject(item, val => {
+                      val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                      return val
+                    })
+                  });
                   this.loading = false
                 })
                 .catch((res) => {
@@ -410,6 +422,13 @@
                 .then(res => {
                   this.inquireData = this.$getDB(this.$db.supplier.sourcingInquiry, res.datas, item => {
                     _.mapObject(item, val => {
+                      let inquiryStatus,payment,incoterm;
+                      inquiryStatus = _.findWhere(this.inquiryStatus, {code: item.status.value}+'') || {};
+                      payment = _.findWhere(this.payment, {code: item.paymentTerm.value}) || {};
+                      incoterm = _.findWhere(this.incoterm, {code: item.incoterm.value}) || {};
+                      item.status._value = inquiryStatus.name || '';
+                      // item.payment._value = payment.name || '';
+                      item.incoterm._value = incoterm.name || '';
                       val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                       return val
                     })
