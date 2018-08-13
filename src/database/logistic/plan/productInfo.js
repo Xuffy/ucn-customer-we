@@ -116,12 +116,6 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuOuterCartonQty": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _important: true
-  },
   "skuNameCustomer": {
     type: 'String',
     _disabled: true,
@@ -147,7 +141,8 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "unit": {
+  "skuUnit": {
+    _filed:'unit',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -195,42 +190,74 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "totalContainerGrossWeight": {
+  "totalQuantityOfOuterCartonsInContainer": {
+    key: 'totalContainerOuterCartonsQty',
+    _filed: 'totalContainerOuterCartonsQty',
+    // computedKey 计算要使用的key 的联动值
+    // computedResKey 计算的结果显示的key 的联动值
+    computed : [
+      {computedKey:'skuOuterCartonQty',computedResKey:'totalContainerQty'},
+      {computedKey:'skuOuterCartonVolume',computedResKey:'totalCtnCbm'},
+      {computedKey:'skuOuterCartonNetWeight',computedResKey:'totalCtnNw'},
+      {computedKey:'skuOuterCartonRoughWeight',computedResKey:'totalCtnGw'}
+    ],
+    type: 'String',
+    _toFixed:1,
+    typeSlef: 'text',
+    _important: true
+  },
+  "skuOuterCartonQty": {
     type: 'String',
     _disabled: true,
-    typeSlef: 'text'
+    typeSlef: 'text',
+    _important: true
   },
   "totalQuantityInContainer": {
     key: 'totalContainerQty',
     _filed: 'totalContainerQty',
-    _toFixed:1,
+    _disabled: true,
     type: 'String',
     typeSlef: 'text',
     _important: true
   },
+  "skuOuterCartonVolume": {
+    _filed:'outerCartonVolume',
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
   "totalVolumeInContainer": {
-    key: 'totalContainerVolume',
+    key: 'totalCtnCbm',
     _filed: 'totalContainerVolume',
     type: 'String',
     _disabled: true,
     typeSlef: 'text',
     _important: true
   },
+  "skuOuterCartonNetWeight": {
+    _filed:'outerCartonNetWeight',
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
   "totalNetWeightInContainer": {
-    key: 'totalContainerNetWeight',
+    key: 'totalCtnNw',
     _filed: 'totalContainerNetWeight',
     type: 'String',
     _disabled: true,
     typeSlef: 'text',
     _important: true
   },
-  "totalQuantityOfOuterCartonsInContainer": {
-    key: 'totalContainerOuterCartonsQty',
-    _filed: 'totalContainerOuterCartonsQty',
+  "skuOuterCartonRoughWeight": {
     type: 'String',
     _disabled: true,
-    typeSlef: 'text',
-    _important: true
+    typeSlef: 'text'
+  },
+  "totalContainerGrossWeight": {
+    key:'totalCtnGw',
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
   },
   "skuOuterCartonLength": {
     type: 'String',
@@ -247,17 +274,7 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuOuterCartonNetWeight": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
   "skuOuterCartonRoughWeight": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "skuOuterCartonVolume": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -268,11 +285,6 @@ export default {
     typeSlef: 'text'
   },
   "skuOuterCartonBarCode": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "skuOuterCartonCode": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
