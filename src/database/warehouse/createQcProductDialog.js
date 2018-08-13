@@ -17,7 +17,7 @@ export default {
     inboundNo:{},
     skuNameEn:{},
     skuNameCustomer:{},
-    skuNameCn:{},
+    // skuNameCn:{},
     skuMaterialCn:{},
     skuMaterialEn:{},
     factorySkuCode:{},
