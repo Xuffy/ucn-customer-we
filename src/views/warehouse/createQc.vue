@@ -690,6 +690,7 @@
                             this.companyId = res[0].companyId
                         }
                         this.loadingProductTable = false;
+                        let oldData = _.clone(this.productTableData)
                         this.productTableData = []
                         _.map(res, v => {
                             if (v.id !== 0) {
@@ -734,11 +735,22 @@
                                 this.productTableData.push(v);
                             }
                         });
+                        
                         let arr = this.$copyArr(this.productTableData)
                         arr = this.$getDB(this.$db.warehouse.createQcProductTable, arr);
-                        this.$refs.filterColumn.update(false, arr).then(data => {
-                            // console.log(data)
-                            this.productTableData = this.$refs.filterColumn.getFilterData(arr, data);
+                        _.each(arr, e => {
+                            let flag = true
+                            _.each(oldData, v => {
+                                if (e.id.value === v.id.value) {
+                                    flag = false
+                                }
+                            })
+                            if (flag) {
+                                oldData.push(e)
+                            }
+                        })
+                        this.$refs.filterColumn.update(false, oldData).then(data => {
+                            this.productTableData = this.$refs.filterColumn.getFilterData(oldData, data);
                             this.columnConfig = this.productTableData[0];
                         });
                     }).catch(err => this.loadingProductTable = false);

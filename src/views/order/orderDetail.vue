@@ -595,21 +595,11 @@
             <el-form label-width="280px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalQty">
+                        <el-form-item :label="$i.order.totalOuterCartonQty">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="orderForm.totalQty"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.skuQtys">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.skuQty"
+                                    v-model="orderForm.totalOuterCartonQty"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -625,17 +615,27 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalOuterCartonQty">
+                        <el-form-item :label="$i.order.orderSkuQty">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="orderForm.totalOuterCartonQty"
+                                    v-model="orderForm.skuQty"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.orderTotalNetWeight">
+                        <el-form-item :label="$i.order.totalQty">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalNetWeight">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
@@ -645,7 +645,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.orderTotalGrossWeight">
+                        <el-form-item :label="$i.order.totalGrossWeight">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
@@ -655,7 +655,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.orderTotalVolume">
+                        <el-form-item :label="$i.order.totalVolume">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
@@ -707,12 +707,12 @@
                         @click="cancelOrder"
                         type="danger">{{$i.order.cancel}}
                 </el-button>
-                <el-checkbox
-                        v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'"
-                        :disabled="loadingPage || hasCancelOrder"
-                        v-model="markImportant"
-                        @change="changeMarkImportant">{{$i.order.markAsImportant}}
-                </el-checkbox>
+                <!--<el-checkbox-->
+                        <!--v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'"-->
+                        <!--:disabled="loadingPage || hasCancelOrder"-->
+                        <!--v-model="markImportant"-->
+                        <!--@change="changeMarkImportant">{{$i.order.markAsImportant}}-->
+                <!--</el-checkbox>-->
             </div>
         </div>
         <el-dialog
@@ -958,7 +958,7 @@
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur(data)"
-                    :accuracy="1"
+                    :accuracy="3"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
@@ -1166,6 +1166,16 @@
                     slot="skuDeliveryDates"
                     :accuracy="0"
                     slot-scope="{data}"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="skuCartonQty"
+                    @blur="handlePriceBlur"
+                    :accuracy="0"
+                    slot-scope="{data}"
+                    :disabled="true"
                     v-model="data.value"></v-input-number>
         </v-history-modify>
         <v-message-board
@@ -2480,11 +2490,30 @@
                 }
             },
             handlePriceBlur(e, item) {
+                let obj;
+                obj = item ? item : this.chooseProduct[0];
+                console.log(obj,'obj')
+                console.log(e,'e')
+                // skuOuterCartonQty    外箱产品数
+                // skuQty    数量
+                // skuCartonQty     产品箱数
+                // 处理product info新增的四个字段
+                if(obj.skuOuterCartonQty.value && obj.skuQty.value){
+                    obj.skuCartonQty.value=obj.skuQty.value/obj.skuOuterCartonQty.value;
+                    if(obj.skuCartonQty.value!==Math.ceil(obj.skuCartonQty.value)){
+                        obj.skuCartonQty._style={ "backgroundColor": "yellow" };
+                    }
+                }else{
+                    obj.skuCartonQty.value=null;
+                }
+
+
+
+
                 if (!this.orderForm.incoterm) {
                     return;
                 }
-                let obj;
-                obj = item ? item : this.chooseProduct[0];
+
                 if (this.savedIncoterm === "1") {
                     //fob
                     if (obj.skuFobPrice.value && obj.skuQty.value) {
@@ -2492,21 +2521,24 @@
                     } else {
                         obj.skuPrice.value = 0;
                     }
-                } else if (this.savedIncoterm === "2") {
+                }
+                else if (this.savedIncoterm === "2") {
                     //exw
                     if (obj.skuExwPrice.value && obj.skuQty.value) {
                         obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuExwPrice.value, obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
-                } else if (this.savedIncoterm === "3") {
+                }
+                else if (this.savedIncoterm === "3") {
                     //cif
                     if (obj.skuCifPrice.value && obj.skuQty.value) {
                         obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuCifPrice.value, obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
-                } else if (this.savedIncoterm === "4") {
+                }
+                else if (this.savedIncoterm === "4") {
                     //ddu
                     if (obj.skuDduPrice.value && obj.skuQty.value) {
                         obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuDduPrice.value, obj.skuQty.value), 4);

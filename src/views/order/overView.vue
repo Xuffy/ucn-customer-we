@@ -26,7 +26,7 @@
                 :code="tableCode"
                 ref='vtable'
                 :data="tabData"
-                :buttons="[{label: 'Detail', type: 1}]"
+                :buttons="[{label: $i.order.detail, type: 1}]"
                 @action="onAction"
                 :loading='loading'
                 :pageTotal='pageTotal'
