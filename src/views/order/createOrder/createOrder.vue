@@ -428,19 +428,6 @@
                         :value="item.name">
                 </el-option>
             </el-select>
-            <!--<el-select-->
-                    <!--slot="skuStatus"-->
-                    <!--v-model="data._value"-->
-                    <!--slot-scope="{data}"-->
-                    <!--clearable-->
-                    <!--:placeholder="$i.order.pleaseChoose">-->
-                <!--<el-option-->
-                        <!--v-for="item in skuStatusOption"-->
-                        <!--:key="item.id"-->
-                        <!--:label="item.name"-->
-                        <!--:value="item.name">-->
-                <!--</el-option>-->
-            <!--</el-select>-->
 
             <v-input-number
                     class="speNumber spx"
@@ -564,6 +551,7 @@
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonQty"
+                    @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -588,18 +576,21 @@
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonNetWeight"
+                    @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonRoughWeight"
+                    @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonVolume"
+                    @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -631,6 +622,15 @@
                     class="speNumber spx"
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    slot="skuCartonQty"
+                    @blur="handlePriceBlur"
+                    :accuracy="0"
+                    slot-scope="{data}"
+                    :disabled="true"
                     v-model="data.value"></v-input-number>
         </v-history-modify>
     </div>
@@ -906,7 +906,7 @@
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     this.$router.push('/order/overview');
-                }).finally(err=>{
+                }).finally(()=>{
                     this.disableClickSend=false;
                 });
             },
@@ -989,6 +989,9 @@
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
                             item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
                             item.skuCategoryId._value = item.skuCategoryName.value;
+                            if (item.skuCartonQty.value !== Math.ceil(item.skuCartonQty.value)) {
+                                item.skuCartonQty._style = { "backgroundColor": "yellow" };
+                            }
                         }
                     });
                     this.productTableData=[];
@@ -1022,6 +1025,7 @@
                 });
             },
             getOrderNo(){
+                this.loadingPage=true;
                 //带了id表示是从draft页面过来的
                 if(this.$route.query.orderId){
                     // this.orderForm.orderNo=this.$route.query.orderId;
@@ -1053,7 +1057,6 @@
                     name:''
                 }).then(res=>{
                     this.supplierOption=res;
-                    console.log(this.$depthClone(this.supplierOption),'this.supplierOption')
                     if(this.$route.query.supplierCode){
                         _.map(this.supplierOption,v=>{
                             if(v.code===this.$route.query.supplierCode){
@@ -1704,9 +1707,64 @@
              * history插槽事件
              * */
             handlePriceBlur(e,item){
-                if(!this.orderForm.incoterm){return;}
                 let obj;
                 obj=item?item:this.chooseProduct[0];
+
+                if(obj.skuOuterCartonQty.value && obj.skuQty.value){
+                    obj.skuCartonQty.value=this.$toFixed(this.$calc.divide(obj.skuQty.value,obj.skuOuterCartonQty.value),1);
+                    //联动totalCtnGw
+                    if(obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value){
+                        obj.totalCtnGw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonRoughWeight.value),2);
+                    }else{
+                        obj.totalCtnGw.value=null;
+                    }
+
+                    //联动totalCtnNw
+                    if(obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value){
+                        obj.totalCtnNw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonNetWeight.value),2);
+                    }else{
+                        obj.totalCtnNw.value=null;
+                    }
+
+                    //联动totalCtnCbm
+                    if(obj.skuCartonQty.value && obj.skuOuterCartonVolume.value){
+                        obj.totalCtnCbm.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonVolume.value),3);
+                    }else{
+                        obj.totalCtnCbm.value=null;
+                    }
+
+                    if(obj.skuCartonQty.value!==Math.ceil(obj.skuCartonQty.value)){
+                        obj.skuCartonQty._style={ "backgroundColor": "yellow" };
+                    }
+                }else{
+                    obj.skuCartonQty.value=null;
+                    obj.totalCtnGw.value=null;
+                }
+
+                //处理totalCtnGw
+                if(obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value){
+                    obj.totalCtnGw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonRoughWeight.value),2);
+                }else{
+                    obj.totalCtnGw.value=null;
+                }
+
+                //处理totalCtnNw
+                if(obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value){
+                    obj.totalCtnNw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonNetWeight.value),2);
+                }else{
+                    obj.totalCtnNw.value=null;
+                }
+
+                //处理totalCtnCbm
+                if(obj.skuCartonQty.value && obj.skuOuterCartonVolume.value){
+                    obj.totalCtnCbm.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonVolume.value),3);
+                }else{
+                    obj.totalCtnCbm.value=null;
+                }
+
+
+
+                if(!this.orderForm.incoterm){return;}
                 if(this.orderForm.incoterm==='1'){
                     //fob
                     if(obj.skuFobPrice.value && obj.skuQty.value){
@@ -1760,7 +1818,6 @@
                 this.getInquiryData();
             },
         },
-
         created(){
             this.getOrderNo();
         },
