@@ -3,8 +3,19 @@ export default {
         _hide:true,
     },
     orderNo:{},
-    customerOrderNo:{},
-    supplierOrderNo:{},
+    customerOrderNo:{
+        mustShowColumn:true
+    },
+    supplierOrderNo:{
+        mustShowColumn:true
+    },
+    skuPictures:{
+        mustShowColumn:true,
+        _image:true,
+        _upload: {
+            readonly:true,
+        }
+    },
     skuCustomerSkuCode:{},
     skuCode:{},
     skuSupplierName:{},
@@ -17,12 +28,22 @@ export default {
     skuRemarkThree:{},      //??
     skuUnit:{},
     skuDescCustomer:{},
-    skuOuterCartonQty:{},
-    skuUndeliveredQty:{},
-    skuUntestedQty:{},
+    skuOuterCartonQty:{
+        mustShowColumn:true
+    },
+    skuUndeliveredQty:{
+        mustShowColumn:true
+    },
+    skuUntestedQty:{
+        mustShowColumn:true
+    },
     skuMaterialEn:{},
-    skuMethodPkgEn:{},
-    skuCartonQty:{},        
+    skuMethodPkgEn:{
+        mustShowColumn:true
+    },
+    skuCartonQty:{
+        mustShowColumn:true
+    },
     skuFobCurrency:{},
     skuFobPrice:{},
     skuFobPort:{},
@@ -38,12 +59,16 @@ export default {
         key:'skuIncoterm'
     },
     skuQty:{},
-    skuInnerCartonQty:{},
+    skuInnerCartonQty:{
+        mustShowColumn:true
+    },
     skuPrice:{},
     entryDt:{},
     deliveryDt:{},
     skuDeliveredQty:{},
     skuStatus:{},
     updateDt:{},
-    supplierAbbr:{},
+    supplierAbbr:{
+        mustShowColumn:true
+    },
 }

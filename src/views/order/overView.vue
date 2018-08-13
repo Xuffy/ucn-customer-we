@@ -153,7 +153,8 @@
                 orderStatusOption: [],
                 incotermOption: [],
                 paymentOption: [],
-                skuStatusOption: []
+                skuStatusOption: [],
+                skuUnitOption:[],
             };
         },
         methods: {
@@ -299,16 +300,16 @@
                     .then((res) => {
                         this.tabData = this.$getDB(query, res.datas, e => {
                             if (e.entryDt) {
-                                e.entryDt.value = this.$dateFormat(e.entryDt.value, "yyyy-mm-dd");
+                                e.entryDt._value = this.$dateFormat(e.entryDt.value, "yyyy-mm-dd");
                             }
                             if (e.deliveryDt) {
-                                e.deliveryDt.value = this.$dateFormat(e.deliveryDt.value, "yyyy-mm-dd");
+                                e.deliveryDt._value = this.$dateFormat(e.deliveryDt.value, "yyyy-mm-dd");
                             }
                             if (e.customerAgreementDt) {
-                                e.customerAgreementDt.value = this.$dateFormat(e.customerAgreementDt.value, "yyyy-mm-dd");
+                                e.customerAgreementDt._value = this.$dateFormat(e.customerAgreementDt.value, "yyyy-mm-dd");
                             }
                             if (e.updateDt) {
-                                e.updateDt.value = this.$dateFormat(e.updateDt.value, "yyyy-mm-dd");
+                                e.updateDt._value = this.$dateFormat(e.updateDt.value, "yyyy-mm-dd");
                             }
                             if (e.status) {
                                 e.status._value = (_.findWhere(this.orderStatusOption, { code: e.status.value }) || {}).name;
@@ -317,13 +318,16 @@
                                 e.skuStatus._value = (_.findWhere(this.skuStatusOption, { code: e.skuStatus.value }) || {}).name;
                             }
                             if (e.skuIncoterm) {
-                                e.skuIncoterm.value = this.$change(this.incotermOption, "skuIncoterm", e).name;
+                                e.skuIncoterm._value =(_.findWhere(this.incotermOption,{code:e.skuIncoterm.value}) || {}).name;
                             }
                             if (e.incoterm) {
-                                e.incoterm._value=(_.findWhere(this.incotermOption,{code:e.incoterm.value}) || {}).name;
+                                e.incoterm._value = (_.findWhere(this.incotermOption, { code: e.incoterm.value }) || {}).name;
                             }
                             if (e.payment) {
-                                e.payment.value = this.$change(this.paymentOption, "payment", e).name;
+                                e.payment._value = (_.findWhere(this.paymentOption, { code: e.payment.value }) || {}).name;
+                            }
+                            if (e.skuUnit) {
+                                e.skuUnit._value = (_.findWhere(this.skuUnitOption,{code:String(e.skuUnit.value)}) || {}).name;
                             }
                         });
                         this.pageData = res;
@@ -335,7 +339,10 @@
                     });
             },
             getUnit() {
-                this.$ajax.post(this.$apis.get_partUnit, ["ORDER_STATUS", "AE_IS", "ITM", "PMT", "SKU_STATUS"], { cache: true }).then(res => {
+                this.$ajax.get(this.$apis.get_allUnit).then(res => {
+                    console.log(res, "res");
+                });
+                this.$ajax.post(this.$apis.get_partUnit, ["ORDER_STATUS", "AE_IS", "ITM", "PMT", "SKU_STATUS", "SKU_UNIT"], { cache: true }).then(res => {
                     res.forEach(v => {
                         if (v.code === "ORDER_STATUS") {
                             this.orderStatusOption = v.codes;
@@ -345,6 +352,8 @@
                             this.paymentOption = v.codes;
                         } else if (v.code === "SKU_STATUS") {
                             this.skuStatusOption = v.codes;
+                        } else if (v.code === "SKU_UNIT") {
+                            this.skuUnitOption = v.codes;
                         }
                     });
                     this.getData();

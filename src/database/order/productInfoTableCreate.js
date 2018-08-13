@@ -31,10 +31,12 @@ export default {
         }
     },
     skuNotes:{
+        mustShowColumn:true,
         _upload:{
             limit:20
         }
     },
+    skuBarCode:{ },
     skuNameEn:{
         _disabled:true
     },
@@ -134,10 +136,18 @@ export default {
     skuCategoryName:{
         _hide:true
     },
-    // skuCategoryOne:{},
-    // skuCategoryTwo:{},
-    // skuCategoryThree:{},
-    // skuCategoryFour:{},
+    totalCtnCbm:{       //新增
+        mustShowColumn:true
+    },
+    totalCtnGw:{        //新增
+        mustShowColumn:true
+    },
+    totalCtnNw:{        //新增
+        mustShowColumn:true
+    },
+    skuCartonQty:{
+        mustShowColumn:true
+    },
     skuCustomsCode:{
         _disabled:true
     },
@@ -283,9 +293,15 @@ export default {
     skuQuotationNo:{
         _disabled:true
     },
-    skuRemarkOne:{},
-    skuRemarkTwo:{},
-    skuRemarkThree:{},
+    skuRemarkOne:{
+        mustShowColumn:true
+    },
+    skuRemarkTwo:{
+        mustShowColumn:true
+    },
+    skuRemarkThree:{
+        mustShowColumn:true
+    },
     skuAdditionalOne:{
         _slot:'skuAdditionalOne',
         _image:true,
