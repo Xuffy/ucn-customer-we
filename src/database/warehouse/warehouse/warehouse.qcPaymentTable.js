@@ -6,7 +6,7 @@ export default {
     name:{
         key:'paymentItem',
         realKey:'name',
-        type:'input'
+        type:'select'
     },
     planPayDt:{
         realKey:'planPayDt',
@@ -35,5 +35,9 @@ export default {
         key:'available',
         realKey:'status',
         isStatus:true
+    },
+    remark:{
+        realKey: 'remark',
+        type: 'input'
     }
 }
