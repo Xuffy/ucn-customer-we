@@ -241,7 +241,7 @@ export const routerMap = [
           draft: false,
           recycleBin: true,
           log: true,
-          name: 'Compare Archive'
+          name: $i.router.compareArchive
         },
         component: () => import ('../views/supplier/compare/archiveSupplier.vue')
       }

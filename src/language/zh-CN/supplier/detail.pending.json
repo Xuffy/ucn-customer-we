@@ -16,9 +16,9 @@
   "factoryAddress": "工厂地址",
   "exportPort": "出口港口",
   "contacctPerson1": "联系人1",
-  "contactPhoneNo.": "联系电话",
+  "contactPhoneNo1": "联系电话",
   "contacctPerson2": "联系人2",
-  "contactPhoneNo  ": "联系电话",
+  "contactPhoneNo2": "联系电话",
   "beneficiaryName": "收款人",
   "beneficiaryAddress": "账户地址",
   "beneficiaryBankName": "开户行",
@@ -127,5 +127,8 @@
   "relatedOrderNO": "关联订单号",
   "shipAgent": "货代公司",
   "amount": "订单总数量",
-  "expressAddress": "收货地址"
+  "expressAddress": "收货地址",
+  "consignee": "收货人",
+  "exportLicenseYes": "是",
+  "exportLicenseNo": "否"
 }

@@ -39,7 +39,7 @@
             <label class="reqiuredStar"></label>
             <el-select v-model="scope.row.payToCompanyId" filterable :placeholder="$i.logistic.placeholder">
               <el-option
-                v-for="item in selectArr.supplier"
+                v-for="item in selectArr.supplierAbbr"
                 :key="item.value"
                 :label="item.value"
                 :value="item.companyId">
