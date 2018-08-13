@@ -1604,7 +1604,11 @@
                     });
                     this.changePayment(res.payment);
                     let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res.skuList, "skuSysCode"), item => {
-                        if (!item._remark) {
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
+                        }
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
                             item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
@@ -2001,7 +2005,11 @@
                     });
 
                     let history = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode", true), item => {
-                        if(!item._remark){
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
+                        }
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
                             item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
@@ -2085,7 +2093,11 @@
                     });
                     let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res, "skuSysCode"), item => {
                         item._isNew = true;
-                        if(!item._remark){
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
+                        }
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
                             item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;

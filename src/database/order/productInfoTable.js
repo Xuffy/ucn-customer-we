@@ -1,4 +1,9 @@
 export default {
+    label:{
+        _important:true,
+        _title:'Remark',
+        _fixed:'left'
+    },
     _remark:{
         _hide:true
     },
