@@ -304,12 +304,12 @@
                 <el-button @click="clear" :disabled="loadingProductDialogTable">{{$i.warehouse.clear}}</el-button>
             </div>
             <v-table
-                    code="uwarehouse_qc_order_detail"
-                    v-loading="loadingProductDialogTable"
-                    :data="productDialogTableData"
-                    :buttons="[{label: $i.warehouse.detail, type: 1}]"
-                    @action="btnClick"
-                    @change-checked="changeProductDialogChecked">
+                code="uwarehouse_inbound_sku"
+                v-loading="loadingProductDialogTable"
+                :data="productDialogTableData"
+                :buttons="[{label: $i.warehouse.detail, type: 1}]"
+                @action="btnClick"
+                @change-checked="changeProductDialogChecked">
             </v-table>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">{{ $i.warehouse.add }}</el-button>
