@@ -974,11 +974,7 @@
                     });
                     this.changePayment(res.payment);
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
-                        if (item._remark) {
-                            item.label.value = this.$i.order.remarks;
-                        }
-                        else {
-                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                        if (!item._remark) {
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
                             item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
@@ -1123,11 +1119,7 @@
                     this.loadingProductTable=true;
                     this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
                         let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                            if (item._remark) {
-                                item.label.value = this.$i.order.remarks;
-                            }
-                            else {
-                                item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                            if (!item._remark) {
                                 item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                                 item.skuSample.value = item.skuSample.value ? "1" : "0";
                                 item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
@@ -1238,11 +1230,7 @@
                 let ids=_.pluck(_.pluck(e,type==='product'?'id':'skuId'),'value');
                 this.$ajax.post(this.$apis.ORDER_SKUS,ids).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                        if (item._remark) {
-                            item.label.value = this.$i.order.remarks;
-                        }
-                        else {
-                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                        if (!item._remark){
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
                             item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
@@ -1620,11 +1608,7 @@
                         arr.push(obj);
                     });
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(arr, 'skuSysCode'),item=>{
-                        if (item._remark) {
-                            item.label.value = this.$i.order.remarks;
-                        }
-                        else {
-                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                        if (!item._remark) {
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
                             item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;

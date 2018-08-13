@@ -2,13 +2,6 @@ export default {
     id:{
         _hide:true,
     },
-    orderNo:{},
-    customerOrderNo:{
-        mustShowColumn:true
-    },
-    supplierOrderNo:{
-        mustShowColumn:true
-    },
     skuPictures:{
         mustShowColumn:true,
         _image:true,
@@ -16,18 +9,27 @@ export default {
             readonly:true,
         }
     },
-    skuCustomerSkuCode:{},
+    skuStatus:{},
     skuCode:{},
+    skuCustomerSkuCode:{},
+    skuNameCustomer:{},
+    skuDescCustomer:{},
+
+    orderNo:{},
+    customerOrderNo:{
+        mustShowColumn:true
+    },
+    supplierOrderNo:{
+        mustShowColumn:true
+    },
     skuSupplierName:{},
     skuNameCn:{},
     skuNameEn:{},
-    skuNameCustomer:{},
     skuDescEn:{},
     skuRemarkOne:{},        //??
     skuRemarkTwo:{},        //??
     skuRemarkThree:{},      //??
     skuUnit:{},
-    skuDescCustomer:{},
     skuOuterCartonQty:{
         mustShowColumn:true
     },
@@ -66,7 +68,6 @@ export default {
     entryDt:{},
     deliveryDt:{},
     skuDeliveredQty:{},
-    skuStatus:{},
     updateDt:{},
     supplierAbbr:{
         mustShowColumn:true

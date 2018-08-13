@@ -708,10 +708,10 @@
                         type="danger">{{$i.order.cancel}}
                 </el-button>
                 <!--<el-checkbox-->
-                        <!--v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'"-->
-                        <!--:disabled="loadingPage || hasCancelOrder"-->
-                        <!--v-model="markImportant"-->
-                        <!--@change="changeMarkImportant">{{$i.order.markAsImportant}}-->
+                <!--v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'"-->
+                <!--:disabled="loadingPage || hasCancelOrder"-->
+                <!--v-model="markImportant"-->
+                <!--@change="changeMarkImportant">{{$i.order.markAsImportant}}-->
                 <!--</el-checkbox>-->
             </div>
         </div>
@@ -1322,7 +1322,7 @@
                 savedIncoterm: "",           //用来存储incoterm
                 disableChangeSkuStatus: false,
                 initialData: {},
-                chatParams:null,
+                chatParams: null,
 
                 /**
                  * payment data配置
@@ -1604,11 +1604,7 @@
                     });
                     this.changePayment(res.payment);
                     let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res.skuList, "skuSysCode"), item => {
-                        if (item._remark) {
-                            item.label.value = this.$i.order.remarks;
-                        }
-                        else {
-                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                        if (!item._remark) {
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
                             item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
@@ -2005,11 +2001,7 @@
                     });
 
                     let history = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode", true), item => {
-                        if (item._remark) {
-                            item.label.value = this.$i.order.remarks;
-                        }
-                        else {
-                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                        if(!item._remark){
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
                             item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
@@ -2093,11 +2085,7 @@
                     });
                     let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res, "skuSysCode"), item => {
                         item._isNew = true;
-                        if (item._remark) {
-                            item.label.value = this.$i.order.remarks;
-                        }
-                        else {
-                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                        if(!item._remark){
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
                             item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
@@ -2507,56 +2495,56 @@
 
                 // 处理product info新增的四个字段
                 //处理产品箱数(因为后续三个字段都与此有关，所以还要联动后面三个字段)
-                if(obj.skuOuterCartonQty.value && obj.skuQty.value){
-                    obj.skuCartonQty.value=this.$toFixed(this.$calc.divide(obj.skuQty.value,obj.skuOuterCartonQty.value),1);
+                if (obj.skuOuterCartonQty.value && obj.skuQty.value) {
+                    obj.skuCartonQty.value = this.$toFixed(this.$calc.divide(obj.skuQty.value, obj.skuOuterCartonQty.value), 1);
                     //联动totalCtnGw
-                    if(obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value){
-                        obj.totalCtnGw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonRoughWeight.value),2);
-                    }else{
-                        obj.totalCtnGw.value=null;
+                    if (obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value) {
+                        obj.totalCtnGw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonRoughWeight.value), 2);
+                    } else {
+                        obj.totalCtnGw.value = null;
                     }
 
                     //联动totalCtnNw
-                    if(obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value){
-                        obj.totalCtnNw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonNetWeight.value),2);
-                    }else{
-                        obj.totalCtnNw.value=null;
+                    if (obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value) {
+                        obj.totalCtnNw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonNetWeight.value), 2);
+                    } else {
+                        obj.totalCtnNw.value = null;
                     }
 
                     //联动totalCtnCbm
-                    if(obj.skuCartonQty.value && obj.skuOuterCartonVolume.value){
-                        obj.totalCtnCbm.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonVolume.value),3);
-                    }else{
-                        obj.totalCtnCbm.value=null;
+                    if (obj.skuCartonQty.value && obj.skuOuterCartonVolume.value) {
+                        obj.totalCtnCbm.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonVolume.value), 3);
+                    } else {
+                        obj.totalCtnCbm.value = null;
                     }
 
-                    if(obj.skuCartonQty.value!==Math.ceil(obj.skuCartonQty.value)){
-                        obj.skuCartonQty._style={ "backgroundColor": "yellow" };
+                    if (obj.skuCartonQty.value !== Math.ceil(obj.skuCartonQty.value)) {
+                        obj.skuCartonQty._style = { "backgroundColor": "yellow" };
                     }
-                }else{
-                    obj.skuCartonQty.value=null;
-                    obj.totalCtnGw.value=null;
+                } else {
+                    obj.skuCartonQty.value = null;
+                    obj.totalCtnGw.value = null;
                 }
 
                 //处理totalCtnGw
-                if(obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value){
-                    obj.totalCtnGw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonRoughWeight.value),2);
-                }else{
-                    obj.totalCtnGw.value=null;
+                if (obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value) {
+                    obj.totalCtnGw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonRoughWeight.value), 2);
+                } else {
+                    obj.totalCtnGw.value = null;
                 }
 
                 //处理totalCtnNw
-                if(obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value){
-                    obj.totalCtnNw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonNetWeight.value),2);
-                }else{
-                    obj.totalCtnNw.value=null;
+                if (obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value) {
+                    obj.totalCtnNw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonNetWeight.value), 2);
+                } else {
+                    obj.totalCtnNw.value = null;
                 }
 
                 //处理totalCtnCbm
-                if(obj.skuCartonQty.value && obj.skuOuterCartonVolume.value){
-                    obj.totalCtnCbm.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonVolume.value),3);
-                }else{
-                    obj.totalCtnCbm.value=null;
+                if (obj.skuCartonQty.value && obj.skuOuterCartonVolume.value) {
+                    obj.totalCtnCbm.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonVolume.value), 3);
+                } else {
+                    obj.totalCtnCbm.value = null;
                 }
 
                 if (!this.orderForm.incoterm) {
@@ -2657,7 +2645,7 @@
                         this.disableCancelOrder = false;
                     });
                 });
-            },
+            }
         },
         created() {
             this.getOrderNo();
