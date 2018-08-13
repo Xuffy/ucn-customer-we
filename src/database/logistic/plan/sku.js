@@ -4,7 +4,8 @@ export default {
     _hide: true
   },
   logisticsNo: {
-    type: 'text'
+    type: 'text',
+    _sort:false
   },
   orderNo: {
     type: 'text'

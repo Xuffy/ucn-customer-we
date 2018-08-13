@@ -38,14 +38,14 @@
             <span v-else>{{ scope.row.containerType }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalContainerGrossWeight" prop='{"key":"totalContainerGrossWeight","total":true}' width="220" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.totalContainerGrossWeight || 0 }}</span>
-          </template>
-        </el-table-column>
         <el-table-column :label="$i.logistic.vgm" prop='{"key":"vgm","total":true}' width="120" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.vgm || 0 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$i.logistic.totalQuantityOfOuterCartonsInContainer" width="300" prop='{"key":"totalContainerOuterCartonsQty","total":true}' align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.totalContainerOuterCartonsQty || 0 }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.totalQuantityInContainer" width="200" prop='{"key":"totalContainerQty","total":true}' align="center">
@@ -53,7 +53,7 @@
             <span>{{ scope.row.totalContainerQty || 0 }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalVolumeInContainer" width="220" prop='{"key":"totalContainerVolume","total":true}' align="center">
+        <el-table-column :label="$i.logistic.totalVolumeInContainer" width="200" prop='{"key":"totalContainerVolume","total":true}' align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.totalContainerVolume || 0 }}</span>
           </template>
@@ -63,9 +63,9 @@
             <span>{{ scope.row.totalContainerNetWeight || 0 }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalQuantityOfOuterCartonsInContainer" width="300" prop='{"key":"totalContainerOuterCartonsQty","total":true}' align="center">
+        <el-table-column :label="$i.logistic.totalContainerGrossWeight" width="200" prop='{"key":"totalContainerGrossWeight","total":true}' align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalContainerOuterCartonsQty || 0 }}</span>
+            <span>{{ scope.row.totalContainerGrossWeight || 0 }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.USD" width="100" prop='{"key":"valueUsd","total":true}' align="center">

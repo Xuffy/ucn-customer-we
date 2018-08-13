@@ -72,7 +72,8 @@
         :currencyCode="oldPlanObject.currency" />
     </div>
     <div>
-      <div class="hd"></div>
+      <!-- :code="configUrl[pageName]&&configUrl[pageName].setTheField" -->
+      <div class="hd"></div> 
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table ref="productInfo" :code="configUrl[pageName]&&configUrl[pageName].setTheField" :totalRow="productListTotal" :data.sync="productList"
         @action="action" :buttons="productbButtons" @change-checked="selectProduct" native-sort="vId" @change-sort="$refs.productInfo.setSort(productList)">
@@ -407,9 +408,11 @@
         this.btnModifyTime = arg;
       },
       autoComputed(data, row) {
-        if (data.hasOwnProperty('correlationKey')) {
-          row[data.correlationKey].value = this.$calc.multiply(data.value, row[data.computedKey].value);
-          data._isModified = row[data.correlationKey]._isModified = true;
+        if (data.hasOwnProperty('computed')) {
+          data.computed.forEach(el=>{
+            row[el.computedResKey].value = this.$calc.multiply(data.value || 0, row[el.computedKey].value || 0);
+            el._isModified = row[el.computedResKey]._isModified = true;
+          })
         }
       },
       ...mapActions(['setMenuLink']),
@@ -643,13 +646,14 @@
         this.productList.forEach((item) => {
           if (!this.isCopy) {
             if (item.fieldDisplay.value) {
-              _.mapObject(item.fieldDisplay.value, (v, k) => {
-                item[k]._style = {
-                  background: 'yellow'
-                };
-                item[k]._mustChecked = true;
-              })
-              item.fieldDisplay.value = null;
+              console.log(item.fieldDisplay.value)
+              // _.mapObject(item.fieldDisplay.value, (v, k) => {
+              //   item[k]._style = {
+              //     background: 'yellow'
+              //   };
+              //   item[k]._mustChecked = true;
+              // })
+              // item.fieldDisplay.value = null;
             }
           }
         })
@@ -839,6 +843,7 @@
         }
       },
       changeChecked(arr) {
+        console.log(arr)
         this.ProductFromOrderChecked = arr;
       },
       //处理 动态增加 产品时 的下拉取值
@@ -914,7 +919,11 @@
           a.totalContainerVolume = null;
           a.totalContainerNetWeight = null;
           a.totalContainerOuterCartonsQty = null;
-          !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
+          // a.outerCartonGrossWeight = a.skuGrossWeight || 0;
+          // a.outerCartonNetWeight = a.skuOuterCartonNetWeight || 0;
+          // a.outerCartonVolume = a.skuOuterCartonVolume || 0;
+          // a.outerCartonVolume = a.skuOuterCartonVolume || 0;
+          !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a);
         })
         this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList];
         this.shipperArrFun();
