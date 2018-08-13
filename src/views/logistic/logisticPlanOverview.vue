@@ -238,7 +238,10 @@
     mounted() {
       let menuList = [{
         path: '',
-        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        query: {
+          bizCode: this.pageType && this.pageType == "loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN',
+          code : 'LOGISTIC'
+        },
         type: 100,
         auth: (()=>{ 
           let code = null;
@@ -301,7 +304,7 @@
         this.pageType === 'draft' && (this.pageParams.planStatus = 1)
         this.pageType === 'plan' && (this.pageParams.planStatus = 2)
         let code = this.pageType=="loadingList" ? 'LOGISTICS_ORDER' : 'LOGISTICS_PLAN'
-        this.$fetch.export_task(code,{lgStatus, ...this.pageParams,ids:this.downloadIds})
+        this.$fetch.export_task(code,{lgStatus, ...this.pageParams,ids:this.downloadIds,archive:0})
       },
       changeSort(arr){
         this.pageParams.sorts = arr.sorts;

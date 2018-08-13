@@ -14,15 +14,15 @@ export default {
     qcMethod: {
         key: 'qcMethodDictCode'
     },
-    surveyor: {
-        key: 'surveyor'
-    },
-    factoryAddress: {
-        key: 'factoryAddress'
-    },
-    factoryContactPhone: {
-        key: 'factoryContactPhone'
-    },
+    // surveyor: {
+    //     key: 'surveyor'
+    // },
+    // factoryAddress: {
+    //     key: 'factoryAddress'
+    // },
+    // factoryContactPhone: {
+    //     key: 'factoryContactPhone'
+    // },
     remark: {
         key: 'remark'
     },
