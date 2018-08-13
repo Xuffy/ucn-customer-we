@@ -23,7 +23,7 @@ export default {
     skuCode:{},
     customerSkuCode:{},
     // factorySkuCode:{},
-    skuNameCn:{},
+    // skuNameCn:{},
     skuBrand:{},
     skuDesign:{},
     skuMethodPkgEn:{},
