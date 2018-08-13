@@ -428,19 +428,6 @@
                         :value="item.name">
                 </el-option>
             </el-select>
-            <!--<el-select-->
-                    <!--slot="skuStatus"-->
-                    <!--v-model="data._value"-->
-                    <!--slot-scope="{data}"-->
-                    <!--clearable-->
-                    <!--:placeholder="$i.order.pleaseChoose">-->
-                <!--<el-option-->
-                        <!--v-for="item in skuStatusOption"-->
-                        <!--:key="item.id"-->
-                        <!--:label="item.name"-->
-                        <!--:value="item.name">-->
-                <!--</el-option>-->
-            <!--</el-select>-->
 
             <v-input-number
                     class="speNumber spx"
@@ -906,7 +893,7 @@
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     this.$router.push('/order/overview');
-                }).finally(err=>{
+                }).finally(()=>{
                     this.disableClickSend=false;
                 });
             },
@@ -1053,7 +1040,6 @@
                     name:''
                 }).then(res=>{
                     this.supplierOption=res;
-                    console.log(this.$depthClone(this.supplierOption),'this.supplierOption')
                     if(this.$route.query.supplierCode){
                         _.map(this.supplierOption,v=>{
                             if(v.code===this.$route.query.supplierCode){
