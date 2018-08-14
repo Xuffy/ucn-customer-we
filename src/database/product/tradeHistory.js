@@ -9,11 +9,7 @@ export default {
     unitPrice:{},
     skuPrice:{},
     totalQty:{},
-    actDeliveryDt:{},
     totalContainerQty:{},
-    salesOrderNo:{
-        key:'customerOrderNo'
-    },
     purchaseOrderNo:{
         key:'supplierOrderNo'
     },

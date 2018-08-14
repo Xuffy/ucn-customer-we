@@ -10,6 +10,45 @@ export default {
   orderNo: {
     type: 'text'
   },
+  containerNo: {
+    type: 'String'
+  },
+  totalQuantityOfOuterCartonsInContainer: {
+    key: 'totalContainerOuterCartonsQty',
+    _filed: 'totalContainerOuterCartonsQty',
+    type: 'String',
+  },
+  totalQuantityInContainer: {
+    key: 'totalContainerQty',
+    _filed: 'totalContainerQty',
+    type: 'String',
+  },
+  totalVolumeInContainer: {
+    key: 'totalCtnCbm',
+    _filed: 'totalContainerVolume',
+    type: 'String'
+  },
+  totalNetWeightInContainer: {
+    key: 'totalCtnNw',
+    _filed: 'totalContainerNetWeight',
+    type: 'String'
+  },
+  totalContainerGrossWeight: {
+    key:'totalCtnGw',
+    type: 'String'
+  },
+  unitExportPrice: {
+    type: 'String'
+  },
+  totalExportPrice: {
+    type: 'String'
+  },
+  currency: {
+    type: 'String'
+  },
+  skuQty: {
+    type: 'String'
+  },
   lcNo: {
     type: 'text'
   },
@@ -23,9 +62,6 @@ export default {
     type: 'text'
   },
   skuBarCode: {
-    type: 'text'
-  },
-  skuNameCn: {
     type: 'text'
   },
   skuNameEn: {
@@ -58,6 +94,13 @@ export default {
   },
   blSkuName: {
     type: 'text'
+  },
+  customsDeclarationNameEn: {
+    key:'customDeclarationNameEn',
+    type: 'String'
+  },
+  hsCode: {
+    type: 'String'
   },
   unitPrice: {
     type: 'text'

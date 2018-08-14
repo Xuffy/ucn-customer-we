@@ -86,22 +86,19 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "productDescription": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
   "blSkuName": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "customsDeclarationNameCn": {
+    key:'customDeclarationNameCn',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "customsDeclarationNameEn": {
+    key:'customDeclarationNameEn',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -112,6 +109,12 @@ export default {
     typeSlef: 'text'
   },
   "reportElement": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "supplierNo": {
+    key:'supplierCode',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -137,6 +140,7 @@ export default {
     typeSlef: 'text'
   },
   "skuCustomerSkuCode": {
+    _filed:'customerSkuCode',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -260,16 +264,19 @@ export default {
     typeSlef: 'text'
   },
   "skuOuterCartonLength": {
+    _filed:'outerCartonLenth',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "skuOuterCartonWidth": {
+    _filed:'outerCartonWidth',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "skuOuterCartonHeight": {
+    _filed:'outerCartonHeight',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'

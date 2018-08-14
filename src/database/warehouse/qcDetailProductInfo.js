@@ -14,6 +14,24 @@ export default{
     inboundSkuId:{
         _hide:true
     },
+    skuCode: {
+        key: 'skuCode',
+        type: 'String'
+    },
+    customerSkuCode: {
+        key: 'customerSkuCode',
+        type: 'String'
+    },
+    orderSkuQuantity: {
+        key: 'orderSkuQty',
+        type: 'Number',
+        _calculate:true
+    },
+    expectQcQty: {
+        key: 'expectQcQty',
+        type: 'Number',
+        _calculate:true
+    },
     skuQcResultDictCode: {
         key: 'skuQcResultDictCode',
         type: 'String',
@@ -24,14 +42,7 @@ export default{
         type: 'String',
         _sort:false
     },
-    skuCode: {
-        key: 'skuCode',
-        type: 'String'
-    },
-    customerSkuCode: {
-        key: 'customerSkuCode',
-        type: 'String'
-    },
+    
     // factorySkuCode: {
     //     key: 'factorySkuCode',
     //     type: 'String'
@@ -66,35 +77,22 @@ export default{
         key: 'skuUnitDictCode',
         type: 'String'
     },
-    lengthUnitDictCode: {
-        key: 'lengthUnitDictCode',
-        type: 'String'
-    },
-    volumeUnitDictCode: {
-        key: 'volumeUnitDictCode',
-        type: 'String'
-    },
-    weightUnitDictCode: {
-        key: 'weightUnitDictCode',
-        type: 'String'
-    },
+    
     inboundNo: {
         key: 'inboundNo',
         type: 'String'
     },
-    orderSkuQuantity: {
-        key: 'orderSkuQty',
-        type: 'Number',
-        _calculate:true
-    },
-    expectQcQty: {
-        key: 'expectQcQty',
-        type: 'Number',
-        _calculate:true
-    },
+    
+   
     samplingRate: {
         key: 'samplingRate',
         type: 'String'
+    },
+    checkOuterCartons:{
+        key: 'checkOuterCartonQty',
+        type: 'Number',
+        _calculate:true,
+        isFWS: true
     },
     unqualifiedProcessingMode: {
         key: 'unqualifiedProcessingMode',
@@ -324,15 +322,22 @@ export default{
         _sort:false,
         isFWS: true
     },
-    checkOuterCartons:{
-        key: 'checkOuterCartonQty',
-        type: 'Number',
-        _calculate:true,
-        isFWS: true
-    },
+    
     remark:{
         key: 'remark',
         type: 'String',
         isFWS: true
+    },
+    lengthUnitDictCode: {
+        key: 'lengthUnitDictCode',
+        type: 'String'
+    },
+    volumeUnitDictCode: {
+        key: 'volumeUnitDictCode',
+        type: 'String'
+    },
+    weightUnitDictCode: {
+        key: 'weightUnitDictCode',
+        type: 'String'
     },
 }
