@@ -14,7 +14,6 @@ export default {
         key:'skuQty'
     },
     totalQty:{},
-
     orderNo:{},
     customerName:{},
     supplierName:{},
