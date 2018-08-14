@@ -25,7 +25,8 @@ export default {
     },
     customerSkuCode:{},
     supplierAbbr:{
-        mustShowColumn:true
+        mustShowColumn:true,
+        _sort:true
     },
     categoryName:{
         key:"categoryName",
@@ -35,6 +36,8 @@ export default {
     descEn:{
         _sort:false
     },
+    unit:{},
+
     fobCurrency:{},
     fobPrice:{},
     refFobPrice:{
@@ -62,12 +65,9 @@ export default {
     outerCartonNetWeight:{},
     outerCartonRoughWeight:{},
     outerCartonVolume:{},
-
-
     descCn:{
         _sort:false
     },
-    unit:{},
     nameCustomer:{},
     descCustomer:{
         _sort:false
@@ -78,7 +78,8 @@ export default {
         _sort:false
     },
     oemQty:{
-        mustShowColumn:true
+        mustShowColumn:true,
+        _sort:true
     },
     colourEn:{},
     barcode:{

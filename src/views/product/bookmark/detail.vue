@@ -46,44 +46,52 @@
                 </el-row>
                 <div class="btns" v-show="hideBtns" v-if="notEdit">
                     <el-button
+                            :disabled="productForm.recycle"
                             @click="createInquiry"
                             v-authorize="'PRODUCT:BOOKMARK_DETAIL:CREATE_INQUIRY'">
                         {{$i.product.createInquiry}}
                     </el-button>
                     <el-button
-                            :disabled="productForm.customerCreate"
+                            :disabled="productForm.customerCreate || productForm.recycle"
                             @click="createOrder"
                             v-authorize="'PRODUCT:BOOKMARK_DETAIL:CREATE_ORDER'">{{$i.product.createOrder}}
                     </el-button>
                     <el-button
+                            :disabled="productForm.recycle"
                             @click="addCompare"
                             v-authorize="'PRODUCT:BOOKMARK_DETAIL:ADD_COMPARE'">
                         {{$i.product.addToCompare}}
                     </el-button>
                     <el-button
+                            :disabled="productForm.recycle"
                             @click="editProduct"
                             v-authorize="'PRODUCT:BOOKMARK_DETAIL:MODIFY'">
                         {{$i.product.editEn}}
                     </el-button>
                     <el-button
+                            :disabled="productForm.recycle"
                             @click="addProduct"
                             v-authorize="'PRODUCT:BOOKMARK_DETAIL:ADD_PRODUCT'">
                         {{$i.product.addNewProductEn}}
                     </el-button>
                     <el-button
+                            :disabled="productForm.recycle"
                             @click="manuallyAddProduct"
                             v-authorize="'PRODUCT:BOOKMARK_DETAIL:MANUALLY_ADD'">
                         {{$i.product.manuallyAdd}}
                     </el-button>
                     <el-button
+                            :disabled="productForm.recycle"
                             v-authorize="'PRODUCT:BOOKMARK_DETAIL:DOWNLOAD'">{{$i.product.downloadTheProduct}}
                     </el-button>
                     <el-button
+                            :disabled="productForm.recycle"
                             @click="upload"
                             v-authorize="'PRODUCT:BOOKMARK_DETAIL:UPLOAD'">{{$i.product.uploadProduct}}
                     </el-button>
                     <el-button
                             type="danger"
+                            :disabled="productForm.recycle"
                             :loading="disableClickDelete"
                             @click="deleteBookmark"
                             v-authorize="'PRODUCT:BOOKMARK_DETAIL:DELETE'">{{$i.product.deleteProduct}}
@@ -211,13 +219,13 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.tradeHistory" name="History">
-                    <v-table
-                            :height="500"
-                            :loading="loadingTable"
-                            :data="historyData">
-                    </v-table>
-                </el-tab-pane>
+                <!--<el-tab-pane :label="$i.product.tradeHistory" name="History">-->
+                    <!--<v-table-->
+                            <!--:height="500"-->
+                            <!--:loading="loadingTable"-->
+                            <!--:data="historyData">-->
+                    <!--</v-table>-->
+                <!--</el-tab-pane>-->
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
                     <div class="bigFont" v-if="!productForm.attachments || productForm.attachments.length===0">
                         {{$i.product.noAttachments}}
@@ -412,7 +420,7 @@
                     otherPackInfoEn: "",
                     adjustPackage: 2,
                     lengthWidthHeight: "",
-                    recycle: 2,
+                    recycle: false,
                     categoryId: "",                      //类型id
                     taxRefundRate: 1,
                     customsCode: "",

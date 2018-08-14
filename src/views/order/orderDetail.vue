@@ -1566,10 +1566,11 @@
                         }
                     });
                     this.getDetail();
+                }).catch(()=>{
+                    this.loadingPage=false;
                 });
             },
             getDetail(e, isTrue) {
-                this.loadingPage = true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL, {
                     orderId: this.$route.query.orderId,
                     orderNo: this.$route.query.orderNo || this.$route.query.code
@@ -1678,7 +1679,9 @@
                      * */
                     this.getPaymentData();
                 }).finally(() => {
-                    this.loadingPage = false;
+                    this.$nextTick(()=>{
+                        this.loadingPage = false;
+                    });
                     this.disableClickCancelModify = false;
                     if (e) {
                         this.isModify = false;
@@ -1841,8 +1844,8 @@
                         });
                     }
                     this.getUnit();
-                }).catch(err => {
-                    // this.loadingPage=false;
+                }).catch(() => {
+                    this.loadingPage=false;
                 });
             },
             getInquiryData() {
