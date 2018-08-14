@@ -2,34 +2,35 @@ export default {
     id:{
         _hide:true
     },
-    orderNo:{},
-    entryDt:{},
-    status:{},      //订单状态
-    customerName:{},
     customerOrderNo:{},
+    status:{},      //订单状态
+    entryDt:{},
+    supplierAbbr:{},
+    incoterm:{},
+    currency:{},
+    totalSkuPrice:{},
+    totalOuterCartonQty:{},
+    skuQuantity:{
+        key:'skuQty'
+    },
+    totalQty:{},
+
+    orderNo:{},
+    customerName:{},
     supplierName:{},
     supplierOrderNo:{},
-    incoterm:{},
     lcNo:{},
     payment:{},
-    currency:{},
     deliveryDt:{},
     departureCountry:{},    //发运国
     destCountry:{},
     customerAgreementNo:{},
     customerAgreementDt:{},
     remark:{},
-    totalSkuPrice:{},
     deliveredQty:{},
     updateDt:{},
     quotationNo:{},
-    totalQty:{},
-    totalOuterCartonQty:{},
     totalNetWeight:{},
     totalGrossWeight:{},
     totalVolume:{},
-    skuQuantity:{
-        key:'skuQty'
-    },
-    supplierAbbr:{}
 }

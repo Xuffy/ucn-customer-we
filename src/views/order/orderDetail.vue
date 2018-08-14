@@ -708,10 +708,10 @@
                         type="danger">{{$i.order.cancel}}
                 </el-button>
                 <!--<el-checkbox-->
-                        <!--v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'"-->
-                        <!--:disabled="loadingPage || hasCancelOrder"-->
-                        <!--v-model="markImportant"-->
-                        <!--@change="changeMarkImportant">{{$i.order.markAsImportant}}-->
+                <!--v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'"-->
+                <!--:disabled="loadingPage || hasCancelOrder"-->
+                <!--v-model="markImportant"-->
+                <!--@change="changeMarkImportant">{{$i.order.markAsImportant}}-->
                 <!--</el-checkbox>-->
             </div>
         </div>
@@ -1075,6 +1075,7 @@
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonQty"
+                    @blur="handlePriceBlur"
                     :accuracy="1"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
@@ -1108,6 +1109,7 @@
                     class="speNumber spx"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonNetWeight"
+                    @blur="handlePriceBlur"
                     :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -1116,6 +1118,7 @@
                     class="speNumber spx"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonRoughWeight"
+                    @blur="handlePriceBlur"
                     :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -1124,6 +1127,7 @@
                     class="speNumber spx"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonVolume"
+                    @blur="handlePriceBlur"
                     :accuracy="3"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -1318,7 +1322,7 @@
                 savedIncoterm: "",           //用来存储incoterm
                 disableChangeSkuStatus: false,
                 initialData: {},
-                chatParams:null,
+                chatParams: null,
 
                 /**
                  * payment data配置
@@ -1562,10 +1566,11 @@
                         }
                     });
                     this.getDetail();
+                }).catch(()=>{
+                    this.loadingPage=false;
                 });
             },
             getDetail(e, isTrue) {
-                this.loadingPage = true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL, {
                     orderId: this.$route.query.orderId,
                     orderNo: this.$route.query.orderNo || this.$route.query.code
@@ -1615,6 +1620,9 @@
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
                             item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
                             item.skuCategoryId._value = item.skuCategoryName.value;
+                            if (item.skuCartonQty.value !== Math.ceil(item.skuCartonQty.value)) {
+                                item.skuCartonQty._style = { "backgroundColor": "yellow" };
+                            }
                         }
                     });
                     this.productTableData = [];
@@ -1671,7 +1679,9 @@
                      * */
                     this.getPaymentData();
                 }).finally(() => {
-                    this.loadingPage = false;
+                    this.$nextTick(()=>{
+                        this.loadingPage = false;
+                    });
                     this.disableClickCancelModify = false;
                     if (e) {
                         this.isModify = false;
@@ -1834,8 +1844,8 @@
                         });
                     }
                     this.getUnit();
-                }).catch(err => {
-                    // this.loadingPage=false;
+                }).catch(() => {
+                    this.loadingPage=false;
                 });
             },
             getInquiryData() {
@@ -2492,23 +2502,65 @@
             handlePriceBlur(e, item) {
                 let obj;
                 obj = item ? item : this.chooseProduct[0];
-                console.log(obj,'obj')
-                console.log(e,'e')
                 // skuOuterCartonQty    外箱产品数
                 // skuQty    数量
                 // skuCartonQty     产品箱数
+                // totalCtnGw       外箱总毛重
+                // skuOuterCartonRoughWeight    外箱毛重
+
                 // 处理product info新增的四个字段
-                if(obj.skuOuterCartonQty.value && obj.skuQty.value){
-                    obj.skuCartonQty.value=obj.skuQty.value/obj.skuOuterCartonQty.value;
-                    if(obj.skuCartonQty.value!==Math.ceil(obj.skuCartonQty.value)){
-                        obj.skuCartonQty._style={ "backgroundColor": "yellow" };
+                //处理产品箱数(因为后续三个字段都与此有关，所以还要联动后面三个字段)
+                if (obj.skuOuterCartonQty.value && obj.skuQty.value) {
+                    obj.skuCartonQty.value = this.$toFixed(this.$calc.divide(obj.skuQty.value, obj.skuOuterCartonQty.value), 1);
+                    //联动totalCtnGw
+                    if (obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value) {
+                        obj.totalCtnGw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonRoughWeight.value), 2);
+                    } else {
+                        obj.totalCtnGw.value = null;
                     }
-                }else{
-                    obj.skuCartonQty.value=null;
+
+                    //联动totalCtnNw
+                    if (obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value) {
+                        obj.totalCtnNw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonNetWeight.value), 2);
+                    } else {
+                        obj.totalCtnNw.value = null;
+                    }
+
+                    //联动totalCtnCbm
+                    if (obj.skuCartonQty.value && obj.skuOuterCartonVolume.value) {
+                        obj.totalCtnCbm.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonVolume.value), 3);
+                    } else {
+                        obj.totalCtnCbm.value = null;
+                    }
+
+                    if (obj.skuCartonQty.value !== Math.ceil(obj.skuCartonQty.value)) {
+                        obj.skuCartonQty._style = { "backgroundColor": "yellow" };
+                    }
+                } else {
+                    obj.skuCartonQty.value = null;
+                    obj.totalCtnGw.value = null;
                 }
 
+                //处理totalCtnGw
+                if (obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value) {
+                    obj.totalCtnGw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonRoughWeight.value), 2);
+                } else {
+                    obj.totalCtnGw.value = null;
+                }
 
+                //处理totalCtnNw
+                if (obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value) {
+                    obj.totalCtnNw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonNetWeight.value), 2);
+                } else {
+                    obj.totalCtnNw.value = null;
+                }
 
+                //处理totalCtnCbm
+                if (obj.skuCartonQty.value && obj.skuOuterCartonVolume.value) {
+                    obj.totalCtnCbm.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonVolume.value), 3);
+                } else {
+                    obj.totalCtnCbm.value = null;
+                }
 
                 if (!this.orderForm.incoterm) {
                     return;
@@ -2608,7 +2660,7 @@
                         this.disableCancelOrder = false;
                     });
                 });
-            },
+            }
         },
         created() {
             this.getOrderNo();

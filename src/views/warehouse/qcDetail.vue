@@ -205,14 +205,26 @@
                                     label="please input"></v-input-number>
                             </div>
                             <div v-else-if="v.type==='select'">
-                                <el-select :disabled="true" v-model="scope.row[v.realKey]" :placeholder="$i.warehouse.pleaseChoose">
-                                    <el-option
-                                            v-for="item in currencyOption"
+                                <div v-if="v.key === 'paymentItem'">
+                                    <el-select  v-model="scope.row[v.realKey]" :placeholder="$i.warehouse.pleaseChoose">
+                                        <el-option
+                                            v-for="item in paymentItem"
                                             :key="item.id"
-                                            :label="item.code"
+                                            :label="item.name"
                                             :value="item.code">
-                                    </el-option>
-                                </el-select>
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div v-else>
+                                    <el-select :disabled="true" v-model="scope.row[v.realKey]" :placeholder="$i.warehouse.pleaseChoose">
+                                        <el-option
+                                                v-for="item in currencyOption"
+                                                :key="item.id"
+                                                :label="item.code"
+                                                :value="item.code">
+                                        </el-option>
+                                    </el-select>
+                                </div>
                             </div>
                             <div v-else-if="v.isStatus">
                                 <span v-if="scope.row.status===-1">{{$i.warehouse.abandon}}</span>
@@ -525,7 +537,7 @@
                 volumeOption:[],
                 weightOption:[],
                 pbCodeOption:[],
-
+                paymentItem: []
 
             }
         },
@@ -707,7 +719,8 @@
                     payToCompanyName: this.qcDetail.serviceName,
                     currency: 0,
                     currencyCode: '',
-                    moduleCode: 'WAREHOUSE'
+                    moduleCode: 'WAREHOUSE',
+                    remark: e.remark
                 };
                 this.currencyOption.forEach(v=>{
                     if(v.code===this.qcDetail.exchangeCurrencyDictCode){
@@ -818,7 +831,8 @@
                     planPayAmount: e.planPayAmount,
                     planPayDt: e.planPayDt,
                     version:e.version,
-                    moduleCode: 'WAREHOUSE'
+                    moduleCode: 'WAREHOUSE',
+                    remark: e.remark
                 };
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.update_qcPayment,param).then(res=>{
@@ -1055,7 +1069,7 @@
         created(){
             this.getCurrency();
             this.loadingData=true;
-            this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','PB_CODE'],{cache:true})
+            this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','PB_CODE','PAYMENT_ITEM_NAME'],{cache:true})
                 .then(res=>{
                     res.forEach(v=>{
                         if(v.code==='QC_TYPE'){
@@ -1072,6 +1086,9 @@
                             this.weightOption=v.codes;
                         }else if(v.code==='PB_CODE'){
                             this.pbCodeOption=v.codes;
+                        }else if (v.code === 'PAYMENT_ITEM_NAME') {
+                            console.log(v.codes)
+                            this.paymentItem = v.codes
                         }
                     });
                     this.getQcOrderDetail();

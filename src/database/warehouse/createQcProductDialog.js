@@ -8,22 +8,15 @@ export default {
     id:{
         _hide:true
     },
-    skuInventoryStatusDictCode:{
-        // _hide:true
-    },
+    skuInventoryStatusDictCode:{},
     orderNo:{},
     skuBarCode:{},
     skuCode:{},
     inboundNo:{},
     skuNameEn:{},
-    skuNameCustomer:{},
-    skuNameCn:{},
-    skuMaterialCn:{},
     skuMaterialEn:{},
-    factorySkuCode:{},
     customerSkuCode:{},
     skuDescEn:{},
-    skuDescCn:{},
     skuBrand:{},
     innerCartonVolume:{},
 }

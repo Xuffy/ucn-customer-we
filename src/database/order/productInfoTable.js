@@ -4,10 +4,6 @@ export default {
         _title:'Remark',
         _fixed:'left'
     },
-    skuStatus:{
-        _slot:'skuStatus',
-        _fixed:'left'
-    },
     _remark:{
         _hide:true
     },
@@ -37,8 +33,36 @@ export default {
         key:'skuPictures',
         _upload: {
             readonly:true,
+        },
+        _fixed:'left'
+    },
+    skuStatus:{
+        _slot:'skuStatus',
+        _fixed:'left'
+    },
+    skuCode:{
+        _disabled:true
+    },
+    skuCustomerSkuCode:{
+        _rules:{
+            required:true
         }
     },
+    skuNameCustomer:{
+        _rules:{
+            required:true
+        }
+    },
+    skuDescCustomer:{
+        _rules:{
+            required:true
+        }
+    },
+
+
+
+
+
     skuNotes:{
         mustShowColumn:true,
         _upload:{
@@ -54,24 +78,6 @@ export default {
         _disabled:true
     },
     skuDescEn:{
-        _disabled:true
-    },
-    skuDescCustomer:{
-        _rules:{
-            required:true
-        }
-    },
-    skuNameCustomer:{
-        _rules:{
-            required:true
-        }
-    },
-    skuCustomerSkuCode:{
-        _rules:{
-            required:true
-        }
-    },
-    skuCode:{
         _disabled:true
     },
     skuSupplierName:{
