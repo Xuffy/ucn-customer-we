@@ -2,13 +2,11 @@ export default {
     id: {
         _hide:true
     },
+    skuCode:{},
+    customerSkuCode:{},
+    orderSkuQty:{},
     expectQcQty:{
         key:'expectQcQty',
-        showType:'number',
-        accuracy: 2
-    },
-    samplingRate:{
-        key:'samplingRate',
         showType:'number',
         accuracy: 2
     },
@@ -16,12 +14,20 @@ export default {
         key:'unqualifiedProcessingMode',
         showType:'input'
     },
+    samplingRate:{
+        key:'samplingRate',
+        showType:'number',
+        accuracy: 2
+    },
+    checkOuterCartons:{
+        fromService:true,
+        key: 'checkOuterCartonQty'
+    },
     skuQcResultDictCode:{
         showType:'qc'
     },
     skuInventoryStatusDictCode:{},
-    skuCode:{},
-    customerSkuCode:{},
+    
     // factorySkuCode:{},
     // skuNameCn:{},
     skuBrand:{},
@@ -34,11 +40,8 @@ export default {
         showType:'date'
     },
     skuUnitDictCode:{},
-    lengthUnitDictCode:{},
-    volumeUnitDictCode:{},
-    weightUnitDictCode:{},
+   
     inboundNo:{},
-    orderSkuQty:{},
     outerCartonTotalQty:{},
     skuLength:{},
     skuWidth:{},
@@ -179,12 +182,11 @@ export default {
     qcPic:{
         fromService:true
     },
-    checkOuterCartons:{
-        fromService:true,
-        key: 'checkOuterCartonQty'
-    },
+   
     remark:{
         fromService:true
     },
-
+    lengthUnitDictCode:{},
+    volumeUnitDictCode:{},
+    weightUnitDictCode:{},
 }
