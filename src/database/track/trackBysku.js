@@ -238,6 +238,7 @@ export default {
   },
   category: {
     key: 'skuCategoryName',
+    mustShowColumn: true,
     // _important:true,
   },
   categoryLevel1: {

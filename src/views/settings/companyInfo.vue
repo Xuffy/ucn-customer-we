@@ -395,7 +395,7 @@
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item  :label="$i.setting.mobileNumber +'：'" required>
+              <el-form-item  :label="$i.setting.mobileNumber +'：'">
                 <el-input size="mini" v-model="contactData.cellphone" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
               </el-form-item>
             </el-col>
@@ -691,7 +691,7 @@
           ...mapActions(['setMenuLink']),
             handleClick(tab, event) {
               switch(Number(tab.index)){
-                case 2:
+                case 3:
                   this.getDocument();
                   break;
                 case 5:
