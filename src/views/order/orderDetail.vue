@@ -1185,7 +1185,7 @@
         <v-message-board
                 v-if="chatParams"
                 :readonly="orderForm.status==='5'"
-                module="order"
+                module="ORDER"
                 code="detail"
                 :arguments="chatParams"
                 :id="$route.query.orderId"></v-message-board>
@@ -1576,6 +1576,16 @@
                     orderNo: this.$route.query.orderNo || this.$route.query.code
                 }).then(res => {
                     this.orderForm = res;
+                    this.chatParams={
+                        bizNo:res.quotationNo,
+                        dataAuthCode:'BIZ_ORDER',
+                        funcAuthCode:'',            //功能权限
+                        suppliers:[{
+                            userId:res.supplierUserId,
+                            companyId:res.supplierCompanyId,
+                            tenantId:res.supplierTenantId
+                        }]
+                    };
                     /**
                      * 高亮处理
                      * */
