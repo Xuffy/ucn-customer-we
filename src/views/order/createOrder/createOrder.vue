@@ -178,7 +178,6 @@
                 </el-col>
             </el-row>
         </el-form>
-
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -887,11 +886,11 @@
                         return;
                     }
                 }
-                let rightCode = true;
+                // let rightCode = true;
                 _.map(params.skuList, v => {
-                    if (v.skuSupplierCode !== params.supplierCode) {
-                        rightCode = false;
-                    }
+                    // if (v.skuSupplierCode !== params.supplierCode) {
+                    //     rightCode = false;8
+                    // }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     v.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory ? _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code : "";
                     let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
@@ -905,12 +904,12 @@
                     });
                 });
                 //如果选的产品和上面选的供应商不一致，要给出提示
-                if (!rightCode) {
-                    return this.$message({
-                        message: this.$i.order.supplierNotTheSame,
-                        type: "warning"
-                    });
-                }
+                // if (!rightCode) {
+                //     return this.$message({
+                //         message: this.$i.order.supplierNotTheSame,
+                //         type: "warning"
+                //     });
+                // }
                 params.attachments = this.$refs.upload[0].getFiles();
                 // return console.log(this.$depthClone(params.skuList),'data')
                 this.disableClickSend = true;
