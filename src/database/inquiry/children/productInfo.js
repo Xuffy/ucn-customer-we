@@ -87,6 +87,10 @@ export default {
     key: 'skuSupplierName',
     _disabled: true
   },
+  supplierAbbr: {
+    key: 'skuSupplierAbbr',
+    _disabled: true
+  },
   supplierNo: {
     key: 'skuSupplierCode',
     _disabled: true
@@ -154,6 +158,31 @@ export default {
     key: 'qty',
     type: 'Number',
     _toFixed: 1
+  },
+  totalAmount: {
+    key: 'totalAmount',
+    type: 'Number',
+    _disabled: true
+  },
+  totalCtn: {
+    key: 'totalCtn',
+    type: 'Number',
+    _disabled: true
+  },
+  totalVolume: {
+    key: 'totalVolume',
+    type: 'Number',
+    _disabled: true
+  },
+  totalNetWeight: {
+    key: 'totalNetWeight',
+    type: 'Number',
+    _disabled: true
+  },
+  totalGrossWeight: {
+    key: 'totalGrossWeight',
+    type: 'Number',
+    _disabled: true
   },
   restrictedSellingCountry: {
     key: 'skuNoneSellCountry',
@@ -411,11 +440,6 @@ export default {
     type: 'String',
     max: 45
   },
-  unitOfInnerCarton: {
-    key: 'skuInnerCartonUnit',
-    type: 'String',
-    max: 45
-  },
   skuQuantityOfInnerCarton: {
     key: 'skuInnerCartonQty',
     type: 'Number',
@@ -472,11 +496,6 @@ export default {
     key: 'skuInnerCartonMethodEn',
     type: 'String',
     max: 45
-  },
-  unitOfOuterCarton: {
-    key: 'skuOuterCartonUnit',
-    type: 'String',
-    max: 20
   },
   descriptionOfOuterCarton: {
     key: 'skuOuterCartonDesc',
@@ -542,6 +561,11 @@ export default {
     type: 'Select',
     transForm: 'OEM_IS'
   },
+  oemQty: {
+    key: 'skuOemQty',
+    type: 'Number',
+    _toFixed: 1
+  },
   gp20SkuQuantity: {
     key: 'skuGp20SkuQty',
     type: 'Number',
@@ -574,34 +598,6 @@ export default {
     type: 'String',
     max: 100
   },
-  inventoryCostCalculationMethod: {
-    key: 'skuInventoryCostMethod',
-    type: 'String',
-    max: 100
-  },
-  defaultWarehouse: {
-    key: 'skuWarehourceDefault',
-    type: 'String',
-    max: 100
-  },
-  supplierInventoryQuantity: {
-    key: 'skuInventory',
-    type: 'Number',
-    min: 0,
-    _total: true,
-    _toFixed: 1
-  },
-  supplierSafeInventoryQuantity: {
-    key: 'skuSafeInventory',
-    type: 'Number',
-    _total: true,
-    _toFixed: 1
-  },
-  supplierMinimumInventory: {
-    key: 'skuMinInventory',
-    type: 'Number',
-    _total: true
-  },
   mainsaleCountry: {
     key: 'skuMainSaleCountry',
     type: 'Select',
@@ -610,10 +606,6 @@ export default {
   mainsalearea: {
     key: 'skuMainSaleArea',
     type: 'String'
-  },
-  prductiondays: {
-    key: 'skuProductionDates',
-    type: 'Number'
   },
   qualityStander: {
     key: 'skuQualityStander',

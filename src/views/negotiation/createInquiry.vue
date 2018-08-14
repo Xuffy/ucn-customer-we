@@ -12,7 +12,7 @@
             :sm="item.sm || 8"
             :md="item.md || 8"
             :lg="item.lg || 8"
-            v-if="!item._inquiryHide && !item._hide">
+            v-if="item._form && !item._hide">
             <el-form-item
               :label="item.label"
               :prop="item.key"

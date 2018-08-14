@@ -26,7 +26,7 @@
             </div>
         </div>
         <v-table
-            :code="compareBy === 0 ? 'inquiry_list' : 'inquiry'"
+            :code="compareBy === 0 ? 'VIEW_BY_INQUIRY' : 'VIEW_BY_SKU'"
             :height="455"
             :data="tabData"
             :loading="tabLoad"

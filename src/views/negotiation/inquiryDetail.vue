@@ -32,7 +32,7 @@
             </div>
           </div>
           <v-table
-              code="inquiry"
+              code="INQUIRY_SKU_DETAIL"
               hide-filter-value
               :data.sync="newProductTabData"
               :buttons="productInfoBtn"
@@ -89,7 +89,7 @@
             </el-tab-pane>
         </el-tabs>
     </el-dialog>
-    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" @change="computePrice" ref="HM"></v-history-modify>
+    <v-history-modify :code="idType === 'basicInfo' ? 'VIEW_BY_INQUIRY' : 'INQUIRY_SKU_DETAIL'" @save="save" @change="computePrice" ref="HM"></v-history-modify>
     <v-message-board v-if="chatParams" v-authorize="'INQUIRY:DETAIL:MESSAGE_BOARD'" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>

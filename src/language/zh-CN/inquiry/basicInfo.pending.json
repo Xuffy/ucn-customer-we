@@ -3,6 +3,7 @@
   "InquiryNo": "询价单号",
   "quotationNo": "报价单号",
   "createTime": "创建时间",
+  "periodOfValidity": "报价有效期",
   "inquiryStatus": "状态",
   "transportationWay": "运输方式",
   "payment": "付款方式",
