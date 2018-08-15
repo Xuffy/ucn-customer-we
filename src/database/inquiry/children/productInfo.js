@@ -72,7 +72,7 @@ export default {
   skuDescriptionInCustomerLanguage: {
     key: 'skuDescCustomer'
   },
-  customerSkuCode: {
+  skuCustomerSkuCode: {
     key: 'skuCustomerSkuCode'
   },
   supplierName: {
@@ -94,7 +94,8 @@ export default {
   },
   productFormation: {
     key: 'skuFormation',
-    type: 'String'
+    type: 'Select',
+    transForm: 'SKU_FORMATION'
   },
   martialEn: {
     key: 'skuMaterialEn',
@@ -595,6 +596,26 @@ export default {
     key: 'skuAdjustPackage',
     type: 'Select',
     transForm: 'SKU_PG_IS'
+  },
+  additionalPicture1: {
+    _image: true,
+    _sort: false,
+    _upload: true
+  },
+  additionalPicture2: {
+    _image: true,
+    _sort: false,
+    _upload: true
+  },
+  additionalPicture3: {
+    _image: true,
+    _sort: false,
+    _upload: true
+  },
+  additionalPicture4: {
+    _image: true,
+    _sort: false,
+    _upload: true
   },
   fieldDisplay: {
     _hide: true

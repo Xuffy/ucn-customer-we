@@ -282,6 +282,8 @@ export default {
       this.optionData.exportLicense = codeUtils.findCodes(this, 'EL_IS');
 
       this.optionData.currency = codeUtils.findCodes(this, 'CY_UNIT');
+      this.optionData.oem = _.findWhere(res[0], {'code': 'OEM_IS'}).codes;
+      this.optionData.formation = _.findWhere(res[0], {'code': 'SKU_FORMATION'}).codes;
 
       this.optionData.destinationCountry = codeUtils.findCodes(this, 'COUNTRY');
       this.optionData.departureCountry = codeUtils.findCodes(this, 'COUNTRY');
@@ -289,26 +291,6 @@ export default {
   },
   methods: {
     ...mapActions(['setMenuLink']),
-    getBaseData() {
-      let getCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN', 'OEM_IS'], {cache: true});
-      let getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL);
-      let getCountries = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
-
-      Promise.all([getCodes, getCurrencies, getCountries]).then(res => {
-        this.optionData.paymentMethod = _.findWhere(res[0], {'code': 'PMT'}).codes;
-        this.optionData.transport = _.findWhere(res[0], {'code': 'MD_TN'}).codes;
-        this.optionData.incoterm = _.findWhere(res[0], {'code': 'ITM'}).codes;
-        this.optionData.exportLicense = _.map(_.findWhere(res[0], {'code': 'EL_IS'}).codes, item => {
-          item.code = Number(item.code);
-          return item;
-        });
-
-        this.optionData.currency = res[1];
-
-        this.optionData.destinationCountry = res[2];
-        this.optionData.departureCountry = res[2];
-      });
-    },
     getSuppliers(name) {
       return this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME + '?name=' + name).then(res => {
         this.optionData.supplierName = res;
