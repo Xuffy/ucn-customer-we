@@ -23,6 +23,9 @@ export default {
   skuCode: { // 产品编码 系统带入：inquiry中的sku 编码
 
   },
+  skuCustomerSkuCode: { // 客户货号
+
+  },
   skuNameEN: { // 系统带入：inquiry中的sku 名称 产品英文品名
     key: 'skuNameEn'
   },
@@ -82,6 +85,75 @@ export default {
   },
   skuRefDduPrice: { // DDU参考价格
     _toFixed: 4
+  },
+  minimumOrderQuantity: {
+    key: 'skuMinOrderQty',
+    type: 'Number',
+    _toFixed: 1
+  },
+  deliveryDays: {
+    key: 'skuDeliveryDates',
+    type: 'Number'
+  },
+  useDisplayBoxOrNot: {
+    key: 'skuUseDisplayBox',
+    type: 'Select',
+    transForm: 'UDB_IS'
+  },
+  skuQuantityInDisplayBox: {
+    key: 'skuDisplayBoxQty',
+    type: 'Number',
+    _toFixed: 1
+  },
+  specialTransportRequirements: {
+    key: 'skuSpecialTransportRequire'
+  },
+  packingMethodCn: {
+    key: 'skuMethodPkgCn'
+  },
+  packingMethodEn: {
+    key: 'skuMethodPkgEn'
+  },
+  skuQuantityOfInnerCarton: {
+    key: 'skuInnerCartonQty',
+    type: 'Number',
+    _toFixed: 1
+  },
+  packingMethodOfInnerCartonCn: {
+    key: 'skuInnerCartonMethodCn',
+    type: 'String',
+  },
+  packingMethodOfInnerCartonEn: {
+    key: 'skuInnerCartonMethodEn',
+    type: 'String',
+  },
+  skuQuantityOfOuterCarton: {
+    key: 'skuOuterCartonQty'
+  },
+  netWeightOfOuterCarton: {
+    key: 'skuOuterCartonNetWeight'
+  },
+  grossWeightOfOuterCarton: {
+    key: 'skuOuterCartonRoughWeight'
+  },
+  volumeOfOuterCarton: {
+    key: 'skuOuterCartonVolume'
+  },
+  packingMethodOfOuterCartonCn: {
+    key: 'skuOuterCartonMethodCn'
+  },
+  packingMethodOfOuterCartonEn: {
+    key: 'skuOuterCartonMethodEn'
+  },
+  oem: {
+    key: 'skuOem',
+    type: 'Select',
+    transForm: 'OEM_IS'
+  },
+  oemQty: {
+    key: 'skuOemQty',
+    type: 'Number',
+    _toFixed: 1
   },
   currency: { // 币种 系统带入：当前inquiry选的币种
     transForm: 'CY_UNIT'

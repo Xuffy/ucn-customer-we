@@ -57,6 +57,9 @@ export default {
     key: 'totalGrossWeight',
     type: 'Number'
   },
+  skuCustomerSkuCode: { // 客户货号
+
+  },
   skuFobCurrency: { // FOB币种
     transForm: 'CY_UNIT'
   },

@@ -58,14 +58,6 @@ export default {
     key: 'skuCode',
     _disabled: true
   },
-  skuNameCn: {
-    key: 'skuNameCn',
-    _disabled: true
-  },
-  skuDescriptionCn: {
-    key: 'skuDescCn',
-    _disabled: true
-  },
   skuNameEn: {
     key: 'skuNameEn',
     _disabled: true
@@ -108,16 +100,8 @@ export default {
     key: 'skuMaterialEn',
     type: 'String'
   },
-  martialCn: {
-    key: 'skuMaterialCn',
-    type: 'String'
-  },
   colourEn: {
     key: 'skuColourEn',
-    type: 'String'
-  },
-  colourCn: {
-    key: 'skuColourCn',
     type: 'String'
   },
   minimumOrderQuantity: {
@@ -131,7 +115,15 @@ export default {
   },
   productDesign: {
     key: 'skuDesign',
-    type: 'String'
+    width: '150px',
+    type: 'attachment',
+    xs: 24,
+    sm: 24,
+    md: 24,
+    lg: 24,
+    _upload: {
+      ref: 'skuDesign'
+    }
   },
   category: {
     key: 'skuCategoryId',
@@ -206,8 +198,15 @@ export default {
   },
   explain: {
     key: 'skuComments',
-    type: 'String',
-    max: 300
+    width: '150px',
+    type: 'attachment',
+    xs: 24,
+    sm: 24,
+    md: 24,
+    lg: 24,
+    _upload: {
+      ref: 'skuComments'
+    }
   },
   fobCurrency: {
     key: 'skuFobCurrency',
@@ -310,14 +309,6 @@ export default {
     key: 'skuDduArea',
     type: 'String'
   },
-  rateOfValueAddedTax: {
-    key: 'skuRateValueAddedTax',
-    type: 'Number',
-    unit: '%',
-    max: 100,
-    min: 0,
-    _toFixed: 2
-  },
   taxRefundRate: {
     key: 'skuTaxRefundRate',
     type: 'Number',
@@ -330,42 +321,21 @@ export default {
     key: 'skuCustomsCode',
     type: 'String'
   },
-  customsDeclarationNameCn: {
-    key: 'skuCustomsNameCn',
-    type: 'String',
-    max: 100
-  },
   customsDeclarationNameEn: {
     key: 'skuCustomsNameEn',
     type: 'String',
     max: 100
   },
-  chineseTradeMark: {
-    key: 'skuTradeMarkCn',
-    type: 'String'
-  },
   englishTradeMark: {
     key: 'skuTradeMarkEn',
-    type: 'String'
-  },
-  commodityInspectionChineseName: {
-    key: 'skuCommodityInspectionCn',
     type: 'String'
   },
   commodityInspectionEnglishName: {
     key: 'skuCommodityInspectionEn',
     type: 'String'
   },
-  declareElements: {
-    key: 'skuDeclareElement',
-    type: 'String'
-  },
   origin: {
     key: 'skuOrigin',
-    type: 'String'
-  },
-  inspectionAndQuarantineCategory: {
-    key: 'skuInspectQuarantineCategory',
     type: 'String'
   },
   brand: {
@@ -430,11 +400,6 @@ export default {
     _total: true,
     _toFixed: 6
   },
-  packingMethodCn: {
-    key: 'skuMethodPkgCn',
-    type: 'String',
-    max: 45
-  },
   packingMethodEn: {
     key: 'skuMethodPkgEn',
     type: 'String',
@@ -486,11 +451,6 @@ export default {
     key: 'skuInnerCartonDesc',
     type: 'String',
     max: 100
-  },
-  packingMethodOfInnerCartonCn: {
-    key: 'skuInnerCartonMethodCn',
-    type: 'String',
-    max: 30
   },
   packingMethodOfInnerCartonEn: {
     key: 'skuInnerCartonMethodEn',
@@ -547,10 +507,6 @@ export default {
     type: 'Number',
     _total: true,
     _toFixed: 3
-  },
-  packingMethodOfOuterCartonCn: {
-    key: 'skuOuterCartonMethodCn',
-    max: 45
   },
   packingMethodOfOuterCartonEn: {
     key: 'skuOuterCartonMethodEn',
@@ -629,10 +585,6 @@ export default {
   lengthBreadthAndHeightOfDisplayBox: {
     key: 'skuLengthWidthHeight',
     type: 'Number'
-  },
-  otherPackingInformationCn: {
-    key: 'skuOtherPackInfoCn',
-    type: 'String'
   },
   otherPackingInformationEn: {
     key: 'skuOtherPackInfoEn',

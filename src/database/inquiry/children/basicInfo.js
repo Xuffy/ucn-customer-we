@@ -16,27 +16,27 @@ export default {
     _hide: true
   },
   totalQty: {
-    _hide: true,
+    type: 'Number',
     _toFixed: 1
   },
   totalCtn: {
-    _hide: true,
+    type: 'Number',
     _toFixed: 1
   },
   totalAmount: {
-    _hide: true,
+    type: 'Number',
     _toFixed: 2
   },
   totalVolume: {
-    _hide: true,
+    type: 'Number',
     _toFixed: 3
   },
   totalNetWeight: {
-    _hide: true,
+    type: 'Number',
     _toFixed: 3
   },
   totalGrossWeight: {
-    _hide: true,
+    type: 'Number',
     _toFixed: 3
   },
   timeZone: {

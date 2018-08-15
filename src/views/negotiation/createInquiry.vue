@@ -290,7 +290,7 @@ export default {
   methods: {
     ...mapActions(['setMenuLink']),
     getBaseData() {
-      let getCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], {cache: true});
+      let getCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN', 'OEM_IS'], {cache: true});
       let getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL);
       let getCountries = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
 
