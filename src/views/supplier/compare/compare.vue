@@ -87,17 +87,21 @@
                   v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">{{$i.product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.params.type==='modify'">
+              <div v-if="isModify">
                 <el-button
-                  v-if="isModify"
                   :disabled="allowBottomClick"
                   :loading="disableClickSaveModify"
                   type="primary"
                   @click='saveModifyCompare'
                   v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">{{$i.common.save}}</el-button>
-                  <el-button
-                    v-if="isModify"
-                    :disabled="allowBottomClick"
-                    @click="cancelModify" >{{$i.common.cancel}}</el-button>
+                <el-button
+                  :disabled="allowBottomClick"
+                  @click="cancelModify" >{{$i.common.cancel}}</el-button>
+              </div>
+              <div v-else>
+                <el-button @click="deleteCompare" type="danger">{{$i.common.archive}}</el-button>
+              </div>
+
             </div>
         </div>
 

@@ -65,9 +65,6 @@ export default {
     outerCartonNetWeight:{},
     outerCartonRoughWeight:{},
     outerCartonVolume:{},
-    descCn:{
-        _sort:false
-    },
     nameCustomer:{},
     descCustomer:{
         _sort:false
@@ -91,7 +88,8 @@ export default {
     designs:{
         _upload:{
             readonly:true
-        }
+        },
+        mustShowColumn:true,
     },
     notes:{
         mustShowColumn:true,
