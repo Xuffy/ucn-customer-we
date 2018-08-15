@@ -41,11 +41,13 @@
                 :height="500"
                 @filter-value="onFilterValue"
                 @change-sort="sort"
+                @change-checked='checked'
                 >
                   <template slot="header">
                     <div style="overflow: hidden">
                       <el-button style="float: left" @click="downloadPayment" v-authorize="'PAYMENT:DOWNLOAD'">
                         {{$i.common.download}}
+                        ({{selectedData.length===0?$i.common.all:selectedData.length}})
                       </el-button>
                       <div class="Date">
                         <span class="text1" >{{$i.payment.orderCreateDate}} : </span>
@@ -151,6 +153,7 @@
                 tableDataList:[],
                 totalRow: [],
                 currency:[],
+                selectedData:[],
                 moduleCode:''
             }
         },
@@ -188,6 +191,10 @@
             pageSizeChange(val) {
                 this.params.ps = val;
                 this.getList();
+            },
+            //.........checked
+            checked(item) {
+              this.selectedData = item
             },
             getList(){
               this.tabLoad = true;
@@ -348,15 +355,21 @@
             this.getList();
           },
           downloadPayment(){
-              let params=this.$depthClone(this.params);
-              this.$fetch.export_task('EXPORT_LEDGER',params);
+              let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
+              if(ids.length>0){
+                this.$fetch.export_task('EXPORT_LEDGER',{ids:ids});
+              }else{
+                let params=this.$depthClone(this.params);
+                this.$fetch.export_task('EXPORT_LEDGER',params);
+              }
+
           },
 
         },
         mounted(){
           this.setMenuLink({
               path: '/logs',
-              query: {code: 'PAYMENT'},
+              query: {code: 'PAYMENT',bizCode:'PAYMENT'},
               type: 100,
               label: this.$i.common.log,
               auth: 'PAYMENT:LOG'
