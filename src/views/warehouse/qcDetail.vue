@@ -602,7 +602,6 @@
                         if(e.skuQcResultDictCode.value==='WAIT_FOR_QC'){
                             e._disabled=true;
                         }
-                        console.log(e.skuBarCodeResultDictCode)
                         e.deliveryDate.value=this.$dateFormat(e.deliveryDate.value,'yyyy-mm-dd');
                         e.skuUnitDictCode.value=e.skuUnitDictCode.value?(_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name:'';
                         e.volumeUnitDictCode.value=e.volumeUnitDictCode.value?(_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name:'';

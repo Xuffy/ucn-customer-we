@@ -82,8 +82,12 @@ export default{
         key: 'inboundNo',
         type: 'String'
     },
-    
-   
+    innerCartonMark:{
+        key:'innerCartonMark'
+    },
+    innerCartonMarkResultDictCode:{
+        key:'innerCartonMarkResultDictCode'
+    },
     samplingRate: {
         key: 'samplingRate',
         type: 'String'
