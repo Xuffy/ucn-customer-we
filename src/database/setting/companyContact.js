@@ -38,12 +38,12 @@ export default {
     skype: {
       key: 'skype',
     },
-    qq: {
-      key: 'qq',
-      _rules:{
-        type:'Number',
-      }
-    },
+    // qq: {
+    //   key: 'qq',
+    //   _rules:{
+    //     type:'Number',
+    //   }
+    // },
     id:{
       key: 'id',
       _hide:true,
