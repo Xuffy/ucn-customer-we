@@ -3,6 +3,7 @@
   "InquiryNo": "Inquiry No.",
   "quotationNo": "Quotation No.",
   "createTime": "Create time",
+  "periodOfValidity": "Validity period for offering",
   "inquiryStatus": "Inquiry status",
   "transportationWay": "Transportation way",
   "payment": "Payment",

@@ -36,7 +36,7 @@
             </div>
         </div>
         <v-table
-            :code="viewByStatus ? 'inquiry': 'inquiry_list'"
+            :code="viewByStatus ? 'VIEW_BY_SKU': 'VIEW_BY_INQUIRY'"
             hide-filter-value
             :data="tabData"
             :buttons="actionBtns"
@@ -133,7 +133,7 @@ export default {
       this.gettabData();
     },
     getBaseData() {
-      const postCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM'], { cache: true });
+      const postCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM', 'OEM_IS'], { cache: true });
       const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: false});
       return this.$ajax.all([postCodes, getCurrencies]).then(res => {
         let data = res[0];

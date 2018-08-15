@@ -7,11 +7,11 @@ import productInfo from './children/productInfo';
 import compare from './children/compare';
 
 export default {
-    overoiewState,
-    viewByInqury,
-    viewBySKU,
-    overviewBySKU,
-    basicInfo,
-    productInfo,
-    compare
-}
+  overoiewState,
+  viewByInqury,
+  viewBySKU,
+  overviewBySKU,
+  basicInfo,
+  productInfo,
+  compare
+};

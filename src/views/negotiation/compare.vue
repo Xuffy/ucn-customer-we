@@ -26,7 +26,7 @@
             </div>
         </div>
         <v-table
-            :code="compareBy === 0 ? 'inquiry_list' : 'inquiry'"
+            :code="compareBy === 0 ? 'VIEW_BY_INQUIRY' : 'VIEW_BY_SKU'"
             :height="455"
             :data="tabData"
             :loading="tabLoad"
@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       addNewTitle: null,
-      dirCodes: ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'],
+      dirCodes: ['INQUIRY_STATUS', 'CY_UNIT', 'ITM', 'OEM_IS'],
       addInquiryIds: null,
       pageTotal: 0,
       showAddListDialog: false,
@@ -120,7 +120,7 @@ export default {
   methods: {
     ...mapActions(['setMenuLink', 'setDic']),
     getData() {
-      let column = this.compareBy === 0 ? this.$db.inquiry.viewByInqury : this.$db.inquiry.viewBySKU;
+      let column = this.compareBy === 0 ? this.$db.inquiry.viewByInqury : this.$db.inquiry.overviewBySKU;
       this.getListByIds().then(this.getCompareList).then(datas => {
         if (!datas) return;
         this.bakData = this.$getDB(column, datas, item => this.$filterDic(item));

@@ -37,6 +37,29 @@ export default {
     key: 'skuQty',
     type: 'Number'
   },
+  totalAmount: {
+    key: 'totalAmount',
+    type: 'Number'
+  },
+  totalCtn: {
+    key: 'totalCtn',
+    type: 'Number'
+  },
+  totalVolume: {
+    key: 'totalVolume',
+    type: 'Number'
+  },
+  totalNetWeight: {
+    key: 'totalNetWeight',
+    type: 'Number'
+  },
+  totalGrossWeight: {
+    key: 'totalGrossWeight',
+    type: 'Number'
+  },
+  skuCustomerSkuCode: { // 客户货号
+
+  },
   skuFobCurrency: { // FOB币种
     transForm: 'CY_UNIT'
   },

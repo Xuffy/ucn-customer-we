@@ -21,7 +21,7 @@
             </div>
         </div>
         <v-table
-            :code="postParams.viewType === 0 ? 'inquiry_list' : 'inquiry_sku_list'"
+            :code="postParams.viewType === 0 ? 'VIEW_BY_INQUIRY' : 'VIEW_BY_SKU'"
             :data="tabData"
             :loading="tabLoad"
             :buttons="[{label: 'Detail', type: 'detail'}]"
