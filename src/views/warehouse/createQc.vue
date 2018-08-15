@@ -309,7 +309,8 @@
                 :data="productDialogTableData"
                 :buttons="[{label: $i.warehouse.detail, type: 1}]"
                 @action="btnClick"
-                @change-checked="changeProductDialogChecked">
+                @change-checked="changeProductDialogChecked"
+                @change-sort="val=>{getDialogProductData(val)}">
             </v-table>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">{{ $i.warehouse.add }}</el-button>
@@ -628,7 +629,8 @@
             /**
              * 弹出框事件
              * */
-            getDialogProductData(){
+            getDialogProductData(e){
+                Object.assign(this.productDialogConfig, e)
                 this.loadingProductDialogTable = true;
                 this.$ajax.post(this.$apis.get_qcProductData, this.productDialogConfig).then(res => {
                     this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res, e => {

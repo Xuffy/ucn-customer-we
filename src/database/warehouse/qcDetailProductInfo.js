@@ -59,8 +59,12 @@ export default{
         key: 'skuDesign',
         type: 'String'
     },
-    skuInnerCartonMethodEn: {},
-    skuMethodPkgEn: {},
+    skuInnerCartonMethodEn: {
+        _sort:false,
+    },
+    skuMethodPkgEn: {
+        _sort:false,
+    },
     // packingMethodCn: {
     //     key: 'packingMethodCn',
     //     type: 'String'
