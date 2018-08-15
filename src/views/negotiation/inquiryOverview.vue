@@ -133,7 +133,7 @@ export default {
       this.gettabData();
     },
     getBaseData() {
-      const postCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM', 'OEM_IS'], { cache: true });
+      const postCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM', 'OEM_IS', 'SKU_FORMATION'], { cache: true });
       const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: false});
       return this.$ajax.all([postCodes, getCurrencies]).then(res => {
         let data = res[0];

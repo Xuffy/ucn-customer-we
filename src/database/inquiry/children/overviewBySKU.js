@@ -24,7 +24,7 @@ export default {
 
   },
   skuCustomerSkuCode: { // 客户货号
-
+    key: 'skuCustomerSkuCode'
   },
   skuNameEN: { // 系统带入：inquiry中的sku 名称 产品英文品名
     key: 'skuNameEn'
@@ -154,6 +154,34 @@ export default {
     key: 'skuOemQty',
     type: 'Number',
     _toFixed: 1
+  },
+  additionalPicture1: {
+    _image: true,
+    _sort: false,
+    _upload: {
+      readonly: true
+    }
+  },
+  additionalPicture2: {
+    _image: true,
+    _sort: false,
+    _upload: {
+      readonly: true
+    }
+  },
+  additionalPicture3: {
+    _image: true,
+    _sort: false,
+    _upload: {
+      readonly: true
+    }
+  },
+  additionalPicture4: {
+    _image: true,
+    _sort: false,
+    _upload: {
+      readonly: true
+    }
   },
   currency: { // 币种 系统带入：当前inquiry选的币种
     transForm: 'CY_UNIT'
