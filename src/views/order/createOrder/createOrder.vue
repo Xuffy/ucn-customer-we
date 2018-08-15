@@ -1105,6 +1105,34 @@
                 this.supplierNo = _.findWhere(this.supplierOption, { id: data }).code;
             },
             handleChangeIncoterm(key) {
+
+                let incoterm,
+                    totalPrice=['skuFobCurrency','skuFobPort','skuFobPrice','skuExwCurrency','skuExwPrice','skuCifPrice','skuCifCurrency','skuCifPort','skuDduCurrency','skuDduPort','skuDduPrice'],
+                    fob=['skuFobCurrency','skuFobPort','skuFobPrice'],
+                    exw=['skuExwCurrency','skuExwPrice'],
+                    cif=['skuCifPrice','skuCifCurrency','skuCifPort'],
+                    ddu=['skuDduCurrency','skuDduPort','skuDduPrice'];
+                if(this.orderForm[key]==='1'){
+                    incoterm=fob;
+                }else if(this.orderForm[key]==='2'){
+                    incoterm=exw;
+                }else if(this.orderForm[key]==='3'){
+                    incoterm=cif;
+                }else if(this.orderForm[key]==='4'){
+                    incoterm=ddu;
+                }
+                console.log(incoterm,'incoterm')
+                _.map(totalPrice,v=>{
+                    // this.$db.order.productInfoTableCreate[v]
+                });
+
+
+                _.map(this.$db.order.productInfoTableCreate,v=>{
+
+                })
+
+
+
                 _.map(this.productTableData, item => {
                     if (!item._remark) {
                         if (this.orderForm[key] === "1") {
