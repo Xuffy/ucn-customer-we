@@ -11,18 +11,18 @@
       <tr v-if="listData[0].bookingDate">
         <td>{{$i.logistic.Booking}}</td>
         <td>--</td>
-        <td>
+        <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('bookingDate')}">
           <span v-if="!edit">{{$dateFormat(listData[0].bookingDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker @change="modifyTime(listData[0].bookingDate.value,listData[0].bookingDate._key)" v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].bookingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('bookingDate')}" @change="modifyTime(listData[0].bookingDate.value,listData[0].bookingDate._key)" v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].bookingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
       </tr>
       <tr v-if="listData[0].actContainerStuffingDate">
         <td>{{$i.logistic.Loading}}</td>
-        <td>
+        <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('estContainerStuffingDate')}">
           <span v-if="!edit">{{$dateFormat(listData[0].estContainerStuffingDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].estContainerStuffingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" @change="modifyTime(false,listData[0].estContainerStuffingDate._key)" format="yyyy-MM-dd" v-model="listData[0].estContainerStuffingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
-        <td>
+        <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('actContainerStuffingDate')}">
           <span v-if="!edit">{{$dateFormat(listData[0].actContainerStuffingDate.value, 'yyyy-mm-dd')}}</span>
           <el-date-picker :picker-options="LoadingTimeOptions" v-else @change="modifyTime(listData[0].actContainerStuffingDate.value,listData[0].actContainerStuffingDate._key)" format="yyyy-MM-dd" v-model="listData[0].actContainerStuffingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
@@ -32,20 +32,20 @@
         <td>
           --
         </td>
-        <td>
+        <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('declareDate')}">
           <span v-if="!edit">{{$dateFormat(listData[0].declareDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker :picker-options="cleanceTimeOptions" v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].declareDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker :picker-options="cleanceTimeOptions" @change="modifyTime(false,listData[0].declareDate._key)" v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].declareDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
       </tr>
       <tr v-if="listData[0].estDepartureDate">
         <td>{{$i.logistic.shipped}}</td>
-        <td>
+        <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('estDepartureDate')}">
           <span v-if="!edit">{{$dateFormat(listData[0].estDepartureDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].estDepartureDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" @change="modifyTime(false,listData[0].estDepartureDate._key)" format="yyyy-MM-dd" v-model="listData[0].estDepartureDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
-        <td>
+        <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('actDepartureDate')}">
           <span v-if="!edit||pageTypeCurr!='loadingListDetail'||pageTypeCurr!='placeLogisticPlan'">{{$dateFormat(listData[0].actDepartureDate.value, 'yyyy-mm-dd') || '--' }}</span>
-          <el-date-picker v-else format="yyyy-MM-dd" v-model="listData[0].actDepartureDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker v-else format="yyyy-MM-dd" v-model="listData[0].actDepartureDate.value" @change="modifyTime(false,listData[0].actDepartureDate.value)" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
       </tr>
       <tr v-if="listData[0].estCustomsCleanceDate">
@@ -53,7 +53,7 @@
         <td>
           --
         </td>
-        <td>
+        <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('actCustomsCleanceDate')}">
           <span v-if="!edit">{{$dateFormat(listData[0].actCustomsCleanceDate.value, 'yyyy-mm-dd')}}</span>
           <el-date-picker v-else @change="modifyTime(listData[0].actCustomsCleanceDate.value,listData[0].actCustomsCleanceDate._key)" format="yyyy-MM-dd" v-model="listData[0].actCustomsCleanceDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
@@ -63,20 +63,20 @@
         <td>
           --
         </td>
-        <td>
+        <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('actReleaseDate')}">
           <span v-if="!edit">{{$dateFormat(listData[0].actReleaseDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker v-else format="yyyy-MM-dd" v-model="listData[0].actReleaseDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker v-else format="yyyy-MM-dd" @change="modifyTime(false,listData[0].actReleaseDate._key)" v-model="listData[0].actReleaseDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
       </tr>
       <tr v-if="listData[0].estArrivalDate">
         <td>{{$i.logistic.arrival}}</td>
-        <td>
+        <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('estArrivalDate')}">
           <span v-if="!edit">{{$dateFormat(listData[0].estArrivalDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].estArrivalDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" @change="modifyTime(false,listData[0].estArrivalDate.value)" format="yyyy-MM-dd" v-model="listData[0].estArrivalDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
-        <td>
+        <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('actArrivalDate')}">
           <span v-if="!edit||pageTypeCurr!='loadingListDetail'||pageTypeCurr!='placeLogisticPlan'">{{$dateFormat(listData[0].actArrivalDate.value, 'yyyy-mm-dd') || '--'}}</span>
-          <el-date-picker v-else format="yyyy-MM-dd" :picker-options="arrivalTimeOptions" v-model="listData[0].actArrivalDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker v-else format="yyyy-MM-dd" :picker-options="arrivalTimeOptions" @change="modifyTime(false,listData[0].actArrivalDate.value)" v-model="listData[0].actArrivalDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
       </tr>
 		</table>
@@ -90,6 +90,7 @@
         BookingTime:'',
         LoadingTime:'',
         cleanceTime:'',
+        hightLightModify:{},
         LoadingTimeOptions: {
           disabledDate:(time)=> {
             return time.getTime() <= this.listData[0].bookingDate.value;
@@ -109,6 +110,7 @@
     },
     props: {
       title: String,
+      fieldDisplay:Object,
       listData: Array,
       basicInfoArr: Array,
       edit:Boolean,
@@ -126,26 +128,30 @@
         return ((new Date(d1.replace(/-/g,"\/"))) - (new Date(d2.replace(/-/g,"\/"))));
       },
       modifyTime(arg,key){
-        let _shipmentStatus = this.basicInfoArr.length ? this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value : 0;
-        this.BookingTime = this.listData[0].bookingDate.value&&this.$dateFormat(new Date(this.listData[0].bookingDate.value),'yyyy-mm-dd');
-        this.LoadingTime = this.listData[0].actContainerStuffingDate.value&&this.$dateFormat(new Date(this.listData[0].actContainerStuffingDate.value),'yyyy-mm-dd');
-        this.cleanceTime = this.listData[0].actCustomsCleanceDate.value&&this.$dateFormat(new Date(this.listData[0].actCustomsCleanceDate.value),'yyyy-mm-dd');
-        let currTime = this.$dateFormat(new Date(),'yyyy-mm-dd');
-        let status = 0;
-        if(_shipmentStatus!=6){
-          // let shipmentStatusCode = this.selectArr.shipmentStatus.find(el=> el.name == key).code;
-          if(this.BookingTime&&this.CompareDate(this.BookingTime,currTime)<=0&&[0].includes(this.shipmentStatus)){
-            status=1;
-          }
-          if(this.LoadingTime&&this.CompareDate(this.LoadingTime,currTime)<=0&&[0,1,2,3].includes(this.shipmentStatus)){
-            status=4;
-          }
-          if(this.cleanceTime&&this.CompareDate(this.cleanceTime,currTime)<=0&&[0,1,2,3,4].includes(this.shipmentStatus)){
-            status=5;
+        //因为有些 日期不需要出发 业务逻辑  所以多加一个参数 区别
+        this.$set(this.hightLightModify,key,arg);
+        this.$emit('hightLightModifyFun',this.hightLightModify,this.name);
+        if(arg){
+          let _shipmentStatus = this.basicInfoArr.length ? this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value : 0;
+          this.BookingTime = this.listData[0].bookingDate.value&&this.$dateFormat(new Date(this.listData[0].bookingDate.value),'yyyy-mm-dd');
+          this.LoadingTime = this.listData[0].actContainerStuffingDate.value&&this.$dateFormat(new Date(this.listData[0].actContainerStuffingDate.value),'yyyy-mm-dd');
+          this.cleanceTime = this.listData[0].actCustomsCleanceDate.value&&this.$dateFormat(new Date(this.listData[0].actCustomsCleanceDate.value),'yyyy-mm-dd');
+          let currTime = this.$dateFormat(new Date(),'yyyy-mm-dd');
+          let status = this.$depthClone(this.shipmentStatus || 0);
+          if(_shipmentStatus!=6){
+            if(this.BookingTime&&this.CompareDate(this.BookingTime,currTime)<=0&&[0].includes(this.shipmentStatus)){
+              status=1;
+            }
+            if(this.LoadingTime&&this.CompareDate(this.LoadingTime,currTime)<=0&&[0,1,2,3].includes(this.shipmentStatus)){
+              status=4;
+            }
+            if(this.cleanceTime&&this.CompareDate(this.cleanceTime,currTime)<=0&&[0,1,2,3,4].includes(this.shipmentStatus)){
+              status=5;
+            }
           }
           this.changeShipmentStatusOption(status);
+          this.$emit('modifyTime',{BookingTime:this.BookingTime,LoadingTime:this.LoadingTime,cleanceTime:this.cleanceTime});
         }
-        this.$emit('modifyTime',{BookingTime:this.BookingTime,LoadingTime:this.LoadingTime,cleanceTime:this.cleanceTime});
       },
       changeShipmentStatusOption(status){
         this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = true;
@@ -211,6 +217,9 @@
       color: #1d1007;
       line-height: 24px;
       font-weight: 400;
+    }
+    /deep/.definedStyleClass{
+      background: yellow;
     }
   }
   table,th, td{

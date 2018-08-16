@@ -44,8 +44,8 @@
       :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle" :selectArr="selectArr" />
 
     <!-- 日期列表 -->
-    <dateInfo :listData="mediatorDate" :selectArr="selectArr" :basicInfoArr="basicInfoArr" :shipmentStatus="shipmentStatus" :edit="edit"
-      :title="$i.logistic.dateInfo" @shipmentStatus="changeShipmentStatus" @modifyTime="modifyTimeData"></dateInfo>
+    <dateInfo :fieldDisplay="fieldDisplay" :listData="mediatorDate" :selectArr="selectArr" :basicInfoArr="basicInfoArr" :shipmentStatus="shipmentStatus" :edit="edit"
+      :title="$i.logistic.dateInfo" @shipmentStatus="changeShipmentStatus" @modifyTime="modifyTimeData" @hightLightModifyFun="hightLightModifyFun"></dateInfo>
     <!-- <form-list :DeliveredEdit="deliveredEdit" name="dateInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun"
       :listData="mediatorDate" :edit="edit" :title="$i.logistic.dateInfo" :selectArr="selectArr"/> -->
 
@@ -87,7 +87,7 @@
       <overviewPage :title="$i.logistic.addProductFromOrder" :tableData="ProductFromOrder" :form-column="$db.logistic.addProductFromOrderFilter"
         :tableButtons="null" @change-checked="changeChecked" @tableBtnClick="ProductFromOrderDetail" @search="getSupplierIds"
         :tableCode="configUrl[pageName]&&configUrl[pageName].addproduct" @change-sort="changeSort">
-        <v-pagination slot="pagination" :page-data="pageParams" />
+        <v-pagination slot="pagination" :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
         <div slot=footerBtn>
           <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
           <el-button type="primary" @click="closeAddProduct">{{ $i.logistic.confirm }}</el-button>
@@ -471,6 +471,14 @@
           }
         })
       },
+      sizeChange(e) {
+        this.pageParams.ps = e
+        this.getSupplierIds()
+      },
+      pageChange(e) {
+        this.pageParams.pn = e
+        this.getSupplierIds()
+      },
       changeSort(arr) {
         this.$set(this.pageParams, 'sorts', arr.sorts);
         this.getSupplierIds();
@@ -509,7 +517,8 @@
             return el;
           }), el => {
             this.productList.forEach(item => {
-              if (el.skuId.value == item.skuId.value) {
+              //两个字段拼接确定唯一
+              if (el.skuId.value+'-'+el.orderId.value == item.skuId.value+'-'+item.orderId.value) {
                 el._disabled = true;
                 el._checked = true;
               }
@@ -656,14 +665,13 @@
         this.productList.forEach((item) => {
           if (!this.isCopy) {
             if (item.fieldDisplay.value) {
-              console.log(item.fieldDisplay.value)
-              // _.mapObject(item.fieldDisplay.value, (v, k) => {
-              //   item[k]._style = {
-              //     background: 'yellow'
-              //   };
-              //   item[k]._mustChecked = true;
-              // })
-              // item.fieldDisplay.value = null;
+              _.mapObject(item.fieldDisplay.value, (v, k) => {
+                item[k]._style = {
+                  background: 'yellow'
+                };
+                item[k]._mustChecked = true;
+              })
+              item.fieldDisplay.value = null;
             }
           }
         })
@@ -853,7 +861,6 @@
         }
       },
       changeChecked(arr) {
-        console.log(arr)
         this.ProductFromOrderChecked = arr;
       },
       //处理 动态增加 产品时 的下拉取值
@@ -928,11 +935,12 @@
           a.totalContainerVolume = null;
           a.totalContainerNetWeight = null;
           a.totalContainerOuterCartonsQty = null;
-          // a.outerCartonGrossWeight = a.skuGrossWeight || 0;
-          // a.outerCartonNetWeight = a.skuOuterCartonNetWeight || 0;
-          // a.outerCartonVolume = a.skuOuterCartonVolume || 0;
-          // a.outerCartonVolume = a.skuOuterCartonVolume || 0;
-          !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a);
+          a.customDeclarationNameCn = a.skuCustomsNameCn;
+          a.customDeclarationNameEn = a.skuCustomsNameEn;
+          a.supplierCode = a.skuSupplierCode;
+          a.outerCartonBarCode = a.skuOuterCartonBarCode;
+          a.shippingMarks = a.skuShippingMarks;
+          // !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a);
         })
         this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList];
         this.shipperArrFun();
@@ -987,9 +995,9 @@
         })
         const id = currrentProduct.id.value
         const vId = this.$getUUID();
-        const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
-        index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] =
-          this.restoreObj(currrentProduct))
+        // const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
+        // index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] =
+        //   this.restoreObj(currrentProduct))
       },
       switchEdit(arg) {
         switch (arg) {
@@ -1129,12 +1137,15 @@
         _.mapObject(this.hightLightObj, (v, k) => {
           Object.assign(obj, v);
         })
-        this.oldPlanObject.fieldDisplay = obj;
+        this.oldPlanObject.fieldDisplay = {...obj,...this.oldPlanObject.fieldDisplay};
       },
       ContainerInfoLight(data) {
         this.oldPlanObject.containerDetail = data;
       },
       changeShipmentStatus(status) {
+        if(status!=this.shipmentStatus){
+          this.oldPlanObject.fieldDisplay = {...{shipmentStatus:status},...this.oldPlanObject.fieldDisplay};
+        }
         this.basicInfoArr.find(el => el.key == 'shipmentStatus').value = status
       },
       sendData(keyString) {
@@ -1233,6 +1244,7 @@
               this.$set(item, 'fieldDisplay', null);
             })
           }
+
           this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
             this.$message({
               message: this.$i.logistic.jumping,

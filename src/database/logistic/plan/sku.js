@@ -3,19 +3,33 @@ export default {
     type: 'text',
     _hide: true
   },
+  skuPictures:{
+    type: 'String',
+    _image:true,
+    _upload:{
+      readonly:true
+    }
+  },
   logisticsNo: {
-    type: 'text',
-    _sort:false
+    type: 'text'
+  },
+  customerSkuCode: {
+    type: 'text'
+  },
+  skuNameEn: {
+    type: 'text'
+  },
+  skuSupplierAbbr: {
+    type: 'text'
   },
   orderNo: {
     type: 'text'
   },
   containerNo: {
-    type: 'String'
+    type: 'text'
   },
   totalQuantityOfOuterCartonsInContainer: {
-    key: 'totalContainerOuterCartonsQty',
-    _filed: 'totalContainerOuterCartonsQty',
+    key: 'ctnQty',
     type: 'String',
   },
   totalQuantityInContainer: {
@@ -24,27 +38,41 @@ export default {
     type: 'String',
   },
   totalVolumeInContainer: {
-    key: 'totalCtnCbm',
-    _filed: 'totalContainerVolume',
+    key: 'totalContainerVolume',
     type: 'String'
   },
   totalNetWeightInContainer: {
-    key: 'totalCtnNw',
-    _filed: 'totalContainerNetWeight',
+    key: 'totalContainerNetWeight',
     type: 'String'
   },
   totalContainerGrossWeight: {
-    key:'totalCtnGw',
+    key:'totalGrossWeight',
     type: 'String'
   },
   unitExportPrice: {
     type: 'String'
   },
-  totalExportPrice: {
+  totalPriceOfExport: {
+    key:'totalExportPrice',
     type: 'String'
   },
   currency: {
     type: 'String'
+  },
+  transportationWay: {
+    type: 'text'
+  },
+  blType:{
+    type: 'text'
+  },
+  blNo:{
+    type: 'text'
+  },
+  shipServiceProvider:{
+    type: 'text'
+  },
+  shippingAgent: {
+    type: 'text'
   },
   skuQty: {
     type: 'String'
@@ -64,11 +92,12 @@ export default {
   skuBarCode: {
     type: 'text'
   },
-  skuNameEn: {
-    type: 'text'
-  },
   productDescription: {
     key:'skuNameCustomer',
+    type: 'text'
+  },
+  ProductDescriptionCustomer: {
+    key:'skuDescCustomer',
     type: 'text'
   },
   skuDescriptionCn: {
@@ -77,19 +106,8 @@ export default {
   skuDescriptionEN: {
     type: 'text'
   },
-  skuSupplierAbbr: {
-    key:'supplierAbbr',
-    _filed:'skuSupplierAbbr',
-    type: 'text'
-  },
   supplierSerialNumber: {
     key:'supplierSerialNo',
-    type: 'text'
-  },
-  customerSkuCode: {
-    type: 'text'
-  },
-  vendorSkuCode: {
     type: 'text'
   },
   blSkuName: {
@@ -109,10 +127,6 @@ export default {
     type: 'text'
   },
   unit: {
-    type: 'text'
-  },
-  skuQuantityOfOuterCarton: {
-    key:'outerCartonQty',
     type: 'text'
   },
   outerCartonVolume: {
@@ -136,12 +150,6 @@ export default {
   warehouseNo: {
     type: 'text'
   },
-  estDelivaryDate: {
-    type: 'textDate'
-  },
-  actDeliveryDate: {
-    type: 'textDate'
-  },
   departurePort: {
     key:'deliveryPort',
     type: 'text'
@@ -155,8 +163,55 @@ export default {
   transportCompany: {
     type: 'text'
   },
-  logisticsStatus: {
-    type: 'text',
-    _hide:true
-  }
+  departureCountry: {
+    type: 'text'
+  },
+  containerType: {
+    type: 'text'
+  },
+  createDate:{
+    type: 'String'
+  },
+  customerName:{
+    type: 'String'
+  },
+  payment:{
+    type: 'String'
+  },
+  bookingDate:{
+    key:'actBookingDate',
+    _filed:'actBookingDate',
+    type: 'String'
+  },
+  estContainerStuffingDate: {
+    type: 'textDate'
+  },
+  actContainerStuffingDate: {
+    type: 'textDate'
+  },
+  declareDate: {
+    key:'actDeclareDate',
+    type: 'textDate'
+  },
+  estDepartureDate: {
+    type: 'textDate'
+  },
+  estArrivalDate: {
+    type: 'textDate'
+  },
+  actDepartureDate: {
+    type: 'textDate'
+  },
+  actCustomsCleanceDate: {
+    type: 'textDate'
+  },
+  actReleaseDate: {
+    type: 'textDate'
+  },
+  actArrivalDate: {
+    type: 'textDate'
+  },
+  skuCartonQty: {
+    type: 'textDate'
+  },
 }
