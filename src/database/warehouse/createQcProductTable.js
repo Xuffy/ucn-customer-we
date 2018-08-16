@@ -99,6 +99,7 @@ export default {
     outerCartonVolume:{
         fromService:true
     },
+    
     grossWeightOfOuterCarton:{
         fromService:true,
         key: 'outerCartonGrossWeight'
@@ -179,10 +180,15 @@ export default {
         fromService:true,
         key: 'shippingMarkResultDictCode'
     },
+    innerCartonMark:{
+        key:'innerCartonMark'
+    },
+    innerCartonMarkResultDictCode:{
+        key:'innerCartonMarkResultDictCode'
+    },
     qcPic:{
         fromService:true
     },
-   
     remark:{
         fromService:true
     },

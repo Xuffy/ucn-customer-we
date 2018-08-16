@@ -25,7 +25,7 @@
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
-                        :buttons="[{label: $i.warehouse.detail, type: 1}]"
+                        :buttons="[{label: $i.warehouse.detail, type: 1, auth: 'PRODUCT:DETAIL'}]"
                         @change-sort="val=>{getWarehouseData(val)}"
                         @change-checked="changeChecked"
                         @action="btnClick">
