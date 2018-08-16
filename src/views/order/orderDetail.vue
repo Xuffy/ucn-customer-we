@@ -1185,7 +1185,7 @@
         <v-message-board
                 v-if="chatParams"
                 :readonly="orderForm.status==='5'"
-                module="order"
+                module="ORDER"
                 code="detail"
                 :arguments="chatParams"
                 :id="$route.query.orderId"></v-message-board>
@@ -1566,15 +1566,26 @@
                         }
                     });
                     this.getDetail();
+                }).catch(()=>{
+                    this.loadingPage=false;
                 });
             },
             getDetail(e, isTrue) {
-                this.loadingPage = true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL, {
                     orderId: this.$route.query.orderId,
                     orderNo: this.$route.query.orderNo || this.$route.query.code
                 }).then(res => {
                     this.orderForm = res;
+                    this.chatParams={
+                        bizNo:res.quotationNo,
+                        dataAuthCode:'BIZ_ORDER',
+                        funcAuthCode:'',            //功能权限
+                        suppliers:[{
+                            userId:res.supplierUserId,
+                            companyId:res.supplierCompanyId,
+                            tenantId:res.supplierTenantId
+                        }]
+                    };
                     /**
                      * 高亮处理
                      * */
@@ -1633,7 +1644,9 @@
                             if (v.fieldUpdate.value) {
                                 _.map(v.fieldUpdate.value, (value, key) => {
                                     if (key !== "skuPictures") {
-                                        v[key]._style = { "backgroundColor": "yellow" };
+                                        if(v[key]){
+                                            v[key]._style = { "backgroundColor": "yellow" };
+                                        }
                                     }
                                 });
                                 v.fieldUpdate.value = {};
@@ -1678,7 +1691,9 @@
                      * */
                     this.getPaymentData();
                 }).finally(() => {
-                    this.loadingPage = false;
+                    this.$nextTick(()=>{
+                        this.loadingPage = false;
+                    });
                     this.disableClickCancelModify = false;
                     if (e) {
                         this.isModify = false;
@@ -1761,7 +1776,6 @@
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
-                // return console.log(this.$depthClone(params.skuList),'params')
 
                 /**
                  * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
@@ -1796,7 +1810,6 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
-                // return console.log(this.$depthClone(params.skuList),'params')
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -1841,8 +1854,8 @@
                         });
                     }
                     this.getUnit();
-                }).catch(err => {
-                    // this.loadingPage=false;
+                }).catch(() => {
+                    this.loadingPage=false;
                 });
             },
             getInquiryData() {

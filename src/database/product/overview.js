@@ -25,7 +25,6 @@ export default {
         betweenKey:['minExwPrice','maxExwPrice'],
     },
     codeLike:{},
-    nameCnLike:{},
     fobPrice:{
         type:'between',
         betweenKey:['minFobPrice','maxFobPrice'],
@@ -45,7 +44,4 @@ export default {
         type:'number'
     },
     descEnLike:{},
-    descCnLike:{
-
-    },
 }

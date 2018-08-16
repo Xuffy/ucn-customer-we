@@ -178,7 +178,6 @@
                 </el-col>
             </el-row>
         </el-form>
-
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -887,11 +886,11 @@
                         return;
                     }
                 }
-                let rightCode = true;
+                // let rightCode = true;
                 _.map(params.skuList, v => {
-                    if (v.skuSupplierCode !== params.supplierCode) {
-                        rightCode = false;
-                    }
+                    // if (v.skuSupplierCode !== params.supplierCode) {
+                    //     rightCode = false;8
+                    // }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     v.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory ? _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code : "";
                     let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
@@ -905,14 +904,13 @@
                     });
                 });
                 //如果选的产品和上面选的供应商不一致，要给出提示
-                if (!rightCode) {
-                    return this.$message({
-                        message: this.$i.order.supplierNotTheSame,
-                        type: "warning"
-                    });
-                }
+                // if (!rightCode) {
+                //     return this.$message({
+                //         message: this.$i.order.supplierNotTheSame,
+                //         type: "warning"
+                //     });
+                // }
                 params.attachments = this.$refs.upload[0].getFiles();
-                // return console.log(this.$depthClone(params.skuList),'data')
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_SAVE, params).then(res => {
                     this.$router.push("/order/overview");
@@ -1106,6 +1104,35 @@
                 this.supplierNo = _.findWhere(this.supplierOption, { id: data }).code;
             },
             handleChangeIncoterm(key) {
+                let incoterm,
+                    totalPrice=['skuFobCurrency','skuFobPort','skuFobPrice','skuExwCurrency','skuExwPrice','skuCifPrice','skuCifCurrency','skuCifPort','skuDduCurrency','skuDduPort','skuDduPrice'],
+                    fob=['skuFobCurrency','skuFobPort','skuFobPrice'],
+                    exw=['skuExwCurrency','skuExwPrice'],
+                    cif=['skuCifPrice','skuCifCurrency','skuCifPort'],
+                    ddu=['skuDduCurrency','skuDduPort','skuDduPrice'];
+                if(this.orderForm[key]==='1'){
+                    incoterm=fob;
+                }else if(this.orderForm[key]==='2'){
+                    incoterm=exw;
+                }else if(this.orderForm[key]==='3'){
+                    incoterm=cif;
+                }else if(this.orderForm[key]==='4'){
+                    incoterm=ddu;
+                }
+                _.map(totalPrice,v=>{
+                    _.map(this.productTableData,item=>{
+                        if(!item._remark){
+                            item[v]._hide=true;
+                        }
+                    })
+                });
+                _.map(incoterm,v=>{
+                    _.map(this.productTableData,item=>{
+                        if(!item._remark){
+                            item[v]._hide=false;
+                        }
+                    })
+                });
                 _.map(this.productTableData, item => {
                     if (!item._remark) {
                         if (this.orderForm[key] === "1") {

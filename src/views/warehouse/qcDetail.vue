@@ -142,8 +142,8 @@
         <div class="second-title">
             {{$i.warehouse.payment}}
         </div>
-        <div class="payment-table" v-authorize="'QC:ORDER_DETAIL:PAYMENT'">
-            <el-button @click="addPayment" :loading="disableClickAdd" class="payment-btn" :disabled="disableAdd" type="primary">{{$i.warehouse.add}}</el-button>
+        <div class="payment-table">
+            <el-button @click="addPayment" v-authorize="'QC:ORDER_DETAIL:PAYMENT:ADD'" :loading="disableClickAdd" class="payment-btn" :disabled="disableAdd" type="primary">{{$i.warehouse.add}}</el-button>
             <el-table
                     v-loading='loadingPaymentTable'
                     :data="paymentTableData"
@@ -278,12 +278,12 @@
                             </div>
                             <div v-else>
                                 <el-button
-                                        v-authorize="'QC:ORDER_DETAIL:PAYMENT_ACTION'"
+                                         v-authorize="'QC:ORDER_DETAIL:PAYMENT:MODIFY'"
                                         @click="modify(scope.row)"
                                         type="text"
                                         size="small">{{$i.warehouse.modify}}</el-button>
                                 <el-button
-                                        v-authorize="'QC:ORDER_DETAIL:PAYMENT_ACTION'"
+                                        v-authorize="'QC:ORDER_DETAIL:PAYMENT:INVALID'"
                                         @click="invalid(scope.row)"
                                         type="text"
                                         size="small">{{$i.warehouse.invalid}}</el-button>
@@ -301,7 +301,7 @@
                     code="uwarehouse_qc_order_detail"
                     :loading="loadingProductInfoTable"
                     :data="productInfoData"
-                    :buttons="[{'label': 'Detail', type: 1}]"
+                    :buttons="[{'label': $i.warehouse.detail, type: 1, auth: 'PRODUCT:DETAIL'}]"
                     @action="btnClick"
                     @change-sort="val=>{getProductInfo(val)}"
                     @change-checked="changeChecked"
@@ -314,12 +314,12 @@
                                 type="primary"
                                 @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
                         <el-button
-                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_RESTART_QC'"
+                                v-authorize="'QC:ORDER_DETAIL:RESTART_QC'"
                                 @click="restartQc"
                                 :disabled="disableClickRestart"
                                 type="primary">{{$i.warehouse.restartQc}}</el-button>
                         <el-button
-                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_RESTART_QC'"
+                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_REWORK'"
                                 :disabled="selectList.length===0"
                                 type="primary"
                                 @click="rework">{{$i.warehouse.rework}}</el-button>
@@ -457,7 +457,7 @@
                     :disabled="loadingData"
                     type="primary"
                     @click="download">{{$i.warehouse.download}}</el-button>
-            <el-button @click="cancel" type="danger">{{$i.warehouse.exit}}</el-button>
+            <el-button v-authorize="'QC:ORDER_DETAIL:CANCEL'" @click="cancel" type="danger">{{$i.warehouse.exit}}</el-button>
         </div>
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
@@ -602,16 +602,16 @@
                         if(e.skuQcResultDictCode.value==='WAIT_FOR_QC'){
                             e._disabled=true;
                         }
-                        e.deliveryDate._value=this.$dateFormat(e.deliveryDate.value,'yyyy-mm-dd');
-                        e.skuUnitDictCode._value=e.skuUnitDictCode._value?(_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name:'';
-                        e.volumeUnitDictCode._value=e.volumeUnitDictCode._value?(_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name:'';
-                        e.weightUnitDictCode._value=e.weightUnitDictCode._value?(_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name:'';
-                        e.lengthUnitDictCode._value=e.lengthUnitDictCode._value?(_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name:'';
-                        e.skuBarCodeResultDictCode._value=e.skuBarCodeResultDictCode._value?(_.findWhere(this.pbCodeOption,{code:e.skuBarCodeResultDictCode.value}) || {}).name:'';
-                        e.innerPackingBarCodeResultDictCode._value=e.innerPackingBarCodeResultDictCode._value?(_.findWhere(this.pbCodeOption,{code:e.innerPackingBarCodeResultDictCode.value}) || {}).name:'';
-                        e.skuLabelResultDictCode._value=e.skuLabelResultDictCode._value?(_.findWhere(this.pbCodeOption,{code:e.skuLabelResultDictCode.value}) || {}).name:'';
-                        e.outerCartonBarCodeResultDictCode._value=e.outerCartonBarCodeResultDictCode._value?(_.findWhere(this.pbCodeOption,{code:e.outerCartonBarCodeResultDictCode.value}) || {}).name:'';
-                        e.shippingMarkResultDictCode._value=e.shippingMarkResultDictCode._value?(_.findWhere(this.pbCodeOption,{code:e.shippingMarkResultDictCode.value}) || {}).name:'';
+                        e.deliveryDate.value=this.$dateFormat(e.deliveryDate.value,'yyyy-mm-dd');
+                        e.skuUnitDictCode.value=e.skuUnitDictCode.value?(_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name:'';
+                        e.volumeUnitDictCode.value=e.volumeUnitDictCode.value?(_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name:'';
+                        e.weightUnitDictCode.value=e.weightUnitDictCode.value?(_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name:'';
+                        e.lengthUnitDictCode.value=e.lengthUnitDictCode.value?(_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name:'';
+                        e.skuBarCodeResultDictCode.value=e.skuBarCodeResultDictCode.value?(_.findWhere(this.pbCodeOption,{code:e.skuBarCodeResultDictCode.value}) || {}).name:'';
+                        e.innerPackingBarCodeResultDictCode.value=e.innerPackingBarCodeResultDictCode.value?(_.findWhere(this.pbCodeOption,{code:e.innerPackingBarCodeResultDictCode.value}) || {}).name:'';
+                        e.skuLabelResultDictCode.value=e.skuLabelResultDictCode.value?(_.findWhere(this.pbCodeOption,{code:e.skuLabelResultDictCode.value}) || {}).name:'';
+                        e.outerCartonBarCodeResultDictCode.value=e.outerCartonBarCodeResultDictCode.value?(_.findWhere(this.pbCodeOption,{code:e.outerCartonBarCodeResultDictCode.value}) || {}).name:'';
+                        e.shippingMarkResultDictCode.value=e.shippingMarkResultDictCode.value?(_.findWhere(this.pbCodeOption,{code:e.shippingMarkResultDictCode.value}) || {}).name:'';
                         return e;
                     });
                     let diffData=[];
@@ -831,7 +831,8 @@
                     planPayAmount: e.planPayAmount,
                     planPayDt: e.planPayDt,
                     version:e.version,
-                    moduleCode: 'WAREHOUSE'
+                    moduleCode: 'WAREHOUSE',
+                    remark: e.remark
                 };
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.update_qcPayment,param).then(res=>{
@@ -1086,7 +1087,6 @@
                         }else if(v.code==='PB_CODE'){
                             this.pbCodeOption=v.codes;
                         }else if (v.code === 'PAYMENT_ITEM_NAME') {
-                            console.log(v.codes)
                             this.paymentItem = v.codes
                         }
                     });
