@@ -70,7 +70,7 @@
                   <!--<div class="section-btn" style="margin-bottom:10px;">-->
                     <!--<el-button  @click="upload" type="primary" >{{$i.button.upload}}</el-button>-->
                   <!--</div>-->
-                  <v-upload ref="uploadAttachment" :limit="20" :list="attachments" readonly/>
+                  <v-upload  :limit="20" :list="attachments" readonly/>
                   <div class="attachment" v-show="!attachments" style="margin-top:40px;">
                     <div>
                       No Attachment
@@ -172,6 +172,7 @@
                 version: null
               },
               attachments:[],
+              department:[],
               countryOption:[],
               addRemarkFormVisible:false,
               disableCreateRemark:false,
@@ -185,7 +186,7 @@
               payment:[],
               sex:[],
               orderStatus:[],
-              inquiryStatus:[]
+              inquiryStatus:[],
             }
         },
         methods: {
@@ -329,8 +330,17 @@
             },
             //获取币种
             getCurrency(){
-              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+              this.$ajax.get(this.$apis.get_currency_all,{},{cache:true}).then(res=>{
                 this.currency = res
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
+            //获取部门列表
+            getDepartment(){
+              console.log(this.basicDate)
+              this.$ajax.get(`${this.$apis.GET_DEPARTMENT}?tenantId=${this.basicDate.tenantId}&companyId=${this.basicDate.companyId}`).then(res=>{
+                this.department = res
               }).catch(err=>{
                 console.log(err)
               });
@@ -358,6 +368,7 @@
                         this.code = res.code;
                         this.attachments = res.attachments;
                         this.basicDate = res;
+                        this.getDepartment();
                         let type,incoterm,payment,country;
                         country = _.findWhere(this.countryOption, {code: this.basicDate.country}) || {};
                         incoterm = _.findWhere(this.incoterm, {code: (this.basicDate.incoterm)+''}) || {};
@@ -372,7 +383,6 @@
                         }else{
                           this.basicDate.exportLicense = this.$i.supplier.exportLicenseNo
                         }
-
                         this.accounts = this.$getDB(this.$db.supplier.accountInfo, res.accounts,e => {
                           return e;
                         });
@@ -393,9 +403,11 @@
                           return e;
                         } );
                         this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
-                          let gender;
+                          let gender,deptId;
                           gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};
+                          deptId = _.findWhere(this.department, {code: (e.deptId.value)}) || {};
                           e.gender._value = gender.name || '';
+                          e.deptId._value = deptId.name || '';
                           return e;
                         });
                         this.loading = false
@@ -545,44 +557,9 @@
               });
             })
           },
-          /**
-           * Attachment操作
-           * */
-          upload(){
-            console.log(this.$refs.uploadAttachment.getFiles())
-            //ATTACHMENT,文件 PICTURE 图片
-            const uploadParams = {
-              id: this.$route.query.id,
-              type: "ATTACHMENT",
-              url: this.$refs.uploadAttachment.getFiles()[0]
-            };
-            const batchUploadParams = {
-              id: this.$route.query.id,
-              type: "ATTACHMENT",
-              urls: this.$refs.uploadAttachment.getFiles()
-            };
-            if (this.$refs.uploadAttachment.getFiles().length === 1){
-              this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
-                this.getData();
-                this.$message({
-                  message: this.$i.common.uploadedSuccess,
-                  type: 'success'
-                });
-              })
-
-            }else{
-              this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
-                this.getData();
-                this.$message({
-                  message: this.$i.common.uploadedSuccess,
-                  type: 'success'
-                });
-              })
-            }
-          },
           //获取国家
           getCountryAll(){
-            this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+            this.$ajax.get(this.$apis.GET_COUNTRY_ALL,{},{cache:true}).then(res=>{
               this.countryOption = res
             }).catch(err=>{
               console.log(err)
@@ -596,11 +573,11 @@
         },
         created() {
             this.companyId = this.$route.query.companyId;
+            this.getData();
             this.getCompareList();
             this.getCountryAll();
             this.getCurrency();
             this.getCodePart();
-            this.getData();
         },
 
     }
