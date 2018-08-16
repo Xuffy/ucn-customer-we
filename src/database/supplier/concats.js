@@ -4,14 +4,14 @@ export default {
     key: 'name'
   },
   department: {
-    key: 'deptName'
+    key: 'deptId'
   },
   gender: {
     key: 'gender'
   },
-  position: {
-    key: 'position'
-  },
+  // position: {
+  //   key: 'position'
+  // },
   mobileNumber: {
     key: 'cellphone'
   },

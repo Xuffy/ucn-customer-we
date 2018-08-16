@@ -911,7 +911,6 @@
                 //     });
                 // }
                 params.attachments = this.$refs.upload[0].getFiles();
-                // return console.log(this.$depthClone(params.skuList),'data')
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_SAVE, params).then(res => {
                     this.$router.push("/order/overview");
@@ -1105,7 +1104,6 @@
                 this.supplierNo = _.findWhere(this.supplierOption, { id: data }).code;
             },
             handleChangeIncoterm(key) {
-
                 let incoterm,
                     totalPrice=['skuFobCurrency','skuFobPort','skuFobPrice','skuExwCurrency','skuExwPrice','skuCifPrice','skuCifCurrency','skuCifPort','skuDduCurrency','skuDduPort','skuDduPrice'],
                     fob=['skuFobCurrency','skuFobPort','skuFobPrice'],
@@ -1121,18 +1119,20 @@
                 }else if(this.orderForm[key]==='4'){
                     incoterm=ddu;
                 }
-                console.log(incoterm,'incoterm')
                 _.map(totalPrice,v=>{
-                    // this.$db.order.productInfoTableCreate[v]
+                    _.map(this.productTableData,item=>{
+                        if(!item._remark){
+                            item[v]._hide=true;
+                        }
+                    })
                 });
-
-
-                _.map(this.$db.order.productInfoTableCreate,v=>{
-
-                })
-
-
-
+                _.map(incoterm,v=>{
+                    _.map(this.productTableData,item=>{
+                        if(!item._remark){
+                            item[v]._hide=false;
+                        }
+                    })
+                });
                 _.map(this.productTableData, item => {
                     if (!item._remark) {
                         if (this.orderForm[key] === "1") {
