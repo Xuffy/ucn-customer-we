@@ -338,12 +338,13 @@
             },
             //获取部门列表
             getDepartment(){
-              console.log(this.basicDate)
-              this.$ajax.get(`${this.$apis.GET_DEPARTMENT}?tenantId=${this.basicDate.tenantId}&companyId=${this.basicDate.companyId}`).then(res=>{
-                this.department = res
-              }).catch(err=>{
-                console.log(err)
-              });
+              if (this.basicDate.tenantId && this.basicDate.companyId){
+                this.$ajax.get(`${this.$apis.GET_DEPARTMENT}?tenantId=${this.basicDate.tenantId}&companyId=${this.basicDate.companyId}`).then(res=>{
+                  this.department = res
+                }).catch(err=>{
+                  console.log(err)
+                });
+              }
             },
           //获取字典
           getCodePart(){
@@ -368,7 +369,6 @@
                         this.code = res.code;
                         this.attachments = res.attachments;
                         this.basicDate = res;
-                        this.getDepartment();
                         let type,incoterm,payment,country;
                         country = _.findWhere(this.countryOption, {code: this.basicDate.country}) || {};
                         incoterm = _.findWhere(this.incoterm, {code: (this.basicDate.incoterm)+''}) || {};
@@ -383,6 +383,7 @@
                         }else{
                           this.basicDate.exportLicense = this.$i.supplier.exportLicenseNo
                         }
+                        this.getDepartment();
                         this.accounts = this.$getDB(this.$db.supplier.accountInfo, res.accounts,e => {
                           return e;
                         });
@@ -405,9 +406,9 @@
                         this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
                           let gender,deptId;
                           gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};
-                          deptId = _.findWhere(this.department, {code: (e.deptId.value)}) || {};
                           e.gender._value = gender.name || '';
-                          e.deptId._value = deptId.name || '';
+                          deptId = _.findWhere(this.department, {deptId: (e.deptId.value)}) || {};
+                          e.deptId._value = deptId.deptName || '';
                           return e;
                         });
                         this.loading = false

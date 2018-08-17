@@ -8,6 +8,10 @@ export const basicInfoObj = {
     value: null,
     disabled:true 
   },
+  contractNo: {
+    type: 'input',
+    value: null
+  },
   logisticsStatus: {
     type: 'selector',
     value: 2,
@@ -19,6 +23,7 @@ export const basicInfoObj = {
     value: null
   },
   createDate: {
+    key:'entryDt',
     type: 'date',
     value: null,
     disabled:true 
@@ -107,6 +112,10 @@ export const CreatPlanBasicInfoObj = {
     type: 'input',
     value: null,
     disabled:true 
+  },
+  contractNo: {
+    type: 'input',
+    value: null
   },
   logisticsStatus: {
     type: 'selector',
@@ -202,6 +211,10 @@ export const LLBasicInfoObj = {
     value: null,
     disabled:true 
   },
+  contractNo: {
+    type: 'input',
+    value: null
+  },
   shipmentStatus: {
     type: 'selector',
     value: null
@@ -289,6 +302,10 @@ export const draftBasicInfoObj = {
     type: 'input',
     value: null,
     disabled:true 
+  },
+  contractNo: {
+    type: 'input',
+    value: null
   },
   customerName: {
     type: 'input',
