@@ -1458,7 +1458,6 @@
                             skuCifPrice: null,
                             skuCode: "",
                             skuColourEn: "",
-                            skuComments: "",
                             skuCommodityInspectionEn: "",
                             skuCustomerCreate: true,
                             skuCustomerSkuCode: "",
@@ -1518,7 +1517,6 @@
                             skuMethodPkgEn: "",
                             skuMinInventory: null,
                             skuModifyStatus: null,
-                            skuNameCn: "",
                             skuNameCustomer: "",
                             skuNameEn: "",
                             skuNetWeight: null,
@@ -1589,7 +1587,6 @@
                         obj.skuId = v.skuId;
                         obj.skuPictures = v.skuPictures;
                         obj.skuNameEn = v.skuNameEn;
-                        obj.skuNameCn = v.skuNameCn;
                         obj.skuDescEn = v.skuDescEn;
                         obj.skuDescCustomer = v.skuDescCustomer;
                         obj.skuNameCustomer = v.skuNameCustomer;
@@ -1653,7 +1650,6 @@
                         obj.skuApplicableAge = v.skuApplicableAge;
                         obj.skuExpireDates = v.skuExpireDates;
                         obj.skuExpireUnit = v.skuExpireUnit;
-                        obj.skuComments = v.skuComments;
                         obj.skuStatus = "TBC";
                         obj.skuQuotationNo = v.quotationNo;
                         obj.skuSysCode = v.skuSysCode;

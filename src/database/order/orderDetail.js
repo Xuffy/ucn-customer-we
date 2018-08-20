@@ -77,7 +77,8 @@ export default {
             required:true
         }
     },
-    payment:{
+    paymentTerm:{
+        key:'payment',
         type:'select',
         belong:'basicInfo',
         isPayment:true,

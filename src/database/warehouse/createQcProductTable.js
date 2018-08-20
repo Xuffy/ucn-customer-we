@@ -180,17 +180,26 @@ export default {
         fromService:true,
         key: 'shippingMarkResultDictCode'
     },
-    innerCartonMark:{
-        key:'innerCartonMark'
-    },
-    innerCartonMarkResultDictCode:{
-        key:'innerCartonMarkResultDictCode'
-    },
+    // innerCartonMark:{
+    //     key:'innerCartonMark'
+    // },
+    // innerCartonMarkResultDictCode:{
+    //     key:'innerCartonMarkResultDictCode'
+    // },
     qcPic:{
         fromService:true
     },
     remark:{
         fromService:true
+    },
+    skuMaterialCn:{
+        key: 'skuMaterialCn'
+    },
+    skuMaterialEn: {
+        key: 'skuMaterialEn'
+    },
+    skuNameEn: {
+        key: 'skuNameEn'
     },
     lengthUnitDictCode:{},
     volumeUnitDictCode:{},

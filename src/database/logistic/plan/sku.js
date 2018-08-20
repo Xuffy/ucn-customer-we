@@ -129,15 +129,6 @@ export default {
   unit: {
     type: 'text'
   },
-  outerCartonVolume: {
-    type: 'text'
-  },
-  outerCartonNetWeight: {
-    type: 'text'
-  },
-  outerCartonGrossWeight: {  
-    type: 'text'
-  },
   inboundDate: {
     type: 'text'
   },
