@@ -192,9 +192,9 @@ export default {
     remark:{
         fromService:true
     },
-    skuMaterialCn:{
-        key: 'skuMaterialCn'
-    },
+    // skuMaterialCn:{
+    //     key: 'skuMaterialCn'
+    // },
     skuMaterialEn: {
         key: 'skuMaterialEn'
     },
