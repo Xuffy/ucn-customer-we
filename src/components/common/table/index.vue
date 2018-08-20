@@ -108,7 +108,8 @@
                 <v-upload readonly :limit="cItem._upload.limit || 5"
                           :ref="cItem.key + 'Upload'"
                           :list="cItem._value || cItem.value"></v-upload>
-                <el-button slot="reference" type="text">{{$i.upload.viewAttachment}}</el-button>
+                <el-button slot="reference" type="text" :disabled="!cItem.value">{{$i.upload.viewAttachment}}
+                </el-button>
               </el-popover>
 
               <div v-else
@@ -428,7 +429,7 @@
         let e = this.$refs.tableBox, timeout = null;
 
         // this.tableLoading = true;
-        if (this.dataList.length !== val.length) {
+        if (this.dataList.length !== val.length || _.values(this.dataList[0]).length !== _.values(val[0]).length) {
           e.scrollTop = 0;
           e.scrollLeft = 0;
         }
