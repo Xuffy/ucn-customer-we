@@ -331,7 +331,15 @@ export default{
         _sort:false,
         isFWS: true
     },
-    
+    skuMaterialCn:{
+        key: 'skuMaterialCn'
+    },
+    skuMaterialEn: {
+        key: 'skuMaterialEn'
+    },
+    skuNameEn: {
+        key: 'skuNameEn'
+    },
     remark:{
         key: 'remark',
         type: 'String',

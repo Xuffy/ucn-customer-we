@@ -192,6 +192,15 @@ export default {
     remark:{
         fromService:true
     },
+    skuMaterialCn:{
+        key: 'skuMaterialCn'
+    },
+    skuMaterialEn: {
+        key: 'skuMaterialEn'
+    },
+    skuNameEn: {
+        key: 'skuNameEn'
+    },
     lengthUnitDictCode:{},
     volumeUnitDictCode:{},
     weightUnitDictCode:{},
