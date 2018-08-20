@@ -317,12 +317,13 @@
                         @click="applyPay"
                         type="primary">{{$i.order.applyPay}}
                 </el-button>
-                <el-button
+                <v-button
                         v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
-                        :loading="disableClickDunning"
-                        :disabled="!allowHandlePay || loadingPaymentTable"
-                        @click="dunningPay">{{$i.order.remindSupplierRefund}}
-                </el-button>
+                        moduleCode="ORDER"
+                        :orderNo="orderForm.orderNo"
+                        :orderType="10"
+                        :disabled="!allowHandlePay || loadingPaymentTable">
+                    {{$i.order.remindSupplierRefund}}</v-button>
                 <el-table
                         v-loading="loadingPaymentTable"
                         class="payTable"
@@ -1202,7 +1203,8 @@
         VHistoryModify,
         VMessageBoard,
         VProduct,
-        VInputNumber
+        VInputNumber,
+        VButton
     } from "@/components/index";
     import { mapActions } from "vuex";
 
@@ -1216,7 +1218,8 @@
             VProduct,
             VHistoryModify,
             VMessageBoard,
-            VInputNumber
+            VInputNumber,
+            VButton
         },
         data() {
             return {
@@ -1333,7 +1336,6 @@
                 loadingPaymentTable: false,
                 paymentData: [],
                 copyList: [],
-                disableClickDunning: false,
 
                 /**
                  * 弹出框data配置
@@ -2233,33 +2235,6 @@
                     });
                 }).finally(() => {
                     this.disableClickApplyPay = false;
-                });
-            },
-            dunningPay() {
-                let params = [];
-                _.map(this.paymentData, v => {
-                    if (v.status === 40 && v.planRefundDt && v.planRefundAmount > v.actualRefundAmount) {
-                        params.push({
-                            id: v.id,
-                            version: v.version
-                        });
-                    }
-                });
-                if (params.length === 0) {
-                    return this.$message({
-                        message: this.$i.order.nothingToDun,
-                        type: "warning"
-                    });
-                }
-                this.disableClickDunning = true;
-                this.$ajax.post(`${this.$apis.PAYMENT_DUNNING}?moduleCode=ORDER`, params).then(res => {
-                    this.getPaymentData();
-                    this.$message({
-                        message: this.$i.order.dunSuccess,
-                        type: "success"
-                    });
-                }).finally(() => {
-                    this.disableClickDunning = false;
                 });
             },
             saveNewPay(data) {

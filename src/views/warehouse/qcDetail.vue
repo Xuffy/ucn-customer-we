@@ -612,6 +612,7 @@
                         e.skuLabelResultDictCode.value=e.skuLabelResultDictCode.value?(_.findWhere(this.pbCodeOption,{code:e.skuLabelResultDictCode.value}) || {}).name:'';
                         e.outerCartonBarCodeResultDictCode.value=e.outerCartonBarCodeResultDictCode.value?(_.findWhere(this.pbCodeOption,{code:e.outerCartonBarCodeResultDictCode.value}) || {}).name:'';
                         e.shippingMarkResultDictCode.value=e.shippingMarkResultDictCode.value?(_.findWhere(this.pbCodeOption,{code:e.shippingMarkResultDictCode.value}) || {}).name:'';
+                        e.innerCartonMarkResultDictCode.value = e.innerCartonMarkResultDictCode.value?(_.findWhere(this.pbCodeOption,{code:e.innerCartonMarkResultDictCode.value}) || {}).name:'';
                         return e;
                     });
                     let diffData=[];
