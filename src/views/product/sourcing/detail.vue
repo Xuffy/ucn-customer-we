@@ -150,7 +150,7 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
-                    <el-form class="speForm" label-width="310px" :label-position="labelPosition">
+                    <el-form class="speForm" label-width="350px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key"
                                     class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
