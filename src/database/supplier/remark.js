@@ -3,7 +3,8 @@ export default {
         key: 'remark'
     },
     date: {
-        key: 'updateDt'
+        key: 'updateDt',
+        type:"textDate"
     },
     operater: {
         key: 'updateName'

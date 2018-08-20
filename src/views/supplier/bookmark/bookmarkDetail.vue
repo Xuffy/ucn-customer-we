@@ -483,7 +483,7 @@
             }
             this.$ajax.post(this.$apis.post_purchase_supplier_listRemarks,remark)
               .then(res => {
-                this.remarkData = this.$getDB(this.$db.supplier.detailTable, res.datas, item => {
+                this.remarkData = this.$getDB(this.$db.supplier.remark, res.datas, item => {
                   _.mapObject(item, val => {
                     val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                     return val
