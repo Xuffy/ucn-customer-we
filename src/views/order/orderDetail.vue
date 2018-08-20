@@ -317,16 +317,11 @@
                         @click="applyPay"
                         type="primary">{{$i.order.applyPay}}
                 </el-button>
-                <el-button
-                        v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
-                        :loading="disableClickDunning"
-                        :disabled="!allowHandlePay || loadingPaymentTable"
-                        @click="dunningPay">{{$i.order.remindSupplierRefund}}
-                </el-button>
                 <v-button
                         v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
                         moduleCode="ORDER"
-
+                        :orderNo="orderForm.orderNo"
+                        :orderType="10"
                         :disabled="!allowHandlePay || loadingPaymentTable">
                     {{$i.order.remindSupplierRefund}}</v-button>
                 <el-table
@@ -1209,7 +1204,7 @@
         VMessageBoard,
         VProduct,
         VInputNumber,
-        vButton
+        VButton
     } from "@/components/index";
     import { mapActions } from "vuex";
 
@@ -1224,7 +1219,7 @@
             VHistoryModify,
             VMessageBoard,
             VInputNumber,
-            vButton
+            VButton
         },
         data() {
             return {
@@ -1341,7 +1336,6 @@
                 loadingPaymentTable: false,
                 paymentData: [],
                 copyList: [],
-                disableClickDunning: false,
 
                 /**
                  * 弹出框data配置
@@ -2242,19 +2236,6 @@
                 }).finally(() => {
                     this.disableClickApplyPay = false;
                 });
-            },
-            dunningPay() {
-                console.log(this.$depthClone(this.paymentData),'paymentData')
-                // this.disableClickDunning = true;
-                // this.$ajax.post(this.$apis.PAYMENT_DUNNING, params).then(res => {
-                //     this.getPaymentData();
-                //     this.$message({
-                //         message: this.$i.order.dunSuccess,
-                //         type: "success"
-                //     });
-                // }).finally(() => {
-                //     this.disableClickDunning = false;
-                // });
             },
             saveNewPay(data) {
                 let param = {
