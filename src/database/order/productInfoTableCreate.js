@@ -61,10 +61,6 @@ export default {
     skuNameEn:{
         _disabled:true
     },
-    skuNameCn:{
-        _slot:'skuNameCn',
-        _disabled:true
-    },
     skuDescEn:{
         _disabled:true
     },
@@ -155,7 +151,6 @@ export default {
     skuCustomsCode:{
         _disabled:true
     },
-    skuCustomsNameCn:{},
     skuTradeMarkEn:{},
     skuCommodityInspectionEn:{},
     skuOrigin:{},
@@ -247,7 +242,6 @@ export default {
     skuExpireUnit:{
         _slot:'skuExpireUnit',
     },
-    skuComments:{},
     skuStatus:{
         _hide:true
     },
