@@ -198,7 +198,9 @@
                     <template slot-scope="scope" v-if="scope.row[v.key]">
                         <div v-if="v.showType==='qc'">
                         </div>
-                        <div v-else-if="v.fromService"></div>
+                        <div v-else-if="v.fromService">
+                            {{scope.row[v.key].value}}
+                        </div>
                         <div v-else-if="v.showType==='number'">
                             <v-input-number
                                     v-model="scope.row[v.key].value"
@@ -488,11 +490,11 @@
                                 v.qualifiedSkuCartonTotalQty = '';
                                 v.actSkuCartonTotalQty = '';
                                 v.outerCartonGrossWeight = '';
-                                v.actInnerCartonSkuQty = '';
+                                v.actInnerCartonSkuQty = ''; // 1
                                 v.innerCartonSkuQty = '';// 来自Order
-                                v.actOuterCartonInnerBoxQty = '';
+                                v.actOuterCartonInnerBoxQty = ''; // 1
                                 v.outerCartonInnerBoxQty = '';// 来自Order
-                                v.actOuterCartonSkuQty = '';
+                                v.actOuterCartonSkuQty = ''; // 1
                                 v.unqualifiedProcessingMode = '';
                                 v.samplingRate = '';
                                 this.productTableData.push(v);
@@ -692,12 +694,9 @@
                         this.loadingProductTable = false;
                         let oldData = _.clone(this.productTableData)
                         this.productTableData = []
+                        console.log(this.$copyArr(res))
                         _.map(res, v => {
                             if (v.id !== 0) {
-                                // let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
-                                //     , vo = _.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}
-                                //     , wo = _.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}
-                                //     , lo = _.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {};
                                 v.skuUnitDictCode = v.skuUnitDictCode ? (_.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}).name : "";
                                 v.volumeUnitDictCode = v.volumeUnitDictCode ? (_.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}).name : '';
                                 v.weightUnitDictCode = v.weightUnitDictCode ? (_.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}).name : '';
@@ -723,7 +722,6 @@
                                 v.unqualifiedSkuCartonTotalQty = '';
                                 v.qualifiedSkuCartonTotalQty = '';
                                 v.actSkuCartonTotalQty = '';
-                                v.outerCartonGrossWeight = '';
                                 v.actInnerCartonSkuQty = '';
                                 v.innerCartonSkuQty = '';// 来自Order
                                 v.actOuterCartonInnerBoxQty = '';
@@ -735,7 +733,6 @@
                                 this.productTableData.push(v);
                             }
                         });
-                        
                         let arr = this.$copyArr(this.productTableData)
                         arr = this.$getDB(this.$db.warehouse.createQcProductTable, arr);
                         _.each(arr, e => {
