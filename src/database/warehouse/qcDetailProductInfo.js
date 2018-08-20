@@ -86,12 +86,7 @@ export default{
         key: 'inboundNo',
         type: 'String'
     },
-    innerCartonMark:{
-        key:'innerCartonMark'
-    },
-    innerCartonMarkResultDictCode:{
-        key:'innerCartonMarkResultDictCode'
-    },
+    
     samplingRate: {
         key: 'samplingRate',
         type: 'String'
@@ -305,6 +300,12 @@ export default{
         type: 'String',
         isFWS: true
     },
+    innerCartonMarkResultDictCode:{
+        key:'innerCartonMarkResultDictCode'
+    },
+    innerCartonMark:{
+        key:'innerCartonMark'
+    },
     outerCartonBarCode:{
         key: 'outerCartonBarCode',
         type: 'String'
@@ -330,7 +331,15 @@ export default{
         _sort:false,
         isFWS: true
     },
-    
+    // skuMaterialCn:{
+    //     key: 'skuMaterialCn'
+    // },
+    skuMaterialEn: {
+        key: 'skuMaterialEn'
+    },
+    skuNameEn: {
+        key: 'skuNameEn'
+    },
     remark:{
         key: 'remark',
         type: 'String',

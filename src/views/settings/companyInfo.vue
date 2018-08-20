@@ -689,7 +689,7 @@
                 case 3:
                   this.getDocument();
                   break;
-                case 5:
+                case 6:
                   this.getGridfavoritePartData();
                   break;
               }

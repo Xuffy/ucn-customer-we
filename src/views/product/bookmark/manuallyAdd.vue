@@ -126,6 +126,7 @@
                             <div v-else-if="v.isFormation">
                                 <el-select
                                         class="speInput"
+                                        clearable
                                         v-model="productForm[v.key]"
                                         :placeholder="$i.product.pleaseChoose">
                                     <el-option
@@ -898,7 +899,6 @@
                     unitVolume: '3',
                     unitWeight: '7',
                     useDisplayBox: '1',
-                    warehourceDefault: "",
                     yearListed: ""
                 },
                 /**

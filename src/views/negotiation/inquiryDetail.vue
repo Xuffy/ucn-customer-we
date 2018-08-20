@@ -31,8 +31,8 @@
               <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length}})</span></el-button>
             </div>
           </div>
+          <!--code="inquiry"-->
           <v-table
-              code="inquiry"
               hide-filter-value
               :data.sync="newProductTabData"
               :buttons="productInfoBtn"
@@ -197,13 +197,12 @@ export default {
     }
   },
   created() {
-    thisTool.setMenuLinks(this, ['INQUIRY:OVERVIEW:DRAFT', 'INQUIRY:OVERVIEW:DELETE', 'INQUIRY:LOG']);
-
-    Object.keys(menuLink).forEach(auth => {
-      if (this.$auth(auth)) {
-        this.setMenuLink(menuLink[auth]);
-      }
-    });
+    const menuLink = thisTool.setMenuLinks(this, ['INQUIRY:OVERVIEW:DRAFT', 'INQUIRY:OVERVIEW:DELETE', 'INQUIRY:LOG']);
+    // Object.keys(menuLink).forEach(auth => {
+    //   if (this.$auth(auth)) {
+    //     this.setMenuLink(menuLink[auth]);
+    //   }
+    // });
 
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
@@ -329,8 +328,8 @@ export default {
           }]
         };
         this.tableLoad = false;
-
-        this.$ajax.post(this.$apis.GET_CUSTOMER_EXCHANGE_RATE_FEE, {tenantId: res.tenantId, companyId: res.companyId}).then(res2 => {
+        // this.$ajax.post(this.$apis.GET_CUSTOMER_EXCHANGE_RATE_FEE, {tenantId: res.tenantId, companyId: res.companyId})
+        this.$ajax.get(this.$apis.get_customcurrencyexchangerate_query).then(res2 => {
           this.custom = res2.custom;
           this.exchangeRates = res2.exchangeRates;
         });

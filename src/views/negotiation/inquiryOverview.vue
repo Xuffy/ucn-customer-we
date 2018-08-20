@@ -35,8 +35,8 @@
                 </el-radio-group>
             </div>
         </div>
+      <!--:code="viewByStatus ? 'inquiry': 'inquiry_list'"-->
         <v-table
-            :code="viewByStatus ? 'inquiry': 'inquiry_list'"
             hide-filter-value
             :data="tabData"
             :buttons="actionBtns"
