@@ -180,12 +180,12 @@ export default {
         fromService:true,
         key: 'shippingMarkResultDictCode'
     },
-    innerCartonMark:{
-        key:'innerCartonMark'
-    },
-    innerCartonMarkResultDictCode:{
-        key:'innerCartonMarkResultDictCode'
-    },
+    // innerCartonMark:{
+    //     key:'innerCartonMark'
+    // },
+    // innerCartonMarkResultDictCode:{
+    //     key:'innerCartonMarkResultDictCode'
+    // },
     qcPic:{
         fromService:true
     },

@@ -86,12 +86,7 @@ export default{
         key: 'inboundNo',
         type: 'String'
     },
-    innerCartonMark:{
-        key:'innerCartonMark'
-    },
-    innerCartonMarkResultDictCode:{
-        key:'innerCartonMarkResultDictCode'
-    },
+    
     samplingRate: {
         key: 'samplingRate',
         type: 'String'
@@ -304,6 +299,12 @@ export default{
         key: 'innerPackingBarCodeResultDictCode',
         type: 'String',
         isFWS: true
+    },
+    innerCartonMarkResultDictCode:{
+        key:'innerCartonMarkResultDictCode'
+    },
+    innerCartonMark:{
+        key:'innerCartonMark'
     },
     outerCartonBarCode:{
         key: 'outerCartonBarCode',

@@ -86,7 +86,8 @@
                 id: '2',
                 label: 'orderNo'
               }],
-              country:[]
+              country:[],
+              skuStatus:[]
             }
         },
         methods:{
@@ -126,17 +127,31 @@
                 console.log(err)
               });
             },
+            //获取字典
+            getCodePart(){
+              this.$ajax.post(this.$apis.POST_CODE_PART,['SKU_STATUS'],{cache:true}).then(res=>{
+                    this.skuStatus = _.findWhere(res, {'code': 'SKU_STATUS'}).codes;
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
             getList() {
                 this.loading = true;
                 this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{
                     this.loading = false;
                     this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
-                      let country;
-                        _.mapObject(item, val => {
-                          val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd HH:MM:ss'))
-                          return val
-                        })
-                      });
+                      let customerCountry,supplierCountry,skuStatus;
+                      customerCountry = _.findWhere(this.country, {code: (item.customerCountry.value)}) || {};
+                      // supplierCountry = _.findWhere(this.country, {code: (item.supplierCountry.value)}) || {};
+                      skuStatus = _.findWhere(this.skuStatus, {code: (item.skuStatus.value)}) || {};
+                      item.skuStatus._value = skuStatus.name || '';
+                      item.customerCountry._value = customerCountry.name || '';
+                      // item.supplierCountry._value = supplierCountry.name || '';
+                      _.mapObject(item, val => {
+                        val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd HH:MM:ss'))
+                        return val
+                      })
+                    });
                   this.pageData=res;
               }).catch(err=>{
                 this.loading = false;
@@ -173,6 +188,7 @@
         },
         created(){
           this.getCountryAll();
+          this.getCodePart();
           this.getList();
         },
 
