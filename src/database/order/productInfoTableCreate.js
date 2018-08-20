@@ -61,10 +61,6 @@ export default {
     skuNameEn:{
         _disabled:true
     },
-    skuNameCn:{
-        _slot:'skuNameCn',
-        _disabled:true
-    },
     skuDescEn:{
         _disabled:true
     },
@@ -140,13 +136,16 @@ export default {
         _hide:true
     },
     totalCtnCbm:{       //新增
-        mustShowColumn:true
+        mustShowColumn:true,
+        _slot:'totalCtnCbm'
     },
     totalCtnGw:{        //新增
-        mustShowColumn:true
+        mustShowColumn:true,
+        _slot:'totalCtnGw'
     },
     totalCtnNw:{        //新增
-        mustShowColumn:true
+        mustShowColumn:true,
+        _slot:'totalCtnNw'
     },
     skuCartonQty:{
         mustShowColumn:true,
@@ -155,7 +154,6 @@ export default {
     skuCustomsCode:{
         _disabled:true
     },
-    skuCustomsNameCn:{},
     skuTradeMarkEn:{},
     skuCommodityInspectionEn:{},
     skuOrigin:{},
@@ -247,7 +245,6 @@ export default {
     skuExpireUnit:{
         _slot:'skuExpireUnit',
     },
-    skuComments:{},
     skuStatus:{
         _hide:true
     },

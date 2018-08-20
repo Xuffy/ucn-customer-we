@@ -441,35 +441,40 @@
                     slot="skuFobPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    :accuracy="1"
+                    :accuracy="4"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
                     slot="skuExwPrice"
                     slot-scope="{data}"
+                    :accuracy="4"
                     @blur="handlePriceBlur"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
                     slot="skuCifPrice"
                     slot-scope="{data}"
+                    :accuracy="4"
                     @blur="handlePriceBlur"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
                     slot="skuDduPrice"
+                    :accuracy="4"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
                     slot="skuQty"
+                    :accuracy="1"
                     @blur="handlePriceBlur(data)"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
                     slot="skuPrice"
+                    :accuracy="4"
                     :disabled="true"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -478,36 +483,42 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuLength"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuWidth"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuHeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuNetWeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuVolume"
+                    :accuracy="6"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonQty"
+                    :accuracy="1"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -515,30 +526,35 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonLength"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonWidth"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonHeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonWeightNet"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonRoughWeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -546,12 +562,14 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonVolume"
+                    :accuracy="3"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonOuterNum"
+                    :accuracy="1"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -559,30 +577,35 @@
                     class="speNumber spx"
                     slot="skuOuterCartonQty"
                     @blur="handlePriceBlur"
+                    :accuracy="1"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonLength"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonWidth"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonHeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonNetWeight"
+                    :accuracy="2"
                     @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -590,6 +613,7 @@
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonRoughWeight"
+                    :accuracy="2"
                     @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -597,6 +621,7 @@
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonVolume"
+                    :accuracy="3"
                     @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -604,30 +629,35 @@
                     :min="0"
                     class="speNumber spx"
                     slot="skuApplicableAge"
+                    :accuracy="0"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuExpireDates"
+                    :accuracy="0"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuSampleQty"
+                    :accuracy="1"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuSamplePrice"
+                    :accuracy="4"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuDeliveryDates"
+                    :accuracy="0"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -639,6 +669,35 @@
                     slot-scope="{data}"
                     :disabled="true"
                     v-model="data.value"></v-input-number>
+
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnCbm"
+                    :accuracy="3"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnGw"
+                    :accuracy="2"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnNw"
+                    :accuracy="2"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+
         </v-history-modify>
     </div>
 </template>
@@ -1458,7 +1517,6 @@
                             skuCifPrice: null,
                             skuCode: "",
                             skuColourEn: "",
-                            skuComments: "",
                             skuCommodityInspectionEn: "",
                             skuCustomerCreate: true,
                             skuCustomerSkuCode: "",
@@ -1518,7 +1576,6 @@
                             skuMethodPkgEn: "",
                             skuMinInventory: null,
                             skuModifyStatus: null,
-                            skuNameCn: "",
                             skuNameCustomer: "",
                             skuNameEn: "",
                             skuNetWeight: null,
@@ -1589,7 +1646,6 @@
                         obj.skuId = v.skuId;
                         obj.skuPictures = v.skuPictures;
                         obj.skuNameEn = v.skuNameEn;
-                        obj.skuNameCn = v.skuNameCn;
                         obj.skuDescEn = v.skuDescEn;
                         obj.skuDescCustomer = v.skuDescCustomer;
                         obj.skuNameCustomer = v.skuNameCustomer;
@@ -1653,7 +1709,6 @@
                         obj.skuApplicableAge = v.skuApplicableAge;
                         obj.skuExpireDates = v.skuExpireDates;
                         obj.skuExpireUnit = v.skuExpireUnit;
-                        obj.skuComments = v.skuComments;
                         obj.skuStatus = "TBC";
                         obj.skuQuotationNo = v.quotationNo;
                         obj.skuSysCode = v.skuSysCode;
