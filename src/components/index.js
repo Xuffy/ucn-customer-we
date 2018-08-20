@@ -23,7 +23,7 @@ import addNewInqury from '@/views/negotiation/children/addNewInqury';
 import overviewPage from './common/overviewPage/index';
 import VInputNumber from './common/inputNumber/index';
 import VProduct from './common/overviewPage/addProduct';
-import vButton from './common/button/index';
+import VButton from './common/button/index';
 
 export {
   VImage,
@@ -49,5 +49,5 @@ export {
   overviewPage,
   VInputNumber,
   VProduct,
-  vButton
+  VButton
 };
