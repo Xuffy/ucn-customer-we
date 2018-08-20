@@ -596,12 +596,12 @@ export default {
         showType:'input',
         belongTab:'logisticInfo',
     },
-    warehourceDefault:{
-        key:'warehourceDefault',
-        type: 'String',
-        showType:'input',
-        belongTab:'logisticInfo',
-    },
+    // warehourceDefault:{
+    //     key:'warehourceDefault',
+    //     type: 'String',
+    //     showType:'input',
+    //     belongTab:'logisticInfo',
+    // },
 
     /**
      * Other Info

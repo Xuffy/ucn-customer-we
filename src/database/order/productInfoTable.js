@@ -148,13 +148,16 @@ export default {
         _hide:true
     },
     totalCtnCbm:{       //新增
-        mustShowColumn:true
+        mustShowColumn:true,
+        _slot:'totalCtnCbm'
     },
     totalCtnGw:{        //新增
-        mustShowColumn:true
+        mustShowColumn:true,
+        _slot:'totalCtnGw'
     },
     totalCtnNw:{        //新增
-        mustShowColumn:true
+        mustShowColumn:true,
+        _slot:'totalCtnNw'
     },
     skuCartonQty:{      //新增
         mustShowColumn:true,
