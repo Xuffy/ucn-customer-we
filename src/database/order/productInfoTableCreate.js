@@ -136,17 +136,24 @@ export default {
         _hide:true
     },
     totalCtnCbm:{       //新增
-        mustShowColumn:true
+        mustShowColumn:true,
+        _slot:'totalCtnCbm',
+        _calculate:true
     },
     totalCtnGw:{        //新增
-        mustShowColumn:true
+        mustShowColumn:true,
+        _slot:'totalCtnGw',
+        _calculate:true
     },
     totalCtnNw:{        //新增
-        mustShowColumn:true
+        mustShowColumn:true,
+        _slot:'totalCtnNw',
+        _calculate:true
     },
     skuCartonQty:{
         mustShowColumn:true,
-        _slot:'skuCartonQty'
+        _slot:'skuCartonQty',
+        _calculate:true
     },
     skuCustomsCode:{
         _disabled:true

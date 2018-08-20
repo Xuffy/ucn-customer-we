@@ -5,9 +5,15 @@
         </div>
         <el-form ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}"
-                        v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key"
-                        :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8"
+                <el-col
+                        :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}"
+                        v-for="v in $db.order.orderDetail"
+                        v-if="v.belong==='basicInfo' && !v.createHide"
+                        :key="v.key"
+                        :xs="24"
+                        :sm="v.fullLine?24:12"
+                        :md="v.fullLine?24:12"
+                        :lg="v.fullLine?24:8"
                         :xl="v.fullLine?24:8">
                     <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.type==='input'">
@@ -441,35 +447,40 @@
                     slot="skuFobPrice"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
-                    :accuracy="1"
+                    :accuracy="4"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
                     slot="skuExwPrice"
                     slot-scope="{data}"
+                    :accuracy="4"
                     @blur="handlePriceBlur"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
                     slot="skuCifPrice"
                     slot-scope="{data}"
+                    :accuracy="4"
                     @blur="handlePriceBlur"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
                     slot="skuDduPrice"
+                    :accuracy="4"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
                     slot="skuQty"
+                    :accuracy="1"
                     @blur="handlePriceBlur(data)"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
                     slot="skuPrice"
+                    :accuracy="4"
                     :disabled="true"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -478,36 +489,42 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuLength"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuWidth"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuHeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuNetWeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuVolume"
+                    :accuracy="6"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonQty"
+                    :accuracy="1"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -515,30 +532,35 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonLength"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonWidth"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonHeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonWeightNet"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonRoughWeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -546,12 +568,14 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuInnerCartonVolume"
+                    :accuracy="3"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuInnerCartonOuterNum"
+                    :accuracy="1"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -559,30 +583,35 @@
                     class="speNumber spx"
                     slot="skuOuterCartonQty"
                     @blur="handlePriceBlur"
+                    :accuracy="1"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonLength"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonWidth"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonHeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonNetWeight"
+                    :accuracy="2"
                     @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -590,6 +619,7 @@
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonRoughWeight"
+                    :accuracy="2"
                     @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -597,6 +627,7 @@
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonVolume"
+                    :accuracy="3"
                     @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -604,30 +635,36 @@
                     :min="0"
                     class="speNumber spx"
                     slot="skuApplicableAge"
+                    :accuracy="0"
+                    :max="127"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuExpireDates"
+                    :accuracy="0"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuSampleQty"
+                    :accuracy="1"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuSamplePrice"
+                    :accuracy="4"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     :min="0"
                     class="speNumber spx"
                     slot="skuDeliveryDates"
+                    :accuracy="0"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -639,6 +676,35 @@
                     slot-scope="{data}"
                     :disabled="true"
                     v-model="data.value"></v-input-number>
+
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnCbm"
+                    :accuracy="3"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnGw"
+                    :accuracy="2"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnNw"
+                    :accuracy="2"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+
         </v-history-modify>
     </div>
 </template>
@@ -848,7 +914,7 @@
                     _.mapObject(v, (item, key) => {
                         if (item._calculate) {
                             obj[key] = {
-                                value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+                                value: this.$calc.add(Number(item.value), (Number(obj[key] ? obj[key].value : 0) || 0))
                             };
                         } else {
                             obj[key] = {
@@ -1105,48 +1171,48 @@
             },
             handleChangeIncoterm(key) {
                 let incoterm,
-                    totalPrice=['skuFobCurrency','skuFobPort','skuFobPrice','skuExwCurrency','skuExwPrice','skuCifPrice','skuCifCurrency','skuCifPort','skuDduCurrency','skuDduPort','skuDduPrice'],
-                    fob=['skuFobCurrency','skuFobPort','skuFobPrice'],
-                    exw=['skuExwCurrency','skuExwPrice'],
-                    cif=['skuCifPrice','skuCifCurrency','skuCifPort'],
-                    ddu=['skuDduCurrency','skuDduPort','skuDduPrice'];
-                if(this.orderForm[key]==='1'){
-                    incoterm=fob;
-                }else if(this.orderForm[key]==='2'){
-                    incoterm=exw;
-                }else if(this.orderForm[key]==='3'){
-                    incoterm=cif;
-                }else if(this.orderForm[key]==='4'){
-                    incoterm=ddu;
+                    totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                    fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                    exw = ["skuExwCurrency", "skuExwPrice"],
+                    cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                    ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                if (this.orderForm[key] === "1") {
+                    incoterm = fob;
+                } else if (this.orderForm[key] === "2") {
+                    incoterm = exw;
+                } else if (this.orderForm[key] === "3") {
+                    incoterm = cif;
+                } else if (this.orderForm[key] === "4") {
+                    incoterm = ddu;
                 }
-                _.map(totalPrice,v=>{
-                    _.map(this.productTableData,item=>{
-                        if(!item._remark){
-                            item[v]._hide=true;
+                _.map(totalPrice, v => {
+                    _.map(this.productTableData, item => {
+                        if (!item._remark) {
+                            item[v]._hide = true;
                         }
-                    })
+                    });
                 });
-                _.map(incoterm,v=>{
-                    _.map(this.productTableData,item=>{
-                        if(!item._remark){
-                            item[v]._hide=false;
+                _.map(incoterm, v => {
+                    _.map(this.productTableData, item => {
+                        if (!item._remark) {
+                            item[v]._hide = false;
                         }
-                    })
+                    });
                 });
                 _.map(this.productTableData, item => {
                     if (!item._remark) {
                         if (this.orderForm[key] === "1") {
                             //fob
-                            item.skuPrice.value = item.skuFobPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$calc.multiply(item.skuFobPrice.value, item.skuQty.value ? item.skuQty.value : 0);
                         } else if (this.orderForm[key] === "2") {
                             //exw
-                            item.skuPrice.value = item.skuExwPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$calc.multiply(item.skuExwPrice.value, item.skuQty.value ? item.skuQty.value : 0);
                         } else if (this.orderForm[key] === "3") {
                             //cif
-                            item.skuPrice.value = item.skuCifPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$calc.multiply(item.skuCifPrice.value, item.skuQty.value ? item.skuQty.value : 0);
                         } else if (this.orderForm[key] === "4") {
                             //ddu
-                            item.skuPrice.value = item.skuDduPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$calc.multiply(item.skuDduPrice.value, item.skuQty.value ? item.skuQty.value : 0);
                         }
                     }
                 });

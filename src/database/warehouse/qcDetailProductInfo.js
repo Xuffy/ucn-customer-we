@@ -331,9 +331,9 @@ export default{
         _sort:false,
         isFWS: true
     },
-    skuMaterialCn:{
-        key: 'skuMaterialCn'
-    },
+    // skuMaterialCn:{
+    //     key: 'skuMaterialCn'
+    // },
     skuMaterialEn: {
         key: 'skuMaterialEn'
     },

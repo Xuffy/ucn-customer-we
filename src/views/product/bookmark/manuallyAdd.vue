@@ -899,7 +899,6 @@
                     unitVolume: '3',
                     unitWeight: '7',
                     useDisplayBox: '1',
-                    warehourceDefault: "",
                     yearListed: ""
                 },
                 /**

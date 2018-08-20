@@ -381,7 +381,22 @@
                         this.accounts = this.$getDB(this.$db.supplier.accountInfo, res.accounts,e => {
                           return e;
                         });
-                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
+                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address,e => {
+                          let country,recvCountry;
+                          country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
+                          recvCountry = _.findWhere(this.countryOption, {code: e.recvCountry.value}) || {};
+                          e.country._value = country.name || '';
+                          e.recvCountry._value = recvCountry.name || '';
+                          const province = e.province.value || '';
+                          const city = e.city.value || '';
+                          const address = e.address.value || ''
+                          const recvProvince = e.recvProvince.value || '';
+                          const recvCity = e.recvCity.value || '';
+                          const recvAddr = e.recvAddr.value || '';
+                          e.factoryAddress.value = e.country._value +' '+province+' '+city+' '+address;
+                          e.expressAddress.value = e.recvCountry._value +' '+recvProvince+' '+recvCity+' '+recvAddr
+                          return e;
+                        });
                         this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
                           let gender;
                           gender = _.findWhere(this.sex, {code:(e.gender.value)+''}) || {};
@@ -483,7 +498,7 @@
             }
             this.$ajax.post(this.$apis.post_purchase_supplier_listRemarks,remark)
               .then(res => {
-                this.remarkData = this.$getDB(this.$db.supplier.detailTable, res.datas, item => {
+                this.remarkData = this.$getDB(this.$db.supplier.remark, res.datas, item => {
                   _.mapObject(item, val => {
                     val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                     return val
