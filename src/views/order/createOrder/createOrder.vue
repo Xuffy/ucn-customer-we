@@ -5,9 +5,15 @@
         </div>
         <el-form ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}"
-                        v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key"
-                        :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8"
+                <el-col
+                        :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}"
+                        v-for="v in $db.order.orderDetail"
+                        v-if="v.belong==='basicInfo' && !v.createHide"
+                        :key="v.key"
+                        :xs="24"
+                        :sm="v.fullLine?24:12"
+                        :md="v.fullLine?24:12"
+                        :lg="v.fullLine?24:8"
                         :xl="v.fullLine?24:8">
                     <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.type==='input'">
@@ -630,6 +636,7 @@
                     class="speNumber spx"
                     slot="skuApplicableAge"
                     :accuracy="0"
+                    :max="127"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -907,7 +914,7 @@
                     _.mapObject(v, (item, key) => {
                         if (item._calculate) {
                             obj[key] = {
-                                value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+                                value: this.$calc.add(Number(item.value), (Number(obj[key] ? obj[key].value : 0) || 0))
                             };
                         } else {
                             obj[key] = {
@@ -1164,48 +1171,48 @@
             },
             handleChangeIncoterm(key) {
                 let incoterm,
-                    totalPrice=['skuFobCurrency','skuFobPort','skuFobPrice','skuExwCurrency','skuExwPrice','skuCifPrice','skuCifCurrency','skuCifPort','skuDduCurrency','skuDduPort','skuDduPrice'],
-                    fob=['skuFobCurrency','skuFobPort','skuFobPrice'],
-                    exw=['skuExwCurrency','skuExwPrice'],
-                    cif=['skuCifPrice','skuCifCurrency','skuCifPort'],
-                    ddu=['skuDduCurrency','skuDduPort','skuDduPrice'];
-                if(this.orderForm[key]==='1'){
-                    incoterm=fob;
-                }else if(this.orderForm[key]==='2'){
-                    incoterm=exw;
-                }else if(this.orderForm[key]==='3'){
-                    incoterm=cif;
-                }else if(this.orderForm[key]==='4'){
-                    incoterm=ddu;
+                    totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                    fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                    exw = ["skuExwCurrency", "skuExwPrice"],
+                    cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                    ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                if (this.orderForm[key] === "1") {
+                    incoterm = fob;
+                } else if (this.orderForm[key] === "2") {
+                    incoterm = exw;
+                } else if (this.orderForm[key] === "3") {
+                    incoterm = cif;
+                } else if (this.orderForm[key] === "4") {
+                    incoterm = ddu;
                 }
-                _.map(totalPrice,v=>{
-                    _.map(this.productTableData,item=>{
-                        if(!item._remark){
-                            item[v]._hide=true;
+                _.map(totalPrice, v => {
+                    _.map(this.productTableData, item => {
+                        if (!item._remark) {
+                            item[v]._hide = true;
                         }
-                    })
+                    });
                 });
-                _.map(incoterm,v=>{
-                    _.map(this.productTableData,item=>{
-                        if(!item._remark){
-                            item[v]._hide=false;
+                _.map(incoterm, v => {
+                    _.map(this.productTableData, item => {
+                        if (!item._remark) {
+                            item[v]._hide = false;
                         }
-                    })
+                    });
                 });
                 _.map(this.productTableData, item => {
                     if (!item._remark) {
                         if (this.orderForm[key] === "1") {
                             //fob
-                            item.skuPrice.value = item.skuFobPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$calc.multiply(item.skuFobPrice.value, item.skuQty.value ? item.skuQty.value : 0);
                         } else if (this.orderForm[key] === "2") {
                             //exw
-                            item.skuPrice.value = item.skuExwPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$calc.multiply(item.skuExwPrice.value, item.skuQty.value ? item.skuQty.value : 0);
                         } else if (this.orderForm[key] === "3") {
                             //cif
-                            item.skuPrice.value = item.skuCifPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$calc.multiply(item.skuCifPrice.value, item.skuQty.value ? item.skuQty.value : 0);
                         } else if (this.orderForm[key] === "4") {
                             //ddu
-                            item.skuPrice.value = item.skuDduPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$calc.multiply(item.skuDduPrice.value, item.skuQty.value ? item.skuQty.value : 0);
                         }
                     }
                 });
