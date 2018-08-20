@@ -198,11 +198,11 @@ export default {
   },
   created() {
     const menuLink = thisTool.setMenuLinks(this, ['INQUIRY:OVERVIEW:DRAFT', 'INQUIRY:OVERVIEW:DELETE', 'INQUIRY:LOG']);
-    Object.keys(menuLink).forEach(auth => {
-      if (this.$auth(auth)) {
-        this.setMenuLink(menuLink[auth]);
-      }
-    });
+    // Object.keys(menuLink).forEach(auth => {
+    //   if (this.$auth(auth)) {
+    //     this.setMenuLink(menuLink[auth]);
+    //   }
+    // });
 
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
