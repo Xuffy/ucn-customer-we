@@ -328,8 +328,8 @@ export default {
           }]
         };
         this.tableLoad = false;
-
-        this.$ajax.get(this.$apis.GET_CUSTOMER_EXCHANGE_RATE_FEE, {tenantId: res.tenantId, companyId: res.companyId}).then(res2 => {
+        // this.$ajax.post(this.$apis.GET_CUSTOMER_EXCHANGE_RATE_FEE, {tenantId: res.tenantId, companyId: res.companyId})
+        this.$ajax.get(this.$apis.get_customcurrencyexchangerate_query).then(res2 => {
           this.custom = res2.custom;
           this.exchangeRates = res2.exchangeRates;
         });
