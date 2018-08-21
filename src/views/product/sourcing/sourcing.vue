@@ -153,7 +153,7 @@
                     });
                     this.pageData = res;
                     this.selectList = [];
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingTable = false;
                 });
             },
@@ -174,9 +174,6 @@
                         }
                     });
                 }
-            },
-            changeSort(e) {
-                console.log(e, "val");
             },
             changeChecked(e) {
                 this.selectList = e;

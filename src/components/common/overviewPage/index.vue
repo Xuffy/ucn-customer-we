@@ -20,6 +20,7 @@
                                         v-model="formData[v.key]"
                                         :list="v._list"
                                         :defaultProps="v._defaultProps"
+                                        :searchPlaceholder="$i.product.pleaseInput"
                                         :checkInputBoxPl="$i.product.pleaseChoose"
                                         :expandOnClickNode="false">
                                 </drop-down-single>
@@ -49,6 +50,7 @@
                             <div v-else-if="v.type==='number'">
                                 <v-input-number
                                         class="speNumber speLine"
+                                        :placeholder="$i.product.pleaseInput"
                                         v-model="formData[v.key]"></v-input-number>
                             </div>
                             <div v-else-if="v._slot">
@@ -81,6 +83,7 @@
                                         v-model="formData[v.key]"
                                         :list="v._list"
                                         :defaultProps="v._defaultProps"
+                                        :searchPlaceholder="$i.product.pleaseInput"
                                         :checkInputBoxPl="$i.product.pleaseChoose"
                                         :expandOnClickNode="false">
                                 </drop-down-single>
@@ -110,6 +113,7 @@
                             <div v-else-if="v.type==='number'">
                                 <v-input-number
                                         class="speNumber speLine"
+                                        :placeholder="$i.product.pleaseInput"
                                         v-model="formData[v.key]"></v-input-number>
                             </div>
                             <div v-else-if="v._slot">
@@ -131,6 +135,7 @@
             <el-button
                     @click="search"
                     :loading="disabledSearch"
+                    plain
                     type="primary">{{$i.product.search}}</el-button>
             <el-button
                     @click="clear"
