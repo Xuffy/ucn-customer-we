@@ -182,7 +182,8 @@
                 payment:[],
                 sex:[],
                 orderStatus:[],
-                inquiryStatus:[]
+                inquiryStatus:[],
+                department:[]
             }
         },
         methods: {
@@ -397,12 +398,20 @@
                           e.expressAddress.value = e.recvCountry._value +' '+recvProvince+' '+recvCity+' '+recvAddr
                           return e;
                         });
-                        this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
-                          let gender;
-                          gender = _.findWhere(this.sex, {code:(e.gender.value)+''}) || {};
-                          e.gender._value = gender.name || '';
-                          return e;
-                        });
+                        const concats = res.concats
+                        //获取部门列表匹配
+                        if (this.basicDate.tenantId && this.basicDate.companyId){
+                          this.$ajax.get(`${this.$apis.GET_DEPARTMENT}?tenantId=${this.basicDate.tenantId}&companyId=${this.basicDate.companyId}`).then(res=>{
+                            this.concats = this.$getDB(this.$db.supplier.concats, concats, e => {
+                              let gender,deptId;
+                              gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};
+                              e.gender._value = gender.name || '';
+                              deptId = _.findWhere(res, {deptId: (e.deptId.value)}) || {};
+                              e.deptId._value = deptId.deptName || '';
+                              return e;
+                            });
+                          })
+                        }
                     })
                     .catch((res) => {
 

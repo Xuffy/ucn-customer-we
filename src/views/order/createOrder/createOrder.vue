@@ -1073,6 +1073,39 @@
                         this.productTableData.push(v);
                     });
 
+
+                    let incoterm,
+                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                        exw = ["skuExwCurrency", "skuExwPrice"],
+                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                    if (this.orderForm.incoterm === "1") {
+                        incoterm = fob;
+                    } else if (this.orderForm.incoterm === "2") {
+                        incoterm = exw;
+                    } else if (this.orderForm.incoterm === "3") {
+                        incoterm = cif;
+                    } else if (this.orderForm.incoterm === "4") {
+                        incoterm = ddu;
+                    }
+                    _.map(totalPrice, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = true;
+                            }
+                        });
+                    });
+                    _.map(incoterm, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = false;
+                            }
+                        });
+                    });
+
+
+
                     this.markImportant = this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
                     if (res.status !== "2" && res.status !== "3" && res.status !== "4") {
@@ -1361,7 +1394,37 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
-                }).finally(err => {
+                    let incoterm,
+                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                        exw = ["skuExwCurrency", "skuExwPrice"],
+                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                    if (this.orderForm.incoterm === "1") {
+                        incoterm = fob;
+                    } else if (this.orderForm.incoterm === "2") {
+                        incoterm = exw;
+                    } else if (this.orderForm.incoterm === "3") {
+                        incoterm = cif;
+                    } else if (this.orderForm.incoterm === "4") {
+                        incoterm = ddu;
+                    }
+                    _.map(totalPrice, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = true;
+                            }
+                        });
+                    });
+                    _.map(incoterm, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = false;
+                            }
+                        });
+                    });
+
+                }).finally(() => {
                     this.loadingProductTable = false;
                 });
             },
@@ -1742,6 +1805,37 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
+
+                    let incoterm,
+                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                        exw = ["skuExwCurrency", "skuExwPrice"],
+                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                    if (this.orderForm.incoterm === "1") {
+                        incoterm = fob;
+                    } else if (this.orderForm.incoterm === "2") {
+                        incoterm = exw;
+                    } else if (this.orderForm.incoterm === "3") {
+                        incoterm = cif;
+                    } else if (this.orderForm.incoterm === "4") {
+                        incoterm = ddu;
+                    }
+                    _.map(totalPrice, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = true;
+                            }
+                        });
+                    });
+                    _.map(incoterm, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = false;
+                            }
+                        });
+                    });
+
                 }).finally(err => {
                     this.loadingProductTable = false;
                     this.loadingPage = false;
