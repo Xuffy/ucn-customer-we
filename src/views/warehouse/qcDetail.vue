@@ -1054,7 +1054,7 @@
                 });
             },
             download(){
-                this.$fetch.export_task('WAREHOUES',{qcOrderNos:[this.qcDetail.qcOrderNo]});
+                this.$fetch.export_task('QC_ORDER',{qcOrderNos:[this.qcDetail.qcOrderNo]});
             },
             cancel(){
                 window.close();
