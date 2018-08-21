@@ -144,12 +144,13 @@
                                 @change="handleCheckedDocument(item,index)">
                                 {{item.name}}
                               </el-checkbox>
-                              <div class="uploadBox" disabled="item.checked">
+                              <div class="uploadBox" :disabled="item.checked">
                                 <v-upload
                                 oss-private
                                 :ref="'uploadDocument'+item.code"
                                 :limit="20"
                                 :list="item.attachments"
+                                :readonly="!item.checked"
                                 />
                               </div>
                             </li>
@@ -286,7 +287,7 @@
                       <el-input size="mini" v-model="addressData.consignee" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="12">
+                  <el-col :span="12">bia
                     <el-form-item  :label="$i.setting.notify +'：'">
                       <el-input size="mini" v-model="addressData.notify" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
@@ -677,9 +678,7 @@
               checkList:[],
               documentRedonly:false,
               documentList:[],
-              documentTypeClone:[],
-
-
+              documentTypeClone:[]
             }
         },
         methods:{
@@ -1192,8 +1191,7 @@
           },
           handleCheckedDocument(item,index){
             item.checked = !item.checked;
-            this.$set(this.documentTypeClone,index, item)
-
+            this.$set(this.documentTypeClone,index, item);
           },
           /**
            * custom操作
