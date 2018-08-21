@@ -2107,7 +2107,6 @@
                 };
 
                 return this.$ajax.post(this.$apis.ORDER_HISTORY, param).then(res => {
-                    console.log(JSON.parse(res.datas[0].history), "res");
                     let array = [], obj = {};
                     _.map(res.datas, v => {
                         obj = JSON.parse(v.history);
