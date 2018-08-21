@@ -14,7 +14,7 @@
             :lg="item.lg || 8"
             v-if="!item._inquiryHide && !item._hide">
             <el-form-item
-              :label="item.label"
+              :label="item.label+':'"
               :prop="item.key"
               :rules="item.rules"
               :label-width="item.width || '150px'"

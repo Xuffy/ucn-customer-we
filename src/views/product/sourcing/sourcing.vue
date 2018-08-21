@@ -116,9 +116,9 @@
                 }
                 Object.assign(this.queryConfig, query);
                 let params = this.$depthClone(this.queryConfig);
-                if (_.isArray(params.country)) {
-                    params.country = params.country.join(",");
-                }
+                // if (_.isArray(params.country)) {
+                //     params.country = params.country.join(",");
+                // }
                 if (this.$route.params.supplierName) {
                     params.supplierNameLike = this.$route.params.supplierName;
                 }
@@ -153,7 +153,7 @@
                     });
                     this.pageData = res;
                     this.selectList = [];
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingTable = false;
                 });
             },
@@ -174,9 +174,6 @@
                         }
                     });
                 }
-            },
-            changeSort(e) {
-                console.log(e, "val");
             },
             changeChecked(e) {
                 this.selectList = e;

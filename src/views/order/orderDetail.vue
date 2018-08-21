@@ -323,7 +323,8 @@
                         :orderNo="orderForm.orderNo"
                         :orderType="10"
                         :disabled="!allowHandlePay || loadingPaymentTable">
-                    {{$i.order.remindSupplierRefund}}</v-button>
+                    {{$i.order.remindSupplierRefund}}
+                </v-button>
                 <el-table
                         v-loading="loadingPaymentTable"
                         class="payTable"
@@ -959,7 +960,7 @@
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur(data)"
-                    :accuracy="3"
+                    :accuracy="1"
                     v-model="data.value"></v-input-number>
             <v-input-number
                     class="speNumber spx"
@@ -1138,6 +1139,7 @@
                     @change="val => data._isModified=true"
                     slot="skuApplicableAge"
                     :accuracy="0"
+                    :max="127"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -1182,6 +1184,35 @@
                     slot-scope="{data}"
                     :disabled="true"
                     v-model="data.value"></v-input-number>
+
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnCbm"
+                    :accuracy="3"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnGw"
+                    :accuracy="2"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnNw"
+                    :accuracy="2"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+
         </v-history-modify>
         <v-message-board
                 v-if="chatParams"
@@ -1489,7 +1520,7 @@
                             if (key === "skuPrice") {
                                 if (sameCurrency) {
                                     obj[key] = {
-                                        value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+                                        value: this.$calc.add(Number(item.value), (Number(obj[key] ? obj[key].value : 0) || 0))
                                     };
                                 } else {
                                     obj[key] = {
@@ -1498,7 +1529,7 @@
                                 }
                             } else {
                                 obj[key] = {
-                                    value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+                                    value: this.$calc.add(Number(item.value), (Number(obj[key] ? obj[key].value : 0) || 0))
                                 };
                             }
                         } else {
@@ -1568,8 +1599,8 @@
                         }
                     });
                     this.getDetail();
-                }).catch(()=>{
-                    this.loadingPage=false;
+                }).catch(() => {
+                    this.loadingPage = false;
                 });
             },
             getDetail(e, isTrue) {
@@ -1578,14 +1609,14 @@
                     orderNo: this.$route.query.orderNo || this.$route.query.code
                 }).then(res => {
                     this.orderForm = res;
-                    this.chatParams={
-                        bizNo:res.quotationNo,
-                        dataAuthCode:'BIZ_ORDER',
-                        funcAuthCode:'',            //功能权限
-                        suppliers:[{
-                            userId:res.supplierUserId,
-                            companyId:res.supplierCompanyId,
-                            tenantId:res.supplierTenantId
+                    this.chatParams = {
+                        bizNo: res.quotationNo,
+                        dataAuthCode: "BIZ_ORDER",
+                        funcAuthCode: "",            //功能权限
+                        suppliers: [{
+                            userId: res.supplierUserId,
+                            companyId: res.supplierCompanyId,
+                            tenantId: res.supplierTenantId
                         }]
                     };
                     /**
@@ -1641,12 +1672,44 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
+
+                    let incoterm,
+                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                        exw = ["skuExwCurrency", "skuExwPrice"],
+                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                    if (this.orderForm.incoterm === "1") {
+                        incoterm = fob;
+                    } else if (this.orderForm.incoterm === "2") {
+                        incoterm = exw;
+                    } else if (this.orderForm.incoterm === "3") {
+                        incoterm = cif;
+                    } else if (this.orderForm.incoterm === "4") {
+                        incoterm = ddu;
+                    }
+                    _.map(totalPrice, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = true;
+                            }
+                        });
+                    });
+                    _.map(incoterm, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = false;
+                            }
+                        });
+                    });
+
+
                     if (this.orderForm.status === "1" || this.orderForm.status === "2" && !isTrue) {
                         _.map(this.productTableData, v => {
                             if (v.fieldUpdate.value) {
                                 _.map(v.fieldUpdate.value, (value, key) => {
                                     if (key !== "skuPictures") {
-                                        if(v[key]){
+                                        if (v[key]) {
                                             v[key]._style = { "backgroundColor": "yellow" };
                                         }
                                     }
@@ -1693,7 +1756,7 @@
                      * */
                     this.getPaymentData();
                 }).finally(() => {
-                    this.$nextTick(()=>{
+                    this.$nextTick(() => {
                         this.loadingPage = false;
                     });
                     this.disableClickCancelModify = false;
@@ -1857,7 +1920,7 @@
                     }
                     this.getUnit();
                 }).catch(() => {
-                    this.loadingPage=false;
+                    this.loadingPage = false;
                 });
             },
             getInquiryData() {
@@ -1897,6 +1960,38 @@
                 }
                 this.orderForm.fieldUpdate[key] = "";
                 if (key === "incoterm") {
+
+                    let incoterm,
+                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                        exw = ["skuExwCurrency", "skuExwPrice"],
+                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                    if (this.orderForm[key] === "1") {
+                        incoterm = fob;
+                    } else if (this.orderForm[key] === "2") {
+                        incoterm = exw;
+                    } else if (this.orderForm[key] === "3") {
+                        incoterm = cif;
+                    } else if (this.orderForm[key] === "4") {
+                        incoterm = ddu;
+                    }
+                    _.map(totalPrice, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = true;
+                            }
+                        });
+                    });
+                    _.map(incoterm, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = false;
+                            }
+                        });
+                    });
+
+
                     _.map(this.productTableData, item => {
                         if (!item._remark) {
                             if (this.orderForm[key] === "1") {
@@ -2128,6 +2223,38 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
+
+                    let incoterm,
+                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                        exw = ["skuExwCurrency", "skuExwPrice"],
+                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                    if (this.orderForm.incoterm === "1") {
+                        incoterm = fob;
+                    } else if (this.orderForm.incoterm === "2") {
+                        incoterm = exw;
+                    } else if (this.orderForm.incoterm === "3") {
+                        incoterm = cif;
+                    } else if (this.orderForm.incoterm === "4") {
+                        incoterm = ddu;
+                    }
+                    _.map(totalPrice, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = true;
+                            }
+                        });
+                    });
+                    _.map(incoterm, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = false;
+                            }
+                        });
+                    });
+
+
                 }).finally(err => {
                     this.loadingProductTable = false;
                 });
