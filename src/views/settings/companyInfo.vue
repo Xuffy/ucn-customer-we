@@ -287,7 +287,7 @@
                       <el-input size="mini" v-model="addressData.consignee" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="12">bia
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.notify +'：'">
                       <el-input size="mini" v-model="addressData.notify" :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
@@ -932,44 +932,29 @@
             },
              //更改默认地址
             setAddress(){
-              let def;
+              let def = [];
               this.addressDatas.forEach(v=>{
-                def = _.findWhere(v,{key:'def'}).value;
+                def.push(_.findWhere(v,{key:'def'}).value);
               })
-              if (def){
+              if (_.compact(def).length != 0){
                 this.$confirm(this.$i.setting.isReplace, this.$i.common.prompt, {
                   confirmButtonText: this.$i.common.confirm,
                   cancelButtonText: this.$i.common.cancel,
                   type: 'warning'
                 }).then(() => {
+                }).finally(()=>{
                   if (this.addressData.def){
-                    this.addressData.def = true;
                     this.$message({
                       type: 'success',
                       message: this.$i.setting.replaceSuccess
                     });
                   }else{
-                    this.addressData.def = false;
                     this.$message({
                       type: 'success',
                       message: this.$i.setting.cancelReplace
                     });
                   }
-                }).catch(() => {
-                  if (this.addressData.def){
-                    this.addressData.def = false;
-                    this.$message({
-                      type: 'success',
-                      message: this.$i.setting.cancelReplace
-                    });
-                  }else{
-                    this.addressData.def = true;
-                    this.$message({
-                      type: 'success',
-                      message: this.$i.setting.replaceSuccess
-                    });
-                  }
-                });
+                })
               }
             },
 
