@@ -54,7 +54,7 @@
               @change-sort="sort">
          <template slot="header">
            <div v-show='isButton'>
-             <div class="btnline">
+             <div class="btnline" v-authorize="'SUPPLIER:OVERVIEW:READ_ONLY'">
                <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'"
                           @click='createInquiry'>
                       {{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>

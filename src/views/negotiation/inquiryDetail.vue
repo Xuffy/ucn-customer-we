@@ -44,7 +44,7 @@
               @change-sort="onListSortChange"
               :rowspan="2"
               :hideFilterColumn="statusModify"/>
-          <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]">
+          <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:READ_ONLY'">
             <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 22" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
             <el-button @click="addToCompare" v-authorize="'INQUIRY:DETAIL:ADD_COMPARE'">{{ $i.common.addToCompare }}</el-button>
             <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id, 'from': 'copy'}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>

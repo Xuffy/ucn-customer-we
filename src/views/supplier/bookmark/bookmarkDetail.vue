@@ -27,7 +27,7 @@
                        </el-col>
                     </el-row>
                  </el-form>
-                <div class="btns" v-if="noEdit">
+                <div class="btns" v-if="noEdit" v-authorize="'SUPPLIER:BOOKMARK_DETAIL:READ_ONLY'">
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
