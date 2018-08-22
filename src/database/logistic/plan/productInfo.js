@@ -166,6 +166,7 @@ export default {
     type: 'text'
   },
   "blSkuName": {
+    key:'skuNameCustomer',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -198,22 +199,12 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuNameCustomer": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
   "skuCustomsNameCn": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "skuCustomsNameEn": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "skuSupplierCode": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'

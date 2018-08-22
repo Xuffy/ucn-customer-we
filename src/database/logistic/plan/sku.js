@@ -120,9 +120,6 @@ export default {
   hsCode: {
     type: 'String'
   },
-  unitPrice: {
-    type: 'text'
-  },
   totalPrice: {
     type: 'text'
   },
@@ -172,7 +169,7 @@ export default {
   bookingDate:{
     key:'actBookingDate',
     _filed:'actBookingDate',
-    type: 'String'
+    type: 'textDate'
   },
   estContainerStuffingDate: {
     type: 'textDate'
@@ -205,4 +202,8 @@ export default {
   skuCartonQty: {
     type: 'textDate'
   },
+  logisticsStatus: {
+    _hide:true,
+    type: 'text'
+  }
 }
