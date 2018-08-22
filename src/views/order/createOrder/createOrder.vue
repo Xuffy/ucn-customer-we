@@ -1218,34 +1218,34 @@
                 } else if (this.orderForm[key] === "4") {
                     incoterm = ddu;
                 }
-                _.map(totalPrice, v => {
-                    _.map(this.productTableData, item => {
-                        if (!item._remark) {
-                            item[v]._hide = true;
-                        }
-                    });
-                });
-                _.map(incoterm, v => {
-                    _.map(this.productTableData, item => {
-                        if (!item._remark) {
-                            item[v]._hide = false;
-                        }
-                    });
-                });
+                // _.map(totalPrice, v => {
+                //     _.map(this.productTableData, item => {
+                //         if (!item._remark) {
+                //             item[v]._hide = true;
+                //         }
+                //     });
+                // });
+                // _.map(incoterm, v => {
+                //     _.map(this.productTableData, item => {
+                //         if (!item._remark) {
+                //             item[v]._hide = false;
+                //         }
+                //     });
+                // });
                 _.map(this.productTableData, item => {
                     if (!item._remark) {
                         if (this.orderForm[key] === "1") {
                             //fob
-                            item.skuPrice.value = this.$calc.multiply(item.skuFobPrice.value, item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuFobPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                         } else if (this.orderForm[key] === "2") {
                             //exw
-                            item.skuPrice.value = this.$calc.multiply(item.skuExwPrice.value, item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuExwPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                         } else if (this.orderForm[key] === "3") {
                             //cif
-                            item.skuPrice.value = this.$calc.multiply(item.skuCifPrice.value, item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuCifPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                         } else if (this.orderForm[key] === "4") {
                             //ddu
-                            item.skuPrice.value = this.$calc.multiply(item.skuDduPrice.value, item.skuQty.value ? item.skuQty.value : 0);
+                            item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuDduPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                         }
                     }
                 });
@@ -2028,13 +2028,13 @@
             this.setMenuLink({
                 path: "/order/archiveOrder",
                 type: 20,
-                auth: "ORDER:OVERVIEW:ARCHIVE_LINK",
+                auth: "ORDER:OVERVIEW_ARCHIVE",
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: "/order/archiveDraft",
                 type: 30,
-                auth: "ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK",
+                auth: "ORDER:DRAFT_ARCHIVE",
                 label: this.$i.order.archiveDraft
             });
         }

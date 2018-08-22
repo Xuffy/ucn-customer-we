@@ -397,7 +397,7 @@ export const routerMap = [
         path: 'archiveOrder',
         name: 'orderArchiveOrder',
         meta: {
-          auth: 'ORDER:DRAFT_ARCHIVE',
+          auth: 'ORDER:OVERVIEW_ARCHIVE',
           name: $i.router.orderRecycleBin
         },
         component: () => import('../views/order/archiveOrder.vue')

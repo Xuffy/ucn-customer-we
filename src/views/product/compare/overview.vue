@@ -8,7 +8,7 @@
                 v-loading="loadingTable"
                 class="speTable"
                 :data="tableDataList"
-                :buttons="[{label:$i.product.modify,type:1,auth:'PRODUCT:COMPARE_OVERVIEW:MODIFY'},{label: $i.product.detailBig, type: 2}]"
+                :buttons="setButtons"
                 @action="btnClick"
                 @change-checked="changeChecked">
             <template slot="header">
@@ -93,8 +93,19 @@
         },
         methods: {
             ...mapActions(['setMenuLink']),
-            selectChange() {
-
+            setButtons(){
+                return [
+                    {
+                        label:this.$i.product.modify,
+                        type:1,
+                        auth:'PRODUCT:COMPARE_OVERVIEW:MODIFY'
+                    },
+                    {
+                        label: this.$i.product.detailBig,
+                        type: 2,
+                        auth:'PRODUCT:COMPARE_DETAIL'
+                    }
+                ]
             },
             hiddenDropDown() {
                 this.showdropDown = !this.showdropDown

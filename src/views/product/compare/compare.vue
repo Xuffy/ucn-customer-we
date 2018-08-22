@@ -22,10 +22,8 @@
                         v-authorize="'PRODUCT:COMPARE_DETAIL:CREATE_ORDER'"
                         @click="createOrder">{{$i.product.createOrder}}({{selectList.length}})</el-button>
                 <el-button
-                        v-authorize="'PRODUCT:COMPARE_DETAIL:ADD_NEW'"
                         @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button
-                        v-authorize="'PRODUCT:COMPARE_DETAIL:DELETE'"
                         @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.deleteProduct}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
@@ -43,15 +41,14 @@
                         @click="download">{{$i.product.download}}</el-button>
                 <el-button
                         v-if="!isModify"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:MODIFY'"
                         @click="modifyCompare">{{$i.product.modify}}</el-button>
                 <el-button
                         v-if="isModify"
-                        v-authorize="'PRODUCT:COMPARE_DETAIL:ADD_NEW'"
                         @click="addNewProduct"
                         :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button
                         v-if="isModify"
-                        v-authorize="'PRODUCT:COMPARE_DETAIL:DELETE'"
                         @click="deleteProduct"
                         :disabled="disableDelete" type="danger">{{$i.product.deleteProduct}}</el-button>
             </span>
@@ -66,7 +63,7 @@
                 :height="500"
                 v-loading="loadingTable"
                 :data="tableDataList"
-                :buttons="[{label: 'Detail', type: 1}]"
+                :buttons="setButton"
                 @action="btnClick"
                 @change-checked="changeChecked"></v-table>
         <div class="footBtn">
@@ -76,7 +73,6 @@
             <div v-if="$route.params.type==='modify'">
                 <div v-if="isModify">
                     <el-button
-                            v-authorize="'PRODUCT:COMPARE_DETAIL:SAVE'"
                             @click="saveModify"
                             :loading="disableClickSaveModify"
                             :disabled="allowBottomClick"
@@ -84,7 +80,10 @@
                     <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify">{{$i.product.cancel}}</el-button>
                 </div>
                 <div v-else>
-                    <el-button @click="deleteCompare" type="danger">{{$i.product.delete}}</el-button>
+                    <el-button
+                            v-authorize="'PRODUCT:COMPARE_DETAIL:ARCHIVE'"
+                            @click="deleteCompare"
+                            type="danger">{{$i.product.delete}}</el-button>
                 </div>
             </div>
         </div>
@@ -270,6 +269,15 @@
                         this.loadingTable=false;
                     });
                 }
+            },
+            setButton(e){
+                let button;
+                if(e.bookmarkId.value){
+                    button=[{label: 'Detail', type: 1,auth:'PRODUCT:BOOKMARK_DETAIL'}];
+                }else{
+                    button=[{label: 'Detail', type: 1,auth:'PRODUCT:DETAIL'}];
+                }
+                return button;
             },
             btnClick(e){
                 let id;

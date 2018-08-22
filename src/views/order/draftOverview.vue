@@ -17,7 +17,7 @@
                 :code="tableCode"
                 ref='vtable'
                 :data="tabData"
-                :buttons="[{label: 'Detail', type: 1}]"
+                :buttons="[{label: 'Detail', type: 1,auth:'ORDER:OVERVIEW:CREATE'}]"
                 @action="onAction"
                 :loading='loading'
                 :pageTotal='pageTotal'
@@ -27,11 +27,6 @@
                 style='marginTop:10px'>
             <template slot="header">
                 <div>
-                    <!--<el-button-->
-                            <!--v-authorize="'ORDER:DRAFT_OVERVIEW:SEND'"-->
-                            <!--:loading="disableClickSend"-->
-                            <!--:disabled="selectedList.length===0"-->
-                            <!--@click="send">{{$i.order.send}}</el-button>-->
                     <el-button
                             :loading="disableClickDelete"
                             type='danger'
@@ -347,13 +342,13 @@
             this.setMenuLink({
                 path: '/order/archiveOrder',
                 type: 20,
-                auth:'ORDER:OVERVIEW:ARCHIVE_LINK',
+                auth:'ORDER:OVERVIEW_ARCHIVE',
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: '/order/archiveDraft',
                 type: 30,
-                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK',
+                auth:'ORDER:DRAFT_ARCHIVE',
                 label: this.$i.order.archiveDraft
             });
         },
