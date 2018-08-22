@@ -722,7 +722,6 @@
                         this.loadingProductTable = false;
                         let oldData = _.clone(this.productTableData)
                         this.productTableData = []
-                        console.log(this.$copyArr(res))
                         _.map(res, v => {
                             if (v.id !== 0) {
                                 v.skuUnitDictCode = v.skuUnitDictCode ? (_.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}).name : "";
@@ -757,7 +756,7 @@
                                 v.actOuterCartonSkuQty = '';
                                 v.unqualifiedProcessingMode = '';
                                 v.samplingRate = '';
-                                v.expectQcQty = 0
+                                v.expectQcQty = v.expectQcQty
                                 this.productTableData.push(v);
                             }
                         });
