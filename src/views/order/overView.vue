@@ -26,7 +26,7 @@
                 :code="tableCode"
                 ref='vtable'
                 :data="tabData"
-                :buttons="[{label: $i.order.detail, type: 1}]"
+                :buttons="[{label: $i.order.detail, type: 1,auth:'ORDER:DETAIL'}]"
                 @action="onAction"
                 :loading='loading'
                 :pageTotal='pageTotal'
@@ -42,12 +42,6 @@
                                 v-authorize="'ORDER:OVERVIEW:CREATE'">
                             {{($i.order.createOrder)}}
                         </el-button>
-                        <!--<el-button-->
-                        <!--:disabled='disableFinish'-->
-                        <!--:loading="disableClickFinish"-->
-                        <!--@click='finish'-->
-                        <!--v-authorize="'ORDER:OVERVIEW:SHIPPED'">-->
-                        <!--{{$i.order.shipped}}({{selectedList.length}})</el-button>-->
                         <el-button
                                 v-authorize="'ORDER:OVERVIEW:DOWNLOAD'"
                                 @click="downloadOrder">
@@ -374,7 +368,7 @@
             this.setMenuLink({
                 path: "/order/draft",
                 type: 10,
-
+                auth:'ORDER:DRAFT_OVERVIEW',
                 label: this.$i.common.draft
             });
             this.setMenuLink({
@@ -387,13 +381,13 @@
             this.setMenuLink({
                 path: "/order/archiveOrder",
                 type: 30,
-                auth: "ORDER:OVERVIEW:ARCHIVE",
+                auth: "ORDER:OVERVIEW_ARCHIVE",
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: "/order/archiveDraft",
                 type: 40,
-                auth: "ORDER:OVERVIEW:ARCHIVE",
+                auth: "ORDER:DRAFT_ARCHIVE",
                 label: this.$i.order.archiveDraft
             });
         },
