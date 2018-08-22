@@ -392,7 +392,7 @@
                           e.expressAddress.value = e.recvCountry._value +' '+recvProvince+' '+recvCity+' '+recvAddr
                           return e;
                         } );
-                        const concats = res.concats
+                        let concats = res.concats
                         //获取部门列表匹配
                         if (this.basicDate.tenantId && this.basicDate.companyId){
                           this.$ajax.get(`${this.$apis.GET_DEPARTMENT}?tenantId=${this.basicDate.tenantId}&companyId=${this.basicDate.companyId}`).then(res=>{
