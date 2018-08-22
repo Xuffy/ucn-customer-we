@@ -8,12 +8,12 @@
         <th>{{$i.logistic.EstDate}}</th>
         <th>{{$i.logistic.ActDate}}</th>
       </tr>
-      <tr v-if="listData[0].bookingDate">
+      <tr v-if="listData[0].bookingDate"> 
         <td>{{$i.logistic.Booking}}</td>
         <td>--</td>
         <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('bookingDate')}">
-          <span v-if="!edit">{{$dateFormat(listData[0].bookingDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('bookingDate')}" @change="modifyTime(listData[0].bookingDate.value,listData[0].bookingDate._key)" v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].bookingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <span v-if="!edit">{{$dateFormat(listData[0].bookingDate.value, 'yyyy-mm-dd')}}</span> 
+          <el-date-picker :picker-options="BookingTimeOptions" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('bookingDate')}" @change="modifyTime(listData[0].bookingDate.value,listData[0].bookingDate._key)" v-if="edit&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].bookingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
       </tr>
       <tr v-if="listData[0].actContainerStuffingDate">
@@ -91,19 +91,27 @@
         LoadingTime:'',
         cleanceTime:'',
         hightLightModify:{},
+        BookingTimeOptions: {
+          disabledDate:(time)=> {
+            //当 如果选择前置条件  这后置的会清空
+            this.listData[0].actContainerStuffingDate.value = '';  //实际装柜日期
+            this.listData[0].declareDate.value = '';  //实际报关日期
+          }
+        },
         LoadingTimeOptions: {
           disabledDate:(time)=> {
-            return time.getTime() <= this.listData[0].bookingDate.value;
+            this.listData[0].declareDate.value = '';  //实际报关日期
+            return this.$dateFormat(time.getTime(),'yyyy-mm-dd') < this.listData[0].bookingDate.value;
           }
         },
         cleanceTimeOptions: {
           disabledDate:(time)=> {
-            return time.getTime() <= this.listData[0].actContainerStuffingDate.value;
+            return this.$dateFormat(time.getTime(),'yyyy-mm-dd') < this.listData[0].actContainerStuffingDate.value;
           }
         },
         arrivalTimeOptions: {
           disabledDate:(time)=> {
-            return time.getTime() <= this.listData[0].actDepartureDate.value;
+            return this.$dateFormat(time.getTime(),'yyyy-mm-dd') < this.listData[0].actDepartureDate.value;
           }
         }
       }
@@ -129,10 +137,12 @@
       },
       modifyTime(arg,key){
         //因为有些 日期不需要出发 业务逻辑  所以多加一个参数 区别
+        this.listData[0][key].value = this.$dateFormat(this.listData[0][key].value,'yyyy-mm-dd');
         this.$set(this.hightLightModify,key,arg);
         this.$emit('hightLightModifyFun',this.hightLightModify,this.name);
         if(arg){
-          let _shipmentStatus = this.basicInfoArr.length ? this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value : 0;
+          //初始化值
+          let _shipmentStatus = this.basicInfoArr.length ? this.basicInfoArr.find(el=> el.key == 'shipmentStatus')&&this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value : 0;
           this.BookingTime = this.listData[0].bookingDate.value&&this.$dateFormat(new Date(this.listData[0].bookingDate.value),'yyyy-mm-dd');
           this.LoadingTime = this.listData[0].actContainerStuffingDate.value&&this.$dateFormat(new Date(this.listData[0].actContainerStuffingDate.value),'yyyy-mm-dd');
           this.cleanceTime = this.listData[0].actCustomsCleanceDate.value&&this.$dateFormat(new Date(this.listData[0].actCustomsCleanceDate.value),'yyyy-mm-dd');
@@ -154,13 +164,14 @@
         }
       },
       changeShipmentStatusOption(status){
-        this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = true;
+        let shipmentStatusCurr = this.basicInfoArr.find(el=> el.key=='shipmentStatus');
+        shipmentStatusCurr && (shipmentStatusCurr.disabled = true);
         let arr = this.$depthClone(this.selectArr.shipmentStatus).map(el=> {
           el.disabled = true;
           return el;
         });
         if(status==0||status==1){
-          this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = false;
+          shipmentStatusCurr && (shipmentStatusCurr.disabled = false);
           arr = this.$depthClone(arr).map(el=> {
             if(el.code==2||el.code==3){
               el.disabled = false;
@@ -168,7 +179,7 @@
             return el;
           });
         }else if(status==0||status==1||status==2){
-          this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = false;
+          shipmentStatusCurr && (shipmentStatusCurr.disabled = false);
           arr = this.$depthClone(arr).map(el=> {
             if(el.code==3){
               el.disabled = false;

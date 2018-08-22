@@ -9,8 +9,8 @@
             <span v-if="pageType === 'plan'">{{ $i.logistic.status}}:</span>
             <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList('elRadioGroup')">
               <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
-              <el-radio-button :label="+a.code" v-for="a of ls_plan[pageType == 'plan' ? 'LS_PLAN' : 'LS_STATUS']" :key="'status-' + a.code">{{a.name}}
-              </el-radio-button>
+              <el-radio-button v-if="pageType == 'plan'" :label="+a.code" v-for="a of ls_plan.LS_PLAN" :key="'status-' + a.code">{{a.name}} </el-radio-button>
+              <el-radio-button v-if="pageType === 'loadingList'" :label="+a.code" v-for="a of ls_plan.LS_STATUS" :key="'status-' + a.code">{{a.name}}</el-radio-button>
             </el-radio-group>
           </div>
         </div>
@@ -36,7 +36,7 @@
     <v-table
       :code="urlObj[pageType][viewBy].setTheField"
       :data="tabData"
-      :buttons="[{label: 'detail', type: 'detail'}]"
+      :buttons="[{label: $i.logistic.detail, type: 'detail'}]"
       @action="action"
       @change-checked="changeChecked"
       :loading="tableLoading"
@@ -107,17 +107,17 @@
         ],
         auth:{
           plan: {
-            DOWNLOAD :'LOGISTICS:PLAN_OVERVIEW:DOWNLOAD',
-            ARCHIVE  : 'LOGISTICS:PLAN_OVERVIEW:ARCHIVE',
-            CREATE  : 'LOGISTICS:PLAN_OVERVIEW:CREATE'
+            DOWNLOAD :['LOGISTICS:PLAN_OVERVIEW:DOWNLOAD','LOGISTICS:PLAN_OVERVIEW:READ_ONLY'],
+            ARCHIVE  : ['LOGISTICS:PLAN_OVERVIEW:ARCHIVE','LOGISTICS:PLAN_OVERVIEW:READ_ONLY'],
+            CREATE  : ['LOGISTICS:PLAN_OVERVIEW:CREATE','LOGISTICS:PLAN_OVERVIEW:READ_ONLY']
           },
           loadingList: {
-            DOWNLOAD:'LOADING_LIST:OVERVIEW:DOWNLOAD',
-            ARCHIVE:'LOADING_LIST:OVERVIEW:ARCHIVE'
+            DOWNLOAD:['LOADING_LIST:OVERVIEW:DOWNLOAD'],
+            ARCHIVE:['LOADING_LIST:OVERVIEW:ARCHIVE']
           },
           draft: {
-            ARCHIVE:'LOGISTICS:PLAN_DRAFT_OVERVIEW:ARCHIVE',
-            SEND:'LOGISTICS:PLAN_DRAFT_OVERVIEW:SEND'
+            ARCHIVE:['LOGISTICS:PLAN_DRAFT_OVERVIEW:ARCHIVE','LOGISTICS:PLAN_DRAFT_OVERVIEW:READ_ONLY'],
+            SEND:['LOGISTICS:PLAN_DRAFT_OVERVIEW:SEND','LOGISTICS:PLAN_DRAFT_OVERVIEW:READ_ONLY']
           }
         },
         headerText: {
@@ -294,7 +294,12 @@
       initPage(){
         this.pageParams = {
           pn: 1,
-          ps: 50
+          ps: 50,
+          //默认排序
+          sorts:[
+            {orderBy:'updateDt',orderType:'desc'},
+            {orderBy:'entryDt',orderType:'desc'}
+          ]
         };
       },
       download(){
@@ -355,8 +360,8 @@
         }
       },
       searchFn(obj) {
-        const {pn, ps} = this.pageParams
-        this.pageParams = {pn, ps, [obj.id]: obj.value}
+        // const {pn, ps} = this.pageParams
+        this.pageParams[obj.id+'Like'] = obj.value;
         this.fetchDataList()
       },
       sizeChange(e) {
@@ -377,6 +382,10 @@
           this.fetchDataList();
         })
       },
+      //获取国家信息
+      countryAll() {
+        return this.$ajax.get(`${this.$apis.country_all}`);
+      },
       fetchDataList(arg) {
         // if(arg){
         //  this.initPage();
@@ -392,15 +401,23 @@
         this.pageType === 'plan' && (this.pageParams.planStatus = 2)
         this.$ajax.post(url, {lgStatus,lsStatus, ...this.pageParams}).then(res => {
           if (!res) return (this.tableLoading = false)
-          this.tabData = this.$getDB(db, res.datas, item => {
-            _.mapObject(item, val => {
-              // if (val.type === 'select' && val.value) {
-              //   let obj = this.containerType.find(a => a.code === val.value)
-              //   val.value = obj ? obj.name : null
-              // } 接手注释
-              val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-              return val
-            })
+          this.getContainerType().then(ContainerType=>{
+            this.countryAll().then(countryAll=>{
+              this.tabData = this.$getDB(db, res.datas, item => {
+                _.mapObject(item, val => {
+                  if (val.type === 'country' && val.value) {
+                    let obj = countryAll.find(a => a.code === val.value)
+                    val.value = obj ? obj.name : null
+                  } 
+                  if (val.type === 'container' && val.value) {
+                    let obj = ContainerType.find(a => a.code === val.value)
+                    val.value = obj ? obj.name : null
+                  } 
+                  val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                  return val
+                })
+              })
+            });
           })
           this.selectCount = [];
           this.$set(this.pageParams,'pn',res.pn);
@@ -412,14 +429,12 @@
       getDictionary(keyCode) {
         this.$ajax.post(this.$apis.get_dictionary, keyCode).then(res => {
           res.forEach(el=>{
-            this.ls_plan[el.code] = el.codes;
+            this.$set(this.ls_plan,el.code,el.codes);
           })
         })
       },
       getContainerType() {
-        this.$ajax.get(this.$apis.get_container_type).then(res => {
-          this.containerType = res
-        })
+        return this.$ajax.get(this.$apis.get_container_type);
       },
       batchSendDraft(){
         this.$ajax.post(this.$apis.logistics_plan_batchSendDraft,{ids:this.downloadIds}).then(res => {

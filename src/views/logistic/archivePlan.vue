@@ -136,7 +136,12 @@
       initPage() {
         this.pageParams = {
           pn: 1,
-          ps: 50
+          ps: 50,
+          //默认排序
+          sorts:[
+            {orderBy:'updateDt',orderType:'desc'},
+            {orderBy:'entryDt',orderType:'desc'}
+          ]
         };
       },
       changeSort(arr){
@@ -173,15 +178,7 @@
         })
       },
       searchFn(obj) {
-        const {
-          pn,
-          ps
-        } = this.pageParams
-        this.pageParams = {
-          pn,
-          ps,
-          [obj.id]: obj.value
-        }
+        this.pageParams[obj.id+'Like'] = obj.value;
         this.fetchDataList()
       },
       sizeChange(e) {
