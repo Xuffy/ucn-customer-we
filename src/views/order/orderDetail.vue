@@ -1672,38 +1672,7 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
-
-                    let incoterm,
-                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
-                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
-                        exw = ["skuExwCurrency", "skuExwPrice"],
-                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
-                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
-                    if (this.orderForm.incoterm === "1") {
-                        incoterm = fob;
-                    } else if (this.orderForm.incoterm === "2") {
-                        incoterm = exw;
-                    } else if (this.orderForm.incoterm === "3") {
-                        incoterm = cif;
-                    } else if (this.orderForm.incoterm === "4") {
-                        incoterm = ddu;
-                    }
-                    _.map(totalPrice, v => {
-                        _.map(this.productTableData, item => {
-                            if (!item._remark) {
-                                item[v]._hide = true;
-                            }
-                        });
-                    });
-                    _.map(incoterm, v => {
-                        _.map(this.productTableData, item => {
-                            if (!item._remark) {
-                                item[v]._hide = false;
-                            }
-                        });
-                    });
-
-
+                    this.handleIncoterm();
                     if (this.orderForm.status === "1" || this.orderForm.status === "2" && !isTrue) {
                         _.map(this.productTableData, v => {
                             if (v.fieldUpdate.value) {
@@ -1776,7 +1745,7 @@
                         v.name = (_.findWhere(this.paymentItemOption, { code: v.name }) || {}).name;
                     });
                     this.paymentData = res.datas;
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingPaymentTable = false;
                 });
             },
@@ -1908,7 +1877,7 @@
             getSupplier() {
                 this.loadingPage = true;
                 this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME, {
-                    name: ""
+                    name: ''
                 }).then(res => {
                     this.supplierOption = res;
                     if (this.$route.query.supplierCode) {
@@ -1933,9 +1902,7 @@
                 });
             },
             changePayment(e, key) {
-                if (!e) {
-                    return;
-                }
+                if (!e) {return;}
                 let name = _.findWhere(this.paymentOption, { code: e }).name;
                 if (name !== "L/C") {
                     this.disabledLcNo = true;
@@ -1961,36 +1928,7 @@
                 this.orderForm.fieldUpdate[key] = "";
                 if (key === "incoterm") {
 
-                    let incoterm,
-                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
-                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
-                        exw = ["skuExwCurrency", "skuExwPrice"],
-                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
-                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
-                    if (this.orderForm[key] === "1") {
-                        incoterm = fob;
-                    } else if (this.orderForm[key] === "2") {
-                        incoterm = exw;
-                    } else if (this.orderForm[key] === "3") {
-                        incoterm = cif;
-                    } else if (this.orderForm[key] === "4") {
-                        incoterm = ddu;
-                    }
-                    _.map(totalPrice, v => {
-                        _.map(this.productTableData, item => {
-                            if (!item._remark) {
-                                item[v]._hide = true;
-                            }
-                        });
-                    });
-                    _.map(incoterm, v => {
-                        _.map(this.productTableData, item => {
-                            if (!item._remark) {
-                                item[v]._hide = false;
-                            }
-                        });
-                    });
-
+                    this.handleIncoterm();
 
                     _.map(this.productTableData, item => {
                         if (!item._remark) {
@@ -2064,6 +2002,43 @@
                     config = this.productNotModifyBtn;
                 }
                 return config;
+            },
+            handleIncoterm(){
+                let incoterm,
+                    totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                    fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                    exw = ["skuExwCurrency", "skuExwPrice"],
+                    cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                    ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                console.log(this.orderForm.incoterm,'this.orderForm.incoterm')
+                if (this.orderForm.incoterm === "1") {
+                    incoterm = fob;
+                } else if (this.orderForm.incoterm === "2") {
+                    incoterm = exw;
+                } else if (this.orderForm.incoterm === "3") {
+                    incoterm = cif;
+                } else if (this.orderForm.incoterm === "4") {
+                    incoterm = ddu;
+                }
+                // _.map(totalPrice, v => {
+                //     _.map(this.productTableData, item => {
+                //         if (!item._remark) {
+                //             item[v]._mustHide=true;
+                //             item[v]._mustShow=false;
+                //         }
+                //     });
+                // });
+                // _.map(incoterm, v => {
+                //     _.map(this.productTableData, item => {
+                //         if (!item._remark) {
+                //             item[v]._mustHide=false;
+                //             item[v]._mustShow=true;
+                //         }
+                //     });
+                // });
+                // this.$refs.table.$refs.filterColumn.update(false,this.$depthClone(this.productTableData)).then(res=>{
+                //     this.productTableData=this.$refs.table.$refs.filterColumn.getFilterData(this.$depthClone(this.productTableData),res);
+                // });
             },
             productInfoAction(e, type) {
                 if (type === "negotiate") {
@@ -2224,37 +2199,7 @@
                         this.productTableData.push(v);
                     });
 
-                    let incoterm,
-                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
-                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
-                        exw = ["skuExwCurrency", "skuExwPrice"],
-                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
-                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
-                    if (this.orderForm.incoterm === "1") {
-                        incoterm = fob;
-                    } else if (this.orderForm.incoterm === "2") {
-                        incoterm = exw;
-                    } else if (this.orderForm.incoterm === "3") {
-                        incoterm = cif;
-                    } else if (this.orderForm.incoterm === "4") {
-                        incoterm = ddu;
-                    }
-                    _.map(totalPrice, v => {
-                        _.map(this.productTableData, item => {
-                            if (!item._remark) {
-                                item[v]._hide = true;
-                            }
-                        });
-                    });
-                    _.map(incoterm, v => {
-                        _.map(this.productTableData, item => {
-                            if (!item._remark) {
-                                item[v]._hide = false;
-                            }
-                        });
-                    });
-
-
+                    this.handleIncoterm();
                 }).finally(err => {
                     this.loadingProductTable = false;
                 });
