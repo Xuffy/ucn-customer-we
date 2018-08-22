@@ -1216,7 +1216,7 @@
                 v-if="chatParams"
                 :readonly="orderForm.status==='5'"
                 module="ORDER"
-                code="detail"
+                code="orderDetail"
                 :arguments="chatParams"
                 :id="$route.query.orderId"></v-message-board>
     </div>
@@ -1608,7 +1608,7 @@
                 }).then(res => {
                     this.orderForm = res;
                     this.chatParams = {
-                        bizNo: res.quotationNo,
+                        bizNo: res.orderNo,
                         dataAuthCode: "BIZ_ORDER",
                         funcAuthCode: "",            //功能权限
                         suppliers: [{
