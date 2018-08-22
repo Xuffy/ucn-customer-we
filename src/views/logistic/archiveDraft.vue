@@ -14,7 +14,7 @@
        <div slot="header">
          <div class="btn-wrap">
             <div class="fn btn">
-              <el-button @click="sendRecover" v-authorize="'LOGISTICS:DRAFT_ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
+              <el-button @click="sendRecover" v-authorize="['LOGISTICS:DRAFT_ARCHIVE:RECOVER','LOGISTICS:DRAFT_ARCHIVE:READ_ONLY']" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
             </div>
             <div class="view-by-btn">
               <span>{{ $i.logistic.viewBy }}&nbsp;</span>
@@ -149,7 +149,12 @@
       initPage() {
         this.pageParams = {
           pn: 1,
-          ps: 50
+          ps: 50,
+          //默认排序
+          sorts:[
+            {orderBy:'updateDt',orderType:'desc'},
+            {orderBy:'entryDt',orderType:'desc'}
+          ]
         };
       },
       changeSort(arr){
@@ -186,15 +191,7 @@
         })
       },
       searchFn(obj) {
-        const {
-          pn,
-          ps
-        } = this.pageParams
-        this.pageParams = {
-          pn,
-          ps,
-          [obj.id]: obj.value
-        }
+        this.pageParams[obj.id+'Like'] = obj.value;
         this.fetchDataList()
       },
       sizeChange(e) {

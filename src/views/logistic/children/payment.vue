@@ -40,8 +40,8 @@
             <el-select v-model="scope.row.payToCompanyId" filterable :placeholder="$i.logistic.placeholder">
               <el-option
                 v-for="item in selectArr.supplierAbbr"
-                :key="item.value"
-                :label="item.value"
+                :key="item.companyId"
+                :label="item.supplierName"
                 :value="item.companyId">
               </el-option>
             </el-select>
