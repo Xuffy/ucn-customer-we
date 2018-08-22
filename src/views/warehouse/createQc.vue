@@ -456,14 +456,47 @@
                         this.productConfig.ids = this.$route.query.ids.split(",");
                         this.loadingProductTable = true;
                         this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
+                            if (!this.companyId) {
+                                this.companyId = res[0].companyId
+                            }
                             this.loadingProductTable = false;
                         this.productTableData = []
                         _.map(res, v => {
                             if (v.id !== 0) {
-                                // let suo = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}
-                                //     , vo = _.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}
-                                //     , wo = _.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}
-                                //     , lo = _.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {};
+                                // v.skuUnitDictCode = v.skuUnitDictCode ? (_.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}).name : "";
+                                // v.volumeUnitDictCode = v.volumeUnitDictCode ? (_.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}).name : '';
+                                // v.weightUnitDictCode = v.weightUnitDictCode ? (_.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}).name : '';
+                                // v.lengthUnitDictCode =  v.lengthUnitDictCode ? (_.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }) || {}).name : '';
+                                // v.skuQcResultDictCode = '';
+                                // v.checkOuterCartonQty = '';
+                                // v.qcPic = '';
+                                // v.remark = '';
+                                // v.shippingMarkResultDictCode = '';
+                                // v.outerCartonBarCodeResultDictCode = '';
+                                // v.innerPackingBarCodeResultDictCode = '';
+                                // v.skuLabelResultDictCode = '';
+                                // v.skuBarCodeResultDictCode = '';
+                                // v.unqualifiedSkuGrossWeight = '';
+                                // v.qualifiedSkuGrossWeight = '';
+                                // v.unqualifiedSkuVolume = '';
+                                // v.qualifiedSkuVolume = '';
+                                // v.unqualifiedSkuNetWeight = '';
+                                // v.qualifiedSkuNetWeight = '';
+                                // v.unqualifiedSkuQty = '';
+                                // v.qualifiedSkuQty = '';
+                                // v.actSkuQty = '';
+                                // v.unqualifiedSkuCartonTotalQty = '';
+                                // v.qualifiedSkuCartonTotalQty = '';
+                                // v.actSkuCartonTotalQty = '';
+                                // v.outerCartonGrossWeight = '';
+                                // v.actInnerCartonSkuQty = ''; // 1
+                                // v.innerCartonSkuQty = '';// 来自Order
+                                // v.actOuterCartonInnerBoxQty = ''; // 1
+                                // v.outerCartonInnerBoxQty = '';// 来自Order
+                                // v.actOuterCartonSkuQty = ''; // 1
+                                // v.unqualifiedProcessingMode = '';
+                                // v.samplingRate = '';
+                                // this.productTableData.push(v);
                                 v.skuUnitDictCode = v.skuUnitDictCode ? (_.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }) || {}).name : "";
                                 v.volumeUnitDictCode = v.volumeUnitDictCode ? (_.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }) || {}).name : '';
                                 v.weightUnitDictCode = v.weightUnitDictCode ? (_.findWhere(this.weightOption, { code: v.weightUnitDictCode }) || {}).name : '';
@@ -489,14 +522,14 @@
                                 v.unqualifiedSkuCartonTotalQty = '';
                                 v.qualifiedSkuCartonTotalQty = '';
                                 v.actSkuCartonTotalQty = '';
-                                v.outerCartonGrossWeight = '';
-                                v.actInnerCartonSkuQty = ''; // 1
+                                v.actInnerCartonSkuQty = '';
                                 v.innerCartonSkuQty = '';// 来自Order
-                                v.actOuterCartonInnerBoxQty = ''; // 1
+                                v.actOuterCartonInnerBoxQty = '';
                                 v.outerCartonInnerBoxQty = '';// 来自Order
-                                v.actOuterCartonSkuQty = ''; // 1
+                                v.actOuterCartonSkuQty = '';
                                 v.unqualifiedProcessingMode = '';
                                 v.samplingRate = '';
+                                v.expectQcQty = 0
                                 this.productTableData.push(v);
                             }
                         });
@@ -506,11 +539,6 @@
                             this.productTableData = this.$refs.filterColumn.getFilterData(arr, data);
                             this.columnConfig = this.productTableData[0];
                         });
-                            // res.forEach(v => {
-                            //     if (v.id !== 0) {
-                            //         this.productTableData.push(v);
-                            //     }
-                            // });
                         }).finally(err => {
                             this.loadingProductTable = false;
                         });
