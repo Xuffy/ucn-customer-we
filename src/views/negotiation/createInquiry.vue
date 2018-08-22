@@ -122,7 +122,7 @@
       <!-- <select-search :options="[]" @inputEnter="inputEnter" /> -->
     </div>
     <v-table
-      code="inquiry"
+      code="VIEW_BY_SKU"
       :data.sync="tabData"
       :buttons="productInfoBtn"
       :loading="tableLoad"
