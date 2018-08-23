@@ -209,7 +209,7 @@
                 </el-col>
             </el-row>
         </el-form>
-        <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
+        <div>
             <div class="title">
                 {{$i.order.responsibility}}
             </div>
@@ -311,19 +311,20 @@
             </div>
             <div class="payment-table">
                 <el-button
-                        v-authorize="'ORDER:DETAIL:PAYMENT_APPLY'"
+                        v-authorize="'ORDER:DETAIL:PAYMENT:APPLY_FOR_PAYMENT'"
                         :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable"
                         :loading="disableClickApplyPay"
                         @click="applyPay"
                         type="primary">{{$i.order.applyPay}}
                 </el-button>
                 <v-button
-                        v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
+                        v-authorize="'ORDER:DETAIL:PAYMENT:URGE_PAYMENT'"
                         moduleCode="ORDER"
                         :orderNo="orderForm.orderNo"
                         :orderType="10"
                         :disabled="!allowHandlePay || loadingPaymentTable">
-                    {{$i.order.remindSupplierRefund}}</v-button>
+                    {{$i.order.remindSupplierRefund}}
+                </v-button>
                 <el-table
                         v-loading="loadingPaymentTable"
                         class="payTable"
@@ -496,7 +497,7 @@
                         <template slot-scope="scope">
                             <div v-if="scope.row.status===10">
                                 <el-button
-                                        v-authorize="'ORDER:DETAIL:CONFIRM_REFUNDS'"
+                                        v-authorize="'ORDER:DETAIL:PAYMENT:CONFIRM_REFUND'"
                                         @click="confirmPay(scope.row)"
                                         type="text">{{$i.order.confirm}}
                                 </el-button>
@@ -506,17 +507,23 @@
                             </div>
                             <div v-else>
                                 <div v-if="scope.row.isNew">
-                                    <el-button :disabled="!allowHandlePay" @click="saveNewPay(scope.row)" type="text"
-                                               size="small">{{$i.order.save}}
+                                    <el-button
+                                            :disabled="!allowHandlePay"
+                                            @click="saveNewPay(scope.row)"
+                                            type="text"
+                                            size="small">{{$i.order.save}}
                                     </el-button>
-                                    <el-button :disabled="!allowHandlePay" @click="cancelNewPay(scope.row)" type="text"
-                                               size="small">{{$i.order.cancel}}
+                                    <el-button
+                                            :disabled="!allowHandlePay"
+                                            @click="cancelNewPay(scope.row)"
+                                            type="text"
+                                            size="small">{{$i.order.cancel}}
                                     </el-button>
                                 </div>
                                 <div v-else>
                                     <div v-if="scope.row.status===-1">
                                         <el-button
-                                                v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                                v-authorize="'ORDER:DETAIL:PAYMENT:ORDER_PAYMENT_MODIFY_INVALID_RECOVER'"
                                                 v-if="scope.row.planPayDt"
                                                 :disabled="!allowHandlePay"
                                                 @click="restorePay(scope.row)"
@@ -536,14 +543,14 @@
                                     </div>
                                     <div v-else>
                                         <el-button
-                                                v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                                v-authorize="'ORDER:DETAIL:PAYMENT:ORDER_PAYMENT_MODIFY_INVALID_RECOVER'"
                                                 @click="modifyPay(scope.row)"
                                                 :disabled="!allowHandlePay"
                                                 type="text">
                                             {{$i.order.modify}}
                                         </el-button>
                                         <el-button
-                                                v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                                v-authorize="'ORDER:DETAIL:PAYMENT:ORDER_PAYMENT_MODIFY_INVALID_RECOVER'"
                                                 @click="abandonPay(scope.row)"
                                                 :disabled="!allowHandlePay"
                                                 type="text">
@@ -576,12 +583,10 @@
             <template slot="header">
                 <div class="btns">
                     <el-button
-                            v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'"
                             :disabled="!isModify"
                             @click="addProduct">{{$i.order.addProduct}}
                     </el-button>
                     <el-button
-                            v-authorize="'ORDER:DETAIL:PRODUCT_INFO_DELETE'"
                             @click="removeProduct"
                             :disabled="selectProductInfoTable.length===0 || !isModify"
                             type="danger">{{$i.order.remove}}
@@ -708,12 +713,6 @@
                         @click="cancelOrder"
                         type="danger">{{$i.order.cancel}}
                 </el-button>
-                <!--<el-checkbox-->
-                <!--v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'"-->
-                <!--:disabled="loadingPage || hasCancelOrder"-->
-                <!--v-model="markImportant"-->
-                <!--@change="changeMarkImportant">{{$i.order.markAsImportant}}-->
-                <!--</el-checkbox>-->
             </div>
         </div>
         <el-dialog
@@ -1138,6 +1137,7 @@
                     @change="val => data._isModified=true"
                     slot="skuApplicableAge"
                     :accuracy="0"
+                    :max="127"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -1216,7 +1216,7 @@
                 v-if="chatParams"
                 :readonly="orderForm.status==='5'"
                 module="ORDER"
-                code="detail"
+                code="orderDetail"
                 :arguments="chatParams"
                 :id="$route.query.orderId"></v-message-board>
     </div>
@@ -1518,7 +1518,7 @@
                             if (key === "skuPrice") {
                                 if (sameCurrency) {
                                     obj[key] = {
-                                        value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+                                        value: this.$calc.add(Number(item.value), (Number(obj[key] ? obj[key].value : 0) || 0))
                                     };
                                 } else {
                                     obj[key] = {
@@ -1527,7 +1527,7 @@
                                 }
                             } else {
                                 obj[key] = {
-                                    value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+                                    value: this.$calc.add(Number(item.value), (Number(obj[key] ? obj[key].value : 0) || 0))
                                 };
                             }
                         } else {
@@ -1597,8 +1597,8 @@
                         }
                     });
                     this.getDetail();
-                }).catch(()=>{
-                    this.loadingPage=false;
+                }).catch(() => {
+                    this.loadingPage = false;
                 });
             },
             getDetail(e, isTrue) {
@@ -1607,14 +1607,14 @@
                     orderNo: this.$route.query.orderNo || this.$route.query.code
                 }).then(res => {
                     this.orderForm = res;
-                    this.chatParams={
-                        bizNo:res.quotationNo,
-                        dataAuthCode:'BIZ_ORDER',
-                        funcAuthCode:'',            //功能权限
-                        suppliers:[{
-                            userId:res.supplierUserId,
-                            companyId:res.supplierCompanyId,
-                            tenantId:res.supplierTenantId
+                    this.chatParams = {
+                        bizNo: res.orderNo,
+                        dataAuthCode: "BIZ_ORDER",
+                        funcAuthCode: "",            //功能权限
+                        suppliers: [{
+                            userId: res.supplierUserId,
+                            companyId: res.supplierCompanyId,
+                            tenantId: res.supplierTenantId
                         }]
                     };
                     /**
@@ -1670,12 +1670,13 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
+                    this.handleIncoterm();
                     if (this.orderForm.status === "1" || this.orderForm.status === "2" && !isTrue) {
                         _.map(this.productTableData, v => {
                             if (v.fieldUpdate.value) {
                                 _.map(v.fieldUpdate.value, (value, key) => {
                                     if (key !== "skuPictures") {
-                                        if(v[key]){
+                                        if (v[key]) {
                                             v[key]._style = { "backgroundColor": "yellow" };
                                         }
                                     }
@@ -1722,7 +1723,7 @@
                      * */
                     this.getPaymentData();
                 }).finally(() => {
-                    this.$nextTick(()=>{
+                    this.$nextTick(() => {
                         this.loadingPage = false;
                     });
                     this.disableClickCancelModify = false;
@@ -1742,7 +1743,7 @@
                         v.name = (_.findWhere(this.paymentItemOption, { code: v.name }) || {}).name;
                     });
                     this.paymentData = res.datas;
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingPaymentTable = false;
                 });
             },
@@ -1886,7 +1887,7 @@
                     }
                     this.getUnit();
                 }).catch(() => {
-                    this.loadingPage=false;
+                    this.loadingPage = false;
                 });
             },
             getInquiryData() {
@@ -1926,20 +1927,23 @@
                 }
                 this.orderForm.fieldUpdate[key] = "";
                 if (key === "incoterm") {
+
+                    this.handleIncoterm();
+
                     _.map(this.productTableData, item => {
                         if (!item._remark) {
                             if (this.orderForm[key] === "1") {
                                 //fob
-                                item.skuPrice.value = item.skuFobPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                                item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuFobPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                             } else if (this.orderForm[key] === "2") {
                                 //exw
-                                item.skuPrice.value = item.skuExwPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                                item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuExwPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                             } else if (this.orderForm[key] === "3") {
                                 //cif
-                                item.skuPrice.value = item.skuCifPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                                item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuCifPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                             } else if (this.orderForm[key] === "4") {
                                 //ddu
-                                item.skuPrice.value = item.skuDduPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                                item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuDduPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                             }
                         }
                     });
@@ -1998,6 +2002,43 @@
                     config = this.productNotModifyBtn;
                 }
                 return config;
+            },
+            handleIncoterm() {
+                let incoterm,
+                    totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                    fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                    exw = ["skuExwCurrency", "skuExwPrice"],
+                    cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                    ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                console.log(this.orderForm.incoterm, "this.orderForm.incoterm");
+                if (this.orderForm.incoterm === "1") {
+                    incoterm = fob;
+                } else if (this.orderForm.incoterm === "2") {
+                    incoterm = exw;
+                } else if (this.orderForm.incoterm === "3") {
+                    incoterm = cif;
+                } else if (this.orderForm.incoterm === "4") {
+                    incoterm = ddu;
+                }
+                // _.map(totalPrice, v => {
+                //     _.map(this.productTableData, item => {
+                //         if (!item._remark) {
+                //             item[v]._mustHide=true;
+                //             item[v]._mustShow=false;
+                //         }
+                //     });
+                // });
+                // _.map(incoterm, v => {
+                //     _.map(this.productTableData, item => {
+                //         if (!item._remark) {
+                //             item[v]._mustHide=false;
+                //             item[v]._mustShow=true;
+                //         }
+                //     });
+                // });
+                // this.$refs.table.$refs.filterColumn.update(false,this.$depthClone(this.productTableData)).then(res=>{
+                //     this.productTableData=this.$refs.table.$refs.filterColumn.getFilterData(this.$depthClone(this.productTableData),res);
+                // });
             },
             productInfoAction(e, type) {
                 if (type === "negotiate") {
@@ -2157,6 +2198,8 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
+
+                    this.handleIncoterm();
                 }).finally(err => {
                     this.loadingProductTable = false;
                 });
@@ -2674,7 +2717,7 @@
                         this.disableCancelOrder = false;
                     });
                 });
-            }
+            },
         },
         created() {
             this.getOrderNo();
@@ -2696,13 +2739,13 @@
             this.setMenuLink({
                 path: "/order/archiveOrder",
                 type: 30,
-                auth: "ORDER:OVERVIEW:ARCHIVE_LINK",
+                auth: "ORDER:OVERVIEW_ARCHIVE",
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: "/order/archiveDraft",
                 type: 40,
-                auth: "ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK",
+                auth: "ORDER:DRAFT_ARCHIVE",
                 label: this.$i.order.archiveDraft
             });
         }

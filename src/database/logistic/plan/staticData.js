@@ -65,14 +65,14 @@ export const basicInfoObj = {
   },
   transportationWay: {
     type: 'input',
-    value: '海运',
-    defaultVal:'海运',
+    value: '',
+    defaultVal: 'transportationWayVal',
     disabled:true 
   },
   loadingType: {
     type: 'input',
-    value: '集装箱',
-    defaultVal:'集装箱',
+    value: '',
+    defaultVal: 'loadingTypeVal',
     disabled:true 
   },
   permitedForTransportation: {
@@ -164,14 +164,14 @@ export const CreatPlanBasicInfoObj = {
   },
   transportationWay: {
     type: 'input',
-    value: '海运',
-    defaultVal:'海运',
+    value: '',
+    defaultVal: 'transportationWayVal',
     disabled:true 
   },
   loadingType: {
     type: 'input',
-    value: '集装箱',
-    defaultVal:'集装箱',
+    value: '',
+    defaultVal: 'loadingTypeVal',
     disabled:true 
   },
   permitedForTransportation: {
@@ -256,14 +256,14 @@ export const LLBasicInfoObj = {
   },
   transportationWay: {
     type: 'input',
-    value: '海运',
-    defaultVal:'海运',
+    value: '',
+    defaultVal: 'transportationWayVal',
     disabled:true 
   },
   loadingType: {
     type: 'input',
-    value: '集装箱',
-    defaultVal:'集装箱',
+    value: '',
+    defaultVal: 'loadingTypeVal',
     disabled:true 
   },
   permitedForTransportation: {
@@ -344,14 +344,14 @@ export const draftBasicInfoObj = {
   },
   transportationWay: {
     type: 'input',
-    value: '海运',
-    defaultVal:'海运',
+    value: '',
+    defaultVal: 'transportationWayVal',
     disabled:true 
   },
   loadingType: {
     type: 'input',
-    value: '集装箱',
-    defaultVal:'集装箱',
+    value: '',
+    defaultVal: 'loadingTypeVal',
     disabled:true 
   },
   permitedForTransportation: {
@@ -462,7 +462,7 @@ export const payMentInfo = {
       required:true
     }
   },
-  supplierName: {
+  skuSupplierName: {
     key:'payToCompanyName',
     _rules:{
       required:true

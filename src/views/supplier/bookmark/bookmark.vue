@@ -53,8 +53,7 @@
                 @change-sort="sort"
                 style='marginTop:10px'>
                <template slot="header">
-                 <div class="btnline">
-
+                 <div class="btnline"  v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:READ_ONLY'">
                    <el-button
                      v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"
                      @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>

@@ -10,7 +10,7 @@
                 :form-column="$db.product.overview"
                 :tableData="productData"
                 :pageData="pageData"
-                :tableButtons="[{label: $i.product.detailBig, type: 1}]"
+                :tableButtons="setButtons"
                 :loadingTable="loadingTable"
                 tableCode="udata_purchase_sku_overview"
                 @search="getData"
@@ -153,7 +153,7 @@
                     });
                     this.pageData = res;
                     this.selectList = [];
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingTable = false;
                 });
             },
@@ -175,9 +175,6 @@
                     });
                 }
             },
-            changeSort(e) {
-                console.log(e, "val");
-            },
             changeChecked(e) {
                 this.selectList = e;
             },
@@ -185,6 +182,13 @@
             /**
              * 按钮事件
              * */
+            setButtons(e){
+                if(e.bookmarkId.value){
+                    return [{label: this.$i.product.detailBig, type: 1,auth:'PRODUCT:BOOKMARK_DETAIL'}]
+                }else{
+                    return [{label: this.$i.product.detailBig, type: 1,auth:'PRODUCT:DETAIL'}]
+                }
+            },
             createInquiry() {
                 if (this.selectList.length === 0) {
                     this.$windowOpen({

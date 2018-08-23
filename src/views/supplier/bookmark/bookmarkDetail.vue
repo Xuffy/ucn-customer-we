@@ -27,7 +27,7 @@
                        </el-col>
                     </el-row>
                  </el-form>
-                <div class="btns" v-if="noEdit">
+                <div class="btns" v-if="noEdit" v-authorize="'SUPPLIER:BOOKMARK_DETAIL:READ_ONLY'">
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
@@ -182,7 +182,8 @@
                 payment:[],
                 sex:[],
                 orderStatus:[],
-                inquiryStatus:[]
+                inquiryStatus:[],
+                department:[]
             }
         },
         methods: {
@@ -381,13 +382,36 @@
                         this.accounts = this.$getDB(this.$db.supplier.accountInfo, res.accounts,e => {
                           return e;
                         });
-                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
-                        this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
-                          let gender;
-                          gender = _.findWhere(this.sex, {code:(e.gender.value)+''}) || {};
-                          e.gender._value = gender.name || '';
+                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address,e => {
+                          let country,recvCountry;
+                          country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
+                          recvCountry = _.findWhere(this.countryOption, {code: e.recvCountry.value}) || {};
+                          e.country._value = country.name || '';
+                          e.recvCountry._value = recvCountry.name || '';
+                          const province = e.province.value || '';
+                          const city = e.city.value || '';
+                          const address = e.address.value || ''
+                          const recvProvince = e.recvProvince.value || '';
+                          const recvCity = e.recvCity.value || '';
+                          const recvAddr = e.recvAddr.value || '';
+                          e.factoryAddress.value = e.country._value +' '+province+' '+city+' '+address;
+                          e.expressAddress.value = e.recvCountry._value +' '+recvProvince+' '+recvCity+' '+recvAddr
                           return e;
                         });
+                        let concats = res.concats
+                        //获取部门列表匹配
+                        if (this.basicDate.tenantId && this.basicDate.companyId){
+                          this.$ajax.get(`${this.$apis.GET_DEPARTMENT}?tenantId=${this.basicDate.tenantId}&companyId=${this.basicDate.companyId}`).then(res=>{
+                            this.concats = this.$getDB(this.$db.supplier.concats, concats, e => {
+                              let gender,deptId;
+                              gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};
+                              e.gender._value = gender.name || '';
+                              deptId = _.findWhere(res, {deptId: (e.deptId.value)}) || {};
+                              e.deptId._value = deptId.deptName || '';
+                              return e;
+                            });
+                          })
+                        }
                     })
                     .catch((res) => {
 

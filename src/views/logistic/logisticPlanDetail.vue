@@ -87,7 +87,7 @@
       <overviewPage :title="$i.logistic.addProductFromOrder" :tableData="ProductFromOrder" :form-column="$db.logistic.addProductFromOrderFilter"
         :tableButtons="null" @change-checked="changeChecked" @tableBtnClick="ProductFromOrderDetail" @search="getSupplierIds"
         :tableCode="configUrl[pageName]&&configUrl[pageName].addproduct" @change-sort="changeSort">
-        <v-pagination slot="pagination" :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
+        <v-pagination slot="pagination" :pageSizes="[50,100,200]" :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
         <div slot=footerBtn>
           <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
           <el-button type="primary" @click="closeAddProduct">{{ $i.logistic.confirm }}</el-button>
@@ -428,14 +428,36 @@
         } else {
           this.edit = true
           this.basicInfoArr.forEach((item) => {
-            this.$set(item, 'value', item.defaultVal);
+            this.$set(item, 'value',this.$i.logistic[item.defaultVal]);
           })
           this.transportInfoArr.forEach((item) => {
-            this.$set(item, 'value', item.defaultVal);
+            this.$set(item, 'value', this.$i.logistic[item.defaultVal]);
           })
           if (this.isCopy) {
             this.getDetails();
           } else {
+            if(this.pageTypeCurr == 'placeLogisticPlan'){
+              let currObj = this.basicInfoArr.find(el => el.key == 'shipmentStatus');
+              currObj.value = 0;
+              if (currObj) {
+                //初始先禁用 下拉 根据条件 选择性的开启
+                currObj.disabled = true;
+                let arr = this.$depthClone(this.selectArr.shipmentStatus).map(el => {
+                  el.disabled = true;
+                  return el;
+                });
+                if (!currObj.value) {
+                  currObj.disabled = false;
+                  arr = this.$depthClone(arr).map(el => {
+                    if (el.code == 2 || el.code == 3) {
+                      el.disabled = false;
+                    }
+                    return el;
+                  });
+                }
+                this.$set(this.selectArr, 'shipmentStatus', arr);
+              }
+            }
             this.getCustomer();
           }
           this.getNewLogisticsNo()
@@ -537,7 +559,7 @@
         this.$ajax.get(`${url}?id=${this.$route.query.id || ''}&logisticsNo=${this.$route.query.code || '' }`).then(res => {
           this.planId = res.id;
           this.planStatus = res.planStatus;
-          if (!this.isCopy) {
+          if (!this.isCopy&&this.pageTypeCurr!='logisticDraftDetail') {
             this.fieldDisplay = res.fieldDisplay;
           }else{
             res.logisticsStatus = 1;
@@ -561,7 +583,7 @@
         let url = this.pageTypeCurr == "loadingListDetail" ? this.$apis.get_order_supplier : this.$apis.get_plan_supplier
         this.$ajax.get(`${url}?logisticsNo=${logisticsNo}`).then(res => {
           this.selectArr.supplierAbbr = res && res.map((item) => {
-            item.value = item.skuSupplierAbbr;
+            item.value = item.skuSupplierName;
             return item;
           });
         })
@@ -633,10 +655,16 @@
           this.logisticsNo = res.logisticsNo
         }
         this.containerInfo = (res.containerDetail || []).map(el => {
+          if(this.pageTypeCurr == 'logisticDraftDetail'){
+            el.fieldDisplay = null;
+          }
           el.isModify = false;
           return el
         });
         this.containerinfoMatch = this.$depthClone(res.containerDetail || []).map(el => {
+          if(this.pageTypeCurr == 'logisticDraftDetail'){
+            el.fieldDisplay = null;
+          }
           el.isModify = false;
           return el
         });
@@ -665,12 +693,14 @@
         this.productList.forEach((item) => {
           if (!this.isCopy) {
             if (item.fieldDisplay.value) {
-              _.mapObject(item.fieldDisplay.value, (v, k) => {
-                item[k]._style = {
-                  background: 'yellow'
-                };
-                item[k]._mustChecked = true;
-              })
+              if(this.pageTypeCurr!='logisticDraftDetail'){
+                _.mapObject(item.fieldDisplay.value, (v, k) => {
+                  item[k]._style = {
+                    background: 'yellow'
+                  };
+                  item[k]._mustChecked = true;
+                })
+              }
               item.fieldDisplay.value = null;
             }
           }
@@ -1146,7 +1176,7 @@
         if(status!=this.shipmentStatus){
           this.oldPlanObject.fieldDisplay = {...{shipmentStatus:status},...this.oldPlanObject.fieldDisplay};
         }
-        this.basicInfoArr.find(el => el.key == 'shipmentStatus').value = status
+        this.basicInfoArr.find(el => el.key == 'shipmentStatus')&&(this.basicInfoArr.find(el => el.key == 'shipmentStatus').value = status);
       },
       sendData(keyString) {
         this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
@@ -1184,7 +1214,7 @@
           // this.mediatorDate.forEach(a => {
           //   this.oldPlanObject[a.key] = a.value
           // })
-          this.basicInfoObj.remark = this.remarkQ
+          this.oldPlanObject.remark = this.remark;
           this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
           this.oldPlanObject.fee = this.feeList && this.feeList.length > 0 ? this.sendfee : null;
           // this.oldPlanObject.product = this.modifyProductArray 原版;

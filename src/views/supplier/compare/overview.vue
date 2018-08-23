@@ -12,7 +12,7 @@
       @action="btnClick"
       @change-checked="changeChecked">
       <template slot="header">
-        <div class="btns">
+        <div class="btns" v-authorize="'SUPPLIER:COMPARE_OVERVIEW:READ_ONLY'">
           <el-button
             @click="download"
             v-authorize="'SUPPLIER:COMPARE_OVERVIEW:DOWNLOAD'"

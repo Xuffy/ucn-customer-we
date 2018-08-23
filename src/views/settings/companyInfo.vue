@@ -144,12 +144,13 @@
                                 @change="handleCheckedDocument(item,index)">
                                 {{item.name}}
                               </el-checkbox>
-                              <div class="uploadBox" disabled="item.checked">
+                              <div class="uploadBox" :disabled="item.checked">
                                 <v-upload
                                 oss-private
                                 :ref="'uploadDocument'+item.code"
                                 :limit="20"
                                 :list="item.attachments"
+                                :readonly="!item.checked"
                                 />
                               </div>
                             </li>
@@ -677,9 +678,7 @@
               checkList:[],
               documentRedonly:false,
               documentList:[],
-              documentTypeClone:[],
-
-
+              documentTypeClone:[]
             }
         },
         methods:{
@@ -933,44 +932,29 @@
             },
              //更改默认地址
             setAddress(){
-              let def;
+              let def = [];
               this.addressDatas.forEach(v=>{
-                def = _.findWhere(v,{key:'def'}).value;
+                def.push(_.findWhere(v,{key:'def'}).value);
               })
-              if (def){
+              if (_.compact(def).length != 0){
                 this.$confirm(this.$i.setting.isReplace, this.$i.common.prompt, {
                   confirmButtonText: this.$i.common.confirm,
                   cancelButtonText: this.$i.common.cancel,
                   type: 'warning'
                 }).then(() => {
+                }).finally(()=>{
                   if (this.addressData.def){
-                    this.addressData.def = true;
                     this.$message({
                       type: 'success',
                       message: this.$i.setting.replaceSuccess
                     });
                   }else{
-                    this.addressData.def = false;
                     this.$message({
                       type: 'success',
                       message: this.$i.setting.cancelReplace
                     });
                   }
-                }).catch(() => {
-                  if (this.addressData.def){
-                    this.addressData.def = false;
-                    this.$message({
-                      type: 'success',
-                      message: this.$i.setting.cancelReplace
-                    });
-                  }else{
-                    this.addressData.def = true;
-                    this.$message({
-                      type: 'success',
-                      message: this.$i.setting.replaceSuccess
-                    });
-                  }
-                });
+                })
               }
             },
 
@@ -1192,8 +1176,7 @@
           },
           handleCheckedDocument(item,index){
             item.checked = !item.checked;
-            this.$set(this.documentTypeClone,index, item)
-
+            this.$set(this.documentTypeClone,index, item);
           },
           /**
            * custom操作

@@ -26,7 +26,7 @@
           @filter-value="tableFilterValue"
           :height="500">
           <template slot="header">
-            <div class="btns">
+            <div class="btns" v-authorize="'SUPPLIER:COMPARE_DETAIL:READ_ONLY'">
                 <span v-if="$route.params.type==='new'">
                     <el-button
                        v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'"
@@ -37,10 +37,8 @@
                       :class="(selectedData.length>1)?'disabledBtn':'' ">
                       {{$i.product.createOrder}}({{selectList.length}})</el-button>
                     <el-button
-                      v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'"
                       @click="addNewProduct">{{$i.product.addNew}}</el-button>
                     <el-button
-                      v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
                       :disabled="!selectList.length>0"
                       @click="deleteCompare"  type="danger">{{$i.common.archive}}</el-button>
                 </span>
@@ -60,12 +58,10 @@
                   @click="modifyCompare">{{$i.button.modify}}</el-button>
                   <el-button
                     v-if="isModify"
-                    v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'"
                     @click="addNewProduct">{{$i.product.addNew}}</el-button>
                   <el-button
                     v-if="isModify"
                     :disabled="!selectList.length>0"
-                    v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
                     @click="deleteCompare"  type="danger">{{$i.common.archive}}</el-button>
                   <el-button
                     v-if="!isModify"

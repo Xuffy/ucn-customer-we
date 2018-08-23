@@ -4,7 +4,8 @@ export default {
     'INQUIRY:OVERVIEW:DELETE': { path: '/negotiation/recycleBin/inquiry', text: 'archive' },
     'INQUIRY:COMPARE_ARCHIVE': { path: '/negotiation/recycleBin/compare', text: 'archive' },
     'INQUIRY:COMPARE_OVERVIEW:DELETE': {path: '/negotiation/recycleBin/compare', text: 'archive'},
-    'INQUIRY:LOG': { path: '/logs/index', query: { code: 'INQUIRY', bizCode: 'INQUIRY' }, text: 'log' }
+    'INQUIRY:LOG': { path: '/logs/index', query: { code: 'INQUIRY', bizCode: 'INQUIRY' }, text: 'log' },
+
   },
   setMenuLinks(vm, auths) {
     let menus = [];

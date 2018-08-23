@@ -367,7 +367,7 @@
             this.setMenuLink({
                 path: '/order/archiveOrder',
                 type: 30,
-                auth:'ORDER:OVERVIEW:ARCHIVE_LINK',
+                auth:'ORDER:OVERVIEW_ARCHIVE',
                 label: this.$i.order.archiveOrder
             });
         },

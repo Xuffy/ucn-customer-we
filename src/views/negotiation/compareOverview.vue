@@ -2,7 +2,7 @@
     <div class="compare-overview">
         <h3 class="hd">{{ $i.common.compareOverview }}</h3>
         <div class="status">
-            <div class="btn-wrap">
+            <div class="btn-wrap" v-authorize="'INQUIRY:COMPARE_OVERVIEW:READ_ONLY'">
                 <el-button v-authorize="'INQUIRY:COMPARE_OVERVIEW:DOWNLOAD'" @click="exportDatas" :disabled="tabData.length<=0">{{ `${$i.common.download}(${checkedIds.length>0?checkedIds.length:'all'})` }}</el-button>
                 <el-button type="danger" @click="compareDelete" :disabled="checkedIds.length <= 0" v-authorize="'INQUIRY:COMPARE_OVERVIEW:DELETE'">{{ `${$i.common.archive}(${checkedIds.length})`}}</el-button>
             </div>

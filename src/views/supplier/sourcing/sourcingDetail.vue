@@ -30,7 +30,7 @@
                       </el-row>
                 </el-row>
                   </el-form>
-                <div class="btns" v-if="noEdit">
+                <div class="btns" v-if="noEdit" v-authorize="'SUPPLIER:DETAIL:READ_ONLY'">
                     <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
                     <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
                     <el-button v-authorize="'SUPPLIER:DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
@@ -336,16 +336,6 @@
                 console.log(err)
               });
             },
-            //获取部门列表
-            getDepartment(){
-              if (this.basicDate.tenantId && this.basicDate.companyId){
-                this.$ajax.get(`${this.$apis.GET_DEPARTMENT}?tenantId=${this.basicDate.tenantId}&companyId=${this.basicDate.companyId}`).then(res=>{
-                  this.department = res
-                }).catch(err=>{
-                  console.log(err)
-                });
-              }
-            },
           //获取字典
           getCodePart(){
             this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","SEX","ORDER_STATUS","INQUIRY_STATUS"],{cache:true}).then(res=>{
@@ -383,7 +373,6 @@
                         }else{
                           this.basicDate.exportLicense = this.$i.supplier.exportLicenseNo
                         }
-                        this.getDepartment();
                         this.accounts = this.$getDB(this.$db.supplier.accountInfo, res.accounts,e => {
                           return e;
                         });
@@ -403,15 +392,21 @@
                           e.expressAddress.value = e.recvCountry._value +' '+recvProvince+' '+recvCity+' '+recvAddr
                           return e;
                         } );
-                        this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
-                          let gender,deptId;
-                          gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};
-                          e.gender._value = gender.name || '';
-                          console.log(this.department)
-                          deptId = _.findWhere(this.department, {deptId: (e.deptId.value)}) || {};
-                          e.deptId._value = deptId.deptName || '';
-                          return e;
-                        });
+                        let concats = res.concats
+                        //获取部门列表匹配
+                        if (this.basicDate.tenantId && this.basicDate.companyId){
+                          this.$ajax.get(`${this.$apis.GET_DEPARTMENT}?tenantId=${this.basicDate.tenantId}&companyId=${this.basicDate.companyId}`).then(res=>{
+                            this.concats = this.$getDB(this.$db.supplier.concats, concats, e => {
+                              let gender,deptId;
+                              gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};
+                              e.gender._value = gender.name || '';
+                              deptId = _.findWhere(res, {deptId: (e.deptId.value)}) || {};
+                              e.deptId._value = deptId.deptName || '';
+                              return e;
+                            });
+
+                          })
+                        }
                         this.loading = false
                     })
                     .catch((res) => {

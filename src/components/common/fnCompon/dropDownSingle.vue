@@ -33,8 +33,8 @@
                 v-model="val[defaultProps.label]"
                 :size="size"
                 readonly>
-            <i v-if="showIcon" slot="suffix" class="el-icon-arrow-down"></i>
-            <i v-else @click="clearData" slot="suffix" class="el-icon-error"></i>
+            <i v-if="showIcon" slot="suffix" class="el-icon-arrow-down speIcon"></i>
+            <i v-else @click="clearData" slot="suffix" class="el-icon-error speIcon"></i>
         </el-input>
     </div>
 </template>
@@ -70,7 +70,7 @@
             },
             searchPlaceholder: {
                 type: String,
-                default: 'Please be here to screen'
+                default: ''
             },
             checkInputBoxPl: {
                 type: String,
@@ -164,7 +164,9 @@
                 })
             },
             handleMouseover(){
-                this.showIcon=false;
+                if(this.val[this.defaultProps.label]){
+                    this.showIcon=false;
+                }
             },
             handleMouseLeave(){
                 this.showIcon=true;
@@ -271,6 +273,9 @@
                     cursor: pointer;
                 }
             }
+        }
+        .speIcon{
+            margin-right: 5px;
         }
     }
 </style>
