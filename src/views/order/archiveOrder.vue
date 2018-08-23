@@ -26,7 +26,7 @@
                 <div class="fn">
                     <div class="btn-wrap">
                         <el-button
-                                v-authorize="'ORDER:DRAFT_ARCHIVE:RECOVER'"
+                                v-authorize="'ORDER:OVERVIEW_ARCHIVE:RECOVER'"
                                 :loading="disableClickRecover"
                                 :disabled="selectedList.length===0"
                                 @click='recover'>{{($i.order.recover)}}</el-button>
@@ -367,7 +367,7 @@
                 path: '/order/archiveDraft',
                 query: {code: 'ORDER'},
                 type: 30,
-                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK',
+                auth:'ORDER:DRAFT_ARCHIVE',
                 label: this.$i.order.archiveDraft
             });
         },

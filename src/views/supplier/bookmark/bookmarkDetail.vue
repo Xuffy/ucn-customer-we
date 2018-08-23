@@ -27,7 +27,7 @@
                        </el-col>
                     </el-row>
                  </el-form>
-                <div class="btns" v-if="noEdit">
+                <div class="btns" v-if="noEdit" v-authorize="'SUPPLIER:BOOKMARK_DETAIL:READ_ONLY'">
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
@@ -398,7 +398,7 @@
                           e.expressAddress.value = e.recvCountry._value +' '+recvProvince+' '+recvCity+' '+recvAddr
                           return e;
                         });
-                        const concats = res.concats
+                        let concats = res.concats
                         //获取部门列表匹配
                         if (this.basicDate.tenantId && this.basicDate.companyId){
                           this.$ajax.get(`${this.$apis.GET_DEPARTMENT}?tenantId=${this.basicDate.tenantId}&companyId=${this.basicDate.companyId}`).then(res=>{

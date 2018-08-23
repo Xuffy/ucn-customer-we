@@ -6,7 +6,7 @@
                 :form-column="$db.product.overview"
                 :tableData="productData"
                 :pageData="pageData"
-                :tableButtons="[{label: $i.product.detailBig, type: 1}]"
+                :tableButtons="[{label: $i.product.detailBig, type: 1,auth:'PRODUCT:BOOKMARK_DETAIL'}]"
                 :loadingTable="loadingTable"
                 tableCode="udata_purchase_sku_bookmark_overview"
                 @search="getData"
@@ -53,7 +53,8 @@
                 <el-button
                         type="danger"
                         :disabled="selectList.length<1"
-                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DELETE'" @click="deleteBookmark">
+                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DELETE'"
+                        @click="deleteBookmark">
                     {{$i.button.remove}}
                 </el-button>
             </template>
