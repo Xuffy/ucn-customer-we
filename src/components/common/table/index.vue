@@ -290,6 +290,9 @@
     },
     methods: {
       ...mapActions(['setViewPicture']),
+      setField(key, type) {
+        this.$refs.filterColumn.setField(key, type);
+      },
       changeSort(key, type) {
         let params = {sorts: []};
         if (key !== this.currentSort.orderBy) {
@@ -455,8 +458,9 @@
       resetFile() {
         _.mapObject(this.dataList, value => {
           _.map(value, val => {
-            if (val._upload && this.$refs[val.key + 'Upload']) {
-              this.$refs[val.key + 'Upload'][0].reset();
+            let e = this.$refs[val.key + 'Upload'];
+            if (val._upload && !_.isEmpty(e)) {
+              e[0].reset();
             }
           });
         });
