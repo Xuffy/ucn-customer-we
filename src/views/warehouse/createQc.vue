@@ -601,6 +601,8 @@
                         newQcOrderConfig.factoryAddress = e.address
                     }
                 })
+                // console.log(newQcOrderConfig)
+                // return
                 this.disableClickSubmit = true;
                 this.$ajax.post(this.$apis.add_buyerQcOrder, newQcOrderConfig).then(res => {
                     this.$message({
