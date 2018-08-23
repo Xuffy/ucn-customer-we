@@ -20,8 +20,8 @@
                 :searchLoad="searchLoad"/>
         </div>
         <div class="fn">
-            <div class="btn-wrap">
-                <el-button @click="toCompare" :disabled="checkedIds.length < 2" v-authorize="'INQUIRY:COMPARE_DETAIL:ADD_NEW'">{{ $i.common.compare }}<span>({{ checkedIds.length }})</span></el-button>
+            <div class="btn-wrap" v-authorize="'INQUIRY:OVERVIEW:READ_ONLY'">
+                <el-button @click="toCompare" :disabled="checkedIds.length < 2" v-authorize="'INQUIRY:OVERVIEW:COMPARE'">{{ $i.common.compare }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.createNewInquiry }}</el-button>
                 <el-button @click="cancelInquiry" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'" :disabled="!cancelAble">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!deleteAble">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span></el-button>
