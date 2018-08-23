@@ -34,28 +34,30 @@
       </el-form>
 
       <div class="uploading-box" v-else>
-        <h3>In Uploading...</h3>
+        <h3>{{$i.importTemplate.inUploading}}...</h3>
         <label>
-          1&nbsp;&nbsp;Uploading the File
+          1&nbsp;&nbsp;{{$i.importTemplate.uploadingTheFile}}
           <i class="el-icon-check"></i>
         </label>
         <label style="margin-bottom: 20px">
-          2&nbsp;&nbsp;Processing the File
+          2&nbsp;&nbsp;{{$i.importTemplate.processingTheFile}}
           <i class="el-icon-loading" v-if="uploadStep === 1"></i>
           <i class="el-icon-check" v-else></i>
         </label>
         <div class="success-info" v-if="uploadStep === 2">
-          <h4>Detail:</h4>
+          <h4>{{$i.payment.detail}}:</h4>
           <div class="item">
-            <label>Success Rows
+            <label>{{$i.importTemplate.SuccessRows}}
               <span v-text="completeData.successExcelRows"></span>
             </label>
           </div>
           <div class="item">
-            <label>Failed Rows
+            <label>{{$i.importTemplate.failedRows}}
               <span v-text="completeData.errorExcelRows">10</span>
             </label>
-            <a v-if="completeData.errorMsgFileUrl" :href="completeData.errorMsgFileUrl">Download the failed ones</a>
+            <a v-if="completeData.errorMsgFileUrl" :href="completeData.errorMsgFileUrl">
+              {{$i.importTemplate.downloadFailedOnes}}
+            </a>
           </div>
         </div>
       </div>
