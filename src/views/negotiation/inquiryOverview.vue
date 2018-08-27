@@ -134,6 +134,7 @@ export default {
     },
     getBaseData() {
       const postCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM'], { cache: true });
+      console.log(postCodes)
       const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: false});
       return this.$ajax.all([postCodes, getCurrencies]).then(res => {
         let data = res[0];

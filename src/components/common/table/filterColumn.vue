@@ -169,7 +169,16 @@
       },
       setField(key, type) { // 设置字段隐藏显示
         let keys = this.$refs.columnTree.getCheckedKeys();
-        type ? keys.push(key) : keys.splice(_.indexOf(keys, key), 1);
+        key = _.isString(key) ? [key] : key;
+
+        if (type) {
+          keys.concat(key);
+        } else {
+          _.map(key, val => {
+            let i = _.indexOf(keys, key);
+            i !== -1 && keys.splice(i, 1);
+          });
+        }
         this.$refs.columnTree.setCheckedKeys(keys);
         this.submitFilter();
       },
